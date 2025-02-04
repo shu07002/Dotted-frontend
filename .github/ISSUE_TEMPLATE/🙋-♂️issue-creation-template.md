@@ -1,5 +1,5 @@
 ---
-name: Issue Creation Template
+name: "\U0001F64B‍♂️Issue Creation Template"
 about: Please create an issue.
 title: ''
 labels: ''
