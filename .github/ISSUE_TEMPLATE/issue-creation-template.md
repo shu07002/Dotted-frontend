@@ -1,6 +1,6 @@
 ---
-name: 이슈 생성 템플릿
-about: 이슈를 생성해주세요.
+name: Issue Creation Template
+about: Please create an issue.
 title: ''
 labels: ''
 assignees: ''
