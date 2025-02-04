@@ -1,5 +1,5 @@
 ---
-name: 이슈 생성 템플릿
+name: 이슈 생성 템플릿sdasdasd
 about: 이슈를 생성해주세요.
 title: ''
 labels: ''
