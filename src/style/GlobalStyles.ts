@@ -22,6 +22,9 @@ font: inherit;
 vertical-align: baseline;
 }
 
+html {
+  font-size: 62.5%;
+}
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 display: block;
