@@ -1,11 +1,23 @@
-import './App.css';
+import styled from 'styled-components';
+import { GlobalStyles } from './style/GlobalStyles';
+import Router from './Router';
+import { RouterProvider } from 'react-router-dom';
+import { GlobalThemeProvider } from './context/ThemeContext';
 
 function App() {
   return (
-    <div>
-      <p>Hello vite</p>
-    </div>
+    <GlobalThemeProvider>
+      <AppContainer>
+        <GlobalStyles />
+        <RouterProvider router={Router} />
+      </AppContainer>
+    </GlobalThemeProvider>
   );
 }
 
 export default App;
+
+const AppContainer = styled.div`
+  width: 100dvw;
+  height: 100dvh;
+`;
