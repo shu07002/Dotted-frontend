@@ -13,7 +13,7 @@ export default function MainPage() {
 const Main = styled.main`
   width: 100%;
   height: 100%;
-  background-color: ${({ theme }) => theme.colors.backgroundLayer2};
+  background-color: ${({ theme }) => theme.colors.purple1000};
   button {
     width: 100px;
     height: 50px;

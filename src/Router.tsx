@@ -1,12 +1,19 @@
 import { createBrowserRouter } from 'react-router-dom';
 import MainPage from './pages/MainPage';
 import SignUpPage from './pages/SignUpPage';
+import ProtectedRoute from './components/common/ProtectedRoute';
+import HeaderLayout from './components/common/header/HeaderLayout';
+import FAQPage from './pages/tips/FAQPage';
 
 const Router = createBrowserRouter([
   {
     path: '/',
     // errorElement:
-    // element:
+    element: (
+      <ProtectedRoute>
+        <HeaderLayout />
+      </ProtectedRoute>
+    ),
     children: [
       {
         path: '',
@@ -15,7 +22,8 @@ const Router = createBrowserRouter([
       {
         path: 'sign-up',
         element: <SignUpPage />
-      }
+      },
+      { path: 'tips/faq', element: <FAQPage /> }
     ]
   }
 ]);
