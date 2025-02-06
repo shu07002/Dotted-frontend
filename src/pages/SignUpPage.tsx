@@ -1,27 +1,33 @@
 import BackButton from '@/components/SignUpPage/BackButton';
 import SignUpForm from '@/components/SignUpPage/SignUpForm';
 import PageLayout from '@/components/SignUpPage/PageLayout';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import EmailVerification from '@/components/SignUpPage/EmailVerification';
 import styled from 'styled-components';
 import PersonalInformation from '@/components/SignUpPage/PersonalInformation';
 import StudentVerification from '@/components/SignUpPage/StudentVerification';
 import AccessRestrictedModal from '@/components/SignUpPage/AccessRestrictedModal';
-
-//TODO
-//로그인 폼에서 체크 박스 상태 관리하기
-//버튼 클릭 링크 세팅
+import { useForm } from 'react-hook-form';
+import { SignUpFormData } from '@/types/signUpFormData';
 
 export default function SignUpPage() {
   const [step, setStep] = useState(1);
   const [isSogangEmail, setIsSogangEmail] = useState(false);
   const [isCheckedTOS, setisCheckedTOS] = useState(false);
   const [isCheckedPP, setisCheckedPP] = useState(false);
-
   const [isModalOpen, setIsModalOpen] = useState(true);
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { errors }
+  } = useForm<SignUpFormData>();
 
   const onChangeStep = () => {
     if (isCheckedTOS && isCheckedPP) setStep((prevStep) => prevStep + 1);
+    else alert('Please agree to the terms and conditions. ');
   };
 
   const onChangeIsSogangEmail = () => {
@@ -67,6 +73,9 @@ export default function SignUpPage() {
         <EmailVerification
           isSogangEmail={isSogangEmail}
           onChangeStep={onChangeStep}
+          register={register}
+          watch={watch}
+          setValue={setValue}
         />
       )}
 

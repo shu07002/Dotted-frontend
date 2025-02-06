@@ -3,15 +3,18 @@ import { GlobalStyles } from './style/GlobalStyles';
 import Router from './Router';
 import { RouterProvider } from 'react-router-dom';
 import { GlobalThemeProvider } from './context/ThemeContext';
+import ReactQueryProvider from './context/ReactQueryProvider';
 
 function App() {
   return (
-    <GlobalThemeProvider>
-      <AppContainer>
-        <GlobalStyles />
-        <RouterProvider router={Router} />
-      </AppContainer>
-    </GlobalThemeProvider>
+    <ReactQueryProvider>
+      <GlobalThemeProvider>
+        <AppContainer>
+          <GlobalStyles />
+          <RouterProvider router={Router} />
+        </AppContainer>
+      </GlobalThemeProvider>
+    </ReactQueryProvider>
   );
 }
 
