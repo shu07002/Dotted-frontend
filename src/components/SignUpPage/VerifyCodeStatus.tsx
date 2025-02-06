@@ -25,12 +25,8 @@ const VerifyCodeStatusWrapper = styled.div<{ $isSubmitClicked: boolean }>`
   align-items: center;
 
   > span {
-    color: var(
-      ${(props) =>
-        props.$isSubmitClicked
-          ? '--Purple-Purple_light-purple-600_light, #9678D3'
-          : '--Gray-Gray_light-gray-600_light, #6c6c6c'}
-    );
+    color: ${({ $isSubmitClicked, theme }) =>
+      $isSubmitClicked ? theme.colors.purple600 : theme.colors.gray600};
     font-family: Inter;
     font-size: 18px;
     font-style: normal;

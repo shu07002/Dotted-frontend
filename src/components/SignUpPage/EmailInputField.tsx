@@ -50,7 +50,7 @@ const EmailInputFieldWrapper = styled.div`
   margin-top: 5rem;
 
   > span {
-    color: var(--Gray-Gray_light-gray-600_light, #6c6c6c);
+    color: ${({ theme }) => theme.colors.gray600};
     font-family: Inter;
     font-size: 18px;
     font-style: normal;
@@ -72,8 +72,8 @@ const EmailInput = styled.div<{ $isSogangEmail: boolean }>`
       height: 5rem;
       flex-shrink: 0;
       border-radius: 5px;
-      border: 1px solid var(--Gray-Gray_light-gray-300_light, #d5d5d5);
-      background: var(--Gray-Gray_light-gray-100_light, #f8f8f8);
+      border: 1px solid ${({ theme }) => theme.colors.gray300};
+      background: ${({ theme }) => theme.colors.gray100};
       font-family: Pretendard;
       font-size: 20px;
       font-style: normal;
@@ -85,7 +85,7 @@ const EmailInput = styled.div<{ $isSogangEmail: boolean }>`
   }
 
   > span {
-    color: var(--Gray-Gray_light-gray-700_light, #464646);
+    color: ${({ theme }) => theme.colors.gray700};
     font-family: Pretendard;
     font-size: 20px;
     font-style: normal;

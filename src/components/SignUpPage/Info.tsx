@@ -27,7 +27,7 @@ const InfoText = styled.div`
     align-items: center;
     justify-content: center;
     > span {
-      color: var(--Purple-Purple_light-purple-600_light, #9678d3);
+      color: ${({ theme }) => theme.colors.purple600};
       font-family: Pretendard;
       font-size: 16px;
       font-style: normal;

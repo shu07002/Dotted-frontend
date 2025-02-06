@@ -109,7 +109,7 @@ const EmailVerificationWrapper = styled.section`
   justify-content: center;
   align-items: center;
   > p {
-    color: var(--Gray-Gray_light-gray-800_light, #222);
+    color: ${({ theme }) => theme.colors.gray800};
     text-align: center;
     font-family: Inter;
     font-size: 40px;
