@@ -12,12 +12,12 @@ const aboutsubs = [
 ];
 
 const tipssubs = [
-  { title: 'Sogang Map', link: '' },
-  { title: 'Restaurant', link: '' },
-  { title: 'Hospital', link: '' },
+  { title: 'Sogang Map', link: '/tips/sogang-map' },
+  { title: 'Restaurant', link: '/tips/restaurant' },
+  { title: 'Hospital', link: '/tips/hospital' },
   { title: 'FAQ', link: '/tips/faq' },
-  { title: 'Clubs', link: '' },
-  { title: 'Culture', link: '' }
+  { title: 'Clubs', link: '/tips/clubs' },
+  { title: 'Culture', link: '/tips/culture' }
 ];
 
 export default function SubHeader({ hoveredTab }: SubHeaderProps) {
