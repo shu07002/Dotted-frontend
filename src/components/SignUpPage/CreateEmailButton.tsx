@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import PurpleLink from '@/assets/svg/LoginPage/PurPleLinkSVG.svg?react';
+import PurpleLink from '@/assets/svg/SignUpPage/PurPleLinkSVG.svg?react';
 
 export default function CreateEmailButton() {
   return (

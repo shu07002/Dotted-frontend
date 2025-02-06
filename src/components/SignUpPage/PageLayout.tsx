@@ -1,17 +1,17 @@
 import styled from 'styled-components';
 
-export default function LoginPageLayout() {
+export default function PageLayout() {
   return (
-    <LoginPageLayoutBox>
+    <SignUpPageLayoutBox>
       <CircleWrapper>
         <PurpleCircle></PurpleCircle>
         <GrayCircle></GrayCircle>
       </CircleWrapper>
-    </LoginPageLayoutBox>
+    </SignUpPageLayoutBox>
   );
 }
 
-const LoginPageLayoutBox = styled.div`
+const SignUpPageLayoutBox = styled.div`
   position: fixed;
   top: 0;
   left: 0;

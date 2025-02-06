@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import BackButtonSVG from '@/assets/svg/LoginPage/BackButtonSVG.svg?react';
+import BackButtonSVG from '@/assets/svg/SignUpPage/BackButtonSVG.svg?react';
 
 export default function BackButton() {
   return (

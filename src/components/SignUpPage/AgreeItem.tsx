@@ -1,25 +1,28 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import Checked from '@/assets/svg/LoginPage/CheckedSVG.svg?react';
-import Link from '@/assets/svg/LoginPage/LinkSVG.svg?react';
+import Checked from '@/assets/svg/SignUpPage/CheckedSVG.svg?react';
+import Link from '@/assets/svg/SignUpPage/LinkSVG.svg?react';
 import { useNavigate } from 'react-router-dom';
 
 interface AgreeItemProps {
   text: string;
   link: string;
+  onChangeChecked: () => void;
+  ischecked: boolean;
 }
 
-export default function AgreeItem({ text, link }: AgreeItemProps) {
+export default function AgreeItem({
+  text,
+  link,
+  onChangeChecked,
+  ischecked
+}: AgreeItemProps) {
   const navigate = useNavigate();
-  const [checked, setChecked] = useState(false);
 
-  const onChangeChcekBox = () => {
-    setChecked(!checked);
-  };
   return (
     <AgreeItemBox>
-      <CheckBox onClick={onChangeChcekBox} $checked={checked}>
-        {checked && <CheckedSVG />}
+      <CheckBox onClick={onChangeChecked} $checked={ischecked}>
+        {ischecked && <CheckedSVG />}
       </CheckBox>
       <span>{text}</span>
       <LinkSVG onClick={() => navigate(link)} />
@@ -59,6 +62,9 @@ const AgreeItemBox = styled.div`
 
 const CheckBox = styled.div<{ $checked: boolean }>`
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-right: 1.2rem;
   width: 1.9rem;
   height: 1.9rem;
@@ -71,7 +77,6 @@ const CheckBox = styled.div<{ $checked: boolean }>`
 `;
 
 const CheckedSVG = styled(Checked)`
-  padding: 0.2rem;
   width: 1.5rem;
   height: 1.5rem;
   flex-shrink: 0;

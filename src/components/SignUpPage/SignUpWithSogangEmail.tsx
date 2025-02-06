@@ -1,11 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Recomended from './Recomended';
 import MainText from './MainText';
 import SogangSignUpButton from './SogangSignUpButton';
 import CreateEmailButton from './CreateEmailButton';
 
-export default function SignUpWithSogangEmail() {
+interface SignUpWithSogangEmailProps {
+  onChangeStep: () => void;
+  onChangeIsSogangEmail: () => void;
+}
+
+export default function SignUpWithSogangEmail({
+  onChangeStep,
+  onChangeIsSogangEmail
+}: SignUpWithSogangEmailProps) {
   return (
     <SogangEmailWrapper>
       <Recomended />
@@ -13,7 +21,10 @@ export default function SignUpWithSogangEmail() {
       <MainText />
 
       <ButtonBoxWrapper>
-        <SogangSignUpButton />
+        <SogangSignUpButton
+          onChangeStep={onChangeStep}
+          onChangeIsSogangEmail={onChangeIsSogangEmail}
+        />
         <CreateEmailButton />
       </ButtonBoxWrapper>
     </SogangEmailWrapper>

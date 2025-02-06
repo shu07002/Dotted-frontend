@@ -1,10 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
-import GoogleIcon from '@/assets/svg/LoginPage/GoogleIconSVG.svg?react';
-import AppleIcon from '@/assets/svg/LoginPage/AppleIconSVG.svg?react';
-import Email from '@/assets/svg/LoginPage/EmailSVG.svg?react';
+import GoogleIcon from '@/assets/svg/SignUpPage/GoogleIconSVG.svg?react';
+import AppleIcon from '@/assets/svg/SignUpPage/AppleIconSVG.svg?react';
+import Email from '@/assets/svg/SignUpPage/EmailSVG.svg?react';
 
-export default function SignUpWithOtherEmail() {
+interface SignUpWithOtherEmailProps {
+  onChangeStep: () => void;
+}
+
+export default function SignUpWithOtherEmail({
+  onChangeStep
+}: SignUpWithOtherEmailProps) {
   return (
     <SignUpWithOtherEmailWrapper>
       <BlackButtonWrapper>
@@ -17,7 +23,7 @@ export default function SignUpWithOtherEmail() {
         <span>Sign up with Apple</span>
       </BlackButtonWrapper>
 
-      <GrayButtonWrapper>
+      <GrayButtonWrapper onClick={onChangeStep}>
         <Email />
         <span>Sign up with Email</span>
       </GrayButtonWrapper>

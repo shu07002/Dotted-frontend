@@ -1,9 +1,21 @@
 import React from 'react';
 import styled from 'styled-components';
 
-export default function SogangSignUpButton() {
+interface SogangSignUpButtonProps {
+  onChangeStep: () => void;
+  onChangeIsSogangEmail: () => void;
+}
+
+export default function SogangSignUpButton({
+  onChangeStep,
+  onChangeIsSogangEmail
+}: SogangSignUpButtonProps) {
+  const onClickSignUpButton = () => {
+    onChangeStep();
+    onChangeIsSogangEmail();
+  };
   return (
-    <SignUpButtonBox>
+    <SignUpButtonBox onClick={onClickSignUpButton}>
       <SignUpText>Sign up with Sogang Email</SignUpText>
     </SignUpButtonBox>
   );
