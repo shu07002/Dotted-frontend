@@ -8,6 +8,7 @@ import HospitalPage from './pages/tips/HospitalPage';
 import ClubsPage from './pages/tips/ClubsPage';
 import CulturePage from './pages/tips/CulturePage';
 import SogangMapPage from './pages/tips/SogangMapPage';
+import SignUpPage from './pages/SignUpPage';
 
 const Router = createBrowserRouter([
   {
@@ -48,6 +49,10 @@ const Router = createBrowserRouter([
         element: <CulturePage />
       }
     ]
+  },
+  {
+    path: 'sign-up',
+    element: <SignUpPage />
   }
 ]);
 

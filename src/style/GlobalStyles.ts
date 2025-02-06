@@ -20,7 +20,15 @@ border: 0;
 font-size: 100%;
 font: inherit;
 vertical-align: baseline;
+<<<<<<< HEAD
 box-sizing: border-box;
+=======
+
+}
+
+* {
+  box-sizing:border-box;
+>>>>>>> f5e0efe0daa0c801f519edd7269e303792e27149
 }
 
 html {
