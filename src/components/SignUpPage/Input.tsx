@@ -18,10 +18,10 @@ const InputWrapper = styled.input`
   height: 50px;
   flex-shrink: 0;
   border-radius: 5px;
-  border: 1px solid var(--Gray-Gray_light-gray-300_light, #d5d5d5);
-  background: var(--Gray-Gray_light-gray-100_light, #f8f8f8);
+  border: 1px solid ${({ theme }) => theme.colors.gray300};
+  background: ${({ theme }) => theme.colors.gray100};
 
-  color: var(--Gray-Gray_light-gray-400_light, #b1b1b1);
+  color: ${({ theme }) => theme.colors.gray400};
   font-family: Pretendard;
   font-size: 20px;
   font-style: normal;

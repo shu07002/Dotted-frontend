@@ -29,11 +29,15 @@ const SignUpButtonBox = styled.div`
   height: 38px;
   flex-shrink: 0;
   border-radius: 24px;
-  background: linear-gradient(90deg, #44287c 27.87%, #9678d3 98.12%);
+  background: linear-gradient(
+    90deg,
+    ${({ theme }) => theme.colors.purple1050} 27.87%,
+    ${({ theme }) => theme.colors.purple600} 98.12%
+  );
 `;
 
 const SignUpText = styled.p`
-  color: var(--Gray-Gray_light-gray-50_light, #fff);
+  color: ${({ theme }) => theme.colors.gray50};
   text-align: center;
   font-family: Inter;
   font-size: 20px;

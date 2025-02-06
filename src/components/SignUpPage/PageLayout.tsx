@@ -20,6 +20,7 @@ const SignUpPageLayoutBox = styled.div`
   display: grid;
   place-items: center;
   overflow: hidden;
+  background-color: ${({ theme }) => theme.colors.backgroundLayer2};
 `;
 
 const CircleWrapper = styled.div`

@@ -54,7 +54,7 @@ const SignUpFormWrapper = styled.div`
 `;
 
 const WelcomeText = styled.h1`
-  color: var(--Gray-Gray_light-gray-800_light, #222);
+  color: ${({ theme }) => theme.colors.gray900};
   text-align: center;
   font-family: Inter;
   font-size: 4rem;
