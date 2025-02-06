@@ -1,4 +1,3 @@
-import React from 'react';
 import InputBox from './InputBox';
 import Label from './Label';
 import Input from './Input';

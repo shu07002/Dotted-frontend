@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 
 import WarnSVG from '@/assets/svg/SignUpPage/ErrorMsgSVG.svg?react';
@@ -8,7 +7,6 @@ import TrashcanSVG from '@/assets/svg/SignUpPage/TrashcanSVG.svg?react';
 import UnlockSVG from '@/assets/svg/SignUpPage/UnlockSVG.svg?react';
 import PentagonSVG from '@/assets/svg/SignUpPage/PentagonSVG.svg?react';
 import SubmitButton from './SubmitButton';
-import AccessRestrictedModal from './AccessRestrictedModal';
 
 interface StudentVerificationProps {
   onChangeStep: () => void;

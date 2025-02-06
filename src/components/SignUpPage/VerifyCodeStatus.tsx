@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 import UnVerified from '@/assets/svg/SignUpPage/UnverifiedSVG.svg?react';
 import Verified from '@/assets/svg/SignUpPage/VerifiedSVG.svg?react';

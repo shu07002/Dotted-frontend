@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import InputBox from './InputBox';
 import Label from './Label';
 import GroupSVG from '@/assets/svg/SignUpPage/GroupSVG.svg?react';

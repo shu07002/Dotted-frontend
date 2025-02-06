@@ -1,4 +1,3 @@
-import React from 'react';
 import InfoSVG from '@/assets/svg/SignUpPage/InfoSVG.svg?react';
 import styled from 'styled-components';
 

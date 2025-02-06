@@ -1,8 +1,4 @@
-import React, { useState } from 'react';
 import styled from 'styled-components';
-
-import InputBox from './InputBox';
-import Label from './Label';
 import Password from './Password';
 import Nickname from './Nickname';
 import Name from './Name';
