@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 import GoogleIcon from '@/assets/svg/SignUpPage/GoogleIconSVG.svg?react';
 import AppleIcon from '@/assets/svg/SignUpPage/AppleIconSVG.svg?react';

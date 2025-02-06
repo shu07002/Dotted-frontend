@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 import BackButtonSVG from '@/assets/svg/SignUpPage/BackButtonSVG.svg?react';
 

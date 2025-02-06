@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import styled from 'styled-components';
 import Checked from '@/assets/svg/SignUpPage/CheckedSVG.svg?react';
 import Link from '@/assets/svg/SignUpPage/LinkSVG.svg?react';
