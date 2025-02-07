@@ -1,5 +1,6 @@
 import { SubHeaderAnimation } from '@/animations/framer-motion/SubHeaderAnimation';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 interface SubHeaderProps {
@@ -21,15 +22,38 @@ const tipssubs = [
 ];
 
 export default function SubHeader({ hoveredTab }: SubHeaderProps) {
+  const { pathname } = useLocation();
+
+  //location이 tips나 about일 때만 subheader를 보여줌
+  const handlePathname = (pathname: string) => {
+    if (
+      pathname.split('/')[1] === 'tips' ||
+      pathname.split('/')[1] === 'about'
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   return (
     <AnimatePresence>
-      {(hoveredTab === 'ABOUT' || hoveredTab === 'TIPS') && (
+      {(hoveredTab === 'ABOUT' ||
+        hoveredTab === 'TIPS' ||
+        (handlePathname(pathname) &&
+          hoveredTab !== 'COMMUNITY' &&
+          hoveredTab !== 'MARKET')) && (
         <SubHeaderWrapper {...SubHeaderAnimation}>
           {hoveredTab === 'ABOUT' ? (
             <>
               {aboutsubs.map((sub, idx) => (
                 <SubElement key={idx}>
-                  <a href={sub.link}>{sub.title}</a>
+                  <a
+                    className={pathname === sub.link ? 'selected' : ''}
+                    href={sub.link}
+                  >
+                    {sub.title}
+                  </a>
                   <p>•</p>
                 </SubElement>
               ))}
@@ -38,7 +62,12 @@ export default function SubHeader({ hoveredTab }: SubHeaderProps) {
             <>
               {tipssubs.map((sub, idx) => (
                 <SubElement key={idx}>
-                  <a href={sub.link}>{sub.title}</a>
+                  <a
+                    className={pathname === sub.link ? 'selected' : ''}
+                    href={sub.link}
+                  >
+                    {sub.title}
+                  </a>
                   <p>•</p>
                 </SubElement>
               ))}
@@ -71,6 +100,10 @@ const SubElement = styled.div`
     font-weight: 500;
     line-height: 2.1rem;
     letter-spacing: -0.8px;
+
+    &.selected {
+      color: ${({ theme }) => theme.colors.purple600};
+    }
 
     &:hover {
       color: ${({ theme }) => theme.colors.purple600};

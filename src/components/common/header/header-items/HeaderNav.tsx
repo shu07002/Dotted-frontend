@@ -1,24 +1,31 @@
+import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 interface HeaderNavProps {
-  hoveredTab: string;
   setHoveredTab: (value: string) => void;
 }
 
-export default function HeaderNav({
-  // hoveredTab,
-  setHoveredTab
-}: HeaderNavProps) {
+const NavList = ['ABOUT', 'TIPS', 'COMMUNITY', 'MARKET'];
+
+export default function HeaderNav({ setHoveredTab }: HeaderNavProps) {
+  const { pathname } = useLocation();
+  const path = pathname.split('/')[1];
+
   function handleMouseEnter(e: React.MouseEvent<HTMLDivElement>) {
     setHoveredTab(e.currentTarget.innerText);
   }
 
   return (
     <NavWrapper>
-      <div onMouseEnter={handleMouseEnter}>ABOUT</div>
-      <div onMouseEnter={handleMouseEnter}>TIPS</div>
-      <div onMouseEnter={handleMouseEnter}>COMMUNITY</div>
-      <div onMouseEnter={handleMouseEnter}>MARKET</div>
+      {NavList.map((nav, idx) => (
+        <div
+          key={idx}
+          className={path === nav.toLowerCase() ? 'selected' : ''}
+          onMouseEnter={handleMouseEnter}
+        >
+          {nav}
+        </div>
+      ))}
     </NavWrapper>
   );
 }
@@ -39,6 +46,10 @@ const NavWrapper = styled.nav`
     color: ${({ theme }) => theme.colors.gray700};
     transition: all ease-in 0.1s;
     cursor: pointer;
+
+    &.selected {
+      color: ${({ theme }) => theme.colors.purple600};
+    }
 
     &:hover {
       color: ${({ theme }) => theme.colors.purple600};
