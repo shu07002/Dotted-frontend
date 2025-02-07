@@ -13,7 +13,7 @@ import { useMutation } from '@tanstack/react-query';
 import SignUpComplete from '@/components/SignUpPage/SignUpComplete';
 
 export default function SignUpPage() {
-  const [step, setStep] = useState(5);
+  const [step, setStep] = useState(1);
   const [isSogangEmail, setIsSogangEmail] = useState(false);
   const [isCheckedTOS, setisCheckedTOS] = useState(false);
   const [isCheckedPP, setisCheckedPP] = useState(false);

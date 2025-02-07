@@ -36,6 +36,7 @@ const SignUpWithOtherEmailWrapper = styled.div`
   justify-content: center;
   align-items: center;
   gap: 1.2rem;
+  margin-bottom: 17.1rem;
 `;
 
 const BlackButtonWrapper = styled.div`
