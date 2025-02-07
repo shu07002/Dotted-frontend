@@ -4,7 +4,7 @@ import Input from './Input';
 import ErrorMsg from './ErrorMsg';
 import PasswordKey from '@/assets/svg/SignUpPage/PasswordKeySVG.svg?react';
 import { SignUpFormData } from '@/types/signUpFormData';
-import { FieldErrors, UseFormRegister, UseFormWatch } from 'react-hook-form';
+import { UseFormRegister, UseFormWatch } from 'react-hook-form';
 
 interface PasswordProps {
   register: UseFormRegister<SignUpFormData>;

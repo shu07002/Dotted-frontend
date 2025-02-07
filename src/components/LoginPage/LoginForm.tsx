@@ -8,9 +8,11 @@ import LoginWithOtherEmail from './LoginWithOtherEmail';
 
 import SignUpPropmpt from './SignUpPropmpt';
 import Eye from '@/assets/svg/LoginPage/Eye.svg?react';
+import { useNavigate } from 'react-router-dom';
 
 export default function LoginForm() {
   const [eyeOn, setEyeOn] = useState(false);
+  const navigate = useNavigate();
 
   const onClickEyeOn = () => {
     setEyeOn(!eyeOn);
@@ -28,7 +30,9 @@ export default function LoginForm() {
         <div>
           <StyledCheckBox /> <span>Remember me</span>
         </div>
-        <ForgetPassword>forget password?</ForgetPassword>
+        <ForgetPassword onClick={() => navigate('forgetpass')}>
+          forget password?
+        </ForgetPassword>
       </OptionBox>
 
       <LoginButton>Login</LoginButton>
