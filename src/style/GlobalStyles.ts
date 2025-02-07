@@ -20,15 +20,12 @@ border: 0;
 font-size: 100%;
 font: inherit;
 vertical-align: baseline;
-
-}
-
-* {
-  box-sizing:border-box;
+box-sizing: border-box;
 }
 
 html {
   font-size: 62.5%;
+  font-family: 'Pretendard', sans-serif;
 }
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
@@ -36,6 +33,7 @@ display: block;
 }
 body {
 line-height: 1;
+box-sizing: border-box;
 }
 ol, ul {
 list-style: none;
@@ -52,4 +50,7 @@ table {
 border-collapse: collapse;
 border-spacing: 0;
 }
+*{
+    box-sizing: border-box;
+  }
 `;
