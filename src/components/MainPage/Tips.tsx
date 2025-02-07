@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 
 import SogangMap from '@/assets/svg/MainPage/SogangMap.svg?react';

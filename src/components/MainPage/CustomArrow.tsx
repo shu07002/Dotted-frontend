@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 import PrevIcon from '@/assets/svg/MainPage/Prev.svg?react';
 import NextIcon from '@/assets/svg/MainPage/Next.svg?react';
