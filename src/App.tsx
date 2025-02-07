@@ -25,5 +25,4 @@ const AppContainer = styled.div`
   height: 100dvh;
   overflow-x: hidden;
   background-color: ${({ theme }) => theme.colors.backgroundLayer2};
-  box-sizing: border-box;
 `;
