@@ -19,11 +19,11 @@ const CreateEmailButtonBox = styled.div`
   height: 38px;
   flex-shrink: 0;
   border-radius: 24px;
-  background: var(--Purple-Purple_light-purple-100_light, #f2f0fa);
+  background: ${({ theme }) => theme.colors.purple100};
 `;
 
 const CreateEmailText = styled.p`
-  color: var(--Purple-Purple_light-purple-600_light, #9678d3);
+  color: ${({ theme }) => theme.colors.purple600};
   text-align: center;
   font-family: Inter;
   font-size: 20px;

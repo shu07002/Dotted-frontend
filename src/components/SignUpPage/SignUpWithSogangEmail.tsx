@@ -37,7 +37,7 @@ const SogangEmailWrapper = styled.div`
   height: 23.3rem;
   flex-shrink: 0;
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.63);
+  background: ${({ theme }) => theme.colors.gray50};
   backdrop-filter: blur(6.449999809265137px);
 `;
 

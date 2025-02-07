@@ -13,17 +13,17 @@ export default function SignUpWithOtherEmail({
   return (
     <SignUpWithOtherEmailWrapper>
       <BlackButtonWrapper>
-        <GoogleIcon />
+        <GoogleIconStyled />
         <span>Sign up with Google</span>
       </BlackButtonWrapper>
 
       <BlackButtonWrapper>
-        <AppleIcon />
+        <AppleIconStyled />
         <span>Sign up with Apple</span>
       </BlackButtonWrapper>
 
       <GrayButtonWrapper onClick={onChangeStep}>
-        <Email />
+        <EmailIconStyled />
         <span>Sign up with Email</span>
       </GrayButtonWrapper>
     </SignUpWithOtherEmailWrapper>
@@ -44,14 +44,14 @@ const BlackButtonWrapper = styled.div`
   height: 38px;
   flex-shrink: 0;
   border-radius: 24px;
-  background: var(--Gray-Gray_light-gray-800_light, #222);
+  background: ${({ theme }) => theme.colors.gray800};
   display: flex;
   justify-content: center;
   align-items: center;
 
   > span {
     width: 176px;
-    color: var(--Gray-Gray_light-gray-50_light, #fff);
+    color: ${({ theme }) => theme.colors.gray50};
     text-align: center;
     font-family: Inter;
     font-size: 15px;
@@ -67,14 +67,14 @@ const GrayButtonWrapper = styled.div`
   height: 38px;
   flex-shrink: 0;
   border-radius: 24px;
-  background: var(--Background-Background_light-Base_light, #e6e6e6);
+  background: ${({ theme }) => theme.colors.backgroundBase};
   display: flex;
   justify-content: center;
   align-items: center;
 
   > span {
     width: 154px;
-    color: var(--Gray-Gray_light-gray-800_light, #222);
+    color: ${({ theme }) => theme.colors.gray800};
     text-align: center;
     font-family: Inter;
     font-size: 15px;
@@ -82,5 +82,21 @@ const GrayButtonWrapper = styled.div`
     font-weight: 300;
     line-height: normal;
     letter-spacing: -0.45px;
+  }
+`;
+
+const GoogleIconStyled = styled(GoogleIcon).attrs({
+  fill: 'red' // 원하는 색상으로 변경
+})``;
+
+const AppleIconStyled = styled(AppleIcon)`
+  path {
+    fill: ${({ theme }) => theme.colors.gray50};
+  }
+`;
+
+const EmailIconStyled = styled(Email)`
+  path {
+    fill: ${({ theme }) => theme.colors.gray900};
   }
 `;

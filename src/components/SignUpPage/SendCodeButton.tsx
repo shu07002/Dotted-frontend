@@ -34,14 +34,11 @@ const SendCodeButtonWrapper = styled.div<{ $isSendCodeClicked: boolean }>`
   height: 50px;
   flex-shrink: 0;
   border-radius: 5px;
-  background: var(
-    ${(props) =>
-      props.$isSendCodeClicked
-        ? '--Gray-Gray_light-gray-700_light, #464646'
-        : '--Purple-Purple_light-purple-600_light, #9678d3'}
-  );
+  background: ${({ $isSendCodeClicked, theme }) =>
+    $isSendCodeClicked ? theme.colors.gray700 : theme.colors.purple600};
+
   > span {
-    color: var(--Gray-Gray_light-gray-50_light, #fff);
+    color: ${({ theme }) => theme.colors.gray50};
     text-align: center;
     font-family: Pretendard;
     font-size: 20px;
@@ -53,7 +50,7 @@ const SendCodeButtonWrapper = styled.div<{ $isSendCodeClicked: boolean }>`
 `;
 
 const SendCodeButtonText = styled.div`
-  color: var(--Gray-Gray_light-gray-50_light, #fff);
+  color: ${({ theme }) => theme.colors.gray50};
   text-align: center;
   font-family: Pretendard;
   font-size: 20px;
