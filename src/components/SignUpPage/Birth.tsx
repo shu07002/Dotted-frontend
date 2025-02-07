@@ -1,18 +1,42 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import InputBox from './InputBox';
 import Label from './Label';
 import BirthSVG from '@/assets/svg/SignUpPage/BirthSVG.svg?react';
 import { getDaysInMonth, months, years } from '@/utils/dateUtils';
 import styled from 'styled-components';
+import { SignUpFormData } from '@/types/signUpFormData';
+import {
+  UseFormRegister,
+  UseFormSetValue,
+  UseFormWatch
+} from 'react-hook-form';
 
-export default function Birth() {
+interface BirthProps {
+  setValue: UseFormSetValue<SignUpFormData>;
+  register: UseFormRegister<SignUpFormData>;
+}
+
+export default function Birth({ setValue, register }: BirthProps) {
   const [year, setYear] = useState('');
   const [month, setMonth] = useState('');
+  const [day, setDay] = useState('');
+
+  useEffect(() => {
+    if (year && month && day) {
+      const formattedBirth = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+      setValue('birth', formattedBirth);
+    }
+  }, [year, month, day]);
+
   return (
     <InputBox>
       <Label name="birth">
         <BirthSVG /> <span>Birth</span>
       </Label>
+      <input
+        type="hidden"
+        {...register('birth', { required: 'Please select yout birthday' })}
+      />
       <BirthSelectWrapper>
         {/* 연도 선택 */}
         <Select value={year} onChange={(e) => setYear(e.target.value)}>
@@ -35,7 +59,7 @@ export default function Birth() {
         </Select>
 
         {/* 일 선택 (연도 & 월 반영) */}
-        <Select>
+        <Select value={day} onChange={(e) => setDay(e.target.value)}>
           <option value="">Day</option>
           {Array.from({ length: getDaysInMonth(year, month) }, (_, i) => (
             <option key={i} value={i + 1}>

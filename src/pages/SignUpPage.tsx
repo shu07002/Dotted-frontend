@@ -1,7 +1,7 @@
 import BackButton from '@/components/SignUpPage/BackButton';
 import SignUpForm from '@/components/SignUpPage/SignUpForm';
 import PageLayout from '@/components/SignUpPage/PageLayout';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import EmailVerification from '@/components/SignUpPage/EmailVerification';
 import styled from 'styled-components';
 import PersonalInformation from '@/components/SignUpPage/PersonalInformation';
@@ -9,21 +9,49 @@ import StudentVerification from '@/components/SignUpPage/StudentVerification';
 import AccessRestrictedModal from '@/components/SignUpPage/AccessRestrictedModal';
 import { useForm } from 'react-hook-form';
 import { SignUpFormData } from '@/types/signUpFormData';
+import { useMutation } from '@tanstack/react-query';
+import SignUpComplete from '@/components/SignUpPage/SignUpComplete';
 
 export default function SignUpPage() {
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(5);
   const [isSogangEmail, setIsSogangEmail] = useState(false);
   const [isCheckedTOS, setisCheckedTOS] = useState(false);
   const [isCheckedPP, setisCheckedPP] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(true);
 
+  //🤖TODO
+  // 닉네임 중복체크 후 변경 못하도록
+  // 회원가입 데이터 확인 후 요청
+
   const {
     register,
     handleSubmit,
     watch,
-    setValue,
-    formState: { errors }
+    formState: { errors },
+    setValue
   } = useForm<SignUpFormData>();
+
+  const signUpMutation = useMutation({
+    mutationFn: async (userData: SignUpFormData) => {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userData)
+      });
+      if (!response.ok) throw new Error('Failed to sign up');
+      return response.json();
+    },
+    onSuccess: (data) => {
+      console.log('🎉 회원가입 성공:', data);
+
+      // ☑️☑️☑️회원가입 성공 시 회원가입 성공 페이지로 이동동
+    },
+    onError: (error) => {
+      console.error('❌ 회원가입 실패:', error);
+    }
+  });
 
   const onChangeStep = () => {
     if (isCheckedTOS && isCheckedPP) setStep((prevStep) => prevStep + 1);
@@ -50,11 +78,16 @@ export default function SignUpPage() {
     setIsModalOpen(false);
   };
 
+  const onSubmitSignUp = (data: SignUpFormData) => {
+    console.log(data);
+    //signUpMutation.mutate(data);
+  };
+
   return (
-    <SignUpPageWrapper>
+    <SignUpPageWrapper onSubmit={handleSubmit(onSubmitSignUp)}>
       {step === 1 && <PageLayout />}
 
-      <BackButton />
+      {!((step === 4 && isSogangEmail) || step === 5) && <BackButton />}
 
       {step === 1 && (
         <SignUpForm
@@ -72,6 +105,15 @@ export default function SignUpPage() {
       {step === 2 && (
         <EmailVerification
           isSogangEmail={isSogangEmail}
+          setValue={setValue}
+          onChangeStep={onChangeStep}
+          register={register}
+          watch={watch}
+        />
+      )}
+
+      {step === 3 && (
+        <PersonalInformation
           onChangeStep={onChangeStep}
           register={register}
           watch={watch}
@@ -79,9 +121,7 @@ export default function SignUpPage() {
         />
       )}
 
-      {step === 3 && <PersonalInformation onChangeStep={onChangeStep} />}
-
-      {step === 4 && (
+      {step === 4 && !isSogangEmail && (
         <>
           {isModalOpen && (
             <AccessRestrictedModal
@@ -92,11 +132,13 @@ export default function SignUpPage() {
           <StudentVerification onChangeStep={onChangeStep} />
         </>
       )}
+
+      {((step === 4 && isSogangEmail) || step === 5) && <SignUpComplete />}
     </SignUpPageWrapper>
   );
 }
 
-const SignUpPageWrapper = styled.div`
+const SignUpPageWrapper = styled.form`
   width: 100%;
   height: 100%;
   background-color: ${({ theme }) => theme.colors.backgroundLayer2};

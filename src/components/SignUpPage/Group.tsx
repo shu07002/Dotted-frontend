@@ -1,11 +1,21 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import InputBox from './InputBox';
 import Label from './Label';
 import GroupSVG from '@/assets/svg/SignUpPage/GroupSVG.svg?react';
 import styled from 'styled-components';
+import { SignUpFormData } from '@/types/signUpFormData';
+import { UseFormSetValue } from 'react-hook-form';
 
-export default function Group() {
+interface GroupProps {
+  setValue: UseFormSetValue<SignUpFormData>;
+}
+
+export default function Group({ setValue }: GroupProps) {
   const [selectedGroup, setSelectedGroup] = useState('International Student');
+
+  useEffect(() => {
+    setValue('group', selectedGroup);
+  }, [selectedGroup]);
   return (
     <InputBox>
       <Label name="group">
