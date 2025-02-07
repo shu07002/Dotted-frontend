@@ -9,7 +9,7 @@ import StudentVerification from '@/components/SignUpPage/StudentVerification';
 import AccessRestrictedModal from '@/components/SignUpPage/AccessRestrictedModal';
 import { useForm } from 'react-hook-form';
 import { SignUpFormData } from '@/types/signUpFormData';
-import { useMutation } from '@tanstack/react-query';
+//import { useMutation } from '@tanstack/react-query';
 import SignUpComplete from '@/components/SignUpPage/SignUpComplete';
 
 export default function SignUpPage() {
@@ -121,7 +121,7 @@ export default function SignUpPage() {
               onClickNow={onClickNow}
             />
           )}
-          <StudentVerification onChangeStep={onChangeStep} />
+          <StudentVerification />
         </>
       )}
 

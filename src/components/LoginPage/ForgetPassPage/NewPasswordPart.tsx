@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import Eye from '@/assets/svg/LoginPage/Eye.svg?react';
 import ErrorMsg from '@/components/SignUpPage/ErrorMsg';

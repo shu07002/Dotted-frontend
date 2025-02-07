@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 import ArrowSVG from '@/assets/svg/SignUpPage/ArrowSVG.svg?react';
 import { useNavigate } from 'react-router-dom';

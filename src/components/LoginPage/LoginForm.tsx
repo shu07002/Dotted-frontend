@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import styled from 'styled-components';
 import Greeting from '../common/Login,SignUp/Greeting';
 import EmailInput from './EmailInput';
@@ -9,6 +8,7 @@ import LoginWithOtherEmail from './LoginWithOtherEmail';
 import SignUpPropmpt from './SignUpPropmpt';
 import Eye from '@/assets/svg/LoginPage/Eye.svg?react';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
 export default function LoginForm() {
   const [eyeOn, setEyeOn] = useState(false);

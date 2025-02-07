@@ -1,13 +1,12 @@
 import BackButton from '@/components/common/Login,SignUp/BackButton';
 import ForgetPassForm from '@/components/LoginPage/ForgetPassPage/ForgetPassForm';
-import React from 'react';
+
 import styled from 'styled-components';
 
 export default function ForgetPassPage() {
   return (
     <ForgetPassPageWrapper>
       <BackButton />
-
       <ForgetPassForm />
     </ForgetPassPageWrapper>
   );
