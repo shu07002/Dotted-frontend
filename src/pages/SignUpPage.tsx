@@ -1,7 +1,7 @@
 import BackButton from '@/components/SignUpPage/BackButton';
 import SignUpForm from '@/components/SignUpPage/SignUpForm';
 import PageLayout from '@/components/SignUpPage/PageLayout';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import EmailVerification from '@/components/SignUpPage/EmailVerification';
 import styled from 'styled-components';
 import PersonalInformation from '@/components/SignUpPage/PersonalInformation';
@@ -19,10 +19,10 @@ export default function SignUpPage() {
 
   const {
     register,
-    handleSubmit,
+    // handleSubmit,
     watch,
-    setValue,
-    formState: { errors }
+    setValue
+    // formState: { errors }
   } = useForm<SignUpFormData>();
 
   const onChangeStep = () => {
