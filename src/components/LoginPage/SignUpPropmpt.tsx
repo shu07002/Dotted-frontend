@@ -1,11 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
+import Arrow from '@/assets/svg/SignUpPage/ArrowSVG.svg?react';
+import { useNavigate } from 'react-router-dom';
 
-export default function SignUpPropmp() {
+export default function SignUpPropmpt() {
+  const navigate = useNavigate();
   return (
     <SignUpPropmpWrapper>
       <Text>Don't have an account?</Text>
-      <GoToSignUp>Sign Up</GoToSignUp>
+      <GoToSignUp onClick={() => navigate('/sign-up')}>
+        Sign Up <ArrowStyled />
+      </GoToSignUp>
     </SignUpPropmpWrapper>
   );
 }
@@ -13,6 +18,7 @@ export default function SignUpPropmp() {
 const SignUpPropmpWrapper = styled.div`
   display: flex;
   gap: 2.1rem;
+  margin-bottom: 25rem;
 `;
 
 const Text = styled.span`
@@ -26,17 +32,24 @@ const Text = styled.span`
 `;
 
 const GoToSignUp = styled.div`
-  color: var(--Purple-Purple_light-purple-600_light, #9678d3);
+  cursor: pointer;
+  color: ${({ theme }) => theme.colors.purple600};
   font-family: Inter;
   font-size: 20px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
   letter-spacing: -0.8px;
-  text-decoration-line: underline;
+  border-bottom: 2px solid ${({ theme }) => theme.colors.purple600};
   text-decoration-style: solid;
   text-decoration-skip-ink: none;
   text-decoration-thickness: auto;
   text-underline-offset: auto;
   text-underline-position: from-font;
+`;
+
+const ArrowStyled = styled(Arrow)`
+  path {
+    fill: ${({ theme }) => theme.colors.purple600};
+  }
 `;

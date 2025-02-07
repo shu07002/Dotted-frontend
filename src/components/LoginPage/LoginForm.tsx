@@ -1,18 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Greeting from '../common/Login,SignUp/Greeting';
 import EmailInput from './EmailInput';
 import PasswordInput from './PasswordInput';
 import Divider from '../common/Login,SignUp/Divider';
 import LoginWithOtherEmail from './LoginWithOtherEmail';
-import SignUpPropmp from './SignUpPropmp';
+
+import SignUpPropmpt from './SignUpPropmpt';
+import Eye from '@/assets/svg/LoginPage/Eye.svg?react';
 
 export default function LoginForm() {
+  const [eyeOn, setEyeOn] = useState(false);
+
+  const onClickEyeOn = () => {
+    setEyeOn(!eyeOn);
+  };
   return (
     <LoginFormWrapper>
       <Greeting text="Login to Dotted" />
       <EmailInput />
-      <PasswordInput />
+      <PasswordWrapper>
+        <PasswordInput eyeOn={eyeOn} />
+        <EyeStyled $eyeOn={eyeOn} onClick={onClickEyeOn} />
+      </PasswordWrapper>
+
       <OptionBox>
         <div>
           <StyledCheckBox /> <span>Remember me</span>
@@ -26,7 +37,7 @@ export default function LoginForm() {
 
       <LoginWithOtherEmail />
 
-      <SignUpPropmp />
+      <SignUpPropmpt />
     </LoginFormWrapper>
   );
 }
@@ -40,10 +51,30 @@ const LoginFormWrapper = styled.div`
   margin-bottom: 17.1rem;
 `;
 
+const PasswordWrapper = styled.div`
+  position: relative;
+`;
+
+const EyeStyled = styled(Eye)<{ $eyeOn: boolean }>`
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  right: 2rem;
+
+  transform: translateY(-50%);
+
+  g {
+    path {
+      stroke: ${({ theme, $eyeOn }) => ($eyeOn ? theme.colors.purple1000 : '')};
+    }
+  }
+`;
+
 const OptionBox = styled.div`
   display: flex;
   position: relative;
   gap: 5.1rem;
+  margin-top: 3.1rem;
   margin-bottom: 2.9rem;
 
   > div {
@@ -65,10 +96,15 @@ const OptionBox = styled.div`
 `;
 
 const StyledCheckBox = styled.input.attrs({ type: 'checkbox' })`
+  cursor: pointer;
+  width: 1.9rem;
+  height: 1.9rem;
+  margin: 0;
   accent-color: ${({ theme }) => theme.colors.purple600};
 `;
 
 const ForgetPassword = styled.div`
+  cursor: pointer;
   color: ${({ theme }) => theme.colors.purple600};
   font-family: Inter;
   font-size: 20px;
@@ -85,6 +121,7 @@ const ForgetPassword = styled.div`
 `;
 
 const LoginButton = styled.button`
+  cursor: pointer;
   width: 38.6rem;
   height: 3.8rem;
   flex-shrink: 0;

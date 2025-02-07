@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 export default function EmailInput() {
-  return <EmailInputWrapper placeholder="Email(ID)" />;
+  return <EmailInputWrapper placeholder="Email(ID)" type="email" />;
 }
 
 const EmailInputWrapper = styled.input`

@@ -1,12 +1,20 @@
 import React from 'react';
 import styled from 'styled-components';
 
-export default function PasswordInput() {
-  return <PasswordInputWrapper placeholder="Password" />;
+interface PasswordInputProps {
+  eyeOn: boolean;
+}
+
+export default function PasswordInput({ eyeOn }: PasswordInputProps) {
+  return (
+    <PasswordInputWrapper
+      placeholder="Password"
+      type={eyeOn ? 'text' : 'password'}
+    />
+  );
 }
 
 const PasswordInputWrapper = styled.input`
-  margin-bottom: 3.1rem;
   padding-left: 2.3rem;
   width: 60.5rem;
   height: 5rem;
