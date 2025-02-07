@@ -1,4 +1,4 @@
-import RestaurantList from '@/components/restaurant/RestaurantList';
+import RestaurantList from '@/components/tips/restaurant/RestaurantList';
 import { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
