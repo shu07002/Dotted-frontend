@@ -2,17 +2,20 @@ import styled from 'styled-components';
 
 interface SendCodeButtonProps {
   isSendCodeClicked: boolean;
+  isSubmitClicked: boolean;
   onClickSendCodeButton: () => void;
 }
 
 export default function SendCodeButton({
   isSendCodeClicked,
+  isSubmitClicked,
   onClickSendCodeButton
 }: SendCodeButtonProps) {
   return (
     <SendCodeButtonWrapper
       onClick={onClickSendCodeButton}
       $isSendCodeClicked={isSendCodeClicked}
+      $isSubmitClicked={isSubmitClicked}
     >
       <SendCodeButtonText>
         {isSendCodeClicked ? 'Send Code Again' : 'Send Code'}
@@ -21,8 +24,11 @@ export default function SendCodeButton({
   );
 }
 
-const SendCodeButtonWrapper = styled.div<{ $isSendCodeClicked: boolean }>`
-  cursor: pointer;
+const SendCodeButtonWrapper = styled.div<{
+  $isSendCodeClicked: boolean;
+  $isSubmitClicked: boolean;
+}>`
+  cursor: ${(props) => (props.$isSubmitClicked ? 'not-allowed' : 'pointer')};
   display: flex;
 
   flex-direction: column;

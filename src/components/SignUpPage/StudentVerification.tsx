@@ -8,13 +8,7 @@ import UnlockSVG from '@/assets/svg/SignUpPage/UnlockSVG.svg?react';
 import PentagonSVG from '@/assets/svg/SignUpPage/PentagonSVG.svg?react';
 import SubmitButton from './SubmitButton';
 
-interface StudentVerificationProps {
-  onChangeStep: () => void;
-}
-
-export default function StudentVerification({
-  onChangeStep
-}: StudentVerificationProps) {
+export default function StudentVerificat() {
   return (
     <StudentVerificationLayout>
       <StudentVerificationWrapper>
@@ -79,7 +73,7 @@ export default function StudentVerification({
 
         <SubmitButtonLayout>
           <SubmitButtonWrapper>
-            <SubmitButton onChangeStep={onChangeStep} />
+            <SubmitButton />
           </SubmitButtonWrapper>
         </SubmitButtonLayout>
       </StudentVerificationWrapper>

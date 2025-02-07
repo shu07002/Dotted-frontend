@@ -1,9 +1,9 @@
-import Logo from '../common/Logo';
 import AgreeBox from './AgreeBox';
 import SignUpWithSogangEmail from './SignUpWithSogangEmail';
-import Divider from './Divider';
+import Divider from '../common/Login,SignUp/Divider';
 import SignUpWithOtherEmail from './SignUpWithOtherEmail';
 import styled from 'styled-components';
+import Greeting from '../common/Login,SignUp/Greeting';
 
 interface SignUpFormProps {
   onChangeStep: () => void;
@@ -24,8 +24,7 @@ export default function SignUpForm({
 }: SignUpFormProps) {
   return (
     <SignUpFormWrapper>
-      <Logo />
-      <WelcomeText>Welcome to Dotted</WelcomeText>
+      <Greeting text="Welcome to Dotted" />
       <AgreeBox
         onChangeCheckedTos={onChangeCheckedTos}
         onChangeCheckedPP={onChangeCheckedPP}
@@ -51,16 +50,4 @@ const SignUpFormWrapper = styled.div`
   justify-content: center;
   align-items: center;
   margin-bottom: 17.1rem;
-`;
-
-const WelcomeText = styled.h1`
-  color: ${({ theme }) => theme.colors.gray900};
-  text-align: center;
-  font-family: Inter;
-  font-size: 4rem;
-  font-style: normal;
-  font-weight: 700;
-  line-height: normal;
-  letter-spacing: -0.2rem;
-  margin-bottom: 5.7rem;
 `;
