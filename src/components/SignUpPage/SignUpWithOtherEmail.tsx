@@ -85,9 +85,7 @@ const GrayButtonWrapper = styled.div`
   }
 `;
 
-const GoogleIconStyled = styled(GoogleIcon).attrs({
-  fill: 'red' // 원하는 색상으로 변경
-})``;
+const GoogleIconStyled = styled(GoogleIcon)``;
 
 const AppleIconStyled = styled(AppleIcon)`
   path {

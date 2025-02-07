@@ -9,6 +9,7 @@ import ClubsPage from './pages/tips/ClubsPage';
 import CulturePage from './pages/tips/CulturePage';
 import SogangMapPage from './pages/tips/SogangMapPage';
 import SignUpPage from './pages/SignUpPage';
+import LoginPage from './pages/LoginPage';
 
 const Router = createBrowserRouter([
   {
@@ -53,6 +54,10 @@ const Router = createBrowserRouter([
   {
     path: 'sign-up',
     element: <SignUpPage />
+  },
+  {
+    path: 'login',
+    element: <LoginPage />
   }
 ]);
 

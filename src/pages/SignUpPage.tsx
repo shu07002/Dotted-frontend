@@ -1,6 +1,6 @@
-import BackButton from '@/components/SignUpPage/BackButton';
+import BackButton from '@/components/common/Login,SignUp/BackButton';
 import SignUpForm from '@/components/SignUpPage/SignUpForm';
-import PageLayout from '@/components/SignUpPage/PageLayout';
+import PageLayout from '@/components/common/Login,SignUp/PageLayout';
 import { useState } from 'react';
 import EmailVerification from '@/components/SignUpPage/EmailVerification';
 import styled from 'styled-components';
