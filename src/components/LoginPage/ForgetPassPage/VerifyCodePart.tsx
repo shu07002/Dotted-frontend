@@ -25,8 +25,8 @@ const CodeInput = styled.input`
   height: 5rem;
 
   border-radius: 5px;
-  border: 1px solid var(--Gray-Gray_light-gray-300_light, #d5d5d5);
-  background: var(--Gray-Gray_light-gray-100_light, #f8f8f8);
+  border: 1px solid ${({ theme }) => theme.colors.gray300};
+  background: ${({ theme }) => theme.colors.gray100};
 
   font-family: Pretendard;
   font-size: 20px;
@@ -41,8 +41,8 @@ const VerifyButton = styled.button`
   width: 100%;
   height: 5rem;
   border-radius: 5px;
-  background: var(--Purple-Purple_light-purple-600_light, #9678d3);
-  color: var(--Gray-Gray_light-gray-50_light, #fff);
+  background: ${({ theme }) => theme.colors.purple600};
+  color: ${({ theme }) => theme.colors.gray50};
   text-align: center;
   font-family: Pretendard;
   font-size: 20px;
@@ -58,7 +58,7 @@ const VerifyButton = styled.button`
 
 const ResendButton = styled.div`
   margin-top: 3.8rem;
-  color: var(--Purple-Purple_light-purple-600_light, #9678d3);
+  color: ${({ theme }) => theme.colors.purple600};
   text-align: center;
   font-family: Inter;
   font-size: 20px;
