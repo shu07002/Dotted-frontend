@@ -3,25 +3,47 @@ import Label from './Label';
 import Input from './Input';
 import NicknameSVG from '@/assets/svg/SignUpPage/NicknameSVG.svg?react';
 import styled from 'styled-components';
+import { UseFormRegister } from 'react-hook-form';
+import { SignUpFormData } from '@/types/signUpFormData';
+import VerificationCheckButton from './VerificationCheckButton';
 
-export default function Nickname() {
+interface NicknameProps {
+  register: UseFormRegister<SignUpFormData>;
+}
+
+export default function Nickname({ register }: NicknameProps) {
   return (
     <InputBox>
       <Label name="nickname">
         <NicknameSVG /> <span>Nickname</span>
       </Label>
-      <Input name="nickname" type="text" placeholder="nickname" />
+      <Wrapper>
+        <Input
+          type="text"
+          placeholder="nickname"
+          {...register('nickname', { required: 'Please your nickname' })}
+        />
+        <VerificationCheckButton />
+      </Wrapper>
+
       <SubText>You can change your nickname anytime</SubText>
     </InputBox>
   );
 }
 
 const SubText = styled.span`
-  color: var(--Gray-Gray_light-gray-400_light, #b1b1b1);
+  color: ${({ theme }) => theme.colors.gray400};
   font-family: Pretendard;
   font-size: 16px;
   font-style: normal;
   font-weight: 300;
   line-height: 36px; /* 225% */
   letter-spacing: -0.48px;
+`;
+
+const Wrapper = styled.div`
+  width: 100%;
+  position: relative;
+
+  display: flex;
 `;

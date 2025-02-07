@@ -6,6 +6,7 @@ import { SignUpFormData } from '@/types/signUpFormData';
 interface isSogangEmail {
   isSogangEmail: boolean;
   isSendCodeClicked: boolean;
+  isSubmitClicked: boolean;
   onClickSendCodeButton: () => void;
   register: UseFormRegister<SignUpFormData>;
 }
@@ -13,6 +14,7 @@ interface isSogangEmail {
 export default function EmailInputField({
   isSogangEmail,
   isSendCodeClicked,
+  isSubmitClicked,
   onClickSendCodeButton,
   register
 }: isSogangEmail) {
@@ -31,7 +33,8 @@ export default function EmailInputField({
             id="email"
             type={isSogangEmail ? 'text' : 'email'}
             placeholder={emailPlaceholder}
-            {...register('email', { required: 'Plaese write your email' })}
+            {...register('email', { required: 'Plaese write down your email' })}
+            readOnly={isSendCodeClicked}
           />
         </label>
         {emailDomain ? <span>{emailDomain}</span> : null}
@@ -39,6 +42,7 @@ export default function EmailInputField({
 
       <SendCodeButton
         isSendCodeClicked={isSendCodeClicked}
+        isSubmitClicked={isSubmitClicked}
         onClickSendCodeButton={onClickSendCodeButton}
       />
     </EmailInputFieldWrapper>

@@ -36,6 +36,7 @@ const SignUpWithOtherEmailWrapper = styled.div`
   justify-content: center;
   align-items: center;
   gap: 1.2rem;
+  margin-bottom: 17.1rem;
 `;
 
 const BlackButtonWrapper = styled.div`
@@ -85,9 +86,7 @@ const GrayButtonWrapper = styled.div`
   }
 `;
 
-const GoogleIconStyled = styled(GoogleIcon).attrs({
-  fill: 'red' // 원하는 색상으로 변경
-})``;
+const GoogleIconStyled = styled(GoogleIcon)``;
 
 const AppleIconStyled = styled(AppleIcon)`
   path {

@@ -23,6 +23,10 @@ vertical-align: baseline;
 box-sizing: border-box;
 }
 
+*{
+  box-sizing: border-box;
+}
+
 html {
   font-size: 62.5%;
   font-family: 'Pretendard', sans-serif;
