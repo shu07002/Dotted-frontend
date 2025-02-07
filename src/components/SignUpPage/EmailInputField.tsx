@@ -1,16 +1,22 @@
 import styled from 'styled-components';
 import SendCodeButton from './SendCodeButton';
+import { UseFormRegister } from 'react-hook-form';
+import { SignUpFormData } from '@/types/signUpFormData';
 
 interface isSogangEmail {
   isSogangEmail: boolean;
   isSendCodeClicked: boolean;
+  isSubmitClicked: boolean;
   onClickSendCodeButton: () => void;
+  register: UseFormRegister<SignUpFormData>;
 }
 
 export default function EmailInputField({
   isSogangEmail,
   isSendCodeClicked,
-  onClickSendCodeButton
+  isSubmitClicked,
+  onClickSendCodeButton,
+  register
 }: isSogangEmail) {
   const emailText = isSogangEmail
     ? 'Sogang University Email Address (ID)'
@@ -24,10 +30,11 @@ export default function EmailInputField({
       <EmailInput $isSogangEmail={isSogangEmail}>
         <label htmlFor="email">
           <input
-            name="email"
             id="email"
-            type="text"
+            type={isSogangEmail ? 'text' : 'email'}
             placeholder={emailPlaceholder}
+            {...register('email', { required: 'Plaese write down your email' })}
+            readOnly={isSendCodeClicked}
           />
         </label>
         {emailDomain ? <span>{emailDomain}</span> : null}
@@ -35,6 +42,7 @@ export default function EmailInputField({
 
       <SendCodeButton
         isSendCodeClicked={isSendCodeClicked}
+        isSubmitClicked={isSubmitClicked}
         onClickSendCodeButton={onClickSendCodeButton}
       />
     </EmailInputFieldWrapper>
