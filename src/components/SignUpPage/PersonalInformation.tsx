@@ -8,21 +8,18 @@ import Info from './Info';
 import SubmitButton from './SubmitButton';
 import { SignUpFormData } from '@/types/signUpFormData';
 import {
-  FieldErrors,
   UseFormRegister,
   UseFormSetValue,
   UseFormWatch
 } from 'react-hook-form';
 
 interface PersoPersonalInformationProps {
-  onChangeStep: () => void;
   register: UseFormRegister<SignUpFormData>;
   watch: UseFormWatch<SignUpFormData>;
   setValue: UseFormSetValue<SignUpFormData>;
 }
 
 export default function PersonalInformation({
-  onChangeStep,
   register,
   watch,
   setValue
@@ -44,7 +41,7 @@ export default function PersonalInformation({
 
         <Info />
 
-        <SubmitButton onChangeStep={onChangeStep} />
+        <SubmitButton />
       </div>
     </PersonalInformationWrapper>
   );

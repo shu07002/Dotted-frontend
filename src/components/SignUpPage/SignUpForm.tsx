@@ -1,4 +1,3 @@
-import Logo from '../common/Logo';
 import AgreeBox from './AgreeBox';
 import SignUpWithSogangEmail from './SignUpWithSogangEmail';
 import Divider from '../common/Login,SignUp/Divider';

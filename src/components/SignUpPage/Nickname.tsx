@@ -3,7 +3,7 @@ import Label from './Label';
 import Input from './Input';
 import NicknameSVG from '@/assets/svg/SignUpPage/NicknameSVG.svg?react';
 import styled from 'styled-components';
-import { UseFormRegister, UseFormWatch } from 'react-hook-form';
+import { UseFormRegister } from 'react-hook-form';
 import { SignUpFormData } from '@/types/signUpFormData';
 import VerificationCheckButton from './VerificationCheckButton';
 

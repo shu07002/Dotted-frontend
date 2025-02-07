@@ -23,35 +23,29 @@ export default function SignUpPage() {
   // 닉네임 중복체크 후 변경 못하도록
   // 회원가입 데이터 확인 후 요청
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-    setValue
-  } = useForm<SignUpFormData>();
+  const { register, handleSubmit, watch, setValue } = useForm<SignUpFormData>();
 
-  const signUpMutation = useMutation({
-    mutationFn: async (userData: SignUpFormData) => {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/register`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(userData)
-      });
-      if (!response.ok) throw new Error('Failed to sign up');
-      return response.json();
-    },
-    onSuccess: (data) => {
-      console.log('🎉 회원가입 성공:', data);
+  // const signUpMutation = useMutation({
+  //   mutationFn: async (userData: SignUpFormData) => {
+  //     const response = await fetch(`${import.meta.env.VITE_API_URL}/register`, {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json'
+  //       },
+  //       body: JSON.stringify(userData)
+  //     });
+  //     if (!response.ok) throw new Error('Failed to sign up');
+  //     return response.json();
+  //   },
+  //   onSuccess: (data) => {
+  //     console.log('🎉 회원가입 성공:', data);
 
-      // ☑️☑️☑️회원가입 성공 시 회원가입 성공 페이지로 이동동
-    },
-    onError: (error) => {
-      console.error('❌ 회원가입 실패:', error);
-    }
-  });
+  //     // ☑️☑️☑️회원가입 성공 시 회원가입 성공 페이지로 이동동
+  //   },
+  //   onError: (error) => {
+  //     console.error('❌ 회원가입 실패:', error);
+  //   }
+  // });
 
   const onChangeStep = () => {
     if (isCheckedTOS && isCheckedPP) setStep((prevStep) => prevStep + 1);
@@ -105,7 +99,6 @@ export default function SignUpPage() {
       {step === 2 && (
         <EmailVerification
           isSogangEmail={isSogangEmail}
-          setValue={setValue}
           onChangeStep={onChangeStep}
           register={register}
           watch={watch}
@@ -114,7 +107,6 @@ export default function SignUpPage() {
 
       {step === 3 && (
         <PersonalInformation
-          onChangeStep={onChangeStep}
           register={register}
           watch={watch}
           setValue={setValue}

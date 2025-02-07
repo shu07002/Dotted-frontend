@@ -1,19 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import EmailInputField from './EmailInputField';
 import VerifyCodeInputField from './VerifyCodeInputField';
 import NextButton from './NextButton';
 import { SignUpFormData } from '@/types/signUpFormData';
-import {
-  UseFormRegister,
-  UseFormSetValue,
-  UseFormWatch
-} from 'react-hook-form';
+import { UseFormRegister, UseFormWatch } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 
 interface EmailVerificationProps {
   isSogangEmail: boolean;
-  setValue: UseFormSetValue<SignUpFormData>;
   onChangeStep: () => void;
   register: UseFormRegister<SignUpFormData>;
   watch: UseFormWatch<SignUpFormData>;
@@ -21,7 +16,6 @@ interface EmailVerificationProps {
 
 export default function EmailVerification({
   isSogangEmail,
-  setValue,
   onChangeStep,
   register,
   watch
@@ -124,8 +118,6 @@ export default function EmailVerification({
         isSubmitClicked={isSubmitClicked}
         onClickSendCodeButton={onClickSendCodeButton}
         register={register}
-        setValue={setValue}
-        watch={watch}
       />
 
       {isSendCodeClicked && (

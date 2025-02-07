@@ -5,11 +5,7 @@ import BirthSVG from '@/assets/svg/SignUpPage/BirthSVG.svg?react';
 import { getDaysInMonth, months, years } from '@/utils/dateUtils';
 import styled from 'styled-components';
 import { SignUpFormData } from '@/types/signUpFormData';
-import {
-  UseFormRegister,
-  UseFormSetValue,
-  UseFormWatch
-} from 'react-hook-form';
+import { UseFormRegister, UseFormSetValue } from 'react-hook-form';
 
 interface BirthProps {
   setValue: UseFormSetValue<SignUpFormData>;

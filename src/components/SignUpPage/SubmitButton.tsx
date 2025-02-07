@@ -1,10 +1,6 @@
 import styled from 'styled-components';
 
-interface SubmitButtonProps {
-  onChangeStep: () => void;
-}
-
-export default function SubmitButton({ onChangeStep }: SubmitButtonProps) {
+export default function SubmitButton() {
   return <SubmitButtonWrapper type="submit">Submit</SubmitButtonWrapper>;
 }
 
