@@ -23,7 +23,7 @@ export default function Header({ scrollY }: { scrollY: number }) {
             <img src="/logo.svg" alt="logo" />
             <span>Dotted</span>
           </Logo>
-          <HeaderNav hoveredTab={hoveredTab} setHoveredTab={setHoveredTab} />
+          <HeaderNav setHoveredTab={setHoveredTab} />
         </LeftSection>
         <RightSection onMouseEnter={() => setHoveredTab('')}>
           <AlarmButton />
