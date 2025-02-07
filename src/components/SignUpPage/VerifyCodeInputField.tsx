@@ -37,7 +37,7 @@ const VerifyCodeInputFieldWrapper = styled.div`
   margin-bottom: 2.6rem;
 
   > span {
-    color: var(--Gray-Gray_light-gray-600_light, #6c6c6c);
+    color: ${({ theme }) => theme.colors.gray600};
     font-family: Inter;
     font-size: 18px;
     font-style: normal;
@@ -58,8 +58,8 @@ const VerifyCodeInput = styled.div`
       height: 5rem;
       flex-shrink: 0;
       border-radius: 5px;
-      border: 1px solid var(--Gray-Gray_light-gray-300_light, #d5d5d5);
-      background: var(--Gray-Gray_light-gray-100_light, #f8f8f8);
+      border: 1px solid ${({ theme }) => theme.colors.gray300};
+      background: ${({ theme }) => theme.colors.gray100};
       font-family: Pretendard;
       font-size: 20px;
       font-style: normal;
@@ -79,19 +79,15 @@ const VerifyCodeButtonWrapper = styled.div<{ $isSubmitClicked: boolean }>`
   height: 50px;
   flex-shrink: 0;
   border-radius: 5px;
-  background: var(
-    ${(props) =>
-      props.$isSubmitClicked
-        ? '--Gray-Gray_light-gray-700_light, #464646'
-        : '--Purple-Purple_light-purple-600_light, #9678d3'}
-  );
+  background: ${({ $isSubmitClicked, theme }) =>
+    $isSubmitClicked ? theme.colors.gray700 : theme.colors.purple600};
 `;
 
 const VerifyCodeText = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: var(--Gray-Gray_light-gray-50_light, #fff);
+  color: ${({ theme }) => theme.colors.gray50};
   text-align: center;
   font-family: Pretendard;
   font-size: 20px;

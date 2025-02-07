@@ -19,8 +19,8 @@ const SubmitButtonWrapper = styled.button`
   flex-shrink: 0;
   border-radius: 5px;
   border: none;
-  background: var(--Purple-Purple_light-purple-600_light, #9678d3);
-  color: var(--Gray-Gray_light-gray-50_light, #fff);
+  background: ${({ theme }) => theme.colors.purple600};
+  color: ${({ theme }) => theme.colors.gray50};
   text-align: center;
   font-family: Pretendard;
   font-size: 20px;

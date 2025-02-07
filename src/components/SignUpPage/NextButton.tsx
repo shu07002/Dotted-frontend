@@ -25,9 +25,9 @@ const NextButtonWrapper = styled.div`
   height: 50px;
   flex-shrink: 0;
   border-radius: 5px;
-  background: var(--Purple-Purple_light-purple-600_light, #9678d3);
+  background: ${({ theme }) => theme.colors.purple600};
   > span {
-    color: var(--Gray-Gray_light-gray-50_light, #fff);
+    color: ${({ theme }) => theme.colors.gray50};
     text-align: center;
     font-family: Pretendard;
     font-size: 20px;
@@ -39,7 +39,7 @@ const NextButtonWrapper = styled.div`
 `;
 
 const NextButtonText = styled.div`
-  color: var(--Gray-Gray_light-gray-50_light, #fff);
+  color: ${({ theme }) => theme.colors.gray50};
   text-align: center;
   font-family: Pretendard;
   font-size: 20px;
