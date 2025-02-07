@@ -21,7 +21,7 @@ const SignUpPropmpWrapper = styled.div`
 `;
 
 const Text = styled.span`
-  color: var(--Gray-Gray_light-gray-700_light, #464646);
+  color: ${({ theme }) => theme.colors.gray700};
   font-family: Inter;
   font-size: 20px;
   font-style: normal;
