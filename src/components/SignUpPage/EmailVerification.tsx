@@ -1,15 +1,11 @@
+import { useState } from 'react';
 import styled from 'styled-components';
+import EmailInputField from './EmailInputField';
+import VerifyCodeInputField from './VerifyCodeInputField';
+import NextButton from './NextButton';
 import { SignUpFormData } from '@/types/signUpFormData';
-<<<<<<< HEAD
-import {
-  UseFormRegister,
-  UseFormSetValue,
-  UseFormWatch
-} from 'react-hook-form';
-=======
 import { UseFormRegister, UseFormWatch } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
->>>>>>> 87e68f8d298216d49a4de9f35014829417f25a5c
 
 interface EmailVerificationProps {
   isSogangEmail: boolean;
@@ -18,50 +14,6 @@ interface EmailVerificationProps {
   watch: UseFormWatch<SignUpFormData>;
 }
 
-<<<<<<< HEAD
-export default function EmailVerification(
-  {
-    // isSogangEmail,
-    // onChangeStep,
-    // register,
-    // watch,
-    // setValue
-  }: EmailVerificationProps
-) {
-  // const [isSendCodeClicked, setIsSendCodeClicked] = useState(false);
-  // const [isSubmitClicked, setIsSubmitClicked] = useState(false);
-  // const [token, setToken] = useState('');
-
-  // const sendCodeMutation = useMutation({
-  //   mutationFn: async (email: string) => {
-  //     const response = await fetch(
-  //       `${import.meta.env.VITE_API_URL}/user/email`,
-  //       {
-  //         method: 'POST',
-  //         headers: {
-  //           'Content-Type': 'application/json'
-  //         },
-  //         body: JSON.stringify({ email })
-  //       }
-  //     );
-  //     if (!response.ok) throw new Error('Failed to send verification code');
-  //     return response.json();
-  //   },
-  //   onSuccess: () => {
-  //     // setToken(data.token); // 응답 데이터 저장
-  //     //setIsSendCodeClicked(true); // 인증 코드 입력 필드 표시
-  //     console.log('Verification code sent successfully!');
-  //   },
-  //   onError: (error) => {
-  //     console.log(`Error: ${error.message}`);
-  //   }
-  // });
-
-  // const onClickSendCodeButton = () => {
-  //   const emailValue = watch('email');
-  //   const emailDomain = '@sogang.ac.kr';
-  //   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-=======
 export default function EmailVerification({
   isSogangEmail,
   onChangeStep,
@@ -130,29 +82,15 @@ export default function EmailVerification({
     const emailValue = watch('email');
     const emailDomain = '@sogang.ac.kr';
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
->>>>>>> 87e68f8d298216d49a4de9f35014829417f25a5c
 
-  //   if (emailValue === '') {
-  //     alert('Please write down your email address');
-  //     return;
-  //   }
+    if (emailValue === '') {
+      alert('Please write down your email address');
+      return;
+    }
 
-  //   if (!emailRegex.test(emailValue) && !isSogangEmail)
-  //     alert('Please enter a valid email address.');
+    if (!emailRegex.test(emailValue) && !isSogangEmail)
+      alert('Please enter a valid email address.');
 
-<<<<<<< HEAD
-  //   const finalEmail = isSogangEmail
-  //     ? `${emailValue}${emailDomain}`
-  //     : emailValue;
-
-  //   sendCodeMutation.mutate(finalEmail);
-  // };
-
-  // const onClickSubmit = () => {
-  //   //setIsSubmitClicked(true);
-  //   console.log(watch('email'));
-  // };
-=======
     const finalEmail = isSogangEmail
       ? `${emailValue}${emailDomain}`
       : emailValue;
@@ -172,10 +110,9 @@ export default function EmailVerification({
   const onChangeCode = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCode(e.target.value);
   };
->>>>>>> 87e68f8d298216d49a4de9f35014829417f25a5c
   return (
     <EmailVerificationWrapper>
-      {/* <EmailInputField
+      <EmailInputField
         isSogangEmail={isSogangEmail}
         isSendCodeClicked={isSendCodeClicked}
         isSubmitClicked={isSubmitClicked}
@@ -192,7 +129,7 @@ export default function EmailVerification({
         />
       )}
 
-      {isSubmitClicked && <NextButton onChangeStep={onChangeStep} />} */}
+      {isSubmitClicked && <NextButton onChangeStep={onChangeStep} />}
     </EmailVerificationWrapper>
   );
 }
