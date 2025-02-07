@@ -4,19 +4,29 @@ import VerifyCodeStatus from './VerifyCodeStatus';
 interface VerifyCodeInputFieldProps {
   isSubmitClicked: boolean;
   onClickSubmit: () => void;
+  code: string;
+  onChangeCode: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export default function VerifyCodeInputField({
   isSubmitClicked,
-  onClickSubmit
+  onClickSubmit,
+  code,
+  onChangeCode
 }: VerifyCodeInputFieldProps) {
   return (
     <VerifyCodeInputFieldWrapper>
       <span>Verify Code</span>
       <div style={{ display: 'flex', gap: '2.1rem' }}>
         <VerifyCodeInput>
-          <label htmlFor="email">
-            <input name="email" id="email" type="text" />
+          <label htmlFor="code">
+            <input
+              name="code"
+              id="code"
+              type="text"
+              value={code}
+              onChange={onChangeCode}
+            />
           </label>
         </VerifyCodeInput>
 
@@ -71,7 +81,7 @@ const VerifyCodeInput = styled.div`
   }
 `;
 const VerifyCodeButtonWrapper = styled.div<{ $isSubmitClicked: boolean }>`
-  cursor: pointer;
+  cursor: ${(props) => (props.$isSubmitClicked ? 'not-allowed' : 'pointer')};
   display: flex;
   justify-content: center;
   align-items: center;

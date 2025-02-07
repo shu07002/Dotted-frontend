@@ -5,9 +5,7 @@ interface SubmitButtonProps {
 }
 
 export default function SubmitButton({ onChangeStep }: SubmitButtonProps) {
-  return (
-    <SubmitButtonWrapper onClick={onChangeStep}>Submit</SubmitButtonWrapper>
-  );
+  return <SubmitButtonWrapper type="submit">Submit</SubmitButtonWrapper>;
 }
 
 const SubmitButtonWrapper = styled.button`

@@ -6,27 +6,40 @@ import Birth from './Birth';
 import Group from './Group';
 import Info from './Info';
 import SubmitButton from './SubmitButton';
+import { SignUpFormData } from '@/types/signUpFormData';
+import {
+  FieldErrors,
+  UseFormRegister,
+  UseFormSetValue,
+  UseFormWatch
+} from 'react-hook-form';
 
 interface PersoPersonalInformationProps {
   onChangeStep: () => void;
+  register: UseFormRegister<SignUpFormData>;
+  watch: UseFormWatch<SignUpFormData>;
+  setValue: UseFormSetValue<SignUpFormData>;
 }
 
 export default function PersonalInformation({
-  onChangeStep
+  onChangeStep,
+  register,
+  watch,
+  setValue
 }: PersoPersonalInformationProps) {
   return (
     <PersonalInformationWrapper>
       <div style={{ width: '60.5rem' }}>
-        <Password />
+        <Password register={register} watch={watch} />
 
-        <Nickname />
+        <Nickname register={register} />
 
         <Box>
-          <Name />
+          <Name register={register} />
 
-          <Birth />
+          <Birth setValue={setValue} register={register} />
 
-          <Group />
+          <Group setValue={setValue} />
         </Box>
 
         <Info />
