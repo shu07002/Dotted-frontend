@@ -60,9 +60,9 @@ const Select = styled.select`
   flex-shrink: 0;
   flex: 1;
   border-radius: 5px;
-  border: 1px solid var(--Gray-Gray_light-gray-700_light, #464646);
-  background: var(--Background-Background_light-Layer-2_light, #fff);
-  color: var(--Gray-Gray_light-gray-700_light, #464646);
+  border: 1px solid ${({ theme }) => theme.colors.gray700};
+  background: ${({ theme }) => theme.colors.backgroundLayer2};
+  color: ${({ theme }) => theme.colors.gray700};
   font-family: Pretendard;
   font-size: 20px;
   font-style: normal;

@@ -48,7 +48,7 @@ export default function StudentVerification({
         <Notice>
           <div>
             <ItemWrapper>
-              <PentagonSVG />
+              <StyledPentagonSVG />
               <TimeSVG />
             </ItemWrapper>
             <span>
@@ -58,7 +58,7 @@ export default function StudentVerification({
           </div>
           <div>
             <ItemWrapper>
-              <PentagonSVG />
+              <StyledPentagonSVG />
               <TrashcanSVG />
             </ItemWrapper>
             <span>
@@ -67,7 +67,7 @@ export default function StudentVerification({
           </div>
           <div>
             <ItemWrapper>
-              <PentagonSVG />
+              <StyledPentagonSVG />
               <UnlockSVG />
             </ItemWrapper>
             <span>
@@ -107,7 +107,7 @@ const Title = styled.div`
   flex-direction: column;
   justify-content: center;
   flex-shrink: 0;
-  color: var(--Gray-Gray_light-gray-700_light, #464646);
+  color: ${({ theme }) => theme.colors.gray700};
   font-family: Pretendard;
   font-size: 36px;
   font-style: normal;
@@ -120,7 +120,7 @@ const Guide = styled.div`
   width: 100%;
   > span {
     &:last-child {
-      color: var(--Purple-Purple_light-purple-600_light, #9678d3);
+      color: ${({ theme }) => theme.colors.purple600};
       font-family: Pretendard;
       font-size: 24px;
       font-style: normal;
@@ -128,7 +128,7 @@ const Guide = styled.div`
       line-height: 36px;
       letter-spacing: -0.72px;
     }
-    color: var(--Gray-Gray_light-gray-700_light, #464646);
+    color: ${({ theme }) => theme.colors.gray700};
     font-family: Pretendard;
     font-size: 24px;
     font-style: normal;
@@ -140,7 +140,7 @@ const Guide = styled.div`
 
 const Example = styled.div`
   width: 100%;
-  color: var(--Gray-Gray_light-gray-500_light, #909090);
+  color: ${({ theme }) => theme.colors.gray500};
   font-family: Pretendard;
   font-size: 20px;
   font-style: normal;
@@ -173,8 +173,8 @@ const AttatchImage = styled.div`
   height: 20.2rem;
   flex-shrink: 0;
   border-radius: 5px;
-  border: 1px dashed var(--Purple-Purple_light-purple-650_light, #8865cd);
-  background: var(--Background-Background_light-Layer-1_light, #f8f8f8);
+  border: 1px dashed ${({ theme }) => theme.colors.purple650};
+  background: ${({ theme }) => theme.colors.backgroundLayer1};
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -183,7 +183,7 @@ const AttatchImage = styled.div`
 
   > span {
     &:last-child {
-      color: var(--Purple-Purple_light-purple-600_light, #9678d3);
+      color: ${({ theme }) => theme.colors.purple600};
       text-align: center;
       font-family: Pretendard;
       font-size: 16px;
@@ -193,7 +193,7 @@ const AttatchImage = styled.div`
       letter-spacing: -0.16px;
     }
 
-    color: var(--Gray-Gray_light-gray-700_light, #464646);
+    color: ${({ theme }) => theme.colors.gray700};
     text-align: center;
     font-family: Pretendard;
     font-size: 24px;
@@ -217,7 +217,7 @@ const Notice = styled.div`
     width: 22.4rem;
 
     > span {
-      color: var(--Gray-Gray_light-gray-600_light, #6c6c6c);
+      color: ${({ theme }) => theme.colors.gray600};
       text-align: center;
       font-family: Pretendard;
       font-size: 20px;
@@ -256,4 +256,10 @@ const SubmitButtonLayout = styled.div`
 
 const SubmitButtonWrapper = styled.div`
   width: 19rem;
+`;
+
+const StyledPentagonSVG = styled(PentagonSVG)`
+  path {
+    fill: ${({ theme }) => theme.colors.purple100};
+  }
 `;

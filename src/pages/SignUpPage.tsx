@@ -45,7 +45,7 @@ export default function SignUpPage() {
   };
 
   return (
-    <div>
+    <SignUpPageWrapper>
       {step === 1 && <PageLayout />}
 
       <BackButton />
@@ -83,12 +83,18 @@ export default function SignUpPage() {
           <StudentVerification onChangeStep={onChangeStep} />
         </>
       )}
-    </div>
+    </SignUpPageWrapper>
   );
 }
 
+const SignUpPageWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  background-color: ${({ theme }) => theme.colors.backgroundLayer2};
+`;
+
 const SignUpTitle = styled.p`
-  color: var(--Gray-Gray_light-gray-800_light, #222);
+  color: ${({ theme }) => theme.colors.gray800};
   text-align: center;
   font-family: Inter;
   font-size: 40px;

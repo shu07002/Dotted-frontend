@@ -40,13 +40,13 @@ const GroupWrapper = styled.div`
   height: 88px;
   flex-shrink: 0;
   border-radius: 5px;
-  border: 1px solid var(--Gray-Gray_light-gray-300_light, #d5d5d5);
-  background: var(--Gray-Gray_light-gray-100_light, #f8f8f8);
+  border: 1px solid ${({ theme }) => theme.colors.gray300};
+  background: ${({ theme }) => theme.colors.gray100};
 `;
 
 const RadioLabel = styled.label`
   margin-right: 1.2rem;
-  color: var(--Gray-Gray_light-gray-700_light, #464646);
+  color: ${({ theme }) => theme.colors.gray600};
   font-family: Inter;
   font-size: 16px;
   font-style: normal;
@@ -63,12 +63,12 @@ const RadioInput = styled.input.attrs({ type: 'radio' })`
   border-radius: 50%;
   border: 3px solid #fff; /* 기본 테두리 */
   box-shadow: 0 0 0 1px #111; /* 바깥 라인 */
-  background-color: transparent;
+  background-color: #fff;
   transition: all 0.3s ease-in-out;
 
   &:checked {
     background-color: #fff; /* 내부 원 */
-    border: 4.5px solid #9678d3; /* 내부와 외부 테두리 사이 색상 */
+    border: 4.5px solid ${({ theme }) => theme.colors.purple600}; /* 내부와 외부 테두리 사이 색상 */
     box-shadow: 0 0 0 1px #6e6e6e; /* 바깥 라인 유지 */
   }
 `;

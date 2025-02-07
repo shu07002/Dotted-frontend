@@ -18,13 +18,9 @@ function App() {
 export default App;
 
 const AppContainer = styled.div`
-<<<<<<< HEAD
-  width: 100vw;
-  height: 100vh;
-  background-color: ${({ theme }) => theme.colors.backgroundLayer2};
-=======
   width: 100dvw;
   height: 100dvh;
   overflow-x: hidden;
->>>>>>> f5e0efe0daa0c801f519edd7269e303792e27149
+  background-color: ${({ theme }) => theme.colors.backgroundLayer2};
+  box-sizing: border-box;
 `;

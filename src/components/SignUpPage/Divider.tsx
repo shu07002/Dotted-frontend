@@ -24,7 +24,7 @@ const LineWrapper = styled.div`
     flex-direction: column;
     justify-content: center;
     flex-shrink: 0;
-    color: var(--Gray-Gray_light-gray-400_light, #b1b1b1);
+    color: ${({ theme }) => theme.colors.gray400};
     text-align: center;
     font-family: Inter;
     font-size: 15px;
@@ -40,5 +40,5 @@ const Line = styled.div`
   height: 1px;
   flex-shrink: 0;
   stroke-width: 1px;
-  background-color: var(--Gray-Gray_light-gray-300_light, #d5d5d5);
+  background-color: ${({ theme }) => theme.colors.gray300};
 `;

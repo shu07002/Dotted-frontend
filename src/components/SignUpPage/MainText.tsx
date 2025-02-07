@@ -20,7 +20,7 @@ const MainTextWrapper = styled.div`
 const MainTextBox = styled.p`
   width: 46.7rem;
   text-align: center;
-  color: var(--Gray-Gray_light-gray-700_light, #464646);
+  color: ${({ theme }) => theme.colors.gray700};
   text-align: center;
   font-family: Inter;
   font-size: 16px;

@@ -48,6 +48,6 @@ const PersonalInformationWrapper = styled.div`
 const Box = styled.div`
   width: 60.5rem;
   border-radius: 5px;
-  border: 1px solid var(--Gray-Gray_light-gray-300_light, #d5d5d5);
+  border: 1px solid ${({ theme }) => theme.colors.gray300};
   padding: 0 2.3rem;
 `;

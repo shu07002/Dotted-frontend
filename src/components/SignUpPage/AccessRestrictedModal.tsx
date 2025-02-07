@@ -73,7 +73,7 @@ const AccessRestricted = styled.div`
   height: 51.8rem;
   flex-shrink: 0;
   border-radius: 5px 5px 0 0;
-  background: var(--Background-Background_light-Layer-1_light, #f8f8f8);
+  background: ${({ theme }) => theme.colors.backgroundLayer1};
 
   /* popup */
   box-shadow: 2px 2px 2px 0px rgba(0, 0, 0, 0.11);
@@ -89,7 +89,7 @@ const Text = styled.div`
   justify-content: center;
 
   > span {
-    color: var(--Gray-Gray_light-gray-700_light, #464646);
+    color: ${({ theme }) => theme.colors.gray700};
     text-align: center;
     font-family: Inter;
     font-size: 20px;
@@ -109,7 +109,7 @@ const ButtonBox = styled.div`
   width: 100%;
   height: 7.4rem;
   border-radius: 0 0 5px 5px;
-  background: var(--Background-Background_light-Layer-1_light, #f8f8f8);
+  background: ${({ theme }) => theme.colors.backgroundLayer1};
 
   > div {
     cursor: pointer;
@@ -129,12 +129,12 @@ const ButtonBox = styled.div`
 const LaterButton = styled.div`
   width: 40%;
   border-radius: 0px 0px 0px 5px;
-  background: var(--Background-Background_light-Base_light, #e6e6e6);
-  color: var(--Gray-Gray_light-gray-700_light, #464646);
+  background: ${({ theme }) => theme.colors.backgroundBase};
+  color: ${({ theme }) => theme.colors.gray700};
 `;
 const NowButton = styled.div`
   width: 60%;
   border-radius: 0px 0px 5px 0px;
-  background: var(--Purple-Purple_light-purple-600_light, #9678d3);
-  color: var(--Gray-Gray_light-gray-50_light, #fff);
+  background: ${({ theme }) => theme.colors.purple600};
+  color: ${({ theme }) => theme.colors.gray50};
 `;
