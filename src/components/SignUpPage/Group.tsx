@@ -14,11 +14,11 @@ export default function Group({ setValue }: GroupProps) {
   const [selectedGroup, setSelectedGroup] = useState('International Student');
 
   useEffect(() => {
-    setValue('group', selectedGroup);
+    setValue('student_type', selectedGroup);
   }, [selectedGroup]);
   return (
     <InputBox>
-      <Label name="group">
+      <Label name="student_type">
         <GroupSVG /> Select your Group
       </Label>
       <GroupWrapper>

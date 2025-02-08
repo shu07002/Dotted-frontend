@@ -12,18 +12,28 @@ import {
   UseFormSetValue,
   UseFormWatch
 } from 'react-hook-form';
+import { useEffect } from 'react';
 
 interface PersoPersonalInformationProps {
+  isSogangEmail: boolean;
   register: UseFormRegister<SignUpFormData>;
   watch: UseFormWatch<SignUpFormData>;
   setValue: UseFormSetValue<SignUpFormData>;
 }
 
 export default function PersonalInformation({
+  isSogangEmail,
   register,
   watch,
   setValue
 }: PersoPersonalInformationProps) {
+  useEffect(() => {
+    if (isSogangEmail && !watch('email').includes('@')) {
+      const email = watch('email');
+      const domain = '@sogang.ac.kr';
+      setValue('email', email + domain);
+    }
+  }, []);
   return (
     <PersonalInformationWrapper>
       <div style={{ width: '60.5rem' }}>

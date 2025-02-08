@@ -1,13 +1,18 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import EmailInputField from './EmailInputField';
 import VerifyCodeInputField from './VerifyCodeInputField';
 import NextButton from './NextButton';
 import { SignUpFormData } from '@/types/signUpFormData';
-import { UseFormRegister, UseFormWatch } from 'react-hook-form';
+import {
+  UseFormRegister,
+  UseFormSetValue,
+  UseFormWatch
+} from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 
 interface EmailVerificationProps {
+  setValue: UseFormSetValue<SignUpFormData>;
   isSogangEmail: boolean;
   onChangeStep: () => void;
   register: UseFormRegister<SignUpFormData>;
@@ -15,6 +20,7 @@ interface EmailVerificationProps {
 }
 
 export default function EmailVerification({
+  setValue,
   isSogangEmail,
   onChangeStep,
   register,
@@ -24,6 +30,8 @@ export default function EmailVerification({
   const [isSubmitClicked, setIsSubmitClicked] = useState(false);
   const [token, setToken] = useState('');
   const [code, setCode] = useState('');
+
+  setValue('login_type', 'EMAIL');
 
   // ✅ 백엔드에 이메일 보내서 코드 받아오기
   const sendCodeMutation = useMutation({

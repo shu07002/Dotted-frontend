@@ -5,5 +5,7 @@ export interface SignUpFormData {
   nickname: string;
   name: string;
   birth: string;
-  group: string;
+  student_type: string;
+  login_type: string;
+  social_id: string;
 }
