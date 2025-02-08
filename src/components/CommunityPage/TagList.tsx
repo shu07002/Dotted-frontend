@@ -42,7 +42,17 @@ const TagListContainer = styled.ul`
   display: flex;
   align-items: end;
 
-  @media (max-width: 1200px) {
+  @media (max-width: 1205px) {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(4rem, 1fr));
+  }
+
+  @media (max-width: 1125px) {
+    display: flex;
+    align-items: end;
+  }
+
+  @media (max-width: 786px) {
     display: grid;
     grid-template-columns: repeat(3, minmax(4rem, 1fr));
   }
@@ -56,6 +66,7 @@ const Tag = styled.li<{ $selected: boolean }>`
   cursor: pointer;
 
   padding: 0.75rem;
+  margin: 0.5rem;
   border-radius: 20px;
 
   color: ${({ theme }) => theme.colors.gray400};
