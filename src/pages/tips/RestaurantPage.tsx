@@ -1,4 +1,6 @@
 import RestaurantList from '@/components/restaurant/RestaurantList';
+import { useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 const restaurantTabs = [
@@ -11,16 +13,27 @@ const restaurantTabs = [
 ];
 
 export default function RestaurantPage() {
-  function handleTabClick() {
-    // Do something
+  const [searchParam, setSearchParam] = useSearchParams();
+  function handleTabClick(tab: string) {
+    setSearchParam({ q: tab.toLowerCase() });
   }
+
+  useEffect(() => {
+    setSearchParam({ q: 'all' });
+  }, []);
 
   return (
     <Main>
       <HeaderSection>
         <nav>
           {restaurantTabs.map((tab, idx) => (
-            <span onClick={() => handleTabClick()} key={idx}>
+            <span
+              className={
+                searchParam.get('q') === tab.toLowerCase() ? 'selected' : ''
+              }
+              onClick={() => handleTabClick(tab)}
+              key={idx}
+            >
               {tab}
             </span>
           ))}
@@ -70,6 +83,11 @@ const HeaderSection = styled.section`
 
       &:hover {
         background-color: ${({ theme }) => theme.colors.gray300};
+      }
+
+      &.selected {
+        background-color: ${({ theme }) => theme.colors.purple600};
+        color: ${({ theme }) => theme.colors.gray50};
       }
     }
   }
