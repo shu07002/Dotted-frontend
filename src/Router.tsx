@@ -11,6 +11,7 @@ import SogangMapPage from './pages/tips/SogangMapPage';
 import SignUpPage from './pages/SignUpPage';
 import LoginPage from './pages/LoginPage';
 import ForgetPassPage from './pages/ForgetPassPage';
+import CultureDetailPage from './pages/tips/CultureDetailPage';
 
 const Router = createBrowserRouter([
   {
@@ -49,6 +50,10 @@ const Router = createBrowserRouter([
       {
         path: 'tips/culture',
         element: <CulturePage />
+      },
+      {
+        path: 'tips/culture/:id',
+        element: <CultureDetailPage />
       }
     ]
   },
