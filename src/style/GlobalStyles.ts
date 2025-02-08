@@ -54,7 +54,17 @@ table {
 border-collapse: collapse;
 border-spacing: 0;
 }
-*{
-    box-sizing: border-box;
-  }
+
+u {
+  text-decoration:underline;
+}
+
+em{
+  font-style:italic;
+}
+
+
+strong {
+    font-weight:bold
+}
 `;

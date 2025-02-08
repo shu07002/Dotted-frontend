@@ -12,7 +12,8 @@ import SignUpPage from './pages/SignUpPage';
 import LoginPage from './pages/LoginPage';
 import ForgetPassPage from './pages/ForgetPassPage';
 import CultureDetailPage from './pages/tips/CultureDetailPage';
-import CommunityPage from './pages/tips/CommunityPage';
+import CommunityPage from './pages/community/CommunityPage';
+import WriteCommunityPage from './pages/community/WriteCommunityPage';
 
 const Router = createBrowserRouter([
   {
@@ -57,8 +58,11 @@ const Router = createBrowserRouter([
         element: <CultureDetailPage />
       },
       {
-        path: '/community',
-        element: <CommunityPage />
+        path: 'community',
+        children: [
+          { path: '', element: <CommunityPage /> },
+          { path: 'write', element: <WriteCommunityPage /> }
+        ]
       }
     ]
   },

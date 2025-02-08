@@ -19,7 +19,7 @@ const PostingTagWrapper = ({ tag }: { tag: string }) => {
 };
 
 export interface CommunityPost {
-  tag: string; // 허용된 태그만 사용 가능
+  tag: string;
   title: string;
   createdAt: string;
   writer: string;
@@ -34,7 +34,7 @@ export default function PostingList({ pagedData }: PostingListProps) {
   return (
     <PostingListWrapper>
       {pagedData.map((post: CommunityPost, idx: number) => (
-        <li>
+        <li key={idx}>
           <PostingTagContainer>
             <PostingTagWrapper tag={post.tag} />
             <div></div>
