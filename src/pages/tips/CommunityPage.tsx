@@ -1,15 +1,48 @@
+import PostingList from '@/components/CommunityPage/PostingList';
+import SearchBar from '@/components/CommunityPage/SearchBar';
 import TagList from '@/components/CommunityPage/TagList';
-import { useState } from 'react';
+import { communityData } from '@/components/CommunityPage/testData';
+
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import Magnifier from '@/assets/svg/CommunityPage/Magnifier.svg?react';
+const data = communityData;
+
+export interface CommunityPost {
+  tag: string; // 허용된 태그만 사용 가능
+  title: string;
+  createdAt: string;
+  writer: string;
+  view: number;
+}
 
 export default function CommunityPage() {
   const [selectedTag, setSelectedTag] = useState('All');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pagedData, setPagedData] = useState<CommunityPost[]>([]);
 
   const onClickTag = (tag: string) => {
     setSelectedTag(tag);
   };
+
+  useEffect(() => {
+    const start = (currentPage - 1) * 8;
+    const end = start + 8;
+    setPagedData(data.slice(start, end));
+  }, [currentPage]);
+
+  function handleDirectionBtn(targetPage: number) {
+    if (targetPage < 1) {
+      setCurrentPage(1);
+    } else if (targetPage > Math.ceil(data.length / 8)) {
+      setCurrentPage(Math.ceil(data.length / 8));
+    } else {
+      setCurrentPage(targetPage);
+    }
+  }
+  function handlePageChange(targetPage: number) {
+    setCurrentPage(targetPage);
+  }
 
   return (
     <CommunityPageContainer>
@@ -18,20 +51,32 @@ export default function CommunityPage() {
 
         <TagAndSearch>
           <TagList selectedTag={selectedTag} onClickTag={onClickTag} />
-          <SearchBar>
-            <Filter>
-              <option value="all">All</option>
-              <option value="title">Title</option>
-              <option value="content">Content</option>
-            </Filter>
-            <Cross />
-            <ContentInputWrapper>
-              <label htmlFor="content"></label>
-              <input type="text" name="content" placeholder="search" />
-              <Magnifier />
-            </ContentInputWrapper>
-          </SearchBar>
+          <SearchBar />
         </TagAndSearch>
+
+        <PostingList pagedData={pagedData} />
+
+        <BottomWrapper>
+          <PaginationBox>
+            <button onClick={() => handleDirectionBtn(currentPage - 1)}>
+              {'<'}
+            </button>
+            {Array.from({ length: Math.ceil(data.length / 8) }, (_, idx) => (
+              <button
+                className={currentPage === idx + 1 ? 'selected' : ''}
+                key={idx}
+                onClick={() => handlePageChange(idx + 1)}
+              >
+                {idx + 1}
+              </button>
+            ))}
+            <button onClick={() => handleDirectionBtn(currentPage + 1)}>
+              {'>'}
+            </button>
+          </PaginationBox>
+
+          <WriteButton>Write</WriteButton>
+        </BottomWrapper>
       </Wrapper>
     </CommunityPageContainer>
   );
@@ -81,68 +126,64 @@ const TagAndSearch = styled.div`
   }
 `;
 
-const SearchBar = styled.div`
-  display: flex;
-  align-items: center;
-
-  background-color: ${({ theme }) => theme.colors.backgroundLayer1};
-  margin-bottom: 1.4rem;
-  border-radius: 0.5rem 0 0 0.5rem;
-`;
-
-const Filter = styled.select`
-  cursor: pointer;
-  border-radius: 0.5rem 0 0 0.5rem;
-  outline: none;
-
-  display: flex;
-  color: ${({ theme }) => theme.colors.gray600};
-  border: none;
-  padding: 1.1rem 2rem 1.1rem 1.1rem;
-
-  background: url('/src/assets/svg/CommunityPage/DropDown.svg') no-repeat 97%
-    50%/15px auto;
-
-  -webkit-appearance: none; /* 크롬 화살표 없애기 */
-  -moz-appearance: none; /* 파이어폭스 화살표 없애기 */
-  appearance: none; /* 화살표 없애기 */
-
-  > option {
-    color: ${({ theme }) => theme.colors.gray600};
-    font-family: Inter;
-    font-size: 1.4rem;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-  }
-`;
-
-const Cross = styled.div`
-  margin: 0 1rem;
-  width: 1px;
-  height: 2rem;
-  background-color: ${({ theme }) => theme.colors.gray600};
-`;
-
-const ContentInputWrapper = styled.div`
-  position: relative;
-  display: flex;
-  align-items: center;
+const PaginationBox = styled.div`
   width: 100%;
-  border-radius: 0 0.5rem 0.5rem 0;
-  padding: 1.1rem 2rem 1.1rem 0;
-  > input {
-    width: 100%;
-    padding-right: 1rem;
-    border-radius: 0 0.5rem 0.5rem 0;
-    border: none;
-    outline: none;
-    background-color: ${({ theme }) => theme.colors.backgroundLayer1};
-  }
+  padding: 5rem 0;
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
 
-  > svg {
-    cursor: pointer;
-    position: absolute;
-    right: 1.2rem;
+  button {
+    width: 3.1rem;
+    height: 3.1rem;
+    border-radius: 50%;
+    border: none;
+    background: none;
+    font-size: 1.6rem;
+    font-weight: 400;
+
+    &.selected {
+      background-color: ${({ theme }) => theme.colors.purple600};
+      color: ${({ theme }) => theme.colors.gray50};
+    }
+
+    &:hover {
+      background-color: ${({ theme }) => theme.colors.backgroundBase};
+      cursor: pointer;
+    }
+  }
+`;
+
+const BottomWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+`;
+
+const WriteButton = styled.button`
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 11.8rem;
+  height: 3.4rem;
+  flex-shrink: 0;
+  position: absolute;
+  right: 0;
+  border-radius: 0.5rem;
+  background-color: ${({ theme }) => theme.colors.gray700};
+  border: none;
+
+  color: var(--Gray-Gray_light-gray-50_light, #fff);
+  text-align: center;
+  font-family: Inter;
+  font-size: 1.4rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.gray600};
   }
 `;

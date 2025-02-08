@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
-import React from 'react';
 import styled from 'styled-components';
+import Fire from '@/assets/svg/CommunityPage/Fire.svg?react';
 
 const tags = ['All', 'HOT', 'Campus Life', 'Travel', 'Living', 'Others'];
 
@@ -19,6 +19,7 @@ export default function TagList({ selectedTag, onClickTag }: TagListProps) {
             onClick={() => onClickTag(tag)}
             $selected={selectedTag === tag}
           >
+            {tag === 'HOT' && <Fire />}
             {tag}
           </Tag>
           {selectedTag === tag && (
@@ -42,7 +43,7 @@ const TagListContainer = styled.ul`
   display: flex;
   align-items: end;
 
-  @media (max-width: 1205px) {
+  @media (max-width: 1235px) {
     display: grid;
     grid-template-columns: repeat(3, minmax(4rem, 1fr));
   }
@@ -85,6 +86,14 @@ const Tag = styled.li<{ $selected: boolean }>`
       : `&:hover {
     background-color: ${theme.colors.backgroundBase}; 
   }`};
+
+  > svg {
+    margin-right: 1rem;
+    path {
+      fill: ${({ theme, $selected }) =>
+        $selected ? `${theme.colors.purple600}` : `${theme.colors.gray400}`};
+    }
+  }
 `;
 const MotionUnderline = styled(motion.div)`
   width: 100%;
