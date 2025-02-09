@@ -45,7 +45,6 @@ export default function PostingList({ pagedData }: PostingListProps) {
               <span>{post.createdAt}</span>
               <span>•</span>
               <span>by</span>
-              <span>•</span>
               <span>{post.writer}</span>
               <span>•</span>
               <span>
@@ -63,6 +62,7 @@ const PostingListWrapper = styled.ul`
   width: 100%;
 
   > li {
+    padding: 1.5rem 0;
     cursor: pointer;
     width: 100%;
     height: 9.2rem;
@@ -137,21 +137,8 @@ const PostingWriter = styled.div`
     font-style: normal;
     line-height: normal;
     letter-spacing: -0.07rem;
-
-    &:first-child,
-    &:nth-child(2),
-    &:nth-child(3),
-    &:nth-child(4),
-    &:nth-child(6),
-    &:nth-child(7) {
-      font-size: 1.4rem;
-      font-weight: 300;
-    }
-
-    &:nth-child(5) {
-      font-size: 1.4rem;
-      font-weight: 500;
-    }
+    font-size: 1.4rem;
+    gap: 0.5rem;
 
     > svg {
       display: flex;
