@@ -12,6 +12,9 @@ import SignUpPage from './pages/SignUpPage';
 import LoginPage from './pages/LoginPage';
 import ForgetPassPage from './pages/ForgetPassPage';
 import CultureDetailPage from './pages/tips/culture/CultureDetailPage';
+import CommunityPage from './pages/community/CommunityPage';
+import WriteCommunityPage from './pages/community/WriteCommunityPage';
+import DetailCommunityPage from './pages/community/DetailCommunityPage';
 
 const Router = createBrowserRouter([
   {
@@ -54,6 +57,14 @@ const Router = createBrowserRouter([
       {
         path: 'tips/culture/:cultureId',
         element: <CultureDetailPage />
+      },
+      {
+        path: 'community',
+        children: [
+          { path: '', element: <CommunityPage /> },
+          { path: 'write', element: <WriteCommunityPage /> },
+          { path: 'detail/:id', element: <DetailCommunityPage /> }
+        ]
       }
     ]
   },
