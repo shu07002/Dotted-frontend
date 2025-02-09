@@ -14,11 +14,11 @@ const fetchBuildings = async () => {
 
 export default function SearchBox() {
   const [isFocused, setIsFocused] = useState(false);
-  const [buildingsData, setBuildingsData] = useState([]);
+  const [_, setBuildingsData] = useState([]);
   const [buildingNames, setBuildingNames] = useState([]);
   const [filteredBuildingNames, setFilteredBuildingNames] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
-  const [searchValue, setSearchValue] = useState('');
+  const [__, setSearchValue] = useState('');
   const { data, isLoading, error } = useQuery({
     queryKey: ['buildings'],
     queryFn: fetchBuildings

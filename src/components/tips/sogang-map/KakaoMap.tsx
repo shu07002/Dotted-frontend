@@ -45,11 +45,11 @@ interface KakaoMapProps {
 }
 
 export default function KakaoMap({ modalOpen, setModalOpen }: KakaoMapProps) {
-  const [initLatLon, setInitLatLon] = useState({
+  const [initLatLon, _] = useState({
     lat: 37.551086,
     lon: 126.940983
   });
-  const [mapLevel, setMapLevel] = useState(3);
+  const [mapLevel, __] = useState(3);
   const [buildingsData, setBuildingsData] = useState<BuildsDataType[]>([]);
   const [selectedBuildingData, setSelectedBuildingData] =
     useState<BuildsDataType | null>(null);
