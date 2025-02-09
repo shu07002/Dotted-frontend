@@ -1,7 +1,5 @@
-import React from 'react';
 import styled from 'styled-components';
 import Eye from '@/assets/svg/CommunityPage/Eye.svg?react';
-import { useNavigate } from 'react-router-dom';
 import { CommunityPost } from '@/types/CommunityPost';
 
 const PostingTagsColors: Record<string, string> = {

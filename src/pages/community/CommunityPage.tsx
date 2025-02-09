@@ -16,13 +16,23 @@ export default function CommunityPage() {
 
   const [search, setSearch] = useState('');
 
+  const [searchType, setSearchType] = useState('all');
+
   const onChangeSearch = (e: any) => {
     setSearch(e.target.value);
+  };
+
+  const onChangeSearchType = (e: any) => {
+    setSearchType(e.target.value);
   };
 
   const onClickTag = (tag: string) => {
     setSelectedTag(tag);
   };
+
+  useEffect(() => {
+    console.log(searchType);
+  }, [searchType]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'auto' });
@@ -52,7 +62,12 @@ export default function CommunityPage() {
 
         <TagAndSearch>
           <TagList selectedTag={selectedTag} onClickTag={onClickTag} />
-          <SearchBar search={search} onChangeSearch={onChangeSearch} />
+          <SearchBar
+            search={search}
+            searchType={searchType}
+            onChangeSearch={onChangeSearch}
+            onChangeSearchType={onChangeSearchType}
+          />
         </TagAndSearch>
 
         <PostingList pagedData={pagedData} />

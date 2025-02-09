@@ -3,27 +3,37 @@ import Magnifier from '@/assets/svg/CommunityPage/Magnifier.svg?react';
 
 interface SearchBarProps {
   search: string;
+  searchType: string;
+
   onChangeSearch: (e: any) => void;
+  onChangeSearchType: (e: any) => void;
 }
 
-export default function SearchBar({ search, onChangeSearch }: SearchBarProps) {
+export default function SearchBar({
+  search,
+  searchType,
+  onChangeSearch,
+  onChangeSearchType
+}: SearchBarProps) {
   return (
     <SearchBarWrapper>
-      <Filter>
+      <Filter onChange={onChangeSearchType} value={searchType}>
         <option value="all">All</option>
         <option value="title">Title</option>
         <option value="content">Content</option>
       </Filter>
       <Cross />
       <ContentInputWrapper>
-        <label htmlFor="content"></label>
-        <input
-          type="text"
-          name="content"
-          placeholder="Search"
-          value={search}
-          onChange={onChangeSearch}
-        />
+        <label htmlFor="content">
+          <input
+            type="text"
+            name="content"
+            placeholder="Search"
+            value={search}
+            onChange={onChangeSearch}
+          />
+        </label>
+
         <Magnifier />
       </ContentInputWrapper>
     </SearchBarWrapper>
@@ -80,7 +90,7 @@ const ContentInputWrapper = styled.div`
   width: 100%;
   border-radius: 0 0.5rem 0.5rem 0;
   padding: 1.1rem 2rem 1.1rem 0;
-  > input {
+  > label > input {
     width: 100%;
     padding-right: 1rem;
     border-radius: 0 0.5rem 0.5rem 0;

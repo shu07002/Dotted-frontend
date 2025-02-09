@@ -2,9 +2,9 @@ import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { communityData } from '@/components/CommunityPage/testData';
 import { useEffect, useState } from 'react';
-import Posting from './Posting';
+import Posting from '../../components/CommunityPage/Posting';
 
-import CommentSection from './CommentSection';
+import CommentSection from '../../components/CommunityPage/CommentSection';
 import { CommunityPost } from '@/types/CommunityPost';
 import PostingList from '@/components/CommunityPage/PostingList';
 
