@@ -195,7 +195,7 @@ export default function KakaoMap({ modalOpen, setModalOpen }: KakaoMapProps) {
     window.kakao.maps.load(() => {
       mapLoad();
     });
-  }, [searchParams, buildingsData]);
+  }, [searchParams, buildingsData, fetchedData]);
   //buildingsData, initLatLon, mapLevel, searchParams
   return (
     <MapSection>
