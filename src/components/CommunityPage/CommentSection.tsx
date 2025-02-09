@@ -1,5 +1,5 @@
 import { CommunityPost } from '@/types/CommunityPost';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 
 import Profile from '@/assets/svg/CommunityPage/Profile.svg?react';
