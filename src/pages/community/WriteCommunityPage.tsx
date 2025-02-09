@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
-import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 import TagBox from '@/components/WriteCommunityPage/TagBox';
 import Editor from '@/components/WriteCommunityPage/Editor';
@@ -9,6 +8,10 @@ export default function WriteCommunityPage() {
   const [selectedTag, setSelectedTag] = useState('');
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+
+  useEffect(() => {
+    console.log(content);
+  }, [content]);
 
   return (
     <WriteCommunityPageContainer>

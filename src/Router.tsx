@@ -14,6 +14,7 @@ import ForgetPassPage from './pages/ForgetPassPage';
 import CultureDetailPage from './pages/tips/culture/CultureDetailPage';
 import CommunityPage from './pages/community/CommunityPage';
 import WriteCommunityPage from './pages/community/WriteCommunityPage';
+import DetailCommunityPage from './pages/community/DetailCommunityPage';
 
 const Router = createBrowserRouter([
   {
@@ -61,7 +62,8 @@ const Router = createBrowserRouter([
         path: 'community',
         children: [
           { path: '', element: <CommunityPage /> },
-          { path: 'write', element: <WriteCommunityPage /> }
+          { path: 'write', element: <WriteCommunityPage /> },
+          { path: 'detail/:id', element: <DetailCommunityPage /> }
         ]
       }
     ]

@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import Eye from '@/assets/svg/CommunityPage/Eye.svg?react';
+import { useNavigate } from 'react-router-dom';
+import { CommunityPost } from '@/types/CommunityPost';
 
 const PostingTagsColors: Record<string, string> = {
   Living: `purple950`,
@@ -18,14 +20,6 @@ const PostingTagWrapper = ({ tag }: { tag: string }) => {
   );
 };
 
-export interface CommunityPost {
-  tag: string;
-  title: string;
-  createdAt: string;
-  writer: string;
-  view: number;
-}
-
 interface PostingListProps {
   pagedData: CommunityPost[];
 }
@@ -34,7 +28,12 @@ export default function PostingList({ pagedData }: PostingListProps) {
   return (
     <PostingListWrapper>
       {pagedData.map((post: CommunityPost, idx: number) => (
-        <li key={idx}>
+        <li
+          key={idx}
+          onClick={() =>
+            (window.location.href = `/community/detail/${post.id}`)
+          }
+        >
           <PostingTagContainer>
             <PostingTagWrapper tag={post.tag} />
             <div></div>
@@ -42,7 +41,7 @@ export default function PostingList({ pagedData }: PostingListProps) {
           <PostingInfo>
             <PostingTitle>
               <span>{post.title}</span>
-              <span>[3]</span>
+              <span>[{post.comment_count}]</span>
             </PostingTitle>
             <PostingWriter>
               <span>{post.createdAt}</span>

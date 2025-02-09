@@ -2,19 +2,12 @@ import PostingList from '@/components/CommunityPage/PostingList';
 import SearchBar from '@/components/CommunityPage/SearchBar';
 import TagList from '@/components/CommunityPage/TagList';
 import { communityData } from '@/components/CommunityPage/testData';
+import { CommunityPost } from '@/types/CommunityPost';
 
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 const data = communityData;
-
-export interface CommunityPost {
-  tag: string; // 허용된 태그만 사용 가능
-  title: string;
-  createdAt: string;
-  writer: string;
-  view: number;
-}
 
 export default function CommunityPage() {
   const [selectedTag, setSelectedTag] = useState('All');
@@ -26,6 +19,7 @@ export default function CommunityPage() {
   };
 
   useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'auto' });
     const start = (currentPage - 1) * 8;
     const end = start + 8;
     setPagedData(data.slice(start, end));
@@ -40,6 +34,7 @@ export default function CommunityPage() {
       setCurrentPage(targetPage);
     }
   }
+
   function handlePageChange(targetPage: number) {
     setCurrentPage(targetPage);
   }
