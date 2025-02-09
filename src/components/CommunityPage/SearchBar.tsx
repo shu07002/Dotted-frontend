@@ -1,8 +1,12 @@
-import React from 'react';
 import styled from 'styled-components';
 import Magnifier from '@/assets/svg/CommunityPage/Magnifier.svg?react';
 
-export default function SearchBar() {
+interface SearchBarProps {
+  search: string;
+  onChangeSearch: (e: any) => void;
+}
+
+export default function SearchBar({ search, onChangeSearch }: SearchBarProps) {
   return (
     <SearchBarWrapper>
       <Filter>
@@ -13,7 +17,13 @@ export default function SearchBar() {
       <Cross />
       <ContentInputWrapper>
         <label htmlFor="content"></label>
-        <input type="text" name="content" placeholder="Search" />
+        <input
+          type="text"
+          name="content"
+          placeholder="Search"
+          value={search}
+          onChange={onChangeSearch}
+        />
         <Magnifier />
       </ContentInputWrapper>
     </SearchBarWrapper>

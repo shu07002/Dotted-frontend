@@ -14,6 +14,12 @@ export default function CommunityPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [pagedData, setPagedData] = useState<CommunityPost[]>([]);
 
+  const [search, setSearch] = useState('');
+
+  const onChangeSearch = (e: any) => {
+    setSearch(e.target.value);
+  };
+
   const onClickTag = (tag: string) => {
     setSelectedTag(tag);
   };
@@ -46,7 +52,7 @@ export default function CommunityPage() {
 
         <TagAndSearch>
           <TagList selectedTag={selectedTag} onClickTag={onClickTag} />
-          <SearchBar />
+          <SearchBar search={search} onChangeSearch={onChangeSearch} />
         </TagAndSearch>
 
         <PostingList pagedData={pagedData} />
