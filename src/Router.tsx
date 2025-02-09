@@ -6,12 +6,12 @@ import FAQPage from './pages/tips/FAQPage';
 import RestaurantPage from './pages/tips/RestaurantPage';
 import HospitalPage from './pages/tips/HospitalPage';
 import ClubsPage from './pages/tips/ClubsPage';
-import CulturePage from './pages/tips/CulturePage';
+import CulturePage from './pages/tips/culture/CulturePage';
 import SogangMapPage from './pages/tips/SogangMapPage';
 import SignUpPage from './pages/SignUpPage';
 import LoginPage from './pages/LoginPage';
 import ForgetPassPage from './pages/ForgetPassPage';
-import CultureDetailPage from './pages/tips/CultureDetailPage';
+import CultureDetailPage from './pages/tips/culture/CultureDetailPage';
 import CommunityPage from './pages/community/CommunityPage';
 import WriteCommunityPage from './pages/community/WriteCommunityPage';
 
@@ -54,7 +54,7 @@ const Router = createBrowserRouter([
         element: <CulturePage />
       },
       {
-        path: 'tips/culture/:id',
+        path: 'tips/culture/:cultureId',
         element: <CultureDetailPage />
       },
       {
