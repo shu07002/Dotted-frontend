@@ -1,39 +1,19 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <!-- kakaomap api -->
-    <script
-      type="text/javascript"
-      src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1b42675fef26ec8083259dd573c9cd01"
-    ></script>
-    <script
-      type="text/javascript"
-      src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1b42675fef26ec8083259dd573c9cd01&libraries=services"
-    ></script>
-    <script
-      type="text/javascript"
-      src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1b42675fef26ec8083259dd573c9cd01&libraries=LIBRARY"
-    ></script>
-
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/logo.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dotted</title>
+
+    <!-- 카카오 지도 API -->
+    <script
+      type="text/javascript"
+      src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1b42675fef26ec8083259dd573c9cd01&libraries=services&autoload=false"
+      defer
+    ></script>
   </head>
   <body>
-    <!-- kakaomap api -->
-    <script
-      type="text/javascript"
-      src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1b42675fef26ec8083259dd573c9cd01"
-    ></script>
-    <script
-      type="text/javascript"
-      src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1b42675fef26ec8083259dd573c9cd01&libraries=services"
-    ></script>
-    <script
-      type="text/javascript"
-      src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1b42675fef26ec8083259dd573c9cd01&libraries=LIBRARY"
-    ></script>
     <div id="root"></div>
     <div id="modal-portal"></div>
     <script type="module" src="/src/main.tsx"></script>
