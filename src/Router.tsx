@@ -78,10 +78,6 @@ const Router = createBrowserRouter([
         element: <MyPageLayout />,
         children: [
           {
-            path: '',
-            element: <EditProfilePage />
-          },
-          {
             path: 'profile',
             element: <EditProfilePage />
           }

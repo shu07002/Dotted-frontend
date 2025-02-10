@@ -51,7 +51,7 @@ const UpWrapper = styled.div<{ $scrollY: number }>`
       ? theme.colors.backgroundLayer2
       : theme.colors.backgroundLayer2}; */
   background-color: ${({ theme }) => theme.colors.backgroundLayer2};
-  color: ${({ theme }) => theme.colors.gray700};
+  color: ${({ theme }) => theme.colors.gray800};
   display: flex;
   justify-content: space-between;
 `;
