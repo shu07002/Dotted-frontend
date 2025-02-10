@@ -16,6 +16,7 @@ export default function WriteMarketPage() {
   const [previews, setPreviews] = useState<(string | null)[]>([null]);
   const [imgFiles, setImgFiles] = useState<(File | null)[]>([null]);
   const imgFileRef = useRef<HTMLInputElement>(null);
+  console.log(imgFiles);
 
   const onSubmit: SubmitHandler<data> = (data) => {
     alert(JSON.stringify(data));
