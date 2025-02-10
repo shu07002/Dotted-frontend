@@ -17,6 +17,7 @@ import WriteCommunityPage from './pages/community/WriteCommunityPage';
 import DetailCommunityPage from './pages/community/DetailCommunityPage';
 import Footer from './components/common/Footer';
 import MarketPage from './pages/market/MarketPage';
+import WriteMarketPage from './pages/market/WriteMarketPage';
 
 const Router = createBrowserRouter([
   {
@@ -77,6 +78,10 @@ const Router = createBrowserRouter([
           {
             path: '',
             element: <MarketPage />
+          },
+          {
+            path: 'write',
+            element: <WriteMarketPage />
           }
         ]
       }

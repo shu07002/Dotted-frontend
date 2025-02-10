@@ -51,6 +51,7 @@ const MarketListContainer = styled.div`
     }
 
     > li {
+      cursor: pointer;
       aspect-ratio: 0.7;
       display: flex;
       flex-direction: column;
