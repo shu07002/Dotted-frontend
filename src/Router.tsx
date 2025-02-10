@@ -15,6 +15,8 @@ import CultureDetailPage from './pages/tips/culture/CultureDetailPage';
 import CommunityPage from './pages/community/CommunityPage';
 import WriteCommunityPage from './pages/community/WriteCommunityPage';
 import DetailCommunityPage from './pages/community/DetailCommunityPage';
+import EditProfilePage from './pages/mypage/EditProfilePage';
+import MyPageLayout from './components/mypage/MyPageLayout';
 
 const Router = createBrowserRouter([
   {
@@ -31,32 +33,37 @@ const Router = createBrowserRouter([
         element: <MainPage />
       },
       {
-        path: 'tips/sogang-map',
-        element: <SogangMapPage />
-      },
-      {
-        path: 'tips/restaurant',
-        element: <RestaurantPage />
-      },
-      {
-        path: 'tips/hospital',
-        element: <HospitalPage />
-      },
-      {
-        path: 'tips/faq',
-        element: <FAQPage />
-      },
-      {
-        path: 'tips/clubs',
-        element: <ClubsPage />
-      },
-      {
-        path: 'tips/culture',
-        element: <CulturePage />
-      },
-      {
-        path: 'tips/culture/:cultureId',
-        element: <CultureDetailPage />
+        path: 'tips',
+        children: [
+          {
+            path: 'sogang-map',
+            element: <SogangMapPage />
+          },
+          {
+            path: 'restaurant',
+            element: <RestaurantPage />
+          },
+          {
+            path: 'hospital',
+            element: <HospitalPage />
+          },
+          {
+            path: 'faq',
+            element: <FAQPage />
+          },
+          {
+            path: 'clubs',
+            element: <ClubsPage />
+          },
+          {
+            path: 'culture',
+            element: <CulturePage />
+          },
+          {
+            path: 'culture/:cultureId',
+            element: <CultureDetailPage />
+          }
+        ]
       },
       {
         path: 'community',
@@ -64,6 +71,20 @@ const Router = createBrowserRouter([
           { path: '', element: <CommunityPage /> },
           { path: 'write', element: <WriteCommunityPage /> },
           { path: 'detail/:id', element: <DetailCommunityPage /> }
+        ]
+      },
+      {
+        path: 'mypage',
+        element: <MyPageLayout />,
+        children: [
+          {
+            path: '',
+            element: <EditProfilePage />
+          },
+          {
+            path: 'profile',
+            element: <EditProfilePage />
+          }
         ]
       }
     ]
