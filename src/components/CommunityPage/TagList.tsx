@@ -2,14 +2,17 @@ import { motion } from 'framer-motion';
 import styled from 'styled-components';
 import Fire from '@/assets/svg/CommunityPage/Fire.svg?react';
 
-const tags = ['All', 'HOT', 'Campus Life', 'Travel', 'Living', 'Others'];
-
 interface TagListProps {
+  tags: string[];
   selectedTag: string;
   onClickTag: (tag: string) => void;
 }
 
-export default function TagList({ selectedTag, onClickTag }: TagListProps) {
+export default function TagList({
+  tags,
+  selectedTag,
+  onClickTag
+}: TagListProps) {
   return (
     <TagListContainer>
       {tags.map((tag, idx) => (

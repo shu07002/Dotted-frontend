@@ -1,23 +1,20 @@
-import PostingList from '@/components/CommunityPage/PostingList';
 import SearchBar from '@/components/CommunityPage/SearchBar';
 import TagList from '@/components/CommunityPage/TagList';
-import { communityData } from '@/components/CommunityPage/testData';
-import { CommunityPost } from '@/types/CommunityPost';
-
+import MakrketList from '@/components/MarketPage/MakrketList';
+import { marketPost } from '@/components/MarketPage/marketPost';
+import { MarketPost } from '@/types/MarketPost';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-const data = communityData;
-const tags = ['All', 'HOT', 'Campus Life', 'Travel', 'Living', 'Others'];
+const tags = ['All', 'Only On Sale'];
+const data = marketPost;
 
-export default function CommunityPage() {
+export default function MarketPage() {
   const [selectedTag, setSelectedTag] = useState('All');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pagedData, setPagedData] = useState<CommunityPost[]>([]);
-
   const [search, setSearch] = useState('');
-
   const [searchType, setSearchType] = useState('all');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pagedData, setPagedData] = useState<MarketPost[]>([]);
 
   const onChangeSearch = (e: any) => {
     setSearch(e.target.value);
@@ -31,18 +28,11 @@ export default function CommunityPage() {
     setSelectedTag(tag);
   };
 
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'auto' });
-    const start = (currentPage - 1) * 8;
-    const end = start + 8;
-    setPagedData(data.slice(start, end));
-  }, [currentPage]);
-
   function handleDirectionBtn(targetPage: number) {
     if (targetPage < 1) {
       setCurrentPage(1);
-    } else if (targetPage > Math.ceil(data.length / 8)) {
-      setCurrentPage(Math.ceil(data.length / 8));
+    } else if (targetPage > Math.ceil(data.length / 12)) {
+      setCurrentPage(Math.ceil(data.length / 12));
     } else {
       setCurrentPage(targetPage);
     }
@@ -52,10 +42,24 @@ export default function CommunityPage() {
     setCurrentPage(targetPage);
   }
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'auto' });
+    const start = (currentPage - 1) * 12;
+    const end = start + 12;
+    setPagedData(data.slice(start, end));
+  }, [currentPage]);
+
   return (
-    <CommunityPageContainer>
+    <MarketPageContainer>
       <Wrapper>
-        <Title>Community</Title>
+        <Title>Market</Title>
+        <Notice>
+          <span>
+            In the market community, you can use the secret comment function
+            {`\n`}
+            when sharing sensitive information related to transaction
+          </span>
+        </Notice>
 
         <TagAndSearch>
           <TagList
@@ -71,14 +75,14 @@ export default function CommunityPage() {
           />
         </TagAndSearch>
 
-        <PostingList pagedData={pagedData} />
+        <MakrketList pagedData={pagedData} />
 
         <BottomWrapper>
           <PaginationBox>
             <button onClick={() => handleDirectionBtn(currentPage - 1)}>
               {'<'}
             </button>
-            {Array.from({ length: Math.ceil(data.length / 8) }, (_, idx) => (
+            {Array.from({ length: Math.ceil(data.length / 12) }, (_, idx) => (
               <button
                 className={currentPage === idx + 1 ? 'selected' : ''}
                 key={idx}
@@ -95,11 +99,11 @@ export default function CommunityPage() {
           <WriteButton>Write</WriteButton>
         </BottomWrapper>
       </Wrapper>
-    </CommunityPageContainer>
+    </MarketPageContainer>
   );
 }
 
-const CommunityPageContainer = styled.div`
+const MarketPageContainer = styled.div`
   margin-top: 2.5rem;
   width: 100%;
   padding: 0 24.3rem;
@@ -127,12 +131,24 @@ const Title = styled.div`
   letter-spacing: -0.18rem;
 `;
 
+const Notice = styled.div`
+  margin: 2rem 0;
+  > span {
+    white-space: pre-wrap;
+    color: ${({ theme }) => theme.colors.gray400};
+    font-family: Pretendard;
+    font-size: 1.6rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 2rem; /* 125% */
+  }
+`;
+
 const TagAndSearch = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: end;
   margin-top: 2rem;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.gray300};
 
   @media (max-width: 1125px) {
     flex-direction: column;

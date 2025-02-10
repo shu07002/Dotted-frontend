@@ -16,6 +16,7 @@ import CommunityPage from './pages/community/CommunityPage';
 import WriteCommunityPage from './pages/community/WriteCommunityPage';
 import DetailCommunityPage from './pages/community/DetailCommunityPage';
 import Footer from './components/common/Footer';
+import MarketPage from './pages/market/MarketPage';
 
 const Router = createBrowserRouter([
   {
@@ -68,6 +69,15 @@ const Router = createBrowserRouter([
           { path: '', element: <CommunityPage /> },
           { path: 'write', element: <WriteCommunityPage /> },
           { path: 'detail/:id', element: <DetailCommunityPage /> }
+        ]
+      },
+      {
+        path: 'market',
+        children: [
+          {
+            path: '',
+            element: <MarketPage />
+          }
         ]
       }
     ]
