@@ -20,7 +20,6 @@ export default function HeaderLayout() {
   return (
     <Wrapper>
       <Header scrollY={scrollY} />
-      <Outlet />
     </Wrapper>
   );
 }
