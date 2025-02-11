@@ -8,7 +8,7 @@ export const communityData = [
     view: 3,
     comment_count: 0,
     content:
-      "<p>Hi there!!</p><p>I'm looking for great restaurants in town.</p><p>Any recommendations?</p>"
+      '## Best Restaurant Guide\nCheck out the best places to eat in town! 🍽️'
   },
   {
     id: 2,
@@ -19,7 +19,7 @@ export const communityData = [
     view: 12,
     comment_count: 3,
     content:
-      "<p>Hello students!</p><p>Where's the best place to study on campus?</p><p>Let me know your favorites!</p>"
+      '### Study Spots on Campus\nFind the coziest places to focus on your studies. 📚'
   },
   {
     id: 3,
@@ -30,7 +30,7 @@ export const communityData = [
     view: 7,
     comment_count: 6,
     content:
-      "<p>Hey book lovers!</p><p>I'm looking for inspiring books.</p><p>Any must-read recommendations?</p>"
+      '#### Book Recommendations\nA curated list of must-read books for self-improvement. 📖'
   },
   {
     id: 4,
@@ -40,8 +40,7 @@ export const communityData = [
     writer: 'mango',
     view: 25,
     comment_count: 19,
-    content:
-      '<p>Planning a trip to Japan!</p><p>What are the must-visit places?</p><p>Looking forward to your suggestions!</p>'
+    content: '## Visit Japan\nTop 10 destinations you should visit in Japan! 🗾'
   },
   {
     id: 5,
@@ -52,7 +51,7 @@ export const communityData = [
     view: 5,
     comment_count: 19,
     content:
-      '<p>Living in a small apartment.</p><p>How do you keep things organized?</p><p>Share your tips!</p>'
+      '### Organizing Your Apartment\nSimple steps to keep your living space tidy and efficient. 🏡'
   },
   {
     id: 6,
@@ -63,7 +62,7 @@ export const communityData = [
     view: 8,
     comment_count: 3,
     content:
-      "<p>College students, help!</p><p>Any advice on managing assignments efficiently?</p><p>Let's discuss!</p>"
+      '#### Assignment Management Tips\nManage your school workload like a pro! 🎓'
   },
   {
     id: 7,
@@ -74,7 +73,7 @@ export const communityData = [
     view: 6,
     comment_count: 4,
     content:
-      '<p>Looking for productivity apps.</p><p>Which apps help you stay organized?</p><p>Let me know!</p>'
+      '### Best Productivity Apps\nApps that will change the way you work and stay organized. 📱'
   },
   {
     id: 8,
@@ -84,8 +83,7 @@ export const communityData = [
     writer: 'grape',
     view: 19,
     comment_count: 5,
-    content:
-      '<p>Thinking about solo travel!</p><p>Any tips for safe and fun solo trips?</p><p>Would love to hear them!</p>'
+    content: '## Solo Travel Hacks\nHow to make solo traveling easy and fun! ✈️'
   },
   {
     id: 9,
@@ -96,7 +94,7 @@ export const communityData = [
     view: 10,
     comment_count: 6,
     content:
-      '<p>Furniture shopping on a budget.</p><p>Where can I find affordable and stylish furniture?</p><p>Any suggestions?</p>'
+      '#### Affordable Furniture Guide\nFind quality furniture without breaking the bank. 🛋️'
   },
   {
     id: 10,
@@ -107,7 +105,7 @@ export const communityData = [
     view: 13,
     comment_count: 0,
     content:
-      '<p>Joining a club in college?</p><p>What are the best clubs to be part of?</p><p>Looking for advice!</p>'
+      '### Top University Clubs\nThe best clubs and organizations to join for networking. 🎭'
   },
   {
     id: 11,
@@ -118,7 +116,7 @@ export const communityData = [
     view: 11,
     comment_count: 19,
     content:
-      '<p>Need motivation!</p><p>What keeps you inspired every day?</p><p>Share your secrets!</p>'
+      '#### Staying Motivated\nPractical strategies to keep yourself inspired every day. 🌟'
   },
   {
     id: 12,
@@ -129,7 +127,7 @@ export const communityData = [
     view: 14,
     comment_count: 14,
     content:
-      '<p>Backpacking essentials.</p><p>What items are a must-have?</p><p>Looking forward to your list!</p>'
+      "## Backpacking Essentials\nDon't forget these items on your next trip! 🎒"
   },
   {
     id: 13,
@@ -140,7 +138,7 @@ export const communityData = [
     view: 9,
     comment_count: 5,
     content:
-      '<p>Meal prep planning.</p><p>How do you organize weekly meals?</p><p>Any easy recipes?</p>'
+      '### Weekly Meal Prep Plan\nPlan your meals to save time and eat healthy. 🥗'
   },
   {
     id: 14,
@@ -151,7 +149,7 @@ export const communityData = [
     view: 5,
     comment_count: 6,
     content:
-      '<p>Coffee lovers unite!</p><p>Where’s the best coffee spot on campus?</p><p>Looking for recommendations!</p>'
+      '#### Best Coffee Spots on Campus\nFind the best places to grab a cup of coffee. ☕'
   },
   {
     id: 15,
@@ -161,8 +159,7 @@ export const communityData = [
     writer: 'watermelon',
     view: 18,
     comment_count: 17,
-    content:
-      '<p>Movie night!</p><p>What’s your favorite must-watch movie?</p><p>Share your top picks!</p>'
+    content: "### Must-Watch Movies\nA list of movies you shouldn't miss! 🎬"
   },
   {
     id: 16,
@@ -172,8 +169,7 @@ export const communityData = [
     writer: 'plum',
     view: 22,
     comment_count: 20,
-    content:
-      '<p>Traveling on a budget.</p><p>How do you save money while exploring?</p><p>Tips and tricks?</p>'
+    content: '## Budget Travel Tips\nSave money while exploring new places. 🌍'
   },
   {
     id: 17,
@@ -184,7 +180,7 @@ export const communityData = [
     view: 16,
     comment_count: 17,
     content:
-      '<p>DIY home decor.</p><p>Any creative ideas?</p><p>Share your best projects!</p>'
+      '#### DIY Home Decor\nCreate beautiful home decorations with simple items. 🏠'
   },
   {
     id: 18,
@@ -195,7 +191,7 @@ export const communityData = [
     view: 20,
     comment_count: 13,
     content:
-      '<p>Networking in college.</p><p>What’s the best way to build valuable connections?</p><p>Would love to hear your strategies!</p>'
+      '### College Networking\nHow to build valuable connections in university. 🔗'
   },
   {
     id: 19,
@@ -206,7 +202,7 @@ export const communityData = [
     view: 15,
     comment_count: 3,
     content:
-      '<p>Online learning platforms.</p><p>Which one is the best?</p><p>Looking for reviews!</p>'
+      '## Online Learning Platforms\nDiscover the best platforms for learning online. 💻'
   },
   {
     id: 20,
@@ -217,6 +213,6 @@ export const communityData = [
     view: 27,
     comment_count: 16,
     content:
-      '<p>Solo travelers!</p><p>Is it safe to travel alone?</p><p>Would love to hear your experiences!</p>'
+      '### Traveling Alone Safely\nStay safe and enjoy your solo trip. 🛤️'
   }
 ];

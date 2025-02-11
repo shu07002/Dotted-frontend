@@ -32,18 +32,17 @@ const MarketListContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-
   > ul {
     margin-top: 2rem;
     width: 100%;
     display: grid;
     flex: 1;
-    justify-content: space-between;
+
     grid-template-columns: repeat(auto-fit, minmax(20%, auto));
     grid-gap: 2rem;
 
     @media (max-width: 1200px) {
-      grid-template-columns: repeat(auto-fit, 30%);
+      grid-template-columns: repeat(auto-fit, 30.8%);
     }
 
     @media (max-width: 768px) {

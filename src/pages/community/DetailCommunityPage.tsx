@@ -10,7 +10,9 @@ import PostingList from '@/components/CommunityPage/PostingList';
 
 export default function DetailCommunityPage() {
   const { id } = useParams();
-  const [post] = communityData.filter((el) => el.id === Number(id));
+  const [post] = communityData.filter(
+    (el: CommunityPost) => el.id === Number(id)
+  );
 
   const [isLiked, setIsLiked] = useState(false);
   const [isScraped, setIsScraped] = useState(false);
@@ -18,7 +20,9 @@ export default function DetailCommunityPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [pagedData, setPagedData] = useState<CommunityPost[]>([]);
 
-  const data = communityData.filter((el) => el.id !== Number(id));
+  const data = communityData.filter(
+    (el: CommunityPost) => el.id !== Number(id)
+  );
 
   useEffect(() => {
     const start = (currentPage - 1) * 3;

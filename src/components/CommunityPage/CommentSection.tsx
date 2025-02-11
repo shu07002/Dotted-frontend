@@ -6,9 +6,10 @@ import Profile from '@/assets/svg/CommunityPage/Profile.svg?react';
 import Like from '@/assets/svg/CommunityPage/Like.svg?react';
 import Comment from '@/assets/svg/CommunityPage/Comment.svg?react';
 import More from '@/assets/svg/CommunityPage/More.svg?react';
+import { MarketPost } from '@/types/MarketPost';
 
 interface CommentSectionProps {
-  post: CommunityPost;
+  post: CommunityPost | MarketPost;
 }
 
 export default function CommentSection({ post }: CommentSectionProps) {
