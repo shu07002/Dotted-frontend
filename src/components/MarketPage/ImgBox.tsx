@@ -15,6 +15,7 @@ interface ImgBoxProps {
 export default function ImgBox({
   previews,
   imgFileRef,
+
   handleDeleteImage,
   handleFileChange
 }: ImgBoxProps) {
@@ -22,7 +23,7 @@ export default function ImgBox({
     <ImgBoxContainer>
       <ImgBoxWrapper>
         {previews.map((preview, index) => (
-          <div key={index}>
+          <li key={index}>
             {preview ? (
               <figure onClick={() => handleDeleteImage(index)}>
                 <img src={preview} alt={`preview-${index}`} />
@@ -45,7 +46,7 @@ export default function ImgBox({
               onChange={(e) => handleFileChange(e, index)}
               style={{ display: 'none' }}
             />
-          </div>
+          </li>
         ))}
       </ImgBoxWrapper>
     </ImgBoxContainer>
@@ -58,7 +59,8 @@ const ImgBoxContainer = styled.div`
   flex-direction: column;
 `;
 
-const ImgBoxWrapper = styled.div`
+const ImgBoxWrapper = styled.ul`
+  list-style-type: none;
   width: 100%;
   margin-top: 2rem;
   display: flex;
@@ -85,7 +87,7 @@ const ImgBoxWrapper = styled.div`
     background: rgba(178, 31, 124, 0.7);
   }
 
-  > div {
+  > li {
     position: relative;
     > figure {
       img {

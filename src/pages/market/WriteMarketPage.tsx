@@ -14,21 +14,20 @@ interface data {
 export default function WriteMarketPage() {
   const { register, handleSubmit } = useForm<data>();
   const [previews, setPreviews] = useState<(string | null)[]>([null]);
-  const [imgFiles, setImgFiles] = useState<(File | null)[]>([null]);
+  //const [imgFiles, setImgFiles] = useState<(File | null)[]>([null]);
   const imgFileRef = useRef<HTMLInputElement>(null);
-  console.log(imgFiles);
 
   const onSubmit: SubmitHandler<data> = (data) => {
     alert(JSON.stringify(data));
   };
 
   const addNewImageSlot = () => {
-    setImgFiles((prevFiles) => [...prevFiles, null]);
+    //setImgFiles((prevFiles) => [...prevFiles, null]);
     setPreviews((prevPreviews) => [...prevPreviews, '']);
   };
 
   const handleDeleteImage = (index: number) => {
-    setImgFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
+    //setImgFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
     setPreviews((prevPreviews) => prevPreviews.filter((_, i) => i !== index));
   };
 
@@ -39,18 +38,19 @@ export default function WriteMarketPage() {
       reader.readAsDataURL(file);
       reader.onloadend = () => {
         // 이미지 파일 배열 업데이트
-        setImgFiles((prevFiles) => {
-          const updatedFiles = [...prevFiles];
-          // + 버튼을 누른 순간 null로 자리가 이미 존재
-          // 따라서 사진을 추가할 자리의 index를 가져가자!
-          updatedFiles[index] = file;
-          return updatedFiles;
-        });
+        // setImgFiles((prevFiles) => {
+        //   const updatedFiles = [...prevFiles];
+        //   // + 버튼을 누른 순간 null로 자리가 이미 존재
+        //   // 따라서 사진을 추가할 자리의 index를 가져가자!
+        //   updatedFiles[index] = file;
+        //   return updatedFiles;
+        // });
 
         // 미리보기 배열 업데이트
         setPreviews((prevPreviews) => {
           const updatedPreviews = [...prevPreviews];
           updatedPreviews[index] = reader.result as string;
+          console.log(reader.result as string);
           return updatedPreviews;
         });
 
@@ -67,8 +67,6 @@ export default function WriteMarketPage() {
 
     if (file) {
       onSaveImage(index, file);
-      console.log(index, file);
-      event.target.value = '';
     }
   };
 
