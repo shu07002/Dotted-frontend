@@ -18,6 +18,7 @@ import DetailCommunityPage from './pages/community/DetailCommunityPage';
 import Footer from './components/common/Footer';
 import MarketPage from './pages/market/MarketPage';
 import WriteMarketPage from './pages/market/WriteMarketPage';
+import DetailMarketPage from './pages/market/DetailMarketPage';
 
 const Router = createBrowserRouter([
   {
@@ -82,7 +83,8 @@ const Router = createBrowserRouter([
           {
             path: 'write',
             element: <WriteMarketPage />
-          }
+          },
+          { path: 'detail/:id', element: <DetailMarketPage /> }
         ]
       }
     ]

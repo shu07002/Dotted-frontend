@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactQuill, { Quill } from 'react-quill-new';
+import 'react-quill-new/dist/quill.snow.css';
 import styled from 'styled-components';
 import { ImageResize } from 'quill-image-resize-module-ts';
 

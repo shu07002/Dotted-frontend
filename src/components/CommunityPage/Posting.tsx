@@ -6,6 +6,7 @@ import Like from '@/assets/svg/CommunityPage/Like.svg?react';
 import Scrap from '@/assets/svg/CommunityPage/Scrap.svg?react';
 
 import ReactQuill from 'react-quill-new';
+import 'react-quill-new/dist/quill.snow.css';
 import { CommunityPost } from '@/types/CommunityPost';
 
 const PostingTagsColors: Record<string, string> = {
