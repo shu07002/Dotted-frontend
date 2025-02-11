@@ -13,7 +13,7 @@ interface data {
 
 export default function WriteMarketPage() {
   const { register, handleSubmit } = useForm<data>();
-  const [previews, setPreviews] = useState<(string | null)[]>([null]);
+  const [previews, setPreviews] = useState<(string | null)[]>([]);
   //const [imgFiles, setImgFiles] = useState<(File | null)[]>([null]);
   const imgFileRef = useRef<HTMLInputElement>(null);
 
@@ -21,17 +21,12 @@ export default function WriteMarketPage() {
     alert(JSON.stringify(data));
   };
 
-  const addNewImageSlot = () => {
-    //setImgFiles((prevFiles) => [...prevFiles, null]);
-    setPreviews((prevPreviews) => [...prevPreviews, '']);
-  };
-
   const handleDeleteImage = (index: number) => {
     //setImgFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
     setPreviews((prevPreviews) => prevPreviews.filter((_, i) => i !== index));
   };
 
-  const onSaveImage = (index: number, file: File) => {
+  const onSaveImage = (file: File) => {
     const reader = new FileReader();
 
     if (file) {
@@ -49,24 +44,19 @@ export default function WriteMarketPage() {
         // 미리보기 배열 업데이트
         setPreviews((prevPreviews) => {
           const updatedPreviews = [...prevPreviews];
-          updatedPreviews[index] = reader.result as string;
-          console.log(reader.result as string);
+          updatedPreviews[updatedPreviews.length] = reader.result as string;
+          console.log(updatedPreviews.length);
           return updatedPreviews;
         });
-
-        addNewImageSlot();
       };
     }
   };
 
-  const handleFileChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    index: number
-  ) => {
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
 
     if (file) {
-      onSaveImage(index, file);
+      onSaveImage(file);
     }
   };
 
@@ -104,6 +94,7 @@ export default function WriteMarketPage() {
               imgFileRef={imgFileRef}
               handleDeleteImage={handleDeleteImage}
               handleFileChange={handleFileChange}
+              setPreviews={setPreviews}
             />
           </label>
 

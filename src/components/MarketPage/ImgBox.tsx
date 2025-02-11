@@ -1,53 +1,55 @@
 import React from 'react';
 import styled from 'styled-components';
+import DraggableImage from './DraggableImage';
 import Plus from '@/assets/svg/MarketPage/Plus.svg?react';
 
 interface ImgBoxProps {
   previews: (string | null)[];
   imgFileRef: React.RefObject<HTMLInputElement>;
   handleDeleteImage: (index: number) => void;
-  handleFileChange: (
-    event: React.ChangeEvent<HTMLInputElement>,
-    index: number
-  ) => void;
+  handleFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  setPreviews: React.Dispatch<React.SetStateAction<(string | null)[]>>;
 }
 
 export default function ImgBox({
   previews,
   imgFileRef,
-
   handleDeleteImage,
-  handleFileChange
+  handleFileChange,
+  setPreviews
 }: ImgBoxProps) {
   return (
     <ImgBoxContainer>
       <ImgBoxWrapper>
         {previews.map((preview, index) => (
-          <li key={index}>
-            {preview ? (
-              <figure onClick={() => handleDeleteImage(index)}>
-                <img src={preview} alt={`preview-${index}`} />
-              </figure>
-            ) : previews.length < 6 ? (
-              <label htmlFor={`file-${index}`}>
-                <EachImage>
-                  <span>
-                    <Plus />
-                  </span>
-                  <span>{previews.length - 1}/5</span>
-                </EachImage>
-              </label>
-            ) : null}
-            <input
-              type="file"
-              accept="image/*"
-              id={`file-${index}`}
-              ref={imgFileRef}
-              onChange={(e) => handleFileChange(e, index)}
-              style={{ display: 'none' }}
-            />
-          </li>
+          <DraggableImage
+            key={`${preview}-${index}`}
+            index={index}
+            previews={previews}
+            preview={preview}
+            imgFileRef={imgFileRef}
+            handleDeleteImage={handleDeleteImage}
+            handleFileChange={handleFileChange}
+            setPreviews={setPreviews}
+          />
         ))}
+
+        <label htmlFor={`file${previews.length}`}>
+          <EachImage>
+            <span>
+              <Plus />
+            </span>
+            <span>{previews.length}/5</span>
+          </EachImage>
+          <input
+            type="file"
+            id={`file${previews.length}`}
+            accept="image/*"
+            ref={imgFileRef}
+            onChange={(e) => handleFileChange(e)}
+            style={{ display: 'none' }}
+          />
+        </label>
       </ImgBoxWrapper>
     </ImgBoxContainer>
   );
@@ -56,11 +58,13 @@ export default function ImgBox({
 const ImgBoxContainer = styled.div`
   overflow: auto;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  overflow-y: hidden;
 `;
 
-const ImgBoxWrapper = styled.ul`
+const ImgBoxWrapper = styled.div`
   list-style-type: none;
+  overflow-y: hidden !important;
   width: 100%;
   margin-top: 2rem;
   display: flex;
