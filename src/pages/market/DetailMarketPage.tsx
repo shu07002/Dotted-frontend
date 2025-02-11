@@ -126,8 +126,11 @@ const ItemWrapper = styled.div`
     display: flex;
     justify-content: space-between;
     flex-direction: column;
-    flex: 1; /* 각 자식 div가 동일한 비율로 너비를 차지하게 설정 */
     min-width: 28rem; /* 최소 너비 설정 */
+
+    &:nth-child(2) {
+      width: 100%;
+    }
   }
 `;
 
@@ -345,6 +348,8 @@ const ContentWrapper = styled.div`
   padding: 2rem 0;
   width: 100%;
   min-height: 12rem;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.gray300};
+  margin-bottom: 3.2rem;
 
   color: ${({ theme }) => theme.colors.gray800};
   font-family: Inter;

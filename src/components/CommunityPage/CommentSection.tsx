@@ -71,7 +71,6 @@ export default function CommentSection({ post }: CommentSectionProps) {
 }
 
 const CommentSectionWrapper = styled.section`
-  padding: 0 3rem;
   margin-bottom: 5.7rem;
 `;
 

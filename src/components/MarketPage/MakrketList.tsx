@@ -1,4 +1,5 @@
 import { MarketPost } from '@/types/MarketPost';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 interface MarketListProps {
@@ -6,11 +7,12 @@ interface MarketListProps {
 }
 
 export default function MakrketList({ pagedData }: MarketListProps) {
+  const navigate = useNavigate();
   return (
     <MarketListContainer>
       <ul>
         {pagedData.map((post) => (
-          <li key={post.id}>
+          <li key={post.id} onClick={() => navigate(`detail/${post.id}`)}>
             <MarketImageWrapper>image</MarketImageWrapper>
             <ItemInfo>
               <span>{post.title}</span>
