@@ -29,6 +29,7 @@ const SendCodeButtonWrapper = styled.div<{
   $isSubmitClicked: boolean;
 }>`
   cursor: ${(props) => (props.$isSubmitClicked ? 'not-allowed' : 'pointer')};
+  margin-top: 2.6rem;
   display: flex;
 
   flex-direction: column;

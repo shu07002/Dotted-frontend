@@ -11,10 +11,13 @@ interface GroupProps {
 }
 
 export default function Group({ setValue }: GroupProps) {
-  const [selectedGroup, setSelectedGroup] = useState('International Student');
+  const [selectedGroup, setSelectedGroup] = useState({
+    full: 'International Student',
+    short: 'INTER'
+  });
 
   useEffect(() => {
-    setValue('student_type', selectedGroup);
+    setValue('student_type', selectedGroup.short);
   }, [selectedGroup]);
   return (
     <InputBox>
@@ -23,20 +26,20 @@ export default function Group({ setValue }: GroupProps) {
       </Label>
       <GroupWrapper>
         {[
-          'International Student',
-          'Exchange Student',
-          'Language Education Center',
-          'Others'
-        ].map((item) => (
-          <RadioLabel key={item}>
+          { full: 'International Student', short: 'INTER' },
+          { full: 'Exchange Student', short: 'EXCHANGE' },
+          { full: 'Language Education Center', short: 'LANGUAGE' },
+          { full: 'Others', short: 'OTHER' }
+        ].map((item, idx) => (
+          <RadioLabel key={idx}>
             <RadioInput
               type="radio"
-              name="group"
-              value={item}
-              checked={selectedGroup === item}
+              name="student_type"
+              value={item.short}
+              checked={selectedGroup.short === item.short}
               onChange={() => setSelectedGroup(item)}
             />
-            {item}
+            {item.full}
           </RadioLabel>
         ))}
       </GroupWrapper>

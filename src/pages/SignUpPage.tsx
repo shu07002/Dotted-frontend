@@ -1,7 +1,7 @@
 import BackButton from '@/components/common/Login,SignUp/BackButton';
 import SignUpForm from '@/components/SignUpPage/SignUpForm';
 import PageLayout from '@/components/common/Login,SignUp/PageLayout';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import EmailVerification from '@/components/SignUpPage/EmailVerification';
 import styled from 'styled-components';
 import PersonalInformation from '@/components/SignUpPage/PersonalInformation';
@@ -9,16 +9,16 @@ import StudentVerification from '@/components/SignUpPage/StudentVerification';
 import AccessRestrictedModal from '@/components/SignUpPage/AccessRestrictedModal';
 import { useForm } from 'react-hook-form';
 import { SignUpFormData } from '@/types/signUpFormData';
-//import { useMutation } from '@tanstack/react-query';
-import SignUpComplete from '@/components/SignUpPage/SignUpComplete';
 import { useMutation } from '@tanstack/react-query';
+import SignUpComplete from '@/components/SignUpPage/SignUpComplete';
 
 export default function SignUpPage() {
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(4);
   const [isSogangEmail, setIsSogangEmail] = useState(false);
   const [isCheckedTOS, setisCheckedTOS] = useState(false);
   const [isCheckedPP, setisCheckedPP] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(true);
+  const [userId, setUserId] = useState(-1);
 
   //🤖TODO
   // 닉네임 중복체크 후 변경 못하도록
@@ -28,24 +28,12 @@ export default function SignUpPage() {
 
   const signUpMutation = useMutation({
     mutationFn: async (userData: SignUpFormData) => {
-      const {
-        email,
-        name,
-        password,
-        birth,
-        nickname,
-        student_type,
-        login_type
-      } = userData;
-      const dataToSend = {
-        email,
-        name,
-        password,
-        birth,
-        nickname,
-        student_type,
-        login_type
-      };
+      const { passwordCheck, ...dataToSend } = userData;
+
+      if (!dataToSend.email.includes('@'))
+        dataToSend.email = `${dataToSend.email}@sogang.ac.kr`;
+
+      console.log(dataToSend);
 
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/user/register`,
@@ -58,10 +46,13 @@ export default function SignUpPage() {
         }
       );
       if (!response.ok) throw new Error('Failed to sign up');
+
+      onChangeStep();
       return response.json();
     },
     onSuccess: (data) => {
       console.log('🎉 회원가입 성공:', data);
+      setUserId(data.id);
 
       // ☑️☑️☑️회원가입 성공 시 회원가입 성공 페이지로 이동동
     },
@@ -96,7 +87,6 @@ export default function SignUpPage() {
   };
 
   const onSubmitSignUp = (data: SignUpFormData) => {
-    console.log(data);
     signUpMutation.mutate(data);
   };
 
@@ -146,7 +136,7 @@ export default function SignUpPage() {
               onClickNow={onClickNow}
             />
           )}
-          <StudentVerification />
+          <StudentVerification userId={userId} onChangeStep={onChangeStep} />
         </>
       )}
 

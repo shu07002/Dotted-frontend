@@ -1,31 +1,47 @@
 import styled from 'styled-components';
 
-export default function VerificationCheckButton() {
+interface VerificationCheckButtonProps {
+  onClickVerificationCheck: () => void;
+  isLoading: boolean;
+}
+
+export default function VerificationCheckButton({
+  onClickVerificationCheck,
+  isLoading
+}: VerificationCheckButtonProps) {
   return (
-    <VerificationCheckButtonWrapper>
-      Verification Check
-    </VerificationCheckButtonWrapper>
+    <Wrapper>
+      <VerificationCheckButtonWrapper
+        onClick={onClickVerificationCheck}
+        disabled={isLoading} // Prevent multiple clicks
+      >
+        Verification Check
+      </VerificationCheckButtonWrapper>
+    </Wrapper>
   );
 }
 
-const VerificationCheckButtonWrapper = styled.div`
-  cursor: pointer;
-  width: 16.7rem;
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 10px;
   position: absolute;
   top: 50%;
   right: -12.5%;
-
   transform: translate(-50%, -50%);
+`;
 
+const VerificationCheckButtonWrapper = styled.div<{ disabled?: boolean }>`
+  cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
+  width: 16.7rem;
   border-radius: 5px;
-  background: ${({ theme }) => theme.colors.gray700};
-
+  background: ${({ theme, disabled }) =>
+    disabled ? theme.colors.gray500 : theme.colors.gray700};
   color: ${({ theme }) => theme.colors.gray50};
   text-align: center;
   font-family: Pretendard;
   font-size: 16px;
-  font-style: normal;
   font-weight: 400;
-  line-height: 36px; /* 225% */
-  letter-spacing: -0.48px;
+  line-height: 36px;
 `;

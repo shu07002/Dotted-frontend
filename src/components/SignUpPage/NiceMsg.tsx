@@ -1,11 +1,10 @@
 import styled from 'styled-components';
-import ErrorMsgSVG from '@/assets/svg/SignUpPage/ErrorMsgSVG.svg?react';
 
-interface ErrorMsgProps {
+interface NiceMsgProps {
   msg: string;
 }
 
-export default function ErrorMsg({ msg }: ErrorMsgProps) {
+export default function NiceMsg({ msg }: NiceMsgProps) {
   return (
     <div
       style={{
@@ -15,14 +14,13 @@ export default function ErrorMsg({ msg }: ErrorMsgProps) {
         gap: '1rem'
       }}
     >
-      <ErrorMsgSVG />
-      <ErrorText>{msg}</ErrorText>
+      <NiceText>{msg}</NiceText>
     </div>
   );
 }
 
-const ErrorText = styled.span`
-  color: var(--Semantic-Negative-900, #ea3729);
+const NiceText = styled.span`
+  color: ${({ theme }) => theme.colors.purple600};
   font-family: Pretendard;
   font-size: 16px;
   font-style: normal;

@@ -6,9 +6,95 @@ import TimeSVG from '@/assets/svg/SignUpPage/TimeSVG.svg?react';
 import TrashcanSVG from '@/assets/svg/SignUpPage/TrashcanSVG.svg?react';
 import UnlockSVG from '@/assets/svg/SignUpPage/UnlockSVG.svg?react';
 import PentagonSVG from '@/assets/svg/SignUpPage/PentagonSVG.svg?react';
-import SubmitButton from './SubmitButton';
+import { useRef, useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
 
-export default function StudentVerificat() {
+interface StudentVerificatProps {
+  userId: number;
+  onChangeStep: () => void;
+}
+
+export default function StudentVerificat({
+  userId,
+  onChangeStep
+}: StudentVerificatProps) {
+  const [preview, setPreview] = useState<string>('');
+  const imgFileRef = useRef<HTMLInputElement>(null);
+  const [imgFile, setImgFile] = useState<File | null>(null);
+
+  const uploadUniversityImageMutation = useMutation({
+    mutationFn: async (file: File) => {
+      const formData = new FormData();
+      formData.append('image_upload', file); // ✅ 파일 추가
+
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/user/univrequest`,
+        {
+          method: 'POST',
+          body: formData
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('대학 인증 요청 실패');
+      }
+
+      onChangeStep();
+      return response.json();
+    },
+    onSuccess: (data) => {
+      console.log('🎉 대학 인증 요청 성공:', data);
+      alert('대학 인증 요청이 성공적으로 제출되었습니다.');
+    },
+    onError: (error) => {
+      console.error('❌ 대학 인증 요청 실패:', error);
+      alert('이미 인증된 유저이거나, 요청 중 오류가 발생했습니다.');
+    }
+  });
+
+  const onClickReupload = () => {
+    console.log(imgFileRef.current);
+    if (imgFileRef.current) {
+      imgFileRef.current.value = '';
+      imgFileRef.current.click();
+    }
+  };
+
+  const onClickDelete = () => {
+    setPreview('');
+    setImgFile(null);
+  };
+
+  const onSaveImage = () => {
+    const reader = new FileReader();
+
+    if (imgFileRef.current?.files) {
+      const file = imgFileRef.current.files[0];
+      console.log(file);
+      setImgFile(file);
+
+      if (file) {
+        reader.readAsDataURL(file);
+        reader.onloadend = () => {
+          setPreview(reader.result as string);
+
+          if (imgFileRef.current) {
+            imgFileRef.current.value = '';
+          }
+        };
+      }
+    }
+  };
+
+  const onClickImgSubmit = () => {
+    if (!imgFile) {
+      alert('Please Attach Image File');
+      return;
+    }
+
+    uploadUniversityImageMutation.mutate(imgFile);
+  };
+
   return (
     <StudentVerificationLayout>
       <StudentVerificationWrapper>
@@ -34,10 +120,36 @@ export default function StudentVerificat() {
         </Warnning>
 
         <AttatchImage>
-          <ImgFileSVG />
-          <span>Attach Image File</span>
-          <span>JPG, PNG, JPEG</span>
+          {preview === '' ? (
+            <>
+              <label htmlFor="file">
+                <ImgFileSVG />
+                <span>Attach Image File</span>
+                <span>JPG, PNG, JPEG</span>
+              </label>
+            </>
+          ) : (
+            <>
+              <img src={preview} alt="proving-source" />
+            </>
+          )}
+          <input
+            type="file"
+            accept="image/*"
+            id="file"
+            name="file"
+            ref={imgFileRef}
+            onChange={onSaveImage}
+            style={{ display: 'none', cursor: 'pointer' }}
+          />
         </AttatchImage>
+
+        {preview !== '' && (
+          <ButtonWrapper>
+            <button onClick={onClickReupload}>reupload</button>
+            <button onClick={onClickDelete}>delete</button>
+          </ButtonWrapper>
+        )}
 
         <Notice>
           <div>
@@ -73,7 +185,7 @@ export default function StudentVerificat() {
 
         <SubmitButtonLayout>
           <SubmitButtonWrapper>
-            <SubmitButton />
+            <SubmitButton onClick={onClickImgSubmit}>Submit</SubmitButton>
           </SubmitButtonWrapper>
         </SubmitButtonLayout>
       </StudentVerificationWrapper>
@@ -175,26 +287,40 @@ const AttatchImage = styled.div`
   justify-content: center;
   margin-bottom: 3.4rem;
 
-  > span {
-    &:last-child {
-      color: ${({ theme }) => theme.colors.purple600};
+  > img {
+    height: 80%;
+    object-fit: cover;
+  }
+
+  > label {
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    > span {
+      &:last-child {
+        color: ${({ theme }) => theme.colors.purple600};
+        text-align: center;
+        font-family: Pretendard;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 300;
+        line-height: 36px; /* 225% */
+        letter-spacing: -0.16px;
+      }
+
+      color: ${({ theme }) => theme.colors.gray700};
       text-align: center;
       font-family: Pretendard;
-      font-size: 16px;
+      font-size: 24px;
       font-style: normal;
-      font-weight: 300;
-      line-height: 36px; /* 225% */
-      letter-spacing: -0.16px;
+      font-weight: 700;
+      line-height: 36px; /* 150% */
+      letter-spacing: -0.24px;
     }
-
-    color: ${({ theme }) => theme.colors.gray700};
-    text-align: center;
-    font-family: Pretendard;
-    font-size: 24px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 36px; /* 150% */
-    letter-spacing: -0.24px;
   }
 `;
 
@@ -256,4 +382,51 @@ const StyledPentagonSVG = styled(PentagonSVG)`
   path {
     fill: ${({ theme }) => theme.colors.purple100};
   }
+`;
+
+const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: end;
+  gap: 2rem;
+  margin-bottom: 3.4rem;
+
+  > button {
+    cursor: pointer;
+    width: 10rem;
+    padding: 1.2rem;
+    border-radius: 5px;
+    border: none;
+    background: ${({ theme }) => theme.colors.purple600};
+    color: ${({ theme }) => theme.colors.gray50};
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 36px; /* 180% */
+    letter-spacing: -1px;
+  }
+`;
+
+const SubmitButton = styled.div`
+  cursor: pointer;
+  margin-top: 2.6rem;
+  margin-bottom: 15.5rem;
+  width: 100%;
+  height: 50px;
+  flex-shrink: 0;
+  border-radius: 5px;
+  border: none;
+  background: ${({ theme }) => theme.colors.purple600};
+  color: ${({ theme }) => theme.colors.gray50};
+  text-align: center;
+  font-family: Pretendard;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 36px; /* 180% */
+  letter-spacing: -1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;

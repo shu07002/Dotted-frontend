@@ -28,10 +28,19 @@ export default function EmailVerification({
 }: EmailVerificationProps) {
   const [isSendCodeClicked, setIsSendCodeClicked] = useState(false);
   const [isSubmitClicked, setIsSubmitClicked] = useState(false);
+  const [isError, setIsError] = useState(false);
   const [token, setToken] = useState('');
   const [code, setCode] = useState('');
 
-  setValue('login_type', 'EMAIL');
+  const emailValue = watch('email');
+
+  useEffect(() => {
+    setValue('login_type', 'EMAIL');
+  }, []);
+
+  useEffect(() => {
+    setIsError(false);
+  }, [emailValue]);
 
   // ✅ 백엔드에 이메일 보내서 코드 받아오기
   const sendCodeMutation = useMutation({
@@ -46,7 +55,12 @@ export default function EmailVerification({
           body: JSON.stringify({ email })
         }
       );
-      if (!response.ok) throw new Error('Failed to send verification code');
+      if (!response.ok) {
+        setIsError(true);
+        throw new Error('Failed to send verification code');
+      }
+      setIsSendCodeClicked(true);
+
       return response.json();
     },
     onSuccess: (data) => {
@@ -87,7 +101,7 @@ export default function EmailVerification({
   // ✅ 서강대/일반 이메일 확인 후 인증코드 요청하기기
   const onClickSendCodeButton = () => {
     if (isSubmitClicked) return;
-    const emailValue = watch('email');
+
     const emailDomain = '@sogang.ac.kr';
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
@@ -102,7 +116,7 @@ export default function EmailVerification({
     const finalEmail = isSogangEmail
       ? `${emailValue}${emailDomain}`
       : emailValue;
-    setIsSendCodeClicked(true);
+
     sendCodeMutation.mutate(finalEmail);
   };
 
@@ -121,6 +135,7 @@ export default function EmailVerification({
   return (
     <EmailVerificationWrapper>
       <EmailInputField
+        isError={isError}
         isSogangEmail={isSogangEmail}
         isSendCodeClicked={isSendCodeClicked}
         isSubmitClicked={isSubmitClicked}
