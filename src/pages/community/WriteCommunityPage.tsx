@@ -11,7 +11,7 @@ export interface CommunityData {
   title: string;
   content: string;
   images: string[];
-  tag: string | number;
+  tag: string;
 }
 
 export default function WriteCommunityPage() {
@@ -102,7 +102,6 @@ export default function WriteCommunityPage() {
     let updatedContent = data.content;
     extractedImages.forEach((imgSrc, index) => {
       // 특수문자를 이스케이프 처리한 이미지 URL을 사용
-      const escapedImgSrc = imgSrc.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
       updatedContent = updatedContent
         .replace(`src="${imgSrc}"`, `src={image${index + 1}}`)
         .replace(`src='${imgSrc}'`, `src={image${index + 1}}`);
@@ -113,8 +112,7 @@ export default function WriteCommunityPage() {
     const updatedData = {
       ...data,
       content: updatedContent,
-      images: extractedImages,
-      tag: 1
+      images: extractedImages
     };
 
     console.log('📤 최종 전송 데이터:', updatedData);
@@ -152,6 +150,7 @@ export default function WriteCommunityPage() {
   );
 }
 
+// ... (스타일 컴포넌트들은 그대로 유지)
 const WriteCommunityPageContainer = styled.form`
   margin-top: 2.5rem;
   width: 100%;
