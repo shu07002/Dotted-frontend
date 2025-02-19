@@ -27,18 +27,18 @@ const customStyles = {
 
 //🤖TODO
 // 닉네임 중복체크 후 변경 못하도록 ✅
-// 회원가입 데이터 확인 후 요청 ✅`
+// 회원가입 데이터 확인 후 요청 ✅
 // 소셜 회원가입 연결
 // 서강 메일 가입 코스 확인
-// 예외 처리
-// 학생증 사진 인증 페이지 모달로 분리
+// 입력 예외 처리
+// 학생증 사진 인증 페이지 모달로 분리 ✅
 
 export default function SignUpPage() {
-  const [step, setStep] = useState(4);
+  const [step, setStep] = useState(3);
   const [isSogangEmail, setIsSogangEmail] = useState(false);
   const [isCheckedTOS, setisCheckedTOS] = useState(false); // false
   const [isCheckedPP, setisCheckedPP] = useState(false); // false
-  const [isModalOpen, setIsModalOpen] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const isChecked = isCheckedTOS && isCheckedPP;
 
   const { register, handleSubmit, watch, setValue } = useForm<SignUpFormData>();
@@ -48,6 +48,8 @@ export default function SignUpPage() {
   } else {
     document.body.style.overflow = 'auto';
   }
+
+  if (step === 4 && !isSogangEmail) setIsModalOpen(true);
 
   const signUpMutation = useMutation({
     mutationFn: async (userData: SignUpFormData) => {

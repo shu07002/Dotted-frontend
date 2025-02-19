@@ -43,6 +43,7 @@ export default function Nickname({ register, watch }: NicknameProps) {
   const [isNicknameChecked, setIsNicknameChecked] = useState(false);
   const [initialIsFine, setInitialIsFine] = useState(false);
   const [msg, setMsg] = useState(defaultMsg);
+  const mountRef = useRef(false);
 
   const toggleChecked = () => {
     setIsNicknameChecked(true);
@@ -59,10 +60,17 @@ export default function Nickname({ register, watch }: NicknameProps) {
   });
 
   useEffect(() => {
-    if (!nickname) return;
+    if (!mountRef.current) {
+      mountRef.current = true;
+      return;
+    }
     setInitialIsFine(true);
     setIsNicknameChecked(false);
     setMsg(defaultMsg);
+  }, [nickname]);
+
+  useEffect(() => {
+    console.log(isVaild, initialIsFine, !isNicknameChecked);
   }, [nickname]);
 
   const onClickVerificationCheck = () => {
@@ -93,11 +101,12 @@ export default function Nickname({ register, watch }: NicknameProps) {
           isLoading={isLoading}
         />
       </Wrapper>
-      {isVaild && initialIsFine && !isNicknameChecked ? (
+      {(isVaild && initialIsFine && !isNicknameChecked) ||
+      (initialIsFine && !isNicknameChecked) ? (
         <ErrorMsg msg={msg} />
       ) : null}
 
-      {isNicknameChecked ? <NiceMsg msg="Verified" /> : null}
+      {isNicknameChecked && isVaild ? <NiceMsg msg="Verified" /> : null}
     </InputBox>
   );
 }
