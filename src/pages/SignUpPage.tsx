@@ -11,20 +11,43 @@ import { useForm } from 'react-hook-form';
 import { SignUpFormData } from '@/types/signUpFormData';
 import { useMutation } from '@tanstack/react-query';
 import SignUpComplete from '@/components/SignUpPage/SignUpComplete';
+import Modal from 'react-modal';
+
+Modal.setAppElement('#root');
+
+const customStyles = {
+  content: {
+    width: '100%',
+    height: '100%',
+    overflow: 'hidden',
+    overflowY: 'hidden' as 'auto' | 'hidden' | 'scroll' | 'visible' | undefined,
+    backgroundColor: 'var(--Modal-Background)'
+  }
+};
+
+//🤖TODO
+// 닉네임 중복체크 후 변경 못하도록 ✅
+// 회원가입 데이터 확인 후 요청 ✅`
+// 소셜 회원가입 연결
+// 서강 메일 가입 코스 확인
+// 예외 처리
+// 학생증 사진 인증 페이지 모달로 분리
 
 export default function SignUpPage() {
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(4);
   const [isSogangEmail, setIsSogangEmail] = useState(false);
   const [isCheckedTOS, setisCheckedTOS] = useState(false); // false
   const [isCheckedPP, setisCheckedPP] = useState(false); // false
   const [isModalOpen, setIsModalOpen] = useState(true);
   const isChecked = isCheckedTOS && isCheckedPP;
 
-  //🤖TODO
-  // 닉네임 중복체크 후 변경 못하도록 ✅
-  // 회원가입 데이터 확인 후 요청 ✅`
-
   const { register, handleSubmit, watch, setValue } = useForm<SignUpFormData>();
+
+  if (isModalOpen) {
+    document.body.style.overflow = 'hidden';
+  } else {
+    document.body.style.overflow = 'auto';
+  }
 
   const signUpMutation = useMutation({
     mutationFn: async (userData: SignUpFormData) => {
@@ -33,7 +56,7 @@ export default function SignUpPage() {
       if (!dataToSend.email.includes('@'))
         dataToSend.email = `${dataToSend.email}@sogang.ac.kr`;
 
-      console.log(dataToSend);
+      //console.log(dataToSend);
 
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/user/register`,
@@ -77,15 +100,19 @@ export default function SignUpPage() {
     setisCheckedPP(!isCheckedPP);
   };
 
-  const onClickLater = () => {
+  const closeModal = () => {
     setIsModalOpen(false);
+  };
+
+  const onClickLater = () => {
+    closeModal();
     onChangeStep();
     window.localStorage.removeItem('accessToken');
     window.localStorage.removeItem('refreshToken');
   };
 
   const onClickNow = () => {
-    setIsModalOpen(false);
+    closeModal();
   };
 
   const onSubmitSignUp = (data: SignUpFormData) => {
@@ -132,12 +159,17 @@ export default function SignUpPage() {
 
       {step === 4 && !isSogangEmail && (
         <>
-          {isModalOpen && (
+          <StyledModal
+            isOpen={isModalOpen}
+            onRequestClose={closeModal}
+            style={customStyles}
+            contentLabel="example"
+          >
             <AccessRestrictedModal
               onClickLater={onClickLater}
               onClickNow={onClickNow}
             />
-          )}
+          </StyledModal>
           <StudentVerification onChangeStep={onChangeStep} watch={watch} />
         </>
       )}
@@ -164,3 +196,5 @@ const SignUpTitle = styled.p`
   letter-spacing: -2px;
   margin-bottom: 2.6rem;
 `;
+
+const StyledModal = styled(Modal)``;

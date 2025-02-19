@@ -25,7 +25,7 @@ export default function StudentVerificat({
   const [imgFile, setImgFile] = useState<File | null>(null);
 
   let emailValue = watch('email');
-  if (!emailValue.includes('@')) emailValue += '@sogang.ac.kr';
+  if (emailValue) if (!emailValue.includes('@')) emailValue += '@sogang.ac.kr';
   const passwordValue = watch('password');
 
   const autoLoginMutation = useMutation({
