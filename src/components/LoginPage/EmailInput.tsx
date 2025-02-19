@@ -17,7 +17,6 @@ export default function EmailInput({ register }: EmailInputProps) {
 }
 
 const EmailInputWrapper = styled.input`
-  margin-bottom: 2.1rem;
   padding-left: 2.3rem;
   width: 60.5rem;
   height: 5rem;

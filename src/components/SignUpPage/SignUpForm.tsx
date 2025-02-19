@@ -23,6 +23,7 @@ export default function SignUpForm({
   isCheckedTOS,
   isCheckedPP
 }: SignUpFormProps) {
+  const isChecked = isCheckedPP && isCheckedPP;
   return (
     <SignUpFormWrapper>
       <Greeting text="Welcome to Dotted" />
@@ -41,7 +42,10 @@ export default function SignUpForm({
       <GoogleOAuthProvider
         clientId={`${import.meta.env.VITE_GOOGLE_CLIENT_ID}`}
       >
-        <SignUpWithOtherEmail onChangeStep={onChangeStep} />
+        <SignUpWithOtherEmail
+          onChangeStep={onChangeStep}
+          isChecked={isChecked}
+        />
       </GoogleOAuthProvider>
     </SignUpFormWrapper>
   );

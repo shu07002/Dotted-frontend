@@ -18,6 +18,7 @@ export default function SignUpPage() {
   const [isCheckedTOS, setisCheckedTOS] = useState(false); // false
   const [isCheckedPP, setisCheckedPP] = useState(false); // false
   const [isModalOpen, setIsModalOpen] = useState(true);
+  const isChecked = isCheckedTOS && isCheckedPP;
 
   //🤖TODO
   // 닉네임 중복체크 후 변경 못하도록 ✅
@@ -60,8 +61,8 @@ export default function SignUpPage() {
     }
   });
 
-  const onChangeStep = () => {
-    if (isCheckedTOS && isCheckedPP) setStep((prevStep) => prevStep + 1);
+  const onChangeStep = (step: number = 1) => {
+    if (isChecked) setStep((prevStep) => prevStep + step);
     else alert('Please agree to the terms and conditions. ');
   };
 

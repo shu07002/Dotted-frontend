@@ -1,13 +1,24 @@
 import { useGoogleLogin } from '@react-oauth/google';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
 import GoogleIcon from '@/assets/svg/SignUpPage/GoogleIconSVG.svg?react';
 
-const GoogleLoginButton = () => {
-  const navigate = useNavigate();
+const GoogleLoginButton = ({
+  onChangeStep,
+  isChecked
+}: {
+  onChangeStep: (step?: number) => void;
+  isChecked: boolean;
+}) => {
+  const onClickLogin = () => {
+    if (!isChecked) {
+      alert('Please agree to the terms and conditions. ');
+      return;
+    }
+    login();
+  };
 
   const login = useGoogleLogin({
-    flow: 'auth-code', // 🔹 auth_code 방식 사용 (백엔드에서 토큰 요청)
+    flow: 'auth-code',
     onSuccess: async (tokenResponse) => {
       console.log('✅ 로그인 성공:', tokenResponse);
       sendTokenToBackend(tokenResponse.code);
@@ -31,7 +42,7 @@ const GoogleLoginButton = () => {
       if (response.status === 200) {
         console.log('🎉 로그인 성공:', data);
         localStorage.setItem('accessToken', data.token);
-        //navigate('/dashboard'); // 🔹 로그인 성공 시 대시보드로 이동
+        onChangeStep(2);
       } else if (response.status === 404) {
         console.log('⚠️ 회원가입 필요:', data);
         //navigate('/signup', {state: { email: data.email, social_id: data.social_id }});
@@ -44,7 +55,7 @@ const GoogleLoginButton = () => {
   };
 
   return (
-    <BlackButtonWrapper onClick={() => login()}>
+    <BlackButtonWrapper onClick={onClickLogin}>
       <GoogleIconStyled />
       <span>Sign up with Google</span>
     </BlackButtonWrapper>
@@ -55,8 +66,9 @@ export default GoogleLoginButton;
 
 const BlackButtonWrapper = styled.div`
   cursor: pointer;
-  width: 386px;
-  height: 38px;
+  width: 38.6rem;
+  height: 3.8rem;
+  flex-shrink: 0;
   border-radius: 24px;
   background: ${({ theme }) => theme.colors.gray800};
   display: flex;
@@ -64,8 +76,15 @@ const BlackButtonWrapper = styled.div`
   align-items: center;
 
   > span {
+    width: 176px;
     color: ${({ theme }) => theme.colors.gray50};
+    text-align: center;
+    font-family: Inter;
     font-size: 15px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+    letter-spacing: -0.45px;
   }
 `;
 

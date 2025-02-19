@@ -77,12 +77,18 @@ export default function LoginForm() {
   return (
     <LoginFormWrapper onSubmit={handleSubmit(onClickLogin)}>
       <Greeting text="Login to Dotted" />
-      <EmailInput register={register} />
-      <PasswordWrapper>
-        <PasswordInput eyeOn={eyeOn} register={register} />
-        <EyeStyled $eyeOn={eyeOn} onClick={onClickEyeOn} />
-      </PasswordWrapper>
-      {errors.password && <ErrorMsg msg={errors.password.message} />}
+      <EmailInputWrapper>
+        <EmailInput register={register} />
+        {errors.email && <ErrorMsg msg={errors.email.message} />}
+      </EmailInputWrapper>
+
+      <div>
+        <PasswordWrapper>
+          <PasswordInput eyeOn={eyeOn} register={register} />
+          <EyeStyled $eyeOn={eyeOn} onClick={onClickEyeOn} />
+        </PasswordWrapper>
+        {errors.password && <ErrorMsg msg={errors.password.message} />}
+      </div>
 
       <OptionBox>
         <div>
@@ -93,7 +99,9 @@ export default function LoginForm() {
         </ForgetPassword>
       </OptionBox>
 
-      <LoginButton type="submit">Login</LoginButton>
+      <LoginButton type="submit" disabled={loginMutation.isPending}>
+        {loginMutation.isPending ? 'Logging in...' : 'Login'}
+      </LoginButton>
 
       <Divider />
 
@@ -183,12 +191,13 @@ const ForgetPassword = styled.div`
 `;
 
 const LoginButton = styled.button`
-  cursor: pointer;
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
   width: 38.6rem;
   height: 3.8rem;
   flex-shrink: 0;
   border-radius: 24px;
-  background: ${({ theme }) => theme.colors.purple1050};
+  background: ${({ theme, disabled }) =>
+    disabled ? theme.colors.gray500 : theme.colors.purple1050};
   color: ${({ theme }) => theme.colors.gray50};
   text-align: center;
   font-family: Inter;
@@ -198,4 +207,9 @@ const LoginButton = styled.button`
   line-height: normal;
   letter-spacing: -0.6px;
   margin-bottom: 3.7rem;
+  transition: background 0.3s;
+`;
+
+const EmailInputWrapper = styled.div`
+  margin-bottom: 2.1rem;
 `;
