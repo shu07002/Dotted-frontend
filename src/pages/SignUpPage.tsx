@@ -1,7 +1,7 @@
 import BackButton from '@/components/common/Login,SignUp/BackButton';
 import SignUpForm from '@/components/SignUpPage/SignUpForm';
 import PageLayout from '@/components/common/Login,SignUp/PageLayout';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import EmailVerification from '@/components/SignUpPage/EmailVerification';
 import styled from 'styled-components';
 import PersonalInformation from '@/components/SignUpPage/PersonalInformation';
@@ -13,16 +13,15 @@ import { useMutation } from '@tanstack/react-query';
 import SignUpComplete from '@/components/SignUpPage/SignUpComplete';
 
 export default function SignUpPage() {
-  const [step, setStep] = useState(4);
+  const [step, setStep] = useState(1);
   const [isSogangEmail, setIsSogangEmail] = useState(false);
-  const [isCheckedTOS, setisCheckedTOS] = useState(false);
-  const [isCheckedPP, setisCheckedPP] = useState(false);
+  const [isCheckedTOS, setisCheckedTOS] = useState(false); // false
+  const [isCheckedPP, setisCheckedPP] = useState(false); // false
   const [isModalOpen, setIsModalOpen] = useState(true);
-  const [userId, setUserId] = useState(-1);
 
   //🤖TODO
-  // 닉네임 중복체크 후 변경 못하도록
-  // 회원가입 데이터 확인 후 요청
+  // 닉네임 중복체크 후 변경 못하도록 ✅
+  // 회원가입 데이터 확인 후 요청 ✅`
 
   const { register, handleSubmit, watch, setValue } = useForm<SignUpFormData>();
 
@@ -38,13 +37,14 @@ export default function SignUpPage() {
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/user/register`,
         {
-          method: 'POST',
+          method: 'POST', // ✅ POST 요청으로 변경
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json' // ✅ JSON 요청 헤더 추가
           },
-          body: JSON.stringify(dataToSend)
+          body: JSON.stringify(dataToSend) // ✅ body에 userData 전송
         }
       );
+
       if (!response.ok) throw new Error('Failed to sign up');
 
       onChangeStep();
@@ -52,9 +52,8 @@ export default function SignUpPage() {
     },
     onSuccess: (data) => {
       console.log('🎉 회원가입 성공:', data);
-      setUserId(data.id);
-
-      // ☑️☑️☑️회원가입 성공 시 회원가입 성공 페이지로 이동동
+      window.history.replaceState(null, '', '/login');
+      // ☑️ 회원가입 성공 후 로그인 페이지로 이동
     },
     onError: (error) => {
       console.error('❌ 회원가입 실패:', error);
@@ -80,6 +79,8 @@ export default function SignUpPage() {
   const onClickLater = () => {
     setIsModalOpen(false);
     onChangeStep();
+    window.localStorage.removeItem('accessToken');
+    window.localStorage.removeItem('refreshToken');
   };
 
   const onClickNow = () => {
@@ -136,7 +137,7 @@ export default function SignUpPage() {
               onClickNow={onClickNow}
             />
           )}
-          <StudentVerification userId={userId} onChangeStep={onChangeStep} />
+          <StudentVerification onChangeStep={onChangeStep} watch={watch} />
         </>
       )}
 

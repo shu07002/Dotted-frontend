@@ -6,49 +6,112 @@ import TimeSVG from '@/assets/svg/SignUpPage/TimeSVG.svg?react';
 import TrashcanSVG from '@/assets/svg/SignUpPage/TrashcanSVG.svg?react';
 import UnlockSVG from '@/assets/svg/SignUpPage/UnlockSVG.svg?react';
 import PentagonSVG from '@/assets/svg/SignUpPage/PentagonSVG.svg?react';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
+import { SignUpFormData } from '@/types/signUpFormData';
+import { UseFormWatch } from 'react-hook-form';
 
 interface StudentVerificatProps {
-  userId: number;
   onChangeStep: () => void;
+  watch: UseFormWatch<SignUpFormData>;
 }
 
 export default function StudentVerificat({
-  userId,
-  onChangeStep
+  onChangeStep,
+  watch
 }: StudentVerificatProps) {
   const [preview, setPreview] = useState<string>('');
   const imgFileRef = useRef<HTMLInputElement>(null);
   const [imgFile, setImgFile] = useState<File | null>(null);
+
+  let emailValue = watch('email');
+  if (!emailValue.includes('@')) emailValue += '@sogang.ac.kr';
+  const passwordValue = watch('password');
+
+  const autoLoginMutation = useMutation({
+    mutationFn: async () => {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/user/login`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            email: emailValue, // 🔹 자동 로그인할 계정 정보
+            password: passwordValue
+          })
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('자동 로그인 실패');
+      }
+
+      return response.json();
+    },
+
+    // 🚨 일단 로컬 스토리지에 저장하여 테스트
+    onSuccess: (data) => {
+      console.log('✅ 자동 로그인 성공:', data);
+      localStorage.setItem('accessToken', data.access);
+      localStorage.setItem('refreshToken', data.refresh);
+    },
+    onError: (error) => {
+      console.error('❌ 자동 로그인 실패:', error);
+    }
+  });
+
+  // 페이지 렌더링 시 자동 로그인 실행
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+
+    if (!token) {
+      console.log('🔹 토큰 없음, 자동 로그인 시도');
+      autoLoginMutation.mutate();
+    } else {
+      console.log('✅ 이미 로그인 상태');
+    }
+  }, []);
 
   const uploadUniversityImageMutation = useMutation({
     mutationFn: async (file: File) => {
       const formData = new FormData();
       formData.append('image_upload', file); // ✅ 파일 추가
 
+      // 로컬 스토리지에서 access_token 가져오기
+      const accessToken = localStorage.getItem('accessToken');
+      if (!accessToken) {
+        throw new Error('No access token found. Please log in again.');
+      }
+
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/user/univrequest`,
         {
           method: 'POST',
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          },
           body: formData
         }
       );
 
       if (!response.ok) {
-        throw new Error('대학 인증 요청 실패');
+        throw new Error('University verification request failed.');
       }
 
       onChangeStep();
       return response.json();
     },
     onSuccess: (data) => {
-      console.log('🎉 대학 인증 요청 성공:', data);
-      alert('대학 인증 요청이 성공적으로 제출되었습니다.');
+      console.log('🎉 University verification request successful:', data);
+      alert('University verification request has been successfully submitted.');
     },
     onError: (error) => {
-      console.error('❌ 대학 인증 요청 실패:', error);
-      alert('이미 인증된 유저이거나, 요청 중 오류가 발생했습니다.');
+      console.error('❌ University verification request failed:', error);
+      alert(
+        'You are either already verified, or an error occurred during the request.'
+      );
     }
   });
 

@@ -1,7 +1,19 @@
+import { UseFormRegister } from 'react-hook-form';
 import styled from 'styled-components';
+import { LoginProps } from './LoginForm';
 
-export default function EmailInput() {
-  return <EmailInputWrapper placeholder="Email(ID)" type="email" />;
+interface EmailInputProps {
+  register: UseFormRegister<LoginProps>;
+}
+
+export default function EmailInput({ register }: EmailInputProps) {
+  return (
+    <EmailInputWrapper
+      placeholder="Email(ID)"
+      type="email"
+      {...register('email', { required: 'Plaese write down your email' })}
+    />
+  );
 }
 
 const EmailInputWrapper = styled.input`

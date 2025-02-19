@@ -5,6 +5,7 @@ import { SignUpFormData } from '@/types/signUpFormData';
 import ErrorMsg from './ErrorMsg';
 
 interface isSogangEmail {
+  loading: boolean;
   isError: boolean;
   isSogangEmail: boolean;
   isSendCodeClicked: boolean;
@@ -14,6 +15,7 @@ interface isSogangEmail {
 }
 
 export default function EmailInputField({
+  loading,
   isError,
   isSogangEmail,
   isSendCodeClicked,
@@ -44,6 +46,7 @@ export default function EmailInputField({
       </EmailInput>
       {isError && <ErrorMsg msg="Already registered email" />}
       <SendCodeButton
+        loading={loading}
         isSendCodeClicked={isSendCodeClicked}
         isSubmitClicked={isSubmitClicked}
         onClickSendCodeButton={onClickSendCodeButton}

@@ -1,12 +1,14 @@
 import styled from 'styled-components';
 
 interface SendCodeButtonProps {
+  loading: boolean;
   isSendCodeClicked: boolean;
   isSubmitClicked: boolean;
   onClickSendCodeButton: () => void;
 }
 
 export default function SendCodeButton({
+  loading,
   isSendCodeClicked,
   isSubmitClicked,
   onClickSendCodeButton
@@ -18,7 +20,11 @@ export default function SendCodeButton({
       $isSubmitClicked={isSubmitClicked}
     >
       <SendCodeButtonText>
-        {isSendCodeClicked ? 'Send Code Again' : 'Send Code'}
+        {isSendCodeClicked
+          ? 'Send Code Again'
+          : loading
+            ? 'Sending...'
+            : 'Send Code'}
       </SendCodeButtonText>
     </SendCodeButtonWrapper>
   );

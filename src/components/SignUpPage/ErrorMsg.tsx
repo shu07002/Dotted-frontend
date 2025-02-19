@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import ErrorMsgSVG from '@/assets/svg/SignUpPage/ErrorMsgSVG.svg?react';
 
 interface ErrorMsgProps {
-  msg: string;
+  msg: string | undefined;
 }
 
 export default function ErrorMsg({ msg }: ErrorMsgProps) {

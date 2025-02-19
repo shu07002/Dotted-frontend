@@ -4,6 +4,7 @@ import Divider from '../common/Login,SignUp/Divider';
 import SignUpWithOtherEmail from './SignUpWithOtherEmail';
 import styled from 'styled-components';
 import Greeting from '../common/Login,SignUp/Greeting';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 interface SignUpFormProps {
   onChangeStep: () => void;
@@ -37,8 +38,11 @@ export default function SignUpForm({
       />
 
       <Divider />
-
-      <SignUpWithOtherEmail onChangeStep={onChangeStep} />
+      <GoogleOAuthProvider
+        clientId={`${import.meta.env.VITE_GOOGLE_CLIENT_ID}`}
+      >
+        <SignUpWithOtherEmail onChangeStep={onChangeStep} />
+      </GoogleOAuthProvider>
     </SignUpFormWrapper>
   );
 }
