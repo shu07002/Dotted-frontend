@@ -3,22 +3,24 @@ import styled from 'styled-components';
 import 'react-quill-new/dist/quill.snow.css';
 import TagBox from '@/components/WriteCommunityPage/TagBox';
 import Editor from '@/components/WriteCommunityPage/Editor';
-import { useBlocker } from 'react-router-dom';
+import { data, useBlocker, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import { useMutation } from '@tanstack/react-query';
 
-export interface Communitydata {
+export interface CommunityData {
   title: string;
   content: string;
-  image: string[];
-  tag: string;
+  images: string[];
+  tag: string | number;
 }
 
 export default function WriteCommunityPage() {
   const { register, handleSubmit, watch, setValue, trigger } =
-    useForm<Communitydata>();
+    useForm<CommunityData>();
   const blocker = useBlocker(({ currentLocation, nextLocation }) => {
     return currentLocation.pathname !== nextLocation.pathname;
   });
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
@@ -46,8 +48,86 @@ export default function WriteCommunityPage() {
     }
   }, [blocker]);
 
+  const extractDataURLs = (htmlContent: string) => {
+    const srcArray: string[] = [];
+    const imgTagRegex = /<img[^>]*src=["'](data:[^"']+)["'][^>]*>/g;
+    let match;
+
+    while ((match = imgTagRegex.exec(htmlContent)) !== null) {
+      srcArray.push(match[1]);
+    }
+
+    return srcArray;
+  };
+
+  const postingMutation = useMutation({
+    mutationFn: async (data: CommunityData) => {
+      console.log(data);
+      const accessToken = window.localStorage.getItem('accessToken');
+      console.log(accessToken);
+      if (!accessToken) {
+        throw new Error('No access token found. Please log in again.');
+      }
+
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/posting/create`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          },
+          body: JSON.stringify(data)
+        }
+      );
+
+      if (!response.ok) throw new Error('Failed to sign up');
+      return response.json();
+    },
+    onSuccess: (data) => {
+      console.log('🎉 글쓰기 성공:', data);
+      navigate(`detail/${data.id}`);
+    },
+    onError: (error) => {
+      console.error('❌ 글쓰기기 실패:', error);
+    }
+  });
+
+  const onSubmit = async (data: CommunityData) => {
+    if (postingMutation.isPending) return;
+    console.log(data.content);
+
+    const extractedImages = extractDataURLs(data.content);
+    console.log('🖼 Extracted Images:', extractedImages);
+
+    let updatedContent = data.content;
+    extractedImages.forEach((imgSrc, index) => {
+      // 특수문자를 이스케이프 처리한 이미지 URL을 사용
+      const escapedImgSrc = imgSrc.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      updatedContent = updatedContent
+        .replace(`src="${imgSrc}"`, `src={image${index + 1}}`)
+        .replace(`src='${imgSrc}'`, `src={image${index + 1}}`);
+    });
+
+    console.log('📝 Updated Content:', updatedContent);
+
+    const updatedData = {
+      ...data,
+      content: updatedContent,
+      images: extractedImages,
+      tag: 1
+    };
+
+    console.log('📤 최종 전송 데이터:', updatedData);
+
+    try {
+      await postingMutation.mutateAsync(updatedData);
+    } catch (error) {
+      console.error('❌ Mutation failed:', error);
+    }
+  };
+
   return (
-    <WriteCommunityPageContainer>
+    <WriteCommunityPageContainer onSubmit={handleSubmit(onSubmit)}>
       <Wrapper>
         <Title>Community</Title>
 
@@ -64,7 +144,9 @@ export default function WriteCommunityPage() {
 
         <Editor watch={watch} setValue={setValue} trigger={trigger} />
 
-        <SubmitButton type="submit">Submit</SubmitButton>
+        <SubmitButton type="submit">
+          {postingMutation.isPending ? 'Submitting...' : 'Submit'}
+        </SubmitButton>
       </Wrapper>
     </WriteCommunityPageContainer>
   );

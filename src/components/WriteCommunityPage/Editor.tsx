@@ -82,7 +82,6 @@ export default function Editor({ setValue, watch, trigger }: EditorProps) {
         value={content || ''}
         onChange={handleChange}
       />
-      {!content?.trim() && <ErrorMsg msg="Content is required." />}
     </EditorWrapper>
   );
 }

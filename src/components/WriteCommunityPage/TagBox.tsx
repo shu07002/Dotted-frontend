@@ -1,4 +1,4 @@
-import { Communitydata } from '@/pages/community/WriteCommunityPage';
+import { CommunityData } from '@/pages/community/WriteCommunityPage';
 import {
   UseFormRegister,
   UseFormSetValue,
@@ -18,9 +18,9 @@ const PostingTagsColors: Record<string, string> = {
 const getTagColor = (tag: string) => PostingTagsColors[tag];
 
 interface TagBoxProps {
-  register: UseFormRegister<Communitydata>;
-  watch: UseFormWatch<Communitydata>;
-  setValue: UseFormSetValue<Communitydata>;
+  register: UseFormRegister<CommunityData>;
+  watch: UseFormWatch<CommunityData>;
+  setValue: UseFormSetValue<CommunityData>;
 }
 
 export default function TagBox({ register, watch, setValue }: TagBoxProps) {
