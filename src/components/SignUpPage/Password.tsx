@@ -53,7 +53,7 @@ export default function Password({ register, watch }: PasswordProps) {
           })}
         />
 
-        {isVaild ? null : <ErrorMsg />}
+        {isVaild ? null : <ErrorMsg msg="Password does not match" />}
       </InputBox>
     </>
   );

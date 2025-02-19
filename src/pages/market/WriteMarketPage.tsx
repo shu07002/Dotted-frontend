@@ -1,23 +1,54 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import styled from 'styled-components';
 
 import ImgBox from '@/components/MarketPage/ImgBox';
+import { useBlocker } from 'react-router-dom';
 
-interface data {
+interface MarketData {
   title: string;
+  content: string;
   price: string;
   image: string[];
-  content: string;
+  tag: string;
 }
 
 export default function WriteMarketPage() {
-  const { register, handleSubmit } = useForm<data>();
+  const { register, handleSubmit } = useForm<MarketData>();
   const [previews, setPreviews] = useState<(string | null)[]>([]);
   //const [imgFiles, setImgFiles] = useState<(File | null)[]>([null]);
   const imgFileRef = useRef<HTMLInputElement>(null);
+  const blocker = useBlocker(({ currentLocation, nextLocation }) => {
+    return currentLocation.pathname !== nextLocation.pathname;
+  });
 
-  const onSubmit: SubmitHandler<data> = (data) => {
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      event.returnValue = '';
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (blocker.state === 'blocked') {
+      const confirmLeave = window.confirm(
+        'Your unsaved changes may be lost. Do you want to leave?'
+      );
+      if (confirmLeave) {
+        blocker.proceed();
+      } else {
+        blocker.reset();
+      }
+    }
+  }, [blocker]);
+
+  const onSubmit: SubmitHandler<MarketData> = (data) => {
     alert(JSON.stringify(data));
   };
 

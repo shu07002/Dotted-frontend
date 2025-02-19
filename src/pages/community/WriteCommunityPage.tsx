@@ -3,43 +3,74 @@ import styled from 'styled-components';
 import 'react-quill-new/dist/quill.snow.css';
 import TagBox from '@/components/WriteCommunityPage/TagBox';
 import Editor from '@/components/WriteCommunityPage/Editor';
+import { useBlocker } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+
+export interface Communitydata {
+  title: string;
+  content: string;
+  image: string[];
+  tag: string;
+}
 
 export default function WriteCommunityPage() {
-  const [selectedTag, setSelectedTag] = useState('');
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
+  const { register, handleSubmit, watch, setValue, trigger } =
+    useForm<Communitydata>();
+  const blocker = useBlocker(({ currentLocation, nextLocation }) => {
+    return currentLocation.pathname !== nextLocation.pathname;
+  });
 
   useEffect(() => {
-    console.log(content);
-  }, [content]);
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      event.returnValue = '';
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (blocker.state === 'blocked') {
+      const confirmLeave = window.confirm(
+        'Your unsaved changes may be lost. Do you want to leave?'
+      );
+      if (confirmLeave) {
+        blocker.proceed();
+      } else {
+        blocker.reset();
+      }
+    }
+  }, [blocker]);
 
   return (
     <WriteCommunityPageContainer>
       <Wrapper>
         <Title>Community</Title>
 
-        <TagBox selectedTag={selectedTag} setSelectedTag={setSelectedTag} />
+        <TagBox register={register} watch={watch} setValue={setValue} />
 
         <TitleWrapper>
           <label htmlFor="title"></label>
           <input
             type="text"
-            name="title"
             placeholder="Please write title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            {...register('title', { required: 'Plaese write down your email' })}
           />
         </TitleWrapper>
 
-        <Editor content={content} setContent={setContent} />
+        <Editor watch={watch} setValue={setValue} trigger={trigger} />
 
-        <SubmitButton>Submit</SubmitButton>
+        <SubmitButton type="submit">Submit</SubmitButton>
       </Wrapper>
     </WriteCommunityPageContainer>
   );
 }
 
-const WriteCommunityPageContainer = styled.div`
+const WriteCommunityPageContainer = styled.form`
   margin-top: 2.5rem;
   width: 100%;
   padding: 0 24.3rem;

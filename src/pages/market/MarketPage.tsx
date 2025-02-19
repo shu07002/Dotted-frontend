@@ -4,6 +4,7 @@ import MakrketList from '@/components/MarketPage/MakrketList';
 import { marketPost } from '@/components/MarketPage/marketPost';
 import { MarketPost } from '@/types/MarketPost';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 //🤖TODO
@@ -19,6 +20,7 @@ export default function MarketPage() {
   const [searchType, setSearchType] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
   const [pagedData, setPagedData] = useState<MarketPost[]>([]);
+  const navigate = useNavigate();
 
   const onChangeSearch = (e: any) => {
     setSearch(e.target.value);
@@ -100,7 +102,7 @@ export default function MarketPage() {
             </button>
           </PaginationBox>
 
-          <WriteButton>Write</WriteButton>
+          <WriteButton onClick={() => navigate('write')}>Write</WriteButton>
         </BottomWrapper>
       </Wrapper>
     </MarketPageContainer>

@@ -5,6 +5,7 @@ import { communityData } from '@/components/CommunityPage/testData';
 import { CommunityPost } from '@/types/CommunityPost';
 
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const data = communityData;
@@ -18,6 +19,8 @@ export default function CommunityPage() {
   const [search, setSearch] = useState('');
 
   const [searchType, setSearchType] = useState('all');
+
+  const navigate = useNavigate();
 
   const onChangeSearch = (e: any) => {
     setSearch(e.target.value);
@@ -92,7 +95,7 @@ export default function CommunityPage() {
             </button>
           </PaginationBox>
 
-          <WriteButton>Write</WriteButton>
+          <WriteButton onClick={() => navigate('write')}>write</WriteButton>
         </BottomWrapper>
       </Wrapper>
     </CommunityPageContainer>

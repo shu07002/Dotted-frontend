@@ -33,23 +33,24 @@ export default function ImgBox({
             setPreviews={setPreviews}
           />
         ))}
-
-        <label htmlFor={`file${previews.length}`}>
-          <EachImage>
-            <span>
-              <Plus />
-            </span>
-            <span>{previews.length}/5</span>
-          </EachImage>
-          <input
-            type="file"
-            id={`file${previews.length}`}
-            accept="image/*"
-            ref={imgFileRef}
-            onChange={(e) => handleFileChange(e)}
-            style={{ display: 'none' }}
-          />
-        </label>
+        {previews.length < 5 && (
+          <label htmlFor={`file${previews.length}`}>
+            <EachImage>
+              <span>
+                <Plus />
+              </span>
+              <span>{previews.length}/5</span>
+            </EachImage>
+            <input
+              type="file"
+              id={`file${previews.length}`}
+              accept="image/*"
+              ref={imgFileRef}
+              onChange={(e) => handleFileChange(e)}
+              style={{ display: 'none' }}
+            />
+          </label>
+        )}
       </ImgBoxWrapper>
     </ImgBoxContainer>
   );
@@ -77,7 +78,7 @@ const ImgBoxWrapper = styled.div`
   }
 
   &::-webkit-scrollbar-track {
-    background: gray;
+    background: ${({ theme }) => theme.colors.gray400};
     border-radius: 10px;
   }
 
@@ -88,7 +89,7 @@ const ImgBoxWrapper = styled.div`
 
   /* 스크롤바 핸들 호버 시 */
   &::-webkit-scrollbar-thumb:hover {
-    background: rgba(178, 31, 124, 0.7);
+    background: ${({ theme }) => theme.colors.purple600};
   }
 
   > li {
