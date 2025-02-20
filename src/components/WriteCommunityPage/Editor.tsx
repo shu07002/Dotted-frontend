@@ -4,8 +4,7 @@ import 'react-quill-new/dist/quill.snow.css';
 import styled from 'styled-components';
 import { ImageResize } from 'quill-image-resize-module-ts';
 import { UseFormSetValue, UseFormTrigger, UseFormWatch } from 'react-hook-form';
-import { Communitydata } from '@/pages/community/WriteCommunityPage';
-import ErrorMsg from '../SignUpPage/ErrorMsg';
+import { CommunityData } from '@/pages/community/WriteCommunityPage';
 
 Quill.register('modules/ImageResize', ImageResize);
 
@@ -49,9 +48,9 @@ const formats = [
 ];
 
 interface EditorProps {
-  setValue: UseFormSetValue<Communitydata>;
-  watch: UseFormWatch<Communitydata>;
-  trigger: UseFormTrigger<Communitydata>;
+  setValue: UseFormSetValue<CommunityData>;
+  watch: UseFormWatch<CommunityData>;
+  trigger: UseFormTrigger<CommunityData>;
 }
 
 export default function Editor({ setValue, watch, trigger }: EditorProps) {
@@ -97,7 +96,7 @@ const StyledReactQuill = styled(ReactQuill)`
 
   .ql-editor,
   .ql-blank {
-    height: 42.6rem;
+    min-height: 42.6rem;
   }
 
   .ql-size-small {

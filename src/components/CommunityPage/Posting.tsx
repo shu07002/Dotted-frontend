@@ -80,6 +80,7 @@ export default function Posting({
       replacedContent = replacedContent.replace(placeholder, realSrc);
     });
   }
+  console.log(post);
   return (
     <PostingWrapper>
       <InfoWrapper>
@@ -91,7 +92,21 @@ export default function Posting({
             <More />
             {openMore && (
               <Menu>
-                <div onClick={() => navigate('edit')}>Edit</div>
+                <div
+                  onClick={() =>
+                    navigate('edit', {
+                      state: {
+                        postId: post.id,
+                        title: post.title,
+                        content: replacedContent,
+                        tag: post.tag,
+                        images: post.images
+                      }
+                    })
+                  }
+                >
+                  Edit
+                </div>
                 <div>Delete</div>
               </Menu>
             )}
