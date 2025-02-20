@@ -1,4 +1,5 @@
 import { CommunityData } from '@/pages/community/WriteCommunityPage';
+import { useEffect } from 'react';
 import {
   UseFormRegister,
   UseFormSetValue,
@@ -6,7 +7,7 @@ import {
 } from 'react-hook-form';
 import styled from 'styled-components';
 
-const tags = ['Living', 'Travel', 'Campus', 'Others'];
+const tags = ['Living', 'Travel', 'Campus Life', 'Others'];
 
 const PostingTagsColors: Record<string, string> = {
   Living: `purple950`,
@@ -25,6 +26,11 @@ interface TagBoxProps {
 
 export default function TagBox({ register, watch, setValue }: TagBoxProps) {
   const tagValue = watch('tag');
+  useEffect(() => {
+    if (tagValue === 'Campus') {
+      setValue('tag', 'Campus Life');
+    }
+  }, [tagValue]);
 
   const onClickTag = (tag: string) => {
     setValue('tag', tag);
@@ -34,7 +40,7 @@ export default function TagBox({ register, watch, setValue }: TagBoxProps) {
       {tags.map((tag, idx) => (
         <Tag
           key={idx}
-          $color={getTagColor(tag)}
+          $color={getTagColor(tag.split(/\s+/)[0])}
           $selected={tagValue === tag}
           onClick={() => onClickTag(tag)}
         >
