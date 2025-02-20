@@ -10,6 +10,10 @@ import 'react-quill-new/dist/quill.snow.css';
 import { PostDetail } from '@/pages/community/DetailCommunityPage';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Modal from 'react-modal';
+import { useMutation } from '@tanstack/react-query';
+
+Modal.setAppElement('#root');
 
 const PostingTagsColors: Record<string, string> = {
   Living: `purple950`,
@@ -35,6 +39,18 @@ interface PostingProps {
   onClickScrap: () => void;
 }
 
+const customStyles = {
+  content: {
+    inset: '0',
+    padding: '0',
+    width: '100%',
+    height: '100%',
+    overflow: 'hidden',
+    overflowY: 'hidden' as 'auto' | 'hidden' | 'scroll' | 'visible' | undefined,
+    backgroundColor: 'var(--modal-Background)'
+  }
+};
+
 export default function Posting({
   post,
   isLiked,
@@ -51,6 +67,14 @@ export default function Posting({
   const [localScrapCount, setLocalScrapCount] = useState(post.scrap_count);
   const [localScrapped, setLocalScrapped] = useState(post.is_scrapped);
 
+  const [openModal, setOpenModal] = useState(false);
+
+  if (openModal) {
+    document.body.style.overflow = 'hidden';
+  } else {
+    document.body.style.overflow = 'auto';
+  }
+
   const handleLikeClick = () => {
     if (localLiked) {
       setLocalLikeCount((prev) => prev - 1);
@@ -59,6 +83,42 @@ export default function Posting({
     }
     setLocalLiked((prev) => !prev);
     onClickLike();
+  };
+
+  const deleteMutation = useMutation({
+    mutationFn: async (postId: number) => {
+      const accessToken = window.localStorage.getItem('accessToken');
+      if (!accessToken) {
+        throw new Error('No access token found. Please log in again.');
+      }
+
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/posting/${postId}/delete`,
+        {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          }
+        }
+      );
+      if (!response.ok) {
+        throw new Error('Failed to delete post');
+      }
+      return response.json();
+    },
+    onSuccess: (data) => {
+      console.log('✅ 삭제 성공:', data);
+      // 삭제 성공 시 원하는 페이지로 이동
+    },
+    onError: (error) => {
+      console.error('❌ 삭제 실패:', error);
+    }
+  });
+
+  // 2) 버튼 클릭 시 삭제 Mutation 실행
+  const handleDelete = () => {
+    setOpenModal(false);
+    navigate('/community');
   };
 
   const handleScrapClick = () => {
@@ -107,7 +167,7 @@ export default function Posting({
                 >
                   Edit
                 </div>
-                <div>Delete</div>
+                <div onClick={() => setOpenModal(true)}>Delete</div>
               </Menu>
             )}
           </button>
@@ -149,6 +209,31 @@ export default function Posting({
           </Button>
         </ButtonWrapper>
       </ContentWrapper>
+
+      <Modal
+        isOpen={openModal}
+        style={customStyles}
+        onRequestClose={() => setOpenModal(!openModal)}
+        contentLabel="example"
+      >
+        <AccessRestrictedWrapper>
+          <div>
+            <AccessRestricted>
+              <Text>
+                <span>Are you sure you want to delete this post?</span>
+              </Text>
+            </AccessRestricted>
+            <ButtonBox>
+              <LaterButton onClick={() => setOpenModal(!openModal)}>
+                Cancle
+              </LaterButton>
+              <NowButton onClick={handleDelete}>
+                {deleteMutation.isPending ? 'Deleting...' : 'Delete'}
+              </NowButton>
+            </ButtonBox>
+          </div>
+        </AccessRestrictedWrapper>
+      </Modal>
     </PostingWrapper>
   );
 }
@@ -365,4 +450,87 @@ const Button = styled.button`
       font-weight: 500;
     }
   }
+`;
+
+const AccessRestrictedWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  background: var(--Modal-Background, rgba(12, 12, 12, 0.3));
+  position: absolute;
+  z-index: 10;
+  top: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const AccessRestricted = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  padding: 5.6rem 2rem 0 2rem;
+  width: 51rem;
+  height: 23.6rem;
+  flex-shrink: 0;
+  border-radius: 5px 5px 0 0;
+  background: ${({ theme }) => theme.colors.backgroundLayer1};
+
+  /* popup */
+  box-shadow: 2px 2px 2px 0px rgba(0, 0, 0, 0.11);
+`;
+
+const Text = styled.div`
+  display: flex;
+  justify-content: center;
+
+  > span {
+    color: ${({ theme }) => theme.colors.gray700};
+    text-align: center;
+    font-family: Inter;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 34px; /* 170% */
+    letter-spacing: -0.8px;
+
+    > span {
+      font-weight: 700;
+    }
+  }
+`;
+
+const ButtonBox = styled.div`
+  display: flex;
+  width: 100%;
+  height: 7.4rem;
+  border-radius: 0 0 5px 5px;
+  background: ${({ theme }) => theme.colors.backgroundLayer1};
+
+  > div {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-family: Inter;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 25px; /* 125% */
+    letter-spacing: -0.6px;
+  }
+`;
+
+const LaterButton = styled.div`
+  width: 50%;
+  border-radius: 0px 0px 0px 5px;
+  background: ${({ theme }) => theme.colors.backgroundBase};
+  color: ${({ theme }) => theme.colors.gray700};
+`;
+const NowButton = styled.div`
+  width: 50%;
+  border-radius: 0px 0px 5px 0px;
+  background: var(--Semantic-Negative-900, #ea3729);
+  color: ${({ theme }) => theme.colors.gray50};
 `;
