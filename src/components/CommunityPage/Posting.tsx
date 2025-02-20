@@ -46,10 +46,10 @@ export default function Posting({
   let replacedContent = post.content;
   const navigate = useNavigate();
   const [localLikeCount, setLocalLikeCount] = useState(post.like_count);
-  const [localLiked, setLocalLiked] = useState(isLiked);
+  const [localLiked, setLocalLiked] = useState(post.is_liked);
 
   const [localScrapCount, setLocalScrapCount] = useState(post.scrap_count);
-  const [localScrapped, setLocalScrapped] = useState(isScraped);
+  const [localScrapped, setLocalScrapped] = useState(post.is_scrapped);
 
   const handleLikeClick = () => {
     if (localLiked) {
