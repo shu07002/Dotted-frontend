@@ -109,8 +109,8 @@ export default function WriteCommunityPage() {
     let updatedContent = data.content;
     extractedImages.forEach((imgSrc, index) => {
       updatedContent = updatedContent
-        .replace(`src="${imgSrc}"`, `src={image${index + 1}}`)
-        .replace(`src='${imgSrc}'`, `src={image${index + 1}}`);
+        .replace(`src="${imgSrc}"`, `src={images[${index}].image_url}`)
+        .replace(`src='${imgSrc}'`, `src={images[${index}].image_url}`);
     });
 
     const updatedData = {

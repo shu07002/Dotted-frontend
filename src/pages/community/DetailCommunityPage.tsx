@@ -107,6 +107,8 @@ export default function DetailCommunityPage() {
     return <div style={{ minHeight: '116rem' }} />;
   }
 
+  console.log(post);
+
   return (
     <DetailCommunityPageContainer>
       <Wrapper>

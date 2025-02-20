@@ -40,6 +40,20 @@ export default function Posting({
   onClickLike,
   onClickScrap
 }: PostingProps) {
+  let replacedContent = post.content;
+
+  if (post.images && post.images.length > 0) {
+    post.images.forEach((imgObj, index) => {
+      // 예: 'src="{images[0].image_url}"' => 'src="https://example.com/img1.png"'
+      const placeholder = `src={images[${index}].image_url}`;
+      const realSrc = `src="${imgObj.image_url}"`;
+      console.log(placeholder, realSrc);
+
+      replacedContent = replacedContent.replace(placeholder, realSrc);
+      console.log(replacedContent.replace(placeholder, realSrc));
+      console.log(replacedContent);
+    });
+  }
   return (
     <PostingWrapper>
       <InfoWrapper>
@@ -68,7 +82,7 @@ export default function Posting({
 
       <ContentWrapper>
         <StyledReactQuill
-          value={post.content}
+          value={replacedContent}
           readOnly={true}
           theme="snow"
           modules={{ toolbar: false }}
@@ -212,7 +226,7 @@ const StyledReactQuill = styled(ReactQuill)`
 
   .ql-editor,
   .ql-blank {
-    height: 42.6rem;
+    min-height: 42.6rem;
   }
 
   .ql-size-small {
