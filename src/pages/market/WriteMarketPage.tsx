@@ -51,9 +51,8 @@ export default function WriteMarketPage() {
 
   const postingMutation = useMutation({
     mutationFn: async (data: MarketData) => {
-      console.log(data);
       const accessToken = window.localStorage.getItem('accessToken');
-      console.log(accessToken);
+
       if (!accessToken) {
         throw new Error('No access token found. Please log in again.');
       }
@@ -63,6 +62,7 @@ export default function WriteMarketPage() {
         {
           method: 'POST',
           headers: {
+            'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`
           },
           body: JSON.stringify(data)

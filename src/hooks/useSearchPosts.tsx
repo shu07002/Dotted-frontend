@@ -21,9 +21,6 @@ const fetchPosts = async ({
   if (searchType) queryParams.append('search_type', searchType);
   if (tag !== 'All') queryParams.append('tag', tag);
   if (page) queryParams.append('page', page.toString());
-  console.log(
-    `${import.meta.env.VITE_API_URL}/posting?${queryParams.toString()}`
-  );
 
   const response = await fetch(
     `${import.meta.env.VITE_API_URL}/posting?${queryParams.toString()}`,
@@ -35,7 +32,6 @@ const fetchPosts = async ({
       }
     }
   );
-  console.log(response);
 
   if (!response.ok) {
     throw new Error(`Error fetching posts: ${response.status}`);

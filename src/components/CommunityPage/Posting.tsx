@@ -4,7 +4,7 @@ import Eye from '@/assets/svg/CommunityPage/Eye.svg?react';
 import Profile from '@/assets/svg/CommunityPage/Profile.svg?react';
 import Like from '@/assets/svg/CommunityPage/Like.svg?react';
 import Scrap from '@/assets/svg/CommunityPage/Scrap.svg?react';
-
+import ReportFlag from '@/assets/svg/CommunityPage/ReportFlag.svg?react';
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 import { PostDetail } from '@/pages/community/DetailCommunityPage';
@@ -67,9 +67,13 @@ export default function Posting({
   const [localScrapCount, setLocalScrapCount] = useState(post.scrap_count);
   const [localScrapped, setLocalScrapped] = useState(post.is_scrapped);
 
-  const [openModal, setOpenModal] = useState(false);
+  const [openNormalModal, setOpenNormalModal] = useState(false);
+  const [openReportModal, setOpenReportModal] = useState(false);
 
-  if (openModal) {
+  const [reportType, setReportType] = useState('');
+  const [reportContent, setReportContent] = useState('');
+
+  if (openNormalModal || openReportModal) {
     document.body.style.overflow = 'hidden';
   } else {
     document.body.style.overflow = 'auto';
@@ -117,7 +121,7 @@ export default function Posting({
 
   // 2) 버튼 클릭 시 삭제 Mutation 실행
   const handleDelete = () => {
-    setOpenModal(false);
+    setOpenNormalModal(false);
     navigate('/community');
   };
 
@@ -140,7 +144,67 @@ export default function Posting({
       replacedContent = replacedContent.replace(placeholder, realSrc);
     });
   }
-  console.log(post);
+  const handleChange = (e: any) => setReportType(e.target.value);
+
+  const reportMutation = useMutation({
+    mutationFn: async () => {
+      const accessToken = window.localStorage.getItem('accessToken');
+      if (!accessToken) {
+        throw new Error('No access token found. Please log in again.');
+      }
+      const dataToSend = {
+        report_type: reportType, // 라디오 버튼에서 선택한 신고 유형
+        content_type: 'Post', // 게시글 신고
+        object_id: post.id, // 게시글 ID
+        reason: reportContent // 신고 사유
+      };
+
+      // POST /management/report
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/management/report`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`
+          },
+          body: JSON.stringify(dataToSend)
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to report');
+      }
+      return response.json();
+    },
+    onSuccess: (data) => {
+      console.log('✅ 신고 성공:', data);
+      setReportContent('');
+      setReportType('');
+      // 신고 후 모달 닫기
+      setOpenReportModal(false);
+      // 필요하다면 후처리 (예: 알림, 페이지 이동 등)
+      alert('Your report has been submitted.');
+    },
+    onError: (error) => {
+      console.error('❌ 신고 실패:', error);
+      alert('Failed to submit the report.');
+    }
+  });
+
+  // "Yes" 버튼 클릭 시 신고 mutation 실행
+  const ReportMutation = () => {
+    if (!reportType) {
+      alert('Please select a report type.');
+      return;
+    }
+    if (!reportContent.trim()) {
+      alert('Please enter a reason for the report.');
+      return;
+    }
+    reportMutation.mutate();
+  };
+
   return (
     <PostingWrapper>
       <InfoWrapper>
@@ -152,22 +216,28 @@ export default function Posting({
             <More />
             {openMore && (
               <Menu>
-                <div
-                  onClick={() =>
-                    navigate('edit', {
-                      state: {
-                        postId: post.id,
-                        title: post.title,
-                        content: replacedContent,
-                        tag: post.tag,
-                        images: post.images
+                {post.is_mine ? (
+                  <>
+                    <div
+                      onClick={() =>
+                        navigate('edit', {
+                          state: {
+                            postId: post.id,
+                            title: post.title,
+                            content: replacedContent,
+                            tag: post.tag,
+                            images: post.images
+                          }
+                        })
                       }
-                    })
-                  }
-                >
-                  Edit
-                </div>
-                <div onClick={() => setOpenModal(true)}>Delete</div>
+                    >
+                      Edit
+                    </div>
+                    <div onClick={() => setOpenNormalModal(true)}>Delete</div>
+                  </>
+                ) : (
+                  <div onClick={() => setOpenReportModal(true)}>Report</div>
+                )}
               </Menu>
             )}
           </button>
@@ -211,25 +281,108 @@ export default function Posting({
       </ContentWrapper>
 
       <Modal
-        isOpen={openModal}
+        isOpen={openNormalModal}
         style={customStyles}
-        onRequestClose={() => setOpenModal(!openModal)}
+        onRequestClose={() => setOpenNormalModal(!openNormalModal)}
         contentLabel="example"
       >
         <AccessRestrictedWrapper>
           <div>
-            <AccessRestricted>
-              <Text>
+            <AccessRestrictedNormal>
+              <TextNormal>
                 <span>Are you sure you want to delete this post?</span>
-              </Text>
-            </AccessRestricted>
+              </TextNormal>
+            </AccessRestrictedNormal>
             <ButtonBox>
-              <LaterButton onClick={() => setOpenModal(!openModal)}>
+              <LaterButton onClick={() => setOpenNormalModal(!openNormalModal)}>
                 Cancle
               </LaterButton>
               <NowButton onClick={handleDelete}>
                 {deleteMutation.isPending ? 'Deleting...' : 'Delete'}
               </NowButton>
+            </ButtonBox>
+          </div>
+        </AccessRestrictedWrapper>
+      </Modal>
+
+      <Modal
+        isOpen={openReportModal}
+        style={customStyles}
+        onRequestClose={() => setOpenReportModal(!openReportModal)}
+        contentLabel="example"
+      >
+        <AccessRestrictedWrapper>
+          <div>
+            <AccessRestrictedReport>
+              <TextReport>
+                <span>
+                  <div>
+                    <ReportFlag />
+                  </div>
+                  Report
+                </span>
+                <span>Report type</span>
+                <form>
+                  <RadioWrapper>
+                    <HiddenRadio
+                      name="reportType"
+                      value="SPAM"
+                      checked={reportType === 'SPAM'}
+                      onChange={handleChange}
+                    />
+                    <RadioLabel>Spam</RadioLabel>
+                  </RadioWrapper>
+                  <RadioWrapper>
+                    <HiddenRadio
+                      name="reportType"
+                      value="ABUSE"
+                      checked={reportType === 'ABUSE'}
+                      onChange={handleChange}
+                    />
+                    <RadioLabel>Abuse</RadioLabel>
+                  </RadioWrapper>
+                  <RadioWrapper>
+                    <HiddenRadio
+                      name="reportType"
+                      value="SEXUAL"
+                      checked={reportType === 'SEXUAL'}
+                      onChange={handleChange}
+                    />
+                    <RadioLabel>Sexual</RadioLabel>
+                  </RadioWrapper>
+                  <RadioWrapper>
+                    <HiddenRadio
+                      name="reportType"
+                      value="ILLEGAL"
+                      checked={reportType === 'ILLEGAL'}
+                      onChange={handleChange}
+                    />
+                    <RadioLabel>Illegal</RadioLabel>
+                  </RadioWrapper>
+                  <RadioWrapper>
+                    <HiddenRadio
+                      name="reportType"
+                      value="OTHERS"
+                      checked={reportType === 'OTHERS'}
+                      onChange={handleChange}
+                    />
+                    <RadioLabel>Others</RadioLabel>
+                  </RadioWrapper>
+                </form>
+              </TextReport>
+              <textarea
+                value={reportContent}
+                onChange={(e) => setReportContent(e.target.value)}
+              />
+              <div>
+                <span>Are you sure you want to report this?</span>
+              </div>
+            </AccessRestrictedReport>
+            <ButtonBox>
+              <LaterButton onClick={() => setOpenReportModal(!openReportModal)}>
+                No
+              </LaterButton>
+              <NowButton onClick={ReportMutation}>Yes</NowButton>
             </ButtonBox>
           </div>
         </AccessRestrictedWrapper>
@@ -251,6 +404,11 @@ const PostingWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
+`;
+
+const RadioLabel = styled.span`
+  font-size: 16px;
+  color: #333;
 `;
 
 const PostingTag = styled.div<{ $color: string }>`
@@ -289,6 +447,19 @@ const TitleWrapper = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
+  }
+`;
+
+const HiddenRadio = styled.input.attrs({ type: 'radio' })`
+  appearance: none;
+  border: max(2px, 0.1em) solid gray;
+  border-radius: 50%;
+  width: 1.25em;
+  height: 1.25em;
+  transition: border 0.5s ease-in-out;
+
+  &:checked {
+    border: 0.4em solid tomato;
   }
 `;
 
@@ -465,7 +636,7 @@ const AccessRestrictedWrapper = styled.div`
   align-items: center;
 `;
 
-const AccessRestricted = styled.div`
+const AccessRestrictedNormal = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -480,7 +651,7 @@ const AccessRestricted = styled.div`
   box-shadow: 2px 2px 2px 0px rgba(0, 0, 0, 0.11);
 `;
 
-const Text = styled.div`
+const TextNormal = styled.div`
   display: flex;
   justify-content: center;
 
@@ -498,6 +669,159 @@ const Text = styled.div`
       font-weight: 700;
     }
   }
+`;
+
+const AccessRestrictedReport = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  padding: 3.1rem 5.5rem 3.1rem 5.5rem;
+  width: 51rem;
+
+  flex-shrink: 0;
+  border-radius: 5px 5px 0 0;
+  background: ${({ theme }) => theme.colors.backgroundLayer1};
+
+  /* popup */
+  box-shadow: 2px 2px 2px 0px rgba(0, 0, 0, 0.11);
+
+  > textarea {
+    border-radius: 5px;
+    padding: 1rem;
+    min-height: 9rem;
+    margin-bottom: 2.8rem;
+    resize: none;
+    width: 100%;
+    max-width: 40rem;
+    height: 5.7rem;
+    font-family: Inter;
+    font-size: 1.6rem;
+  }
+
+  > div:last-child {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    color: var(--Gray-Gray_light-gray-700_light, #464646);
+    text-align: center;
+    font-family: Inter;
+    font-size: 1.4rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 3.4rem; /* 242.857% */
+    letter-spacing: -0.056rem;
+  }
+`;
+
+const TextReport = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  > span {
+    &:first-child {
+      display: flex;
+      gap: 1.2rem;
+      color: var(--Gray-Gray_light-gray-700_light, #464646);
+      text-align: center;
+      font-family: Inter;
+      font-size: 2rem;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 3.4rem; /* 170% */
+      letter-spacing: -0.08rem;
+    }
+
+    &:nth-child(2) {
+      color: ${({ theme }) => theme.colors.gray400};
+      font-family: Inter;
+      font-size: 1.4rem;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 3.4rem; /* 242.857% */
+      letter-spacing: -0.056rem;
+    }
+  }
+
+  > form {
+    margin-bottom: 1.3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+
+    > div {
+      display: flex;
+      align-items: center;
+      gap: 1.4rem;
+
+      color: ${({ theme }) => theme.colors.gray700};
+      font-family: Inter;
+      font-size: 1.6rem;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 3.4rem; /* 212.5% */
+      letter-spacing: -0.064rem;
+
+      > input {
+        &.custom-radio {
+          display: inline-flex;
+          align-items: center;
+          cursor: pointer;
+          margin-bottom: 0.8rem; /* 간격 조정 */
+        }
+
+        /* 라디오 버튼을 숨기고, 커스텀 모양을 만들어줄 예정 */
+        &.custom-radio input[type='radio'] {
+          appearance: none; /* 브라우저 기본 스타일 없애기 */
+          -webkit-appearance: none; /* 크롬/사파리 호환 */
+          width: 1.2rem;
+          height: 1.2rem;
+          margin: 0 0.6rem 0 0; /* 오른쪽 여백(텍스트와 간격) */
+          border: 2px solid #f68512; /* 주황색 테두리 */
+          border-radius: 50%; /* 동그라미 */
+          outline: none;
+          cursor: pointer;
+          position: relative; /* ::before를 위한 위치 기준 */
+        }
+
+        /* 선택되지 않은 상태(hover) 시 효과 */
+        &.custom-radio input[type='radio']:hover {
+          border-color: #f06f00; /* 살짝 어두운 주황 */
+        }
+
+        /* 라디오 버튼이 선택된 경우, 안에 점을 찍어준다 */
+        &.custom-radio input[type='radio']:checked::before {
+          content: '';
+          display: block;
+          width: 0.6rem;
+          height: 0.6rem;
+          border-radius: 50%;
+          background-color: #f68512; /* 주황색 내부 */
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+
+        /* 라벨 텍스트 */
+        &.custom-radio span {
+          font-size: 1.4rem;
+          color: #333;
+          user-select: none; /* 드래그 방지 (옵션) */
+        }
+      }
+    }
+  }
+`;
+
+const RadioWrapper = styled.label`
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin-bottom: 8px;
+  position: relative;
+  gap: 1.2rem;
 `;
 
 const ButtonBox = styled.div`
