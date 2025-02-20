@@ -31,9 +31,12 @@ const GoogleLoginButton = ({
   const sendTokenToBackend = async (authCode: string) => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/user/login/google/callback?code=${authCode}`,
+        `${import.meta.env.VITE_API_DOMAIN}/user/login/google`,
         {
-          method: 'GET'
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json' // ✅ JSON 요청 헤더 추가
+          }
         }
       );
 

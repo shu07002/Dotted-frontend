@@ -34,7 +34,7 @@ const customStyles = {
 // 학생증 사진 인증 페이지 모달로 분리 ✅
 
 export default function SignUpPage() {
-  const [step, setStep] = useState(3);
+  const [step, setStep] = useState(1);
   const [isSogangEmail, setIsSogangEmail] = useState(false);
   const [isCheckedTOS, setisCheckedTOS] = useState(false); // false
   const [isCheckedPP, setisCheckedPP] = useState(false); // false
