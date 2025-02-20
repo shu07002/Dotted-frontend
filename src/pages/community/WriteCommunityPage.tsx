@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import styled from 'styled-components';
 import 'react-quill-new/dist/quill.snow.css';
 import TagBox from '@/components/WriteCommunityPage/TagBox';
 import Editor from '@/components/WriteCommunityPage/Editor';
-import { data, useBlocker, useNavigate } from 'react-router-dom';
+import { useBlocker, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 
@@ -80,7 +80,7 @@ export default function WriteCommunityPage() {
         }
       );
 
-      if (!response.ok) throw new Error('Failed to sign up');
+      if (!response.ok) throw new Error('Failed to posting');
       return response.json();
     },
     onSuccess: (data) => {

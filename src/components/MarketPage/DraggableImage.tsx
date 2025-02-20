@@ -24,9 +24,7 @@ export default function DraggableImage({
   index,
   previews,
   preview,
-  imgFileRef,
   handleDeleteImage,
-  handleFileChange,
   setPreviews
 }: DraggableImageProps) {
   const ref = useRef<HTMLLIElement>(null);

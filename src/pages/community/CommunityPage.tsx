@@ -2,58 +2,84 @@ import PostingList from '@/components/CommunityPage/PostingList';
 import SearchBar from '@/components/CommunityPage/SearchBar';
 import TagList from '@/components/CommunityPage/TagList';
 import { communityData } from '@/components/CommunityPage/testData';
-import { CommunityPost } from '@/types/CommunityPost';
-
+import { useSearchPosts } from '@/hooks/useSearchPosts';
+import { CommunityPost, EachPost } from '@/types/CommunityPost';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 const data = communityData;
 const tags = ['All', 'HOT', 'Campus Life', 'Travel', 'Living', 'Others'];
 
+const POST_PER_PAGE = 5;
+
 export default function CommunityPage() {
   const [selectedTag, setSelectedTag] = useState('All');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pagedData, setPagedData] = useState<CommunityPost[]>([]);
-
-  const [search, setSearch] = useState('');
-
+  const [searchResults, setSearchResults] = useState<CommunityPost>();
+  const [pagedData, setPagedData] = useState<EachPost[]>([]);
+  const [keyword, setKeyword] = useState('');
   const [searchType, setSearchType] = useState('all');
+  const searchPosts = useSearchPosts();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentPage = Number(searchParams.get('page')) || 1;
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSearch = () => {
+    setIsLoading(true);
+    searchPosts.mutate(
+      {
+        keyword,
+        searchType,
+        tag: selectedTag,
+        page: currentPage
+      },
+      {
+        onSuccess: (data) => {
+          setSearchResults(data);
+          setPagedData(data.results); // ✅ 검색 결과 업데이트
+          setIsLoading(false);
+        },
+        onError: (error) => {
+          console.error('❌ 검색 실패:', error);
+          setIsLoading(false);
+        }
+      }
+    );
+  };
+
+  useEffect(() => {
+    handleSearch();
+  }, [selectedTag, currentPage]);
+
+  useEffect(() => {
+    console.log(searchResults);
+  }, [searchResults]);
 
   const navigate = useNavigate();
 
   const onChangeSearch = (e: any) => {
-    setSearch(e.target.value);
+    setKeyword(e.target.value);
   };
 
   const onChangeSearchType = (e: any) => {
     setSearchType(e.target.value);
   };
 
-  const onClickTag = (tag: string) => {
-    setSelectedTag(tag);
-  };
-
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'auto' });
-    const start = (currentPage - 1) * 8;
-    const end = start + 8;
+    const start = (currentPage - 1) * POST_PER_PAGE;
+    const end = start + POST_PER_PAGE;
     setPagedData(data.slice(start, end));
   }, [currentPage]);
 
-  function handleDirectionBtn(targetPage: number) {
-    if (targetPage < 1) {
-      setCurrentPage(1);
-    } else if (targetPage > Math.ceil(data.length / 8)) {
-      setCurrentPage(Math.ceil(data.length / 8));
-    } else {
-      setCurrentPage(targetPage);
-    }
-  }
+  const onClickTag = (tag: string) => {
+    setSelectedTag(tag);
+    setSearchParams({ page: '1', tag: tag, keyword }); // ✅ 태그 변경 시 첫 페이지로
+  };
 
-  function handlePageChange(targetPage: number) {
-    setCurrentPage(targetPage);
-  }
+  const handlePageChange = (targetPage: number) => {
+    setSearchParams({ page: targetPage.toString(), tag: selectedTag, keyword });
+  };
 
   return (
     <CommunityPageContainer>
@@ -67,34 +93,56 @@ export default function CommunityPage() {
             onClickTag={onClickTag}
           />
           <SearchBar
-            search={search}
+            keyword={keyword}
             searchType={searchType}
             onChangeSearch={onChangeSearch}
             onChangeSearchType={onChangeSearchType}
+            handleSearch={handleSearch}
           />
         </TagAndSearch>
 
-        <PostingList pagedData={pagedData} />
+        {isLoading ? (
+          <div style={{ minHeight: '46rem' }}></div>
+        ) : (
+          <PostingList pagedData={pagedData} />
+        )}
 
         <BottomWrapper>
           <PaginationBox>
-            <button onClick={() => handleDirectionBtn(currentPage - 1)}>
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage <= 1 || isLoading} // ✅ 로딩 중에는 비활성화
+            >
               {'<'}
             </button>
-            {Array.from({ length: Math.ceil(data.length / 8) }, (_, idx) => (
-              <button
-                className={currentPage === idx + 1 ? 'selected' : ''}
-                key={idx}
-                onClick={() => handlePageChange(idx + 1)}
-              >
-                {idx + 1}
-              </button>
-            ))}
-            <button onClick={() => handleDirectionBtn(currentPage + 1)}>
+            {Array.from(
+              {
+                length: Math.ceil(
+                  searchResults ? searchResults.count / POST_PER_PAGE : 1
+                )
+              },
+              (_, idx) => (
+                <button
+                  className={currentPage === idx + 1 ? 'selected' : ''}
+                  key={idx}
+                  onClick={() => handlePageChange(idx + 1)}
+                  disabled={isLoading} // ✅ 로딩 중에는 비활성화
+                >
+                  {idx + 1}
+                </button>
+              )
+            )}
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={
+                currentPage >=
+                  Math.ceil((searchResults?.count || 0) / POST_PER_PAGE) ||
+                isLoading
+              }
+            >
               {'>'}
             </button>
           </PaginationBox>
-
           <WriteButton onClick={() => navigate('write')}>write</WriteButton>
         </BottomWrapper>
       </Wrapper>

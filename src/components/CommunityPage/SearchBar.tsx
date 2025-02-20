@@ -2,18 +2,19 @@ import styled from 'styled-components';
 import Magnifier from '@/assets/svg/CommunityPage/Magnifier.svg?react';
 
 interface SearchBarProps {
-  search: string;
+  keyword: string;
   searchType: string;
-
   onChangeSearch: (e: any) => void;
   onChangeSearchType: (e: any) => void;
+  handleSearch: () => void;
 }
 
 export default function SearchBar({
-  search,
+  keyword,
   searchType,
   onChangeSearch,
-  onChangeSearchType
+  onChangeSearchType,
+  handleSearch
 }: SearchBarProps) {
   return (
     <SearchBarWrapper>
@@ -29,12 +30,12 @@ export default function SearchBar({
             type="text"
             name="content"
             placeholder="Search"
-            value={search}
+            value={keyword}
             onChange={onChangeSearch}
           />
         </label>
 
-        <Magnifier />
+        <Magnifier onClick={handleSearch} />
       </ContentInputWrapper>
     </SearchBarWrapper>
   );

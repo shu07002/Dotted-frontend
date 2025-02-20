@@ -7,10 +7,6 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-//🤖TODO
-// 1. 마켓 글쓰기 페이지 사진 DND 구현
-// 2. 마켓 글쓰기 페이지 사진 파일 객체 data URL로 변환
-
 const tags = ['All', 'Only On Sale'];
 const data = marketPost;
 
