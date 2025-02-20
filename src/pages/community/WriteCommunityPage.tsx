@@ -1,11 +1,10 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import 'react-quill-new/dist/quill.snow.css';
-import TagBox from '@/components/WriteCommunityPage/TagBox';
-import Editor from '@/components/WriteCommunityPage/Editor';
 import { useBlocker, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
+import TagBox from '@/components/WriteCommunityPage/TagBox';
+import Editor from '@/components/WriteCommunityPage/Editor';
 
 export interface CommunityData {
   title: string;
@@ -17,26 +16,17 @@ export interface CommunityData {
 export default function WriteCommunityPage() {
   const { register, handleSubmit, watch, setValue, trigger } =
     useForm<CommunityData>();
+  const navigate = useNavigate();
+  const [isSubmitted, setIsSubmitted] = useState(false); // ✅ 제출 여부 상태 추가
+
   const blocker = useBlocker(({ currentLocation, nextLocation }) => {
+    if (isSubmitted) return false; // 제출된 경우 차단하지 않음
     return currentLocation.pathname !== nextLocation.pathname;
   });
-  const navigate = useNavigate();
 
   useEffect(() => {
-    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-      event.preventDefault();
-      event.returnValue = '';
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (blocker.state === 'blocked') {
+    if (blocker.state === 'blocked' && !isSubmitted) {
+      // ✅ 제출된 경우 confirm 생략
       const confirmLeave = window.confirm(
         'Your unsaved changes may be lost. Do you want to leave?'
       );
@@ -46,7 +36,22 @@ export default function WriteCommunityPage() {
         blocker.reset();
       }
     }
-  }, [blocker]);
+  }, [blocker, isSubmitted]); // ✅ isSubmitted 상태 추가
+
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      if (!isSubmitted) {
+        // ✅ 제출된 경우 unload 이벤트 생략
+        event.preventDefault();
+        event.returnValue = '';
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [isSubmitted]); // ✅ isSubmitted 상태 추가
 
   const extractDataURLs = (htmlContent: string) => {
     const srcArray: string[] = [];
@@ -62,9 +67,7 @@ export default function WriteCommunityPage() {
 
   const postingMutation = useMutation({
     mutationFn: async (data: CommunityData) => {
-      console.log(data);
       const accessToken = window.localStorage.getItem('accessToken');
-      console.log(accessToken);
       if (!accessToken) {
         throw new Error('No access token found. Please log in again.');
       }
@@ -74,6 +77,7 @@ export default function WriteCommunityPage() {
         {
           method: 'POST',
           headers: {
+            'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`
           },
           body: JSON.stringify(data)
@@ -85,8 +89,13 @@ export default function WriteCommunityPage() {
     },
     onSuccess: (data) => {
       console.log('🎉 글쓰기 성공:', data);
-      navigate(`detail/${data.id}`);
+      setIsSubmitted(true);
+      blocker.reset?.();
+      setTimeout(() => {
+        navigate('/community');
+      }, 0);
     },
+
     onError: (error) => {
       console.error('❌ 글쓰기기 실패:', error);
     }
@@ -94,28 +103,21 @@ export default function WriteCommunityPage() {
 
   const onSubmit = async (data: CommunityData) => {
     if (postingMutation.isPending) return;
-    console.log(data.content);
 
     const extractedImages = extractDataURLs(data.content);
-    console.log('🖼 Extracted Images:', extractedImages);
 
     let updatedContent = data.content;
     extractedImages.forEach((imgSrc, index) => {
-      // 특수문자를 이스케이프 처리한 이미지 URL을 사용
       updatedContent = updatedContent
         .replace(`src="${imgSrc}"`, `src={image${index + 1}}`)
         .replace(`src='${imgSrc}'`, `src={image${index + 1}}`);
     });
-
-    console.log('📝 Updated Content:', updatedContent);
 
     const updatedData = {
       ...data,
       content: updatedContent,
       images: extractedImages
     };
-
-    console.log('📤 최종 전송 데이터:', updatedData);
 
     try {
       await postingMutation.mutateAsync(updatedData);

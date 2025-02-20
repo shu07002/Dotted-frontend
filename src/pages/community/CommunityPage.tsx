@@ -4,6 +4,7 @@ import TagList from '@/components/CommunityPage/TagList';
 import { communityData } from '@/components/CommunityPage/testData';
 import { useSearchPosts } from '@/hooks/useSearchPosts';
 import { CommunityPost, EachPost } from '@/types/CommunityPost';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
@@ -104,7 +105,17 @@ export default function CommunityPage() {
         {isLoading ? (
           <div style={{ minHeight: '46rem' }}></div>
         ) : (
-          <PostingList pagedData={pagedData} />
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={JSON.stringify(pagedData)} // ✅ 데이터 변경 시 애니메이션 트리거
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <PostingList pagedData={pagedData} />
+            </motion.div>
+          </AnimatePresence>
         )}
 
         <BottomWrapper>
