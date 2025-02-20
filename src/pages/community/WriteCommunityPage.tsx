@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useBlocker, useNavigate } from 'react-router-dom';
+import { useBlocker, useLocation, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 import TagBox from '@/components/WriteCommunityPage/TagBox';
@@ -18,6 +18,9 @@ export default function WriteCommunityPage() {
     useForm<CommunityData>();
   const navigate = useNavigate();
   const [isSubmitted, setIsSubmitted] = useState(false); // ✅ 제출 여부 상태 추가
+  const location = useLocation();
+  // if (location.pathname.includes('edit')) {
+  // }
 
   const blocker = useBlocker(({ currentLocation, nextLocation }) => {
     if (isSubmitted) return false; // 제출된 경우 차단하지 않음

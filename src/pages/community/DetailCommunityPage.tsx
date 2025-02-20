@@ -3,8 +3,7 @@ import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 import Posting from '@/components/CommunityPage/Posting';
 import CommentSection from '@/components/CommunityPage/CommentSection';
-import { useQuery } from '@tanstack/react-query';
-import LoadingScreen from '@/components/common/LoadingScreen';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 // -------------------- 타입 정의 --------------------
 export interface PostImage {
@@ -34,24 +33,6 @@ export interface PostDetail {
   is_scrapped: boolean;
 }
 
-// -------------------- API 호출 함수 --------------------
-async function fetchPostDetail(postId: number): Promise<PostDetail> {
-  const response = await fetch(
-    `${import.meta.env.VITE_API_URL}/posting/${postId}`,
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }
-  );
-  if (!response.ok) {
-    throw new Error(`Failed to fetch post detail (status: ${response.status})`);
-  }
-  return response.json();
-}
-
-// -------------------- 컴포넌트 --------------------
 export default function DetailCommunityPage() {
   const { id } = useParams();
   const postId = Number(id);
@@ -77,12 +58,126 @@ export default function DetailCommunityPage() {
   const [isLiked, setIsLiked] = useState(false);
   const [isScraped, setIsScraped] = useState(false);
 
+  useEffect(() => {
+    if (post) {
+      setIsLiked(post.is_liked);
+      setIsScraped(post.is_scrapped);
+    }
+  }, [post]);
+
+  // -------------------- API 호출 함수 --------------------
+  async function fetchPostDetail(postId: number): Promise<PostDetail> {
+    const accessToken = localStorage.getItem('accessToken');
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}/posting/${postId}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`
+        }
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch post detail (status: ${response.status})`
+      );
+    }
+
+    return response.json();
+  }
+
+  const likeMutation = useMutation({
+    mutationFn: async () => {
+      const accessToken = localStorage.getItem('accessToken');
+      if (!accessToken) {
+        console.error('No access');
+        return;
+      }
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/posting/${id}/like`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${accessToken}`
+            },
+            body: JSON.stringify({ id })
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error('Failed to like');
+        }
+
+        return await response.json();
+      } catch (error) {
+        console.log(error);
+        throw error; // onError 핸들러에서 처리됨
+      } finally {
+        // 요청 성공/실패 여부와 관계없이 항상 실행됨
+      }
+    },
+    onSuccess: (data) => {
+      setIsLiked(data.is_liked);
+      console.log(data);
+    },
+    onError: (error) => {
+      console.log(`Error: ${error.message}`);
+    }
+  });
+
+  const scrapMutation = useMutation({
+    mutationFn: async () => {
+      const accessToken = localStorage.getItem('accessToken');
+      if (!accessToken) {
+        console.error('No access');
+        return;
+      }
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/posting/${id}/scrap`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${accessToken}`
+            },
+            body: JSON.stringify({ id })
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error('Failed to like');
+        }
+
+        return await response.json();
+      } catch (error) {
+        console.log(error);
+        throw error; // onError 핸들러에서 처리됨
+      } finally {
+        // 요청 성공/실패 여부와 관계없이 항상 실행됨
+      }
+    },
+    onSuccess: (data) => {
+      setIsScraped(data.is_scrapped);
+      console.log(data);
+    },
+    onError: (error) => {
+      console.log(`Error: ${error.message}`);
+    }
+  });
+
   const onClickLike = () => {
     setIsLiked(!isLiked);
+    likeMutation.mutate();
   };
 
   const onClickScrap = () => {
     setIsScraped(!isScraped);
+    scrapMutation.mutate();
   };
 
   // function handleDirectionBtn(targetPage: number) {
@@ -106,9 +201,7 @@ export default function DetailCommunityPage() {
   if (isError || !post) {
     return <div style={{ minHeight: '116rem' }} />;
   }
-
   console.log(post);
-
   return (
     <DetailCommunityPageContainer>
       <Wrapper>
@@ -210,20 +303,3 @@ const Wrapper = styled.div`
 //     }
 //   }
 // `;
-
-const LoadingContainer = styled.div`
-  min-height: 116rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2rem;
-`;
-
-const ErrorContainer = styled.div`
-  min-height: 116rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: red;
-  font-size: 2rem;
-`;

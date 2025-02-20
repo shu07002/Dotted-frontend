@@ -15,6 +15,7 @@ const fetchPosts = async ({
   page
 }: SearchPostsParams): Promise<CommunityPost> => {
   const queryParams = new URLSearchParams();
+  const accessToken = localStorage.getItem('accessToken');
 
   if (keyword) queryParams.append('keyword', keyword);
   if (searchType) queryParams.append('search_type', searchType);
@@ -23,12 +24,14 @@ const fetchPosts = async ({
   console.log(
     `${import.meta.env.VITE_API_URL}/posting?${queryParams.toString()}`
   );
+
   const response = await fetch(
     `${import.meta.env.VITE_API_URL}/posting?${queryParams.toString()}`,
     {
       method: 'GET',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`
       }
     }
   );

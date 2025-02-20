@@ -8,6 +8,8 @@ import Scrap from '@/assets/svg/CommunityPage/Scrap.svg?react';
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 import { PostDetail } from '@/pages/community/DetailCommunityPage';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const PostingTagsColors: Record<string, string> = {
   Living: `purple950`,
@@ -40,18 +42,42 @@ export default function Posting({
   onClickLike,
   onClickScrap
 }: PostingProps) {
+  const [openMore, setOpenMore] = useState(false);
   let replacedContent = post.content;
+  const navigate = useNavigate();
+  const [localLikeCount, setLocalLikeCount] = useState(post.like_count);
+  const [localLiked, setLocalLiked] = useState(isLiked);
+
+  const [localScrapCount, setLocalScrapCount] = useState(post.scrap_count);
+  const [localScrapped, setLocalScrapped] = useState(isScraped);
+
+  const handleLikeClick = () => {
+    if (localLiked) {
+      setLocalLikeCount((prev) => prev - 1);
+    } else {
+      setLocalLikeCount((prev) => prev + 1);
+    }
+    setLocalLiked((prev) => !prev);
+    onClickLike();
+  };
+
+  const handleScrapClick = () => {
+    if (localScrapped) {
+      setLocalScrapCount((prev) => prev - 1);
+    } else {
+      setLocalScrapCount((prev) => prev + 1);
+    }
+    setLocalScrapped((prev) => !prev);
+    onClickScrap();
+  };
 
   if (post.images && post.images.length > 0) {
     post.images.forEach((imgObj, index) => {
       // 예: 'src="{images[0].image_url}"' => 'src="https://example.com/img1.png"'
       const placeholder = `src={images[${index}].image_url}`;
       const realSrc = `src="${imgObj.image_url}"`;
-      console.log(placeholder, realSrc);
 
       replacedContent = replacedContent.replace(placeholder, realSrc);
-      console.log(replacedContent.replace(placeholder, realSrc));
-      console.log(replacedContent);
     });
   }
   return (
@@ -61,8 +87,14 @@ export default function Posting({
 
         <TitleWrapper>
           <Title>{post.title}</Title>
-          <button>
+          <button onClick={() => setOpenMore((prev) => !prev)}>
             <More />
+            {openMore && (
+              <Menu>
+                <div onClick={() => navigate('edit')}>Edit</div>
+                <div>Delete</div>
+              </Menu>
+            )}
           </button>
         </TitleWrapper>
 
@@ -89,16 +121,16 @@ export default function Posting({
         />
 
         <ButtonWrapper>
-          <Button className={`${isLiked && 'liked'}`} onClick={onClickLike}>
+          <Button className={`${isLiked && 'liked'}`} onClick={handleLikeClick}>
             <Like />
-            <span>2 likes</span>
+            <span>{localLikeCount} likes</span>
           </Button>
           <Button
             className={`${isScraped && 'scraped'}`}
-            onClick={onClickScrap}
+            onClick={handleScrapClick}
           >
             <Scrap />
-            <span>2 scraps</span>
+            <span>{localScrapCount} scraps</span>
           </Button>
         </ButtonWrapper>
       </ContentWrapper>
@@ -146,15 +178,35 @@ const TitleWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-
+  position: relative;
   > button {
+    position: relative;
     border: none;
     background-color: transparent;
     cursor: pointer;
     min-width: 2rem;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+  }
+`;
+
+const Menu = styled.div`
+  z-index: 10;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 1rem;
+  background-color: ${({ theme }) => theme.colors.gray100};
+  color: ${({ theme }) => theme.colors.gray800};
+
+  > div {
+    cursor: pointer;
+    padding: 1rem;
+    &:hover {
+      background-color: ${({ theme }) => theme.colors.gray200};
+    }
   }
 `;
 
