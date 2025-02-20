@@ -22,8 +22,17 @@ export default function CommunityPage() {
   const [searchType, setSearchType] = useState('all');
   const searchPosts = useSearchPosts();
   const [searchParams, setSearchParams] = useSearchParams();
-  const currentPage = Number(searchParams.get('page')) || 1;
+  let currentPage = Number(searchParams.get('page')) || 1;
   const [isLoading, setIsLoading] = useState(false);
+
+  // 페이지네이션 관련 계산
+  const totalPages = searchResults
+    ? Math.ceil(searchResults.count / POST_PER_PAGE)
+    : 1;
+  const groupSize = 5;
+  const currentGroup = Math.floor((currentPage - 1) / groupSize);
+  const startPage = currentGroup * groupSize + 1;
+  const endPage = Math.min(startPage + groupSize - 1, totalPages);
 
   const handleSearch = () => {
     setIsLoading(true);
@@ -47,6 +56,10 @@ export default function CommunityPage() {
       }
     );
   };
+
+  useEffect(() => {
+    currentPage = 1;
+  }, [selectedTag]);
 
   useEffect(() => {
     handleSearch();
@@ -120,40 +133,37 @@ export default function CommunityPage() {
 
         <BottomWrapper>
           <PaginationBox>
+            {/* 이전 그룹으로 이동: 현재 그룹이 0이면 비활성화 */}
             <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage <= 1 || isLoading} // ✅ 로딩 중에는 비활성화
+              onClick={() => handlePageChange(startPage - 1)}
+              disabled={currentGroup === 0 || isLoading}
             >
               {'<'}
             </button>
-            {Array.from(
-              {
-                length: Math.ceil(
-                  searchResults ? searchResults.count / POST_PER_PAGE : 1
-                )
-              },
-              (_, idx) => (
+
+            {Array.from({ length: endPage - startPage + 1 }, (_, idx) => {
+              const pageNumber = startPage + idx;
+              return (
                 <button
-                  className={currentPage === idx + 1 ? 'selected' : ''}
-                  key={idx}
-                  onClick={() => handlePageChange(idx + 1)}
-                  disabled={isLoading} // ✅ 로딩 중에는 비활성화
+                  key={pageNumber}
+                  className={currentPage === pageNumber ? 'selected' : ''}
+                  onClick={() => handlePageChange(pageNumber)}
+                  disabled={isLoading}
                 >
-                  {idx + 1}
+                  {pageNumber}
                 </button>
-              )
-            )}
+              );
+            })}
+
+            {/* 다음 그룹으로 이동: 현재 그룹의 마지막 페이지가 전체 페이지 수와 같으면 비활성화 */}
             <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={
-                currentPage >=
-                  Math.ceil((searchResults?.count || 0) / POST_PER_PAGE) ||
-                isLoading
-              }
+              onClick={() => handlePageChange(endPage + 1)}
+              disabled={endPage === totalPages || isLoading}
             >
               {'>'}
             </button>
           </PaginationBox>
+
           <WriteButton onClick={() => navigate('write')}>write</WriteButton>
         </BottomWrapper>
       </Wrapper>
