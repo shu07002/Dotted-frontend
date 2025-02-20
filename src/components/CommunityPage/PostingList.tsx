@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import Eye from '@/assets/svg/CommunityPage/Eye.svg?react';
 import { EachPost } from '@/types/CommunityPost';
+import { useNavigate } from 'react-router-dom';
 
 const PostingTagsColors: Record<string, string> = {
   Living: `purple950`,
@@ -26,15 +27,11 @@ interface PostingListProps {
 }
 
 export default function PostingList({ pagedData }: PostingListProps) {
+  const navigate = useNavigate();
   return (
     <PostingListWrapper>
       {pagedData.map((post: EachPost, idx: number) => (
-        <li
-          key={idx}
-          onClick={() =>
-            (window.location.href = `/community/detail/${post.id}`)
-          }
-        >
+        <li key={idx} onClick={() => navigate(`/community/detail/${post.id}`)}>
           <PostingTagContainer>
             <PostingTagWrapper tag={post.tag} />
             <div></div>

@@ -1,7 +1,6 @@
 import PostingList from '@/components/CommunityPage/PostingList';
 import SearchBar from '@/components/CommunityPage/SearchBar';
 import TagList from '@/components/CommunityPage/TagList';
-import { communityData } from '@/components/CommunityPage/testData';
 import { useSearchPosts } from '@/hooks/useSearchPosts';
 import { CommunityPost, EachPost } from '@/types/CommunityPost';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -9,33 +8,38 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-const data = communityData;
 const tags = ['All', 'HOT', 'Campus Life', 'Travel', 'Living', 'Others'];
-
-const POST_PER_PAGE = 5;
+const POST_PER_PAGE = 5; // 서버에서 받아오는 page 당 개수가 맞다면 굳이 slice 안해도 됨
 
 export default function CommunityPage() {
   const [selectedTag, setSelectedTag] = useState('All');
   const [searchResults, setSearchResults] = useState<CommunityPost>();
   const [pagedData, setPagedData] = useState<EachPost[]>([]);
+
   const [keyword, setKeyword] = useState('');
   const [searchType, setSearchType] = useState('all');
+
   const searchPosts = useSearchPosts();
   const [searchParams, setSearchParams] = useSearchParams();
-  let currentPage = Number(searchParams.get('page')) || 1;
-  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
-  // 페이지네이션 관련 계산
+  // 현재 페이지 번호
+  const currentPage = Number(searchParams.get('page')) || 1;
+
+  // 전체 페이지 계산 (서버에서 이미 페이지네이션 처리 시, 직접 계산 불필요할 수 있음)
   const totalPages = searchResults
     ? Math.ceil(searchResults.count / POST_PER_PAGE)
     : 1;
+
+  // 페이지네이션 그룹 계산
   const groupSize = 5;
   const currentGroup = Math.floor((currentPage - 1) / groupSize);
   const startPage = currentGroup * groupSize + 1;
   const endPage = Math.min(startPage + groupSize - 1, totalPages);
 
+  // 1) 태그/페이지/검색어에 따라 서버에서 데이터 가져오기
   const handleSearch = () => {
-    setIsLoading(true);
+    // 로딩 표시를 위해 isLoading 사용
     searchPosts.mutate(
       {
         keyword,
@@ -46,54 +50,44 @@ export default function CommunityPage() {
       {
         onSuccess: (data) => {
           setSearchResults(data);
-          setPagedData(data.results); // ✅ 검색 결과 업데이트
-          setIsLoading(false);
+          setPagedData(data.results); // 서버에서 이미 페이지별로 results 제공
         },
         onError: (error) => {
           console.error('❌ 검색 실패:', error);
-          setIsLoading(false);
         }
       }
     );
   };
 
-  useEffect(() => {
-    currentPage = 1;
-  }, [selectedTag]);
-
-  useEffect(() => {
-    handleSearch();
-  }, [selectedTag, currentPage]);
-
-  useEffect(() => {
-    console.log(searchResults);
-  }, [searchResults]);
-
-  const navigate = useNavigate();
-
-  const onChangeSearch = (e: any) => {
-    setKeyword(e.target.value);
-  };
-
-  const onChangeSearchType = (e: any) => {
-    setSearchType(e.target.value);
-  };
-
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'auto' });
-    const start = (currentPage - 1) * POST_PER_PAGE;
-    const end = start + POST_PER_PAGE;
-    setPagedData(data.slice(start, end));
-  }, [currentPage]);
-
+  // 2) 태그가 변경될 때마다 page=1로 세팅 (원한다면)
+  // 뒤로 가기 시에는 URL 파라미터 유지 → 자동으로 currentPage 유지
   const onClickTag = (tag: string) => {
     setSelectedTag(tag);
-    setSearchParams({ page: '1', tag: tag, keyword }); // ✅ 태그 변경 시 첫 페이지로
+    setSearchParams({ page: '1', tag, keyword });
   };
 
+  // 3) 페이지 변경 시 URL 파라미터 업데이트
   const handlePageChange = (targetPage: number) => {
     setSearchParams({ page: targetPage.toString(), tag: selectedTag, keyword });
   };
+
+  // 4) 태그나 페이지 번호가 바뀔 때마다 서버에 요청
+  useEffect(() => {
+    handleSearch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedTag, currentPage]);
+  // 주의: handleSearch가 의존성에 있으면 무한루프 → 빼고 사용
+
+  // 검색어/검색타입 변경 핸들러
+  const onChangeSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setKeyword(e.target.value);
+  };
+  const onChangeSearchType = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSearchType(e.target.value);
+  };
+
+  // 로딩 상태는 useSearchPosts().isLoading 등으로 처리 가능
+  const isLoading = searchPosts.isPending;
 
   return (
     <CommunityPageContainer>
@@ -120,7 +114,7 @@ export default function CommunityPage() {
         ) : (
           <AnimatePresence mode="wait">
             <motion.div
-              key={JSON.stringify(pagedData)} // ✅ 데이터 변경 시 애니메이션 트리거
+              key={JSON.stringify(pagedData)} // 데이터 변경 시 애니메이션
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -133,7 +127,6 @@ export default function CommunityPage() {
 
         <BottomWrapper>
           <PaginationBox>
-            {/* 이전 그룹으로 이동: 현재 그룹이 0이면 비활성화 */}
             <button
               onClick={() => handlePageChange(startPage - 1)}
               disabled={currentGroup === 0 || isLoading}
@@ -155,7 +148,6 @@ export default function CommunityPage() {
               );
             })}
 
-            {/* 다음 그룹으로 이동: 현재 그룹의 마지막 페이지가 전체 페이지 수와 같으면 비활성화 */}
             <button
               onClick={() => handlePageChange(endPage + 1)}
               disabled={endPage === totalPages || isLoading}
@@ -171,6 +163,7 @@ export default function CommunityPage() {
   );
 }
 
+// -------------------- 스타일 컴포넌트 --------------------
 const CommunityPageContainer = styled.div`
   margin-top: 2.5rem;
   width: 100%;
@@ -195,7 +188,7 @@ const Title = styled.div`
   font-size: 3.6rem;
   font-style: normal;
   font-weight: 700;
-  line-height: 3.6rem; /* 100% */
+  line-height: 3.6rem;
   letter-spacing: -0.18rem;
 `;
 
@@ -213,6 +206,13 @@ const TagAndSearch = styled.div`
       margin-bottom: 2rem;
     }
   }
+`;
+
+const BottomWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
 `;
 
 const PaginationBox = styled.div`
@@ -243,13 +243,6 @@ const PaginationBox = styled.div`
   }
 `;
 
-const BottomWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: relative;
-`;
-
 const WriteButton = styled.button`
   cursor: pointer;
   display: flex;
@@ -264,11 +257,10 @@ const WriteButton = styled.button`
   background-color: ${({ theme }) => theme.colors.gray700};
   border: none;
 
-  color: var(--Gray-Gray_light-gray-50_light, #fff);
+  color: #fff;
   text-align: center;
   font-family: Inter;
   font-size: 1.4rem;
-  font-style: normal;
   font-weight: 600;
   line-height: normal;
 

@@ -1,4 +1,3 @@
-import { CommunityPost } from '@/types/CommunityPost';
 import { useState } from 'react';
 import styled from 'styled-components';
 
@@ -7,9 +6,10 @@ import Like from '@/assets/svg/CommunityPage/Like.svg?react';
 import Comment from '@/assets/svg/CommunityPage/Comment.svg?react';
 import More from '@/assets/svg/CommunityPage/More.svg?react';
 import { MarketPost } from '@/types/MarketPost';
+import { PostDetail } from '@/pages/community/DetailCommunityPage';
 
 interface CommentSectionProps {
-  post: CommunityPost | MarketPost;
+  post: PostDetail | MarketPost;
 }
 
 export default function CommentSection({ post }: CommentSectionProps) {
@@ -71,7 +71,7 @@ export default function CommentSection({ post }: CommentSectionProps) {
 }
 
 const CommentSectionWrapper = styled.section`
-  margin-bottom: 5.7rem;
+  margin-bottom: 20.7rem;
 `;
 
 const CommentCount = styled.div`

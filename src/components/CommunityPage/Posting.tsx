@@ -7,7 +7,7 @@ import Scrap from '@/assets/svg/CommunityPage/Scrap.svg?react';
 
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
-import { CommunityPost } from '@/types/CommunityPost';
+import { PostDetail } from '@/pages/community/DetailCommunityPage';
 
 const PostingTagsColors: Record<string, string> = {
   Living: `purple950`,
@@ -26,7 +26,7 @@ const PostingTagWrapper = ({ tag }: { tag: string }) => {
 };
 
 interface PostingProps {
-  post: CommunityPost;
+  post: PostDetail;
   isLiked: boolean;
   isScraped: boolean;
   onClickLike: () => void;
@@ -54,14 +54,14 @@ export default function Posting({
 
         <PostingWriter>
           <Profile />
-          <span>{post.createdAt}</span>
+          <span>{post.created_at}</span>
           <span>•</span>
           <span>by</span>
           <span>•</span>
-          <span>{post.writer}</span>
+          <span>{post.writer_nickname}</span>
           <span>•</span>
           <span>
-            <Eye /> {post.view}
+            <Eye /> {post.view_count}
           </span>
         </PostingWriter>
       </InfoWrapper>
