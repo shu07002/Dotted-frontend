@@ -1,4 +1,3 @@
-import { marketPost } from '@/components/MarketPage/marketPost';
 import { useParams } from 'react-router-dom';
 import Slider from 'react-slick';
 import styled from 'styled-components';
@@ -6,19 +5,81 @@ import { NextArrow, PrevArrow } from '@/components/MainPage/CustomArrow';
 import More from '@/assets/svg/CommunityPage/More.svg?react';
 import Profile from '@/assets/svg/CommunityPage/Profile.svg?react';
 import Scrap from '@/assets/svg/CommunityPage/Scrap.svg?react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import CommentSection from '@/components/CommunityPage/CommentSection';
+import { useQuery } from '@tanstack/react-query';
+
+export interface MarketPostImage {
+  id: number;
+  post: number; // post_id (FK)
+  image_url: string;
+  blob_name: string;
+  order: number;
+}
+
+export interface MarketPostDetail {
+  id: number;
+  writer_id: string;
+  writer_nickname: string;
+  status: string;
+  created_at: string;
+  title: string;
+  content: string;
+  price: number;
+  images: MarketPostImage[]; // 이미지 배열
+  comments: string; // 댓글 목록 (구조에 따라 수정 가능)
+  scrap_count: number;
+  comment_count: number;
+  is_scrapped: boolean;
+}
 
 export default function DetailMarketPage() {
   const { id } = useParams();
-  const [post] = marketPost.filter((el) => el.id === Number(id));
+  const postId = Number(id);
   const [isScraped, setIsScraped] = useState(false);
+  const status = useRef<string>();
 
   const onClickScrap = () => {
     setIsScraped(!isScraped);
   };
 
-  console.log(post);
+  const {
+    data: post,
+    isLoading,
+    isError
+  } = useQuery<MarketPostDetail, Error>({
+    queryKey: ['postDetail', postId],
+    queryFn: () => fetchPostDetail(postId)
+  });
+
+  useEffect(() => {
+    if (post) {
+      setIsScraped(post.is_scrapped);
+    }
+  }, [post]);
+
+  // -------------------- API 호출 함수 --------------------
+  async function fetchPostDetail(postId: number): Promise<MarketPostDetail> {
+    const accessToken = localStorage.getItem('accessToken');
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}/posting/market/${postId}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`
+        }
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch post detail (status: ${response.status})`
+      );
+    }
+
+    return response.json();
+  }
 
   const setting = {
     infinite: true,
@@ -30,6 +91,14 @@ export default function DetailMarketPage() {
     prevArrow: <PrevArrow />,
     nextArrow: <NextArrow />
   };
+
+  if (isLoading) {
+    return <div style={{ minHeight: '116rem' }} />;
+  }
+
+  if (isError || !post) {
+    return <div style={{ minHeight: '116rem' }} />;
+  }
 
   return (
     <DetailMarketPageContainer>
@@ -58,9 +127,9 @@ export default function DetailMarketPage() {
           <div>
             <Text>
               <Tag
-                className={`${post.tag === 'On Sale' ? 'onSale' : 'soldOut'}`}
+                className={`${post.status === 'FOR_SALE' ? 'onSale' : 'soldOut'}`}
               >
-                {post.tag}
+                {status.current}
               </Tag>
               <Title>
                 {post.title}
@@ -68,15 +137,15 @@ export default function DetailMarketPage() {
                   <More />
                 </span>
               </Title>
-              <Price>{post.price}</Price>
+              <Price>₩ {post.price}</Price>
               <Writer>
                 <Profile />
                 <div>
                   <span>
-                    by <span>{post.writer}</span>
+                    by <span>{post.writer_nickname}</span>
                   </span>
                   <span>•</span>
-                  <span>{post.createdAt}</span>
+                  <span>{post.created_at}</span>
                 </div>
               </Writer>
             </Text>
@@ -92,9 +161,9 @@ export default function DetailMarketPage() {
           </div>
         </ItemWrapper>
 
-        <ContentWrapper>Very nice shoes</ContentWrapper>
+        <ContentWrapper>{post.content}</ContentWrapper>
 
-        <CommentSection post={post} />
+        {/* <CommentSection post={post} /> */}
       </Wrapper>
     </DetailMarketPageContainer>
   );

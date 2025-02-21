@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 
 import ImgBox from '@/components/MarketPage/ImgBox';
@@ -18,26 +18,16 @@ export default function WriteMarketPage() {
   const [previews, setPreviews] = useState<(string | null)[]>([]);
   //const [imgFiles, setImgFiles] = useState<(File | null)[]>([null]);
   const imgFileRef = useRef<HTMLInputElement>(null);
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const blocker = useBlocker(({ currentLocation, nextLocation }) => {
+    if (isSubmitted) return false;
     return currentLocation.pathname !== nextLocation.pathname;
   });
+
   const navigate = useNavigate();
 
   useEffect(() => {
-    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-      event.preventDefault();
-      event.returnValue = '';
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (blocker.state === 'blocked') {
+    if (blocker.state === 'blocked' && !isSubmitted) {
       const confirmLeave = window.confirm(
         'Your unsaved changes may be lost. Do you want to leave?'
       );
@@ -47,7 +37,20 @@ export default function WriteMarketPage() {
         blocker.reset();
       }
     }
-  }, [blocker]);
+  }, [blocker, isSubmitted]);
+
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      if (!isSubmitted) {
+        event.preventDefault();
+        event.returnValue = '';
+      }
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [isSubmitted]);
 
   const postingMutation = useMutation({
     mutationFn: async (data: MarketData) => {
@@ -74,7 +77,11 @@ export default function WriteMarketPage() {
     },
     onSuccess: (data) => {
       console.log('🎉 글쓰기 성공:', data);
-      navigate(`detail/${data.id}`);
+      setIsSubmitted(true);
+      blocker.reset?.();
+      setTimeout(() => {
+        navigate('/market');
+      }, 100);
     },
     onError: (error) => {
       console.error('❌ 글쓰기기 실패:', error);
@@ -82,7 +89,7 @@ export default function WriteMarketPage() {
   });
 
   const onSubmit = async (data: MarketData) => {
-    if (postingMutation.isPaused) return;
+    if (postingMutation.isPending) return;
     data.images = previews;
     console.log(data);
 
@@ -138,7 +145,7 @@ export default function WriteMarketPage() {
 
   return (
     <WriteMarketPageContainer>
-      <Wrapper>
+      <WriteMarketPageWrapper>
         <Title>Market</Title>
 
         <Form onSubmit={handleSubmit(onSubmit)}>
@@ -187,7 +194,7 @@ export default function WriteMarketPage() {
             {postingMutation.isPending ? 'Submitting...' : 'Submit'}
           </SubmitButton>
         </Form>
-      </Wrapper>
+      </WriteMarketPageWrapper>
     </WriteMarketPageContainer>
   );
 }
@@ -205,7 +212,7 @@ const WriteMarketPageContainer = styled.div`
   }
 `;
 
-const Wrapper = styled.div`
+const WriteMarketPageWrapper = styled.div`
   width: 100%;
 `;
 

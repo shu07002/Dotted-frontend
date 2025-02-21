@@ -1,12 +1,17 @@
 export interface MarketPost {
+  count: number;
+  next: string;
+  previous: string;
+  results: EachMarketPost[];
+}
+
+export interface EachMarketPost {
   id: number;
-  img: string;
-  tag: string;
+  writer_id: number;
+  writer_nickname: string;
+  created_at: string;
   title: string;
-  createdAt: string;
-  price: string;
-  writer: string;
-  comment_count: number;
-  scrap_count: number;
-  content: string;
+  price: number;
+  status: string;
+  thumbnail: string;
 }

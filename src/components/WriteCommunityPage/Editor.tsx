@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import ReactQuill, { Quill } from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 import styled from 'styled-components';
@@ -110,10 +110,4 @@ const StyledReactQuill = styled(ReactQuill)`
   .ql-size-large {
     font-size: 3rem;
   }
-`;
-
-const ErrorText = styled.p`
-  color: red;
-  font-size: 1.4rem;
-  margin-top: 0.5rem;
 `;

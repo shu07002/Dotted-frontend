@@ -36,6 +36,8 @@ export interface PostDetail {
 export default function DetailCommunityPage() {
   const { id } = useParams();
   const postId = Number(id);
+  const [isLiked, setIsLiked] = useState(false);
+  const [isScraped, setIsScraped] = useState(false);
 
   // API를 통해 상세 게시글을 가져옴
   const {
@@ -53,10 +55,6 @@ export default function DetailCommunityPage() {
   // // 기타 게시글 페이지네이션 (dummy 데이터 사용)
   // const [currentPage, setCurrentPage] = useState(1);
   // const [pagedData, setPagedData] = useState<any[]>([]);
-
-  // 좋아요/스크랩 로컬 상태 (예시)
-  const [isLiked, setIsLiked] = useState(false);
-  const [isScraped, setIsScraped] = useState(false);
 
   useEffect(() => {
     if (post) {

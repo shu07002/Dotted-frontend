@@ -51,7 +51,7 @@ export default function Nickname({ register, watch }: NicknameProps) {
 
   const isVaild = nickname !== '';
 
-  const { data, isLoading, error, refetch } = useQuery({
+  const { isLoading, refetch } = useQuery({
     queryKey: ['nicknameCheck'], // Remove nickname from queryKey
     queryFn: () => checkNickname(nickname, toggleChecked, setMsg),
     enabled: false,

@@ -1,55 +1,91 @@
 import SearchBar from '@/components/CommunityPage/SearchBar';
 import TagList from '@/components/CommunityPage/TagList';
 import MakrketList from '@/components/MarketPage/MakrketList';
-import { marketPost } from '@/components/MarketPage/marketPost';
-import { MarketPost } from '@/types/MarketPost';
+import { useSearchPosts } from '@/hooks/useSearchPosts';
+import { EachMarketPost, MarketPost } from '@/types/MarketPost';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-const tags = ['All', 'Only On Sale'];
-const data = marketPost;
+const tags = ['All', 'Only For Sale'];
+const POST_PER_PAGE = 5;
 
 export default function MarketPage() {
   const [selectedTag, setSelectedTag] = useState('All');
-  const [search, setSearch] = useState('');
+  const [searchResults, setSearchResults] = useState<MarketPost>();
+  const [pagedData, setPagedData] = useState<EachMarketPost[]>([]);
+
+  const [keyword, setKeyword] = useState('');
   const [searchType, setSearchType] = useState('all');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pagedData, setPagedData] = useState<MarketPost[]>([]);
+
+  const searchPosts = useSearchPosts();
+  const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  const onChangeSearch = (e: any) => {
-    setSearch(e.target.value);
+  // 현재 페이지 번호
+  const currentPage = Number(searchParams.get('page')) || 1;
+
+  // 전체 페이지 계산 (서버에서 이미 페이지네이션 처리 시, 직접 계산 불필요할 수 있음)
+  const totalPages = searchResults
+    ? Math.ceil(searchResults.count / POST_PER_PAGE)
+    : 1;
+
+  const groupSize = 5;
+  const currentGroup = Math.floor((currentPage - 1) / groupSize);
+  const startPage = currentGroup * groupSize + 1;
+  const endPage = Math.min(startPage + groupSize - 1, totalPages);
+
+  // 1) 태그/페이지/검색어에 따라 서버에서 데이터 가져오기
+  const handleSearch = () => {
+    // 로딩 표시를 위해 isLoading 사용
+    searchPosts.mutate(
+      {
+        name: 'market',
+        keyword,
+        searchType,
+        tag: selectedTag,
+        page: currentPage
+      },
+      {
+        onSuccess: (data) => {
+          console.log(data);
+          setSearchResults(data as MarketPost);
+          setPagedData(data.results as EachMarketPost[]); // 서버에서 이미 페이지별로 results 제공
+        },
+        onError: (error) => {
+          console.error('❌ 검색 실패:', error);
+        }
+      }
+    );
   };
 
-  const onChangeSearchType = (e: any) => {
-    setSearchType(e.target.value);
-  };
-
+  // 2) 태그가 변경될 때마다 page=1로 세팅 (원한다면)
+  // 뒤로 가기 시에는 URL 파라미터 유지 → 자동으로 currentPage 유지
   const onClickTag = (tag: string) => {
     setSelectedTag(tag);
+    setSearchParams({ page: '1', tag, keyword });
   };
 
-  function handleDirectionBtn(targetPage: number) {
-    if (targetPage < 1) {
-      setCurrentPage(1);
-    } else if (targetPage > Math.ceil(data.length / 12)) {
-      setCurrentPage(Math.ceil(data.length / 12));
-    } else {
-      setCurrentPage(targetPage);
-    }
-  }
-
-  function handlePageChange(targetPage: number) {
-    setCurrentPage(targetPage);
-  }
-
+  // 3) 페이지 변경 시 URL 파라미터 업데이트
+  const handlePageChange = (targetPage: number) => {
+    setSearchParams({ page: targetPage.toString(), tag: selectedTag, keyword });
+  };
+  // 4) 태그나 페이지 번호가 바뀔 때마다 서버에 요청
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'auto' });
-    const start = (currentPage - 1) * 12;
-    const end = start + 12;
-    setPagedData(data.slice(start, end));
-  }, [currentPage]);
+    handleSearch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedTag, currentPage]);
+  // 주의: handleSearch가 의존성에 있으면 무한루프 → 빼고 사용
+
+  // 검색어/검색타입 변경 핸들러
+  const onChangeSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setKeyword(e.target.value);
+  };
+  const onChangeSearchType = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSearchType(e.target.value);
+  };
+  const isLoading = searchPosts.isPending;
 
   return (
     <MarketPageContainer>
@@ -70,21 +106,39 @@ export default function MarketPage() {
             onClickTag={onClickTag}
           />
           <SearchBar
-            search={search}
+            keyword={keyword}
             searchType={searchType}
             onChangeSearch={onChangeSearch}
             onChangeSearchType={onChangeSearchType}
+            handleSearch={handleSearch}
           />
         </TagAndSearch>
 
-        <MakrketList pagedData={pagedData} />
+        {isLoading ? (
+          <div style={{ minHeight: '46rem' }}></div>
+        ) : (
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={JSON.stringify(pagedData)} // 데이터 변경 시 애니메이션
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <MakrketList pagedData={pagedData} />
+            </motion.div>
+          </AnimatePresence>
+        )}
 
         <BottomWrapper>
           <PaginationBox>
-            <button onClick={() => handleDirectionBtn(currentPage - 1)}>
+            <button
+              onClick={() => handlePageChange(startPage - 1)}
+              disabled={currentGroup === 0 || isLoading}
+            >
               {'<'}
             </button>
-            {Array.from({ length: Math.ceil(data.length / 12) }, (_, idx) => (
+            {Array.from({ length: endPage - startPage + 1 }, (_, idx) => (
               <button
                 className={currentPage === idx + 1 ? 'selected' : ''}
                 key={idx}
@@ -93,7 +147,10 @@ export default function MarketPage() {
                 {idx + 1}
               </button>
             ))}
-            <button onClick={() => handleDirectionBtn(currentPage + 1)}>
+            <button
+              onClick={() => handlePageChange(endPage + 1)}
+              disabled={endPage === totalPages || isLoading}
+            >
               {'>'}
             </button>
           </PaginationBox>

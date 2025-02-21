@@ -165,7 +165,9 @@ export default function WriteCommunityPage() {
       console.log('🎉 글수정 성공:', data);
       setIsSubmitted(true);
       blocker.reset?.();
-      navigate('/community');
+      setTimeout(() => {
+        navigate('/community');
+      }, 100);
     },
     onError: (error) => {
       console.error('❌ 글수정 실패:', error);

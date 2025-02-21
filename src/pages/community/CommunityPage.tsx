@@ -42,6 +42,7 @@ export default function CommunityPage() {
     // 로딩 표시를 위해 isLoading 사용
     searchPosts.mutate(
       {
+        name: '',
         keyword,
         searchType,
         tag: selectedTag,
@@ -49,8 +50,8 @@ export default function CommunityPage() {
       },
       {
         onSuccess: (data) => {
-          setSearchResults(data);
-          setPagedData(data.results); // 서버에서 이미 페이지별로 results 제공
+          setSearchResults(data as CommunityPost);
+          setPagedData(data.results as EachPost[]); // 서버에서 이미 페이지별로 results 제공
         },
         onError: (error) => {
           console.error('❌ 검색 실패:', error);
