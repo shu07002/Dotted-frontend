@@ -1,7 +1,4 @@
-import React from 'react';
 import styled from 'styled-components';
-
-import Like from '@/assets/svg/CommunityPage/Like.svg?react';
 import { Comment } from '@/pages/community/DetailCommunityPage';
 import AReply from './AReply';
 

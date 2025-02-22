@@ -15,6 +15,7 @@ export default function CommentSection({ post, origin }: CommentSectionProps) {
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState(post.comments); // ✅ 댓글 상태 추가
   const [commentCount, setCommentCount] = useState(post.comment_count); // ✅ 댓글 개수 상태 추가
+  console.log(origin);
 
   // 댓글 추가 함수
   const handleCommentSubmit = async () => {

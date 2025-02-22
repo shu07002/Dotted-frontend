@@ -8,7 +8,6 @@ import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 import { PostDetail } from '@/pages/community/DetailCommunityPage';
 import { useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
 import MoreButton from './MoreButton';
 
 const PostingTagsColors: Record<string, string> = {

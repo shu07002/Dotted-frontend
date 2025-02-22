@@ -33,8 +33,7 @@ interface OriginalImage {
 }
 
 export default function WriteMarketPage() {
-  const { register, handleSubmit, watch, setValue, trigger } =
-    useForm<MarketData>();
+  const { register, handleSubmit, setValue } = useForm<MarketData>();
   const [previews, setPreviews] = useState<(string | null)[]>([]);
   //const [imgFiles, setImgFiles] = useState<(File | null)[]>([null]);
   const imgFileRef = useRef<HTMLInputElement>(null);

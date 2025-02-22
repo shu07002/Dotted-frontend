@@ -1,5 +1,5 @@
 import { MarketPostDetail } from '@/pages/market/DetailMarketPage';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Slider from 'react-slick';
 import styled from 'styled-components';
 import { NextArrow, PrevArrow } from '@/components/MainPage/CustomArrow';

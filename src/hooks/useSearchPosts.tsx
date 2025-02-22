@@ -1,7 +1,6 @@
 import { CommunityPost } from '@/types/CommunityPost';
 import { MarketPost } from '@/types/MarketPost';
 import { useMutation } from '@tanstack/react-query';
-import { useLocation } from 'react-router-dom';
 
 interface SearchPostsParams {
   name: string;

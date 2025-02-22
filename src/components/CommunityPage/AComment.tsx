@@ -1,5 +1,5 @@
 import { Comment } from '@/pages/community/DetailCommunityPage';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import CommentSVG from '@/assets/svg/CommunityPage/Comment.svg?react';
 import Profile from '@/assets/svg/CommunityPage/Profile.svg?react';
 import Like from '@/assets/svg/CommunityPage/Like.svg?react';
