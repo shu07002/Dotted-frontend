@@ -24,11 +24,28 @@ export interface MarketPostDetail {
   content: string;
   price: number;
   images: MarketPostImage[]; // 이미지 배열
-  comments: string; // 댓글 목록 (구조에 따라 수정 가능)
+  comments: Comment[]; // 댓글 목록 (구조에 따라 수정 가능)
   scrap_count: number;
   comment_count: number;
   is_scrapped: boolean;
   is_mine: boolean;
+}
+
+export interface Comment {
+  content: string;
+  id: number;
+  created_at: string;
+  is_deleted: boolean;
+  is_liked: boolean;
+  is_mine: boolean;
+  is_secret: boolean;
+  like_count: number;
+  parent: null;
+  post: number;
+  replies: Comment[];
+  root_parent: number;
+  user_id: number;
+  user_nickname: string;
 }
 
 export default function DetailMarketPage() {

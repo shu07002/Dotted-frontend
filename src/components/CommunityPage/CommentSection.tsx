@@ -1,57 +1,92 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 
-import Profile from '@/assets/svg/CommunityPage/Profile.svg?react';
-import Like from '@/assets/svg/CommunityPage/Like.svg?react';
-import Comment from '@/assets/svg/CommunityPage/Comment.svg?react';
-import More from '@/assets/svg/CommunityPage/More.svg?react';
-import { MarketPost } from '@/types/MarketPost';
-import { PostDetail } from '@/pages/community/DetailCommunityPage';
+import { Comment, PostDetail } from '@/pages/community/DetailCommunityPage';
+import { MarketPostDetail } from '@/pages/market/DetailMarketPage';
+import { useMutation } from '@tanstack/react-query';
+import AComment from './AComment';
 
 interface CommentSectionProps {
-  post: PostDetail | MarketPost;
+  post: PostDetail | MarketPostDetail;
 }
 
 export default function CommentSection({ post }: CommentSectionProps) {
   const [comment, setComment] = useState('');
+  const [comments, setComments] = useState(post.comments); // ✅ 댓글 상태 추가
+  const [commentCount, setCommentCount] = useState(post.comment_count); // ✅ 댓글 개수 상태 추가
 
-  const [isCommentLiked, setIsCommentLiked] = useState(false);
-  const [isOpenRecomment, setisOpenRecomment] = useState(false);
+  // 댓글 추가 함수
+  const handleCommentSubmit = async () => {
+    if (!comment.trim()) {
+      return;
+    }
 
-  const onClickCommentLike = () => {
-    setIsCommentLiked(!isCommentLiked);
+    const accessToken = window.localStorage.getItem('accessToken');
+    if (!accessToken) {
+      alert('Login is required.');
+      return;
+    }
+
+    const requestData = {
+      post: post.id, // ✅ 댓글을 달 게시글 ID
+      content: comment.trim(), // ✅ 입력된 댓글 내용
+      parent: null, // ✅ 대댓글이면 부모 댓글 ID, 아니면 null
+      is_secret: false // ✅ 비밀 댓글 기능이 필요하면 true로 변경
+    };
+
+    try {
+      const newComment = await postCommentMutation.mutateAsync(requestData);
+      setComment(''); // ✅ 댓글 입력창 초기화
+
+      // ✅ 화면에 바로 반영하기 위해 comments 상태 업데이트
+      setComments((prev: Comment[]) => [...prev, newComment]);
+      setCommentCount((prev) => prev + 1); // ✅ 댓글 개수 증가
+    } catch (error) {
+      console.error('❌ 댓글 작성 실패:', error);
+      alert('댓글 작성에 실패했습니다.');
+    }
   };
 
-  const onClickRecomment = () => {
-    setisOpenRecomment(!isOpenRecomment);
-  };
+  // React Query Mutation (댓글 등록)
+  const postCommentMutation = useMutation<
+    Comment, // ✅ 응답 데이터 타입 (새로운 댓글)
+    Error, // ✅ 에러 타입
+    { post: number; content: string; parent: number | null; is_secret: boolean } // ✅ 요청 데이터 타입
+  >({
+    mutationFn: async (data) => {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/posting/comment/create`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${window.localStorage.getItem('accessToken')}`
+          },
+          body: JSON.stringify(data)
+        }
+      );
+
+      if (!response.ok) throw new Error('Failed to create comment');
+      return response.json();
+    },
+    onSuccess: (data) => {
+      console.log('✅ 댓글 작성 성공:', data);
+    },
+    onError: (error) => {
+      console.error('❌ 댓글 작성 실패:', error);
+    }
+  });
+
   return (
     <CommentSectionWrapper>
       <CommentCount>
-        Comment <span> {post.comment_count}</span>
+        Comment <span> {commentCount}</span>
       </CommentCount>
 
       <CommentsListWrapper>
-        <Comments>
-          <Profile />
-          <div>
-            <div>diamondsinmyhead</div>
-            <div>Hmmmmmmmmmm.........</div>
-            <div>04/01/25 14:05</div>
-            <ButtonWrapper>
-              <button onClick={onClickCommentLike}>
-                <Like className={`${isCommentLiked && 'commentLiked'}`} />3
-              </button>
-              <button onClick={onClickRecomment}>
-                <Comment className={`${isOpenRecomment && 'recomment'}`} />
-              </button>
-
-              <button>
-                <More />
-              </button>
-            </ButtonWrapper>
-          </div>
-        </Comments>
+        {comments.map((comment, idx) => (
+          <AComment comment={comment} key={idx} />
+        ))}
       </CommentsListWrapper>
 
       <CommentInputWrapper>
@@ -61,10 +96,16 @@ export default function CommentSection({ post }: CommentSectionProps) {
             placeholder="write a comment"
             value={comment}
             onChange={(e) => setComment(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleCommentSubmit();
+              }
+            }}
           />
         </label>
 
-        <CommentButton>comment</CommentButton>
+        <CommentButton onClick={handleCommentSubmit}>comment</CommentButton>
       </CommentInputWrapper>
     </CommentSectionWrapper>
   );
@@ -95,83 +136,6 @@ const CommentCount = styled.div`
 const CommentsListWrapper = styled.ul`
   display: flex;
   flex-direction: column;
-`;
-
-const Comments = styled.li`
-  display: flex;
-  gap: 2.1rem;
-  margin-bottom: 3.1rem;
-
-  > div {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    > div {
-      font-family: Inter;
-      font-style: normal;
-      line-height: normal;
-      &:first-child {
-        color: ${({ theme }) => theme.colors.gray700};
-        font-size: 2rem;
-        font-weight: 600;
-        letter-spacing: -0.1rem;
-      }
-
-      &:nth-child(2) {
-        color: ${({ theme }) => theme.colors.gray700};
-        font-size: 2rem;
-        font-weight: 300;
-        letter-spacing: -0.1rem;
-      }
-
-      &:nth-child(3) {
-        color: ${({ theme }) => theme.colors.gray500};
-        font-size: 1.4rem;
-        font-weight: 300;
-        letter-spacing: -0.07rem;
-      }
-    }
-  }
-`;
-
-const ButtonWrapper = styled.div`
-  color: ${({ theme }) => theme.colors.gray700};
-  font-size: 1.4rem;
-  font-weight: 300;
-  letter-spacing: -0.07rem;
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-
-  > button {
-    min-width: 2rem;
-    padding: 0;
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1.2rem;
-
-    > svg {
-      &.commentLiked {
-        > path {
-          fill: ${({ theme }) => theme.colors.purple600};
-          stroke: ${({ theme }) => theme.colors.purple600};
-        }
-      }
-
-      &.recomment {
-        fill: ${({ theme }) => theme.colors.purple600};
-        stroke: ${({ theme }) => theme.colors.purple600};
-        > path {
-          fill: ${({ theme }) => theme.colors.purple600};
-          stroke: ${({ theme }) => theme.colors.purple600};
-        }
-      }
-    }
-  }
 `;
 
 const CommentInputWrapper = styled.div`
