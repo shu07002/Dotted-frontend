@@ -37,12 +37,14 @@ interface MoreButtonProps {
   post: MarketPostDetail | PostDetail;
   openMore: boolean;
   setOpenMore: React.Dispatch<React.SetStateAction<boolean>>;
+  origin?: string;
 }
 
 export default function MoreButton({
   post,
   openMore,
-  setOpenMore
+  setOpenMore,
+  origin
 }: MoreButtonProps) {
   const [openNormalModal, setOpenNormalModal] = useState(false);
   const [openReportModal, setOpenReportModal] = useState(false);
@@ -63,7 +65,7 @@ export default function MoreButton({
   // 2) 버튼 클릭 시 삭제 Mutation 실행
   const handleDelete = () => {
     setOpenNormalModal(false);
-    navigate('/community');
+
     deleteMutation.mutate(post.id);
   };
   const handleChange = (e: any) => setReportType(e.target.value);
@@ -75,15 +77,16 @@ export default function MoreButton({
         throw new Error('No access token found. Please log in again.');
       }
 
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/posting/${postId}/delete`,
-        {
-          method: 'DELETE',
-          headers: {
-            Authorization: `Bearer ${accessToken}`
-          }
+      const path = origin
+        ? `/posting/${origin}/${postId}/delete`
+        : `/posting/${postId}/delete`;
+
+      const response = await fetch(`${import.meta.env.VITE_API_URL}${path}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
         }
-      );
+      });
       if (!response.ok) {
         throw new Error('Failed to delete post');
       }
@@ -94,6 +97,9 @@ export default function MoreButton({
     onSuccess: (data) => {
       console.log('✅ 삭제 성공:', data);
       // 삭제 성공 시 원하는 페이지로 이동
+      if (origin) {
+        navigate(`/${origin}`);
+      } else navigate('/community');
     },
     onError: (error) => {
       console.error('❌ 삭제 실패:', error);
@@ -409,6 +415,7 @@ const AccessRestrictedWrapper = styled.div`
 `;
 
 const AccessRestrictedNormal = styled.div`
+  z-index: 200;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;

@@ -77,6 +77,7 @@ export default function MarketPosting({
                 post={post}
                 openMore={openMore}
                 setOpenMore={setOpenMore}
+                origin="market"
               />
             </span>
           </Title>
