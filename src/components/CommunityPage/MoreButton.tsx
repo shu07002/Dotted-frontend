@@ -18,7 +18,11 @@ const customStyles = {
     height: '100%',
     overflow: 'hidden',
     overflowY: 'hidden' as 'auto' | 'hidden' | 'scroll' | 'visible' | undefined,
-    backgroundColor: 'var(--modal-Background)'
+    backgroundColor: 'var(--modal-Background)',
+    zIndex: 9999 // ✅ 추가
+  },
+  overlay: {
+    zIndex: 9999 // ✅ 추가 (다른 요소보다 위에 표시)
   }
 };
 
