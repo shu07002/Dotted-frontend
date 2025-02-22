@@ -19,10 +19,10 @@ const customStyles = {
     overflow: 'hidden',
     overflowY: 'hidden' as 'auto' | 'hidden' | 'scroll' | 'visible' | undefined,
     backgroundColor: 'var(--modal-Background)',
-    zIndex: 9999 // ✅ 추가
+    zIndex: 9999
   },
   overlay: {
-    zIndex: 9999 // ✅ 추가 (다른 요소보다 위에 표시)
+    zIndex: 9999
   }
 };
 
@@ -112,7 +112,7 @@ export default function MoreButton({
 
   if (post.images && post.images.length > 0) {
     post.images.forEach((imgObj, index) => {
-      // 예: 'src="{images[0].image_url}"' => 'src="https://example.com/img1.png"'
+      // 'src="{images[0].image_url}"' => 'src="https://example.com/img1.png"'
       const placeholder = `src={images[${index}].image_url}`;
       const realSrc = `src="${imgObj.image_url}"`;
 

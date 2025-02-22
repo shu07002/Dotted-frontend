@@ -30,19 +30,18 @@ export default function CommentSection({ post, origin }: CommentSectionProps) {
     }
 
     const requestData = {
-      post: post.id, // ✅ 댓글을 달 게시글 ID
-      content: comment.trim(), // ✅ 입력된 댓글 내용
-      parent: null, // ✅ 대댓글이면 부모 댓글 ID, 아니면 null
-      is_secret: false // ✅ 비밀 댓글 기능이 필요하면 true로 변경
+      post: post.id,
+      content: comment.trim(),
+      parent: null,
+      is_secret: false
     };
 
     try {
       const newComment = await postCommentMutation.mutateAsync(requestData);
-      setComment(''); // ✅ 댓글 입력창 초기화
+      setComment('');
 
-      // ✅ 화면에 바로 반영하기 위해 comments 상태 업데이트
       setComments((prev: Comment[]) => [...prev, newComment]);
-      setCommentCount((prev) => prev + 1); // ✅ 댓글 개수 증가
+      setCommentCount((prev) => prev + 1);
     } catch (error) {
       console.error('❌ 댓글 작성 실패:', error);
       alert('댓글 작성에 실패했습니다.');
