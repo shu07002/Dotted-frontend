@@ -8,9 +8,10 @@ import AComment from './AComment';
 
 interface CommentSectionProps {
   post: PostDetail | MarketPostDetail;
+  origin?: string;
 }
 
-export default function CommentSection({ post }: CommentSectionProps) {
+export default function CommentSection({ post, origin }: CommentSectionProps) {
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState(post.comments); // ✅ 댓글 상태 추가
   const [commentCount, setCommentCount] = useState(post.comment_count); // ✅ 댓글 개수 상태 추가

@@ -18,6 +18,9 @@ export default function AComment({ comment }: ACommentProps) {
   const [isOpenRecomment, setIsOpenRecomment] = useState(false);
   const [recomment, setRecomment] = useState('');
   const [replies, setReplies] = useState<Comment[]>(comment.replies || []);
+  const [openMore, setOpenMore] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedContent, setEditedContent] = useState(comment.content);
 
   const commentLikeMutation = useMutation({
     mutationFn: async () => {
@@ -53,6 +56,50 @@ export default function AComment({ comment }: ACommentProps) {
 
   const onClickCommentLike = () => {
     commentLikeMutation.mutate();
+  };
+
+  const updateCommentMutation = useMutation({
+    mutationFn: async () => {
+      const accessToken = window.localStorage.getItem('accessToken');
+      if (!accessToken) {
+        throw new Error('Login required');
+      }
+
+      const requestData = {
+        content: editedContent,
+        is_secret: false // 공개 댓글
+      };
+      console.log(requestData, comment.id);
+
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/posting/comment/${comment.id}/update`,
+        {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`
+          },
+          body: JSON.stringify(requestData)
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to update comment');
+      }
+      return response.json();
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      setIsEditing(false);
+    },
+    onError: (error) => {
+      console.error('❌ 댓글 수정 실패:', error);
+    }
+  });
+
+  const handleEditSubmit = () => {
+    if (!editedContent.trim()) return;
+    updateCommentMutation.mutate();
   };
 
   const onClickRecomment = () => {
@@ -108,9 +155,32 @@ export default function AComment({ comment }: ACommentProps) {
     <Comments>
       <Profile />
       <div style={{ width: '100%' }}>
-        <div>{comment.user_nickname}</div>
-        <div>{comment.content}</div>
-        <div>{comment.created_at}</div>
+        {isEditing ? (
+          // 수정 중일 때
+          <CommentInputWrapper>
+            <textarea
+              value={editedContent}
+              onChange={(e) => setEditedContent(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault();
+                  handleEditSubmit();
+                }
+              }}
+            />
+            <CommentButton onClick={handleEditSubmit}>Save</CommentButton>
+            <CancelButton onClick={() => setIsEditing(false)}>
+              Cancel
+            </CancelButton>
+          </CommentInputWrapper>
+        ) : (
+          // 일반 상태
+          <>
+            <div>{comment.user_nickname}</div>
+            <div>{comment.content}</div>
+            <div>{comment.created_at}</div>
+          </>
+        )}
         <ButtonWrapper>
           <button onClick={onClickCommentLike}>
             <Like className={`${isCommentLiked && 'commentLiked'}`} />
@@ -120,9 +190,23 @@ export default function AComment({ comment }: ACommentProps) {
             <CommentSVG className={`${isOpenRecomment && 'recomment'}`} />
           </button>
 
-          <button>
-            <More />
-          </button>
+          <MoreWrapper>
+            <button onClick={() => setOpenMore((prev) => !prev)}>
+              <More />
+              {openMore && (
+                <Menu>
+                  {comment.is_mine ? (
+                    <>
+                      <div onClick={() => setIsEditing(true)}>Edit</div>
+                      <div>Delete</div>
+                    </>
+                  ) : (
+                    <div>Report</div>
+                  )}
+                </Menu>
+              )}
+            </button>
+          </MoreWrapper>
         </ButtonWrapper>
 
         {/* 대댓글 입력창 */}
@@ -148,18 +232,41 @@ export default function AComment({ comment }: ACommentProps) {
         )}
 
         {/* 대댓글 목록 */}
-        {replies.length > 0 && <ReplySection replies={comment.replies} />}
+        {replies.length > 0 && <ReplySection replies={replies} />}
       </div>
     </Comments>
   );
 }
 
+const MoreWrapper = styled.div`
+  position: relative;
+`;
+
 const CommentInputWrapper = styled.div`
   width: 100%;
   height: 10rem;
   display: flex;
-  justify-content: space-between;
+
   gap: 1.8rem;
+
+  textarea {
+    width: 100%;
+    resize: none;
+    border: none;
+
+    padding: 2rem;
+    width: 100%;
+    height: 100%;
+    border-radius: 0.4rem;
+    background: ${({ theme }) => theme.colors.gray100};
+
+    font-family: Inter;
+    font-size: 1.6rem;
+    font-style: normal;
+    font-weight: 300;
+
+    letter-spacing: -0.08rem;
+  }
 
   label {
     width: 100%;
@@ -277,4 +384,32 @@ const ButtonWrapper = styled.div`
       }
     }
   }
+`;
+
+const Menu = styled.div`
+  z-index: 10;
+  position: absolute;
+  top: -250%;
+  left: 150%;
+
+  margin-top: 1rem;
+  background-color: ${({ theme }) => theme.colors.gray100};
+  color: ${({ theme }) => theme.colors.gray800};
+
+  > div {
+    cursor: pointer;
+    padding: 1rem;
+    &:hover {
+      background-color: ${({ theme }) => theme.colors.gray200};
+    }
+  }
+`;
+
+const CancelButton = styled.button`
+  cursor: pointer;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  background: ${({ theme }) => theme.colors.gray400};
+  color: ${({ theme }) => theme.colors.gray50};
+  border-radius: 0.4rem;
 `;

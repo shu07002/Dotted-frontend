@@ -155,7 +155,7 @@ export default function DetailMarketPage() {
         />
         <ContentWrapper>{post.content}</ContentWrapper>
 
-        {/* <CommentSection post={post} /> */}
+        <CommentSection post={post} origin="market" />
       </Wrapper>
     </DetailMarketPageContainer>
   );
