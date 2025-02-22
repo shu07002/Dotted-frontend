@@ -73,7 +73,7 @@ export default function AReply({ reply }: AReplyProps) {
   );
 }
 
-const Comments = styled.li`
+const Comments = styled.div`
   display: flex;
   gap: 2.1rem;
   margin-top: 3.1rem;
