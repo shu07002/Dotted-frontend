@@ -3,9 +3,9 @@ import React, { useState } from 'react';
 import Slider from 'react-slick';
 import styled from 'styled-components';
 import { NextArrow, PrevArrow } from '@/components/MainPage/CustomArrow';
-import More from '@/assets/svg/CommunityPage/More.svg?react';
 import Profile from '@/assets/svg/CommunityPage/Profile.svg?react';
 import Scrap from '@/assets/svg/CommunityPage/Scrap.svg?react';
+import MoreButton from '../CommunityPage/MoreButton';
 
 const setting = {
   infinite: true,
@@ -29,6 +29,8 @@ export default function MarketPosting({
   isScraped,
   onClickScrap
 }: MarketPostingProps) {
+  const [openMore, setOpenMore] = useState(false);
+
   const [localScrapCount, setLocalScrapCount] = useState(post.scrap_count);
   const [localScrapped, setLocalScrapped] = useState(post.is_scrapped);
 
@@ -71,7 +73,11 @@ export default function MarketPosting({
           <Title>
             {post.title}
             <span>
-              <More />
+              <MoreButton
+                post={post}
+                openMore={openMore}
+                setOpenMore={setOpenMore}
+              />
             </span>
           </Title>
           <Price>₩ {post.price}</Price>
@@ -248,6 +254,7 @@ const Title = styled.div`
   letter-spacing: -0.112rem;
 
   > span {
+    position: relative;
     text-align: center;
     width: 2rem;
     cursor: pointer;

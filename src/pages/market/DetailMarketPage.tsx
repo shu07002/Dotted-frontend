@@ -1,5 +1,4 @@
 import { useParams } from 'react-router-dom';
-import Slider from 'react-slick';
 import styled from 'styled-components';
 
 import { useEffect, useRef, useState } from 'react';
@@ -29,6 +28,7 @@ export interface MarketPostDetail {
   scrap_count: number;
   comment_count: number;
   is_scrapped: boolean;
+  is_mine: boolean;
 }
 
 export default function DetailMarketPage() {

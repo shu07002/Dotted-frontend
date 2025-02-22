@@ -21,7 +21,7 @@ export interface CommunityUpdateData {
 }
 
 export interface ImagePayload {
-  id?: number;
+  image_id?: number;
   action: 'keep' | 'delete' | 'add';
   order: number;
   image_data?: string; // add 시 필수
@@ -213,14 +213,14 @@ export default function WriteCommunityPage() {
       if (foundSrcList.includes(original.image_url)) {
         // 에디터 최종 내용에 원본 url이 남아있으면 keep
         imagePayload.push({
-          id: original.id,
+          image_id: original.id,
           action: 'keep',
           order: order++
         });
       } else {
         // 최종 내용에 없으면 delete
         imagePayload.push({
-          id: original.id,
+          image_id: original.id,
           action: 'delete',
           order: -1
         });
