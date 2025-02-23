@@ -241,23 +241,27 @@ export default function AComment({ comment }: ACommentProps) {
             <CommentSVG className={`${isOpenRecomment && 'recomment'}`} />
           </button>
 
-          <MoreWrapper>
-            <button onClick={() => setOpenMore((prev) => !prev)}>
-              <More />
-              {openMore && (
-                <Menu>
-                  {comment.is_mine ? (
-                    <>
-                      <div onClick={() => setIsEditing(true)}>Edit</div>
-                      <div onClick={() => setOpenNormalModal(true)}>Delete</div>
-                    </>
-                  ) : (
-                    <div>Report</div>
-                  )}
-                </Menu>
-              )}
-            </button>
-          </MoreWrapper>
+          {comment.content !== 'Deleted Comment' && (
+            <MoreWrapper>
+              <button onClick={() => setOpenMore((prev) => !prev)}>
+                <More />
+                {openMore && (
+                  <Menu>
+                    {comment.is_mine ? (
+                      <>
+                        <div onClick={() => setIsEditing(true)}>Edit</div>
+                        <div onClick={() => setOpenNormalModal(true)}>
+                          Delete
+                        </div>
+                      </>
+                    ) : (
+                      <div>Report</div>
+                    )}
+                  </Menu>
+                )}
+              </button>
+            </MoreWrapper>
+          )}
         </ButtonWrapper>
         <Modal
           isOpen={openNormalModal}

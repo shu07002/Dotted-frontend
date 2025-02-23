@@ -61,15 +61,18 @@ export default function MarketPosting({
 
       <div>
         <Text>
-          <Tag
-            className={`${post.status === 'FOR_SALE' ? 'onSale' : 'soldOut'}`}
-          >
-            {post.status === 'FOR_SALE'
-              ? 'For Sale'
-              : post.status === 'SOLD_OUT'
-                ? 'Sold Out'
-                : 'Reserved'}
-          </Tag>
+          <TagWrapper>
+            <Tag
+              className={`${post.status === 'FOR_SALE' ? 'onSale' : 'soldOut'}`}
+            >
+              {post.status === 'FOR_SALE'
+                ? 'For Sale'
+                : post.status === 'SOLD_OUT'
+                  ? 'Sold Out'
+                  : 'Reserved'}
+            </Tag>
+          </TagWrapper>
+
           <Title>
             {post.title}
             <span>
@@ -211,13 +214,18 @@ const SlideContent = styled.div`
   align-items: center;
 `;
 
+const TagWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
 const Text = styled.div`
   width: 100%;
 `;
 const Tag = styled.div`
   display: inline-flex;
   padding: 0.3rem 1.2rem;
-  margin-bottom: 1rem;
+
   text-align: center;
   font-family: Inter;
   font-size: 1.4rem;

@@ -7,6 +7,7 @@ import { PostDetail } from '@/pages/community/DetailCommunityPage';
 import { useMutation } from '@tanstack/react-query';
 import Modal from 'react-modal';
 import ReportFlag from '@/assets/svg/CommunityPage/ReportFlag.svg?react';
+import Change from '@/assets/svg/MarketPage/Change.svg?react';
 
 Modal.setAppElement('#root');
 
@@ -52,9 +53,12 @@ export default function MoreButton({
 }: MoreButtonProps) {
   const [openNormalModal, setOpenNormalModal] = useState(false);
   const [openReportModal, setOpenReportModal] = useState(false);
+  const [openChangeModal, setOpenChangeModal] = useState(false);
 
   const [reportType, setReportType] = useState('');
   const [reportContent, setReportContent] = useState('');
+
+  const [statusType, setStatusType] = useState('');
 
   let replacedContent = post.content;
 
@@ -73,6 +77,7 @@ export default function MoreButton({
     deleteMutation.mutate(post.id);
   };
   const handleChange = (e: any) => setReportType(e.target.value);
+  const handleStatusChange = (e: any) => setStatusType(e.target.value);
 
   const deleteMutation = useMutation({
     mutationFn: async (postId: number) => {
@@ -119,6 +124,65 @@ export default function MoreButton({
       replacedContent = replacedContent.replace(placeholder, realSrc);
     });
   }
+
+  const changeStatusMutate = useMutation({
+    mutationFn: async () => {
+      const accessToken = window.localStorage.getItem('accessToken');
+      if (!accessToken) {
+        throw new Error('No access token found. Please log in again.');
+      }
+
+      if (!('status' in post) || !('price' in post)) {
+        throw new Error(
+          'Invalid post type. Only market posts can change status.'
+        );
+      }
+
+      // 기존 post 데이터를 유지하면서 status만 업데이트
+      const updatedPostData = {
+        title: post.title,
+        content: post.content,
+        price: post.price,
+        status: statusType, // 새롭게 변경할 status 값
+        images: post.images.map((img, index) => ({
+          image_id: img.id,
+          action: 'keep',
+          order: index + 1
+        }))
+      };
+
+      console.log(updatedPostData);
+
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/posting/market/${post.id}/update`,
+        {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`
+          },
+          body: JSON.stringify(updatedPostData)
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to update status');
+      }
+
+      return response.json();
+    },
+    onSuccess: (data) => {
+      console.log('✅ 상태 변경 성공:', data);
+      setOpenChangeModal(false); // 모달 닫기
+      if ('status' in post) {
+        post.status = statusType;
+      }
+    },
+    onError: (error) => {
+      console.error('❌ 상태 변경 실패:', error);
+      alert('Failed to update status.');
+    }
+  });
 
   const reportMutation = useMutation({
     mutationFn: async () => {
@@ -200,12 +264,17 @@ export default function MoreButton({
                     })
                   }
                 >
-                  Edit
+                  edit
                 </div>
-                <div onClick={() => setOpenNormalModal(true)}>Delete</div>
+                <div onClick={() => setOpenNormalModal(true)}>delete</div>
+                {origin && (
+                  <div onClick={() => setOpenChangeModal(true)}>
+                    change condition
+                  </div>
+                )}
               </>
             ) : (
-              <div onClick={() => setOpenReportModal(true)}>Report</div>
+              <div onClick={() => setOpenReportModal(true)}>report</div>
             )}
           </Menu>
         )}
@@ -320,6 +389,68 @@ export default function MoreButton({
             </div>
           </AccessRestrictedWrapper>
         </Modal>
+
+        <Modal
+          isOpen={openChangeModal}
+          style={customStyles}
+          onRequestClose={() => setOpenReportModal(!openChangeModal)}
+          contentLabel="example"
+        >
+          <AccessRestrictedWrapper>
+            <div>
+              <AccessRestrictedReport>
+                <TextReport>
+                  <span>
+                    <div>
+                      <Change />
+                    </div>
+                    Change Condition
+                  </span>
+
+                  <form>
+                    <ChangeRadioWrapper>
+                      <ChangeHiddenRadio
+                        name="statusType"
+                        value="FOR_SALE"
+                        checked={statusType === 'FOR_SALE'}
+                        onChange={handleStatusChange}
+                      />
+                      <RadioLabel>For Sale</RadioLabel>
+                    </ChangeRadioWrapper>
+                    <ChangeRadioWrapper>
+                      <ChangeHiddenRadio
+                        name="statusType"
+                        value="RESERVED"
+                        checked={statusType === 'RESERVED'}
+                        onChange={handleStatusChange}
+                      />
+                      <RadioLabel>Reserved</RadioLabel>
+                    </ChangeRadioWrapper>
+                    <ChangeRadioWrapper>
+                      <ChangeHiddenRadio
+                        name="statusType"
+                        value="SOLD_OUT"
+                        checked={statusType === 'SOLD_OUT'}
+                        onChange={handleStatusChange}
+                      />
+                      <RadioLabel>Sold Out</RadioLabel>
+                    </ChangeRadioWrapper>
+                  </form>
+                </TextReport>
+              </AccessRestrictedReport>
+              <ButtonBox>
+                <LaterButton
+                  onClick={() => setOpenChangeModal(!openChangeModal)}
+                >
+                  Cancel
+                </LaterButton>
+                <ChangeNowButton onClick={() => changeStatusMutate.mutate()}>
+                  Change
+                </ChangeNowButton>
+              </ButtonBox>
+            </div>
+          </AccessRestrictedWrapper>
+        </Modal>
       </button>
     </>
   );
@@ -338,18 +469,47 @@ const HiddenRadio = styled.input.attrs({ type: 'radio' })`
   }
 `;
 
+const ChangeHiddenRadio = styled.input.attrs({ type: 'radio' })`
+  appearance: none;
+  border: max(2px, 0.1em) solid gray;
+  border-radius: 50%;
+  width: 1.25em;
+  height: 1.25em;
+  transition: border 0.5s ease-in-out;
+
+  &:checked {
+    border: 0.4em solid ${({ theme }) => theme.colors.purple600};
+  }
+`;
+
 const Menu = styled.div`
   z-index: 10;
   position: absolute;
-  top: 100%;
-  right: 0;
+  top: 0%;
+  right: 125%;
   margin-top: 1rem;
   background-color: ${({ theme }) => theme.colors.gray100};
   color: ${({ theme }) => theme.colors.gray800};
 
+  width: 15.9rem;
+
+  flex-shrink: 0;
+
+  border-radius: 0.5rem;
+  background: ${({ theme }) => theme.colors.backgroundLayer2};
+  box-shadow: 2px 2px 26.1px -3px rgba(0, 0, 0, 0.22);
+
   > div {
+    text-align: start;
     cursor: pointer;
-    padding: 1rem;
+    padding: 1rem 2rem;
+    color: ${({ theme }) => theme.colors.gray700};
+    font-family: Inter;
+    font-size: 1.6rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: -0.08rem;
     &:hover {
       background-color: ${({ theme }) => theme.colors.gray200};
     }
@@ -366,6 +526,15 @@ const RadioWrapper = styled.label`
   align-items: center;
   cursor: pointer;
   margin-bottom: 8px;
+  position: relative;
+  gap: 1.2rem;
+`;
+
+const ChangeRadioWrapper = styled.label`
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin-top: 8px;
   position: relative;
   gap: 1.2rem;
 `;
@@ -402,6 +571,13 @@ const NowButton = styled.div`
   width: 50%;
   border-radius: 0px 0px 5px 0px;
   background: var(--Semantic-Negative-900, #ea3729);
+  color: ${({ theme }) => theme.colors.gray50};
+`;
+
+const ChangeNowButton = styled.div`
+  width: 50%;
+  border-radius: 0px 0px 5px 0px;
+  background: ${({ theme }) => theme.colors.purple600};
   color: ${({ theme }) => theme.colors.gray50};
 `;
 
@@ -484,7 +660,6 @@ const AccessRestrictedReport = styled.div`
   > div:last-child {
     display: flex;
     justify-content: center;
-    align-items: center;
 
     color: var(--Gray-Gray_light-gray-700_light, #464646);
     text-align: center;
@@ -524,6 +699,11 @@ const TextReport = styled.div`
       font-weight: 400;
       line-height: 3.4rem; /* 242.857% */
       letter-spacing: -0.056rem;
+    }
+
+    > div {
+      display: flex;
+      align-items: center;
     }
   }
 

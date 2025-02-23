@@ -39,12 +39,18 @@ export default function MarketPage() {
   // 1) 태그/페이지/검색어에 따라 서버에서 데이터 가져오기
   const handleSearch = () => {
     // 로딩 표시를 위해 isLoading 사용
+    let realTag = selectedTag;
+    if (selectedTag === 'Only For Sale') {
+      console.log(selectedTag);
+      realTag = 'FOR_SALE';
+    }
+
     searchPosts.mutate(
       {
         name: 'market',
         keyword,
         searchType,
-        tag: selectedTag,
+        status: realTag,
         page: currentPage
       },
       {
@@ -64,7 +70,13 @@ export default function MarketPage() {
   // 뒤로 가기 시에는 URL 파라미터 유지 → 자동으로 currentPage 유지
   const onClickTag = (tag: string) => {
     setSelectedTag(tag);
-    setSearchParams({ page: '1', tag, keyword });
+    let realTag = tag;
+    if (tag === 'Only For Sale') {
+      console.log(tag);
+      realTag = 'FOR_SALE';
+    }
+    console.log(realTag);
+    setSearchParams({ page: '1', status: realTag, keyword });
   };
 
   // 3) 페이지 변경 시 URL 파라미터 업데이트

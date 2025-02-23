@@ -20,7 +20,11 @@ export default function MakrketList({ pagedData }: MarketListProps) {
           console.log(status);
           return (
             <li key={post.id} onClick={() => navigate(`detail/${post.id}`)}>
-              <Tag>{status}</Tag>
+              <Tag
+                className={`${post.status === 'FOR_SALE' ? 'onSale' : 'soldOut'}`}
+              >
+                {status}
+              </Tag>
               <MarketImageWrapper>
                 <img src={post.thumbnail} />
               </MarketImageWrapper>
@@ -56,6 +60,17 @@ const Tag = styled.div`
   letter-spacing: -0.07rem;
   padding: 0.25rem 1rem;
   border-radius: 1.6rem;
+
+  &.onSale {
+    background: ${({ theme }) => theme.colors.purple600};
+    color: ${({ theme }) => theme.colors.gray50};
+  }
+
+  &.soldOut {
+    background: ${({ theme }) => theme.colors.gray100};
+    color: ${({ theme }) => theme.colors.gray500};
+    font-weight: 600;
+  }
 `;
 
 const MarketListContainer = styled.div`

@@ -15,29 +15,31 @@ export default function TagList({
 }: TagListProps) {
   return (
     <TagListContainer>
-      {tags.map((tag, idx) => (
-        <TagWrapper key={idx}>
-          <Tag
-            value={tag}
-            onClick={() => onClickTag(tag)}
-            $selected={selectedTag === tag}
-          >
-            {tag === 'HOT' && <Fire />}
-            {tag}
-          </Tag>
-          {selectedTag === tag && (
-            <MotionUnderline
-              layoutId="underline"
-              initial={false}
-              transition={{
-                type: 'spring',
-                stiffness: 500,
-                damping: 40
-              }}
-            />
-          )}
-        </TagWrapper>
-      ))}
+      {tags.map((tag, idx) => {
+        return (
+          <TagWrapper key={idx}>
+            <Tag
+              value={tag}
+              onClick={() => onClickTag(tag)}
+              $selected={selectedTag === tag}
+            >
+              {tag === 'HOT' && <Fire />}
+              {tag}
+            </Tag>
+            {selectedTag === tag && (
+              <MotionUnderline
+                layoutId="underline"
+                initial={false}
+                transition={{
+                  type: 'spring',
+                  stiffness: 500,
+                  damping: 40
+                }}
+              />
+            )}
+          </TagWrapper>
+        );
+      })}
     </TagListContainer>
   );
 }
