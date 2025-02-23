@@ -1,66 +1,35 @@
-import { useGoogleLogin } from '@react-oauth/google';
 import styled from 'styled-components';
 import GoogleIcon from '@/assets/svg/SignUpPage/GoogleIconSVG.svg?react';
 
 const GoogleLoginButton = ({
-  onChangeStep,
-  isChecked
+  isChecked,
+  text
 }: {
-  onChangeStep: (step?: number) => void;
   isChecked: boolean;
+  text: string;
 }) => {
-  const onClickLogin = () => {
+  const GOOGLE_CLIENT_ID =
+    '27893795025-99ide3g469se39f3pba1mofvirpjmhri.apps.googleusercontent.com'; // 여기에 실제 Google Client ID 입력
+  const REDIRECT_URI = 'http://localhost:3000/user/login/google/callback';
+  const SCOPE =
+    'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile';
+
+  const handleGoogleLogin = () => {
     if (!isChecked) {
-      alert('Please agree to the terms and conditions. ');
+      alert('Please agree to the terms and conditions.');
       return;
     }
-    login();
-  };
 
-  const login = useGoogleLogin({
-    flow: 'auth-code',
-    onSuccess: async (tokenResponse) => {
-      console.log('✅ 로그인 성공:', tokenResponse);
-      sendTokenToBackend(tokenResponse.code);
-    },
-    onError: () => {
-      console.log('❌ 로그인 실패');
-    }
-  });
+    const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_CLIENT_ID}&response_type=code&redirect_uri=${REDIRECT_URI}&scope=${SCOPE}`;
 
-  const sendTokenToBackend = async (authCode: string) => {
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_DOMAIN}/user/login/google`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json' // ✅ JSON 요청 헤더 추가
-          }
-        }
-      );
-
-      const data = await response.json();
-
-      if (response.status === 200) {
-        console.log('🎉 로그인 성공:', data);
-        localStorage.setItem('accessToken', data.token);
-        onChangeStep(2);
-      } else if (response.status === 404) {
-        console.log('⚠️ 회원가입 필요:', data);
-        //navigate('/signup', {state: { email: data.email, social_id: data.social_id }});
-      } else {
-        throw new Error('Login failed');
-      }
-    } catch (error) {
-      console.error('❌ 백엔드 인증 실패:', error);
-    }
+    // 구글 로그인 페이지로 리다이렉트
+    window.location.href = googleAuthUrl;
   };
 
   return (
-    <BlackButtonWrapper onClick={onClickLogin}>
+    <BlackButtonWrapper onClick={handleGoogleLogin}>
       <GoogleIconStyled />
-      <span>Sign up with Google</span>
+      <span>{text}</span>
     </BlackButtonWrapper>
   );
 };

@@ -1,14 +1,12 @@
 import styled from 'styled-components';
 import GoogleIcon from '@/assets/svg/SignUpPage/GoogleIconSVG.svg?react';
 import AppleIcon from '@/assets/svg/SignUpPage/AppleIconSVG.svg?react';
+import GoogleLoginButton from '../SignUpPage/GooleLoginButton';
 
 export default function LoginWithOtherEmail() {
   return (
     <LoginWithOtherEmailWrapper>
-      <BlackButtonWrapper>
-        <GoogleIconStyled />
-        <span>Continue with Google</span>
-      </BlackButtonWrapper>
+      <GoogleLoginButton isChecked={true} text="Continue with Google" />
 
       <BlackButtonWrapper>
         <AppleIconStyled />

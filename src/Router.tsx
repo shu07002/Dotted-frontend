@@ -16,6 +16,8 @@ import CommunityPage from './pages/community/CommunityPage';
 import WriteCommunityPage from './pages/community/WriteCommunityPage';
 import DetailCommunityPage from './pages/community/DetailCommunityPage';
 import Footer from './components/common/Footer';
+import Google from './pages/Google';
+import SignUpGoogle from './components/SignUpPage/SignUpGoogle';
 
 const Router = createBrowserRouter([
   {
@@ -75,14 +77,22 @@ const Router = createBrowserRouter([
 
   {
     path: 'sign-up',
-    element: <SignUpPage />
+    children: [
+      { path: '', element: <SignUpPage /> },
+      { path: 'google', element: <SignUpGoogle /> }
+    ]
   },
   {
     path: 'login',
     children: [
       { path: '', element: <LoginPage /> },
-      { path: 'forgetpass', element: <ForgetPassPage /> }
+      { path: 'forgetpass', element: <ForgetPassPage /> },
+      { path: 'google/callback', element: <Google /> }
     ]
+  },
+  {
+    path: 'user/login/google/callback',
+    element: <Google />
   }
 ]);
 
