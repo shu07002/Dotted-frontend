@@ -1,13 +1,25 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 
 interface VerifyCodePartProps {
   onChangeStep: () => void;
+  code: string;
+  setCode: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export default function VerifyCodePart({ onChangeStep }: VerifyCodePartProps) {
+export default function VerifyCodePart({
+  onChangeStep,
+  code,
+  setCode
+}: VerifyCodePartProps) {
   return (
     <VerifyCodePartWrapper>
-      <CodeInput placeholder="enter the verify code" />
+      <CodeInput
+        placeholder="enter the verify code"
+        required={true}
+        value={code}
+        onChange={(e: any) => setCode(e.target.value)}
+      />
       <VerifyButton onClick={onChangeStep}>Verify Email</VerifyButton>
       <ResendButton>Resend Code</ResendButton>
     </VerifyCodePartWrapper>
@@ -57,6 +69,7 @@ const VerifyButton = styled.button`
 `;
 
 const ResendButton = styled.div`
+  cursor: pointer;
   margin-top: 3.8rem;
   color: ${({ theme }) => theme.colors.purple600};
   text-align: center;
