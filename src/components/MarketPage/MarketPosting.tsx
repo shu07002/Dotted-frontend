@@ -33,6 +33,7 @@ export default function MarketPosting({
 
   const [localScrapCount, setLocalScrapCount] = useState(post.scrap_count);
   const [localScrapped, setLocalScrapped] = useState(post.is_scrapped);
+  const [localStatus, setLocalStatus] = useState(post.status);
 
   const handleScrapClick = () => {
     if (localScrapped) {
@@ -63,11 +64,11 @@ export default function MarketPosting({
         <Text>
           <TagWrapper>
             <Tag
-              className={`${post.status === 'FOR_SALE' ? 'onSale' : 'soldOut'}`}
+              className={`${localStatus === 'FOR_SALE' ? 'onSale' : 'soldOut'}`}
             >
-              {post.status === 'FOR_SALE'
+              {localStatus === 'FOR_SALE'
                 ? 'For Sale'
-                : post.status === 'SOLD_OUT'
+                : localStatus === 'SOLD_OUT'
                   ? 'Sold Out'
                   : 'Reserved'}
             </Tag>
@@ -81,6 +82,7 @@ export default function MarketPosting({
                 openMore={openMore}
                 setOpenMore={setOpenMore}
                 origin="market"
+                setLocalStatus={setLocalStatus}
               />
             </span>
           </Title>

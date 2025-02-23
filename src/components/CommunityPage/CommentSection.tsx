@@ -5,6 +5,7 @@ import { Comment, PostDetail } from '@/pages/community/DetailCommunityPage';
 import { MarketPostDetail } from '@/pages/market/DetailMarketPage';
 import { useMutation } from '@tanstack/react-query';
 import AComment from './AComment';
+import Locker from '@/assets/svg/MarketPage/Locker.svg?react';
 
 interface CommentSectionProps {
   post: PostDetail | MarketPostDetail;
@@ -15,7 +16,7 @@ export default function CommentSection({ post, origin }: CommentSectionProps) {
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState(post.comments); // ✅ 댓글 상태 추가
   const [commentCount, setCommentCount] = useState(post.comment_count); // ✅ 댓글 개수 상태 추가
-  console.log(origin);
+  const [isSecret, setIsSecret] = useState(false);
 
   // 댓글 추가 함수
   const handleCommentSubmit = async () => {
@@ -33,7 +34,7 @@ export default function CommentSection({ post, origin }: CommentSectionProps) {
       post: post.id,
       content: comment.trim(),
       parent: null,
-      is_secret: false
+      is_secret: isSecret
     };
 
     try {
@@ -104,6 +105,13 @@ export default function CommentSection({ post, origin }: CommentSectionProps) {
               }
             }}
           />
+          <SecretButton
+            onClick={() => setIsSecret((prev) => !prev)}
+            $isSecret={isSecret}
+          >
+            <Locker />
+            secret comment
+          </SecretButton>
         </label>
 
         <CommentButton onClick={handleCommentSubmit}>comment</CommentButton>
@@ -111,6 +119,41 @@ export default function CommentSection({ post, origin }: CommentSectionProps) {
     </CommentSectionWrapper>
   );
 }
+
+const SecretButton = styled.button<{ $isSecret: boolean }>`
+  cursor: pointer;
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  display: flex;
+  gap: 1rem;
+
+  align-items: center;
+  padding: 0.8rem;
+
+  border-radius: 0.5rem;
+  border: 1px solid
+    ${({ theme, $isSecret }) =>
+      $isSecret ? theme.colors.purple600 : theme.colors.gray300};
+
+  color: ${({ theme, $isSecret }) =>
+    $isSecret ? theme.colors.purple600 : theme.colors.gray400};
+
+  text-align: center;
+  font-family: Inter;
+  font-size: 1.6rem;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
+  letter-spacing: -0.08rem;
+
+  > svg {
+    > path {
+      fill: ${({ theme, $isSecret }) =>
+        $isSecret ? theme.colors.purple600 : theme.colors.gray400};
+    }
+  }
+`;
 
 const CommentSectionWrapper = styled.section`
   margin-bottom: 20.7rem;
@@ -147,6 +190,7 @@ const CommentInputWrapper = styled.div`
   gap: 1.8rem;
 
   label {
+    position: relative;
     width: 100%;
     textarea {
       resize: none;

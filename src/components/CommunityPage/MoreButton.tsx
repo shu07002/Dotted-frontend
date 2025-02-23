@@ -43,13 +43,15 @@ interface MoreButtonProps {
   openMore: boolean;
   setOpenMore: React.Dispatch<React.SetStateAction<boolean>>;
   origin?: string;
+  setLocalStatus?: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export default function MoreButton({
   post,
   openMore,
   setOpenMore,
-  origin
+  origin,
+  setLocalStatus
 }: MoreButtonProps) {
   const [openNormalModal, setOpenNormalModal] = useState(false);
   const [openReportModal, setOpenReportModal] = useState(false);
@@ -174,6 +176,7 @@ export default function MoreButton({
     onSuccess: (data) => {
       console.log('✅ 상태 변경 성공:', data);
       setOpenChangeModal(false); // 모달 닫기
+      if (setLocalStatus) setLocalStatus(statusType);
       if ('status' in post) {
         post.status = statusType;
       }
@@ -278,180 +281,175 @@ export default function MoreButton({
             )}
           </Menu>
         )}
-        <Modal
-          isOpen={openNormalModal}
-          style={customStyles}
-          onRequestClose={() => setOpenNormalModal(!openNormalModal)}
-          contentLabel="example"
-        >
-          <AccessRestrictedWrapper>
-            <div>
-              <AccessRestrictedNormal>
-                <TextNormal>
-                  <span>Are you sure you want to delete this post?</span>
-                </TextNormal>
-              </AccessRestrictedNormal>
-              <ButtonBox>
-                <LaterButton
-                  onClick={() => setOpenNormalModal(!openNormalModal)}
-                >
-                  Cancle
-                </LaterButton>
-                <NowButton onClick={handleDelete}>
-                  {deleteMutation.isPending ? 'Deleting...' : 'Delete'}
-                </NowButton>
-              </ButtonBox>
-            </div>
-          </AccessRestrictedWrapper>
-        </Modal>
-
-        <Modal
-          isOpen={openReportModal}
-          style={customStyles}
-          onRequestClose={() => setOpenReportModal(!openReportModal)}
-          contentLabel="example"
-        >
-          <AccessRestrictedWrapper>
-            <div>
-              <AccessRestrictedReport>
-                <TextReport>
-                  <span>
-                    <div>
-                      <ReportFlag />
-                    </div>
-                    Report
-                  </span>
-                  <span>Report type</span>
-                  <form>
-                    <RadioWrapper>
-                      <HiddenRadio
-                        name="reportType"
-                        value="SPAM"
-                        checked={reportType === 'SPAM'}
-                        onChange={handleChange}
-                      />
-                      <RadioLabel>Spam</RadioLabel>
-                    </RadioWrapper>
-                    <RadioWrapper>
-                      <HiddenRadio
-                        name="reportType"
-                        value="ABUSE"
-                        checked={reportType === 'ABUSE'}
-                        onChange={handleChange}
-                      />
-                      <RadioLabel>Abuse</RadioLabel>
-                    </RadioWrapper>
-                    <RadioWrapper>
-                      <HiddenRadio
-                        name="reportType"
-                        value="SEXUAL"
-                        checked={reportType === 'SEXUAL'}
-                        onChange={handleChange}
-                      />
-                      <RadioLabel>Sexual</RadioLabel>
-                    </RadioWrapper>
-                    <RadioWrapper>
-                      <HiddenRadio
-                        name="reportType"
-                        value="ILLEGAL"
-                        checked={reportType === 'ILLEGAL'}
-                        onChange={handleChange}
-                      />
-                      <RadioLabel>Illegal</RadioLabel>
-                    </RadioWrapper>
-                    <RadioWrapper>
-                      <HiddenRadio
-                        name="reportType"
-                        value="OTHERS"
-                        checked={reportType === 'OTHERS'}
-                        onChange={handleChange}
-                      />
-                      <RadioLabel>Others</RadioLabel>
-                    </RadioWrapper>
-                  </form>
-                </TextReport>
-                <textarea
-                  value={reportContent}
-                  onChange={(e) => setReportContent(e.target.value)}
-                />
-                <div>
-                  <span>Are you sure you want to report this?</span>
-                </div>
-              </AccessRestrictedReport>
-              <ButtonBox>
-                <LaterButton
-                  onClick={() => setOpenReportModal(!openReportModal)}
-                >
-                  No
-                </LaterButton>
-                <NowButton onClick={ReportMutation}>Yes</NowButton>
-              </ButtonBox>
-            </div>
-          </AccessRestrictedWrapper>
-        </Modal>
-
-        <Modal
-          isOpen={openChangeModal}
-          style={customStyles}
-          onRequestClose={() => setOpenReportModal(!openChangeModal)}
-          contentLabel="example"
-        >
-          <AccessRestrictedWrapper>
-            <div>
-              <AccessRestrictedReport>
-                <TextReport>
-                  <span>
-                    <div>
-                      <Change />
-                    </div>
-                    Change Condition
-                  </span>
-
-                  <form>
-                    <ChangeRadioWrapper>
-                      <ChangeHiddenRadio
-                        name="statusType"
-                        value="FOR_SALE"
-                        checked={statusType === 'FOR_SALE'}
-                        onChange={handleStatusChange}
-                      />
-                      <RadioLabel>For Sale</RadioLabel>
-                    </ChangeRadioWrapper>
-                    <ChangeRadioWrapper>
-                      <ChangeHiddenRadio
-                        name="statusType"
-                        value="RESERVED"
-                        checked={statusType === 'RESERVED'}
-                        onChange={handleStatusChange}
-                      />
-                      <RadioLabel>Reserved</RadioLabel>
-                    </ChangeRadioWrapper>
-                    <ChangeRadioWrapper>
-                      <ChangeHiddenRadio
-                        name="statusType"
-                        value="SOLD_OUT"
-                        checked={statusType === 'SOLD_OUT'}
-                        onChange={handleStatusChange}
-                      />
-                      <RadioLabel>Sold Out</RadioLabel>
-                    </ChangeRadioWrapper>
-                  </form>
-                </TextReport>
-              </AccessRestrictedReport>
-              <ButtonBox>
-                <LaterButton
-                  onClick={() => setOpenChangeModal(!openChangeModal)}
-                >
-                  Cancel
-                </LaterButton>
-                <ChangeNowButton onClick={() => changeStatusMutate.mutate()}>
-                  Change
-                </ChangeNowButton>
-              </ButtonBox>
-            </div>
-          </AccessRestrictedWrapper>
-        </Modal>
       </button>
+
+      <Modal
+        isOpen={openNormalModal}
+        style={customStyles}
+        onRequestClose={() => setOpenNormalModal(!openNormalModal)}
+        contentLabel="example"
+      >
+        <AccessRestrictedWrapper>
+          <div>
+            <AccessRestrictedNormal>
+              <TextNormal>
+                <span>Are you sure you want to delete this post?</span>
+              </TextNormal>
+            </AccessRestrictedNormal>
+            <ButtonBox>
+              <LaterButton onClick={() => setOpenNormalModal(!openNormalModal)}>
+                Cancle
+              </LaterButton>
+              <NowButton onClick={handleDelete}>
+                {deleteMutation.isPending ? 'Deleting...' : 'Delete'}
+              </NowButton>
+            </ButtonBox>
+          </div>
+        </AccessRestrictedWrapper>
+      </Modal>
+
+      <Modal
+        isOpen={openReportModal}
+        style={customStyles}
+        onRequestClose={() => setOpenReportModal(!openReportModal)}
+        contentLabel="example"
+      >
+        <AccessRestrictedWrapper>
+          <div>
+            <AccessRestrictedReport>
+              <TextReport>
+                <span>
+                  <div>
+                    <ReportFlag />
+                  </div>
+                  Report
+                </span>
+                <span>Report type</span>
+                <form>
+                  <RadioWrapper>
+                    <HiddenRadio
+                      name="reportType"
+                      value="SPAM"
+                      checked={reportType === 'SPAM'}
+                      onChange={handleChange}
+                    />
+                    <RadioLabel>Spam</RadioLabel>
+                  </RadioWrapper>
+                  <RadioWrapper>
+                    <HiddenRadio
+                      name="reportType"
+                      value="ABUSE"
+                      checked={reportType === 'ABUSE'}
+                      onChange={handleChange}
+                    />
+                    <RadioLabel>Abuse</RadioLabel>
+                  </RadioWrapper>
+                  <RadioWrapper>
+                    <HiddenRadio
+                      name="reportType"
+                      value="SEXUAL"
+                      checked={reportType === 'SEXUAL'}
+                      onChange={handleChange}
+                    />
+                    <RadioLabel>Sexual</RadioLabel>
+                  </RadioWrapper>
+                  <RadioWrapper>
+                    <HiddenRadio
+                      name="reportType"
+                      value="ILLEGAL"
+                      checked={reportType === 'ILLEGAL'}
+                      onChange={handleChange}
+                    />
+                    <RadioLabel>Illegal</RadioLabel>
+                  </RadioWrapper>
+                  <RadioWrapper>
+                    <HiddenRadio
+                      name="reportType"
+                      value="OTHERS"
+                      checked={reportType === 'OTHERS'}
+                      onChange={handleChange}
+                    />
+                    <RadioLabel>Others</RadioLabel>
+                  </RadioWrapper>
+                </form>
+              </TextReport>
+              <textarea
+                value={reportContent}
+                onChange={(e) => setReportContent(e.target.value)}
+              />
+              <div>
+                <span>Are you sure you want to report this?</span>
+              </div>
+            </AccessRestrictedReport>
+            <ButtonBox>
+              <LaterButton onClick={() => setOpenReportModal(!openReportModal)}>
+                No
+              </LaterButton>
+              <NowButton onClick={ReportMutation}>Yes</NowButton>
+            </ButtonBox>
+          </div>
+        </AccessRestrictedWrapper>
+      </Modal>
+
+      <Modal
+        isOpen={openChangeModal}
+        style={customStyles}
+        onRequestClose={() => setOpenReportModal(!openChangeModal)}
+        contentLabel="example"
+      >
+        <AccessRestrictedWrapper>
+          <div>
+            <AccessRestrictedReport>
+              <TextReport>
+                <span>
+                  <div>
+                    <Change />
+                  </div>
+                  Change Condition
+                </span>
+
+                <form>
+                  <ChangeRadioWrapper>
+                    <ChangeHiddenRadio
+                      name="statusType"
+                      value="FOR_SALE"
+                      checked={statusType === 'FOR_SALE'}
+                      onChange={handleStatusChange}
+                    />
+                    <RadioLabel>For Sale</RadioLabel>
+                  </ChangeRadioWrapper>
+                  <ChangeRadioWrapper>
+                    <ChangeHiddenRadio
+                      name="statusType"
+                      value="RESERVED"
+                      checked={statusType === 'RESERVED'}
+                      onChange={handleStatusChange}
+                    />
+                    <RadioLabel>Reserved</RadioLabel>
+                  </ChangeRadioWrapper>
+                  <ChangeRadioWrapper>
+                    <ChangeHiddenRadio
+                      name="statusType"
+                      value="SOLD_OUT"
+                      checked={statusType === 'SOLD_OUT'}
+                      onChange={handleStatusChange}
+                    />
+                    <RadioLabel>Sold Out</RadioLabel>
+                  </ChangeRadioWrapper>
+                </form>
+              </TextReport>
+            </AccessRestrictedReport>
+            <ButtonBox>
+              <LaterButton onClick={() => setOpenChangeModal(!openChangeModal)}>
+                Cancel
+              </LaterButton>
+              <ChangeNowButton onClick={() => changeStatusMutate.mutate()}>
+                Change
+              </ChangeNowButton>
+            </ButtonBox>
+          </div>
+        </AccessRestrictedWrapper>
+      </Modal>
     </>
   );
 }
