@@ -1,3 +1,5 @@
+import { usePasswordResetEmail } from '@/hooks/usePasswordResetEmail';
+import { useState } from 'react';
 import styled from 'styled-components';
 
 interface SendCodePartProps {
@@ -5,10 +7,23 @@ interface SendCodePartProps {
 }
 
 export default function SendCodePart({ onChangeStep }: SendCodePartProps) {
+  const [email, setEmail] = useState('');
+  const mutation = usePasswordResetEmail();
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const data = mutation.mutate(email);
+  };
+
   return (
     <SendCodePartWrapper>
-      <EmailInput placeholder="email@address.com" type="email" />
-      <SendCodeButton onClick={onChangeStep}>Send Code</SendCodeButton>
+      <EmailInput
+        placeholder="email@address.com"
+        type="email"
+        value={email}
+        onChange={(e: any) => setEmail(e.target.value)}
+        required={true}
+      />
+      <SendCodeButton onClick={handleSubmit}>Send Code</SendCodeButton>
     </SendCodePartWrapper>
   );
 }

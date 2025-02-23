@@ -28,8 +28,8 @@ const Google = () => {
 
           if (data.message === 'login success') {
             console.log('🎉 로그인 성공:', data);
-            localStorage.setItem('access_token', data.token.access_token);
-            localStorage.setItem('refresh_token', data.token.refresh_token);
+            localStorage.setItem('accessToken', data.token.access_token);
+            localStorage.setItem('refreshToken', data.token.refresh_token);
             navigate('/'); // 로그인 성공 후 홈으로 이동
           } else if (data.message === 'signup_required') {
             console.log('회원가입 필요:', data);
