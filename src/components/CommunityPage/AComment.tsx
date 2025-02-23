@@ -8,9 +8,11 @@ import More from '@/assets/svg/CommunityPage/More.svg?react';
 import { useMutation } from '@tanstack/react-query';
 import ReplySection from './ReplySection';
 import Modal from 'react-modal';
+import Locker from '@/assets/svg/MarketPage/Locker.svg?react';
 
 interface ACommentProps {
   comment: Comment;
+  origin?: string;
 }
 
 const customStyles = {
@@ -29,7 +31,7 @@ const customStyles = {
   }
 };
 
-export default function AComment({ comment }: ACommentProps) {
+export default function AComment({ comment, origin }: ACommentProps) {
   const [isCommentLiked, setIsCommentLiked] = useState(comment.is_liked);
   const [likeCount, setLikeCount] = useState(comment.like_count);
   const [isOpenRecomment, setIsOpenRecomment] = useState(false);
@@ -39,6 +41,7 @@ export default function AComment({ comment }: ACommentProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState(comment.content);
   const [openNormalModal, setOpenNormalModal] = useState(false);
+  const [isSecret, setIsSecret] = useState(false);
 
   const commentLikeMutation = useMutation({
     mutationFn: async () => {
@@ -85,7 +88,7 @@ export default function AComment({ comment }: ACommentProps) {
 
       const requestData = {
         content: editedContent,
-        is_secret: false // 공개 댓글
+        is_secret: isSecret // 공개 댓글
       };
 
       const response = await fetch(
@@ -134,7 +137,7 @@ export default function AComment({ comment }: ACommentProps) {
         post: comment.post, // 게시글 ID
         content: recomment.trim(), // 대댓글 내용
         parent: comment.id, // 원본 댓글 ID
-        is_secret: false // 공개 대댓글
+        is_secret: isSecret // 공개 대댓글
       };
 
       const response = await fetch(
@@ -305,6 +308,15 @@ export default function AComment({ comment }: ACommentProps) {
                   }
                 }}
               />
+              {origin === 'market' && (
+                <SecretButton
+                  onClick={() => setIsSecret((prev) => !prev)}
+                  $isSecret={isSecret}
+                >
+                  <Locker />
+                  secret comment
+                </SecretButton>
+              )}
             </label>
             <CommentButton onClick={handleRecommentSubmit}>Reply</CommentButton>
           </CommentInputWrapper>
@@ -315,6 +327,41 @@ export default function AComment({ comment }: ACommentProps) {
     </Comments>
   );
 }
+
+const SecretButton = styled.button<{ $isSecret: boolean }>`
+  cursor: pointer;
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  display: flex;
+  gap: 1rem;
+
+  align-items: center;
+  padding: 0.8rem;
+
+  border-radius: 0.5rem;
+  border: 1px solid
+    ${({ theme, $isSecret }) =>
+      $isSecret ? theme.colors.purple600 : theme.colors.gray300};
+
+  color: ${({ theme, $isSecret }) =>
+    $isSecret ? theme.colors.purple600 : theme.colors.gray400};
+
+  text-align: center;
+  font-family: Inter;
+  font-size: 1.6rem;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
+  letter-spacing: -0.08rem;
+
+  > svg {
+    > path {
+      fill: ${({ theme, $isSecret }) =>
+        $isSecret ? theme.colors.purple600 : theme.colors.gray400};
+    }
+  }
+`;
 
 const MoreWrapper = styled.div`
   position: relative;
@@ -347,6 +394,7 @@ const CommentInputWrapper = styled.div`
   }
 
   label {
+    position: relative;
     width: 100%;
     textarea {
       width: 100%;

@@ -87,7 +87,7 @@ export default function CommentSection({ post, origin }: CommentSectionProps) {
 
       <CommentsListWrapper>
         {comments.map((comment, idx) => (
-          <AComment comment={comment} key={idx} />
+          <AComment comment={comment} origin={origin} key={idx} />
         ))}
       </CommentsListWrapper>
 
@@ -105,13 +105,15 @@ export default function CommentSection({ post, origin }: CommentSectionProps) {
               }
             }}
           />
-          <SecretButton
-            onClick={() => setIsSecret((prev) => !prev)}
-            $isSecret={isSecret}
-          >
-            <Locker />
-            secret comment
-          </SecretButton>
+          {origin === 'market' && (
+            <SecretButton
+              onClick={() => setIsSecret((prev) => !prev)}
+              $isSecret={isSecret}
+            >
+              <Locker />
+              secret comment
+            </SecretButton>
+          )}
         </label>
 
         <CommentButton onClick={handleCommentSubmit}>comment</CommentButton>

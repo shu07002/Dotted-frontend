@@ -207,34 +207,31 @@ export default function AReply({ reply }: AReplyProps) {
             </MoreWrapper>
           )}
         </ButtonWrapper>
-
-        <Modal
-          isOpen={openNormalModal}
-          style={customStyles}
-          onRequestClose={() => setOpenNormalModal(!openNormalModal)}
-          contentLabel="example"
-        >
-          <AccessRestrictedWrapper>
-            <div>
-              <AccessRestrictedNormal>
-                <TextNormal>
-                  <span>Are you sure you want to delete this comment?</span>
-                </TextNormal>
-              </AccessRestrictedNormal>
-              <ButtonBox>
-                <LaterButton
-                  onClick={() => setOpenNormalModal(!openNormalModal)}
-                >
-                  Cancle
-                </LaterButton>
-                <NowButton onClick={handleDelete}>
-                  {deleteMutation.isPending ? 'Deleting...' : 'Delete'}
-                </NowButton>
-              </ButtonBox>
-            </div>
-          </AccessRestrictedWrapper>
-        </Modal>
       </div>
+      <Modal
+        isOpen={openNormalModal}
+        style={customStyles}
+        onRequestClose={() => setOpenNormalModal(!openNormalModal)}
+        contentLabel="example"
+      >
+        <AccessRestrictedWrapper>
+          <div>
+            <AccessRestrictedNormal>
+              <TextNormal>
+                <span>Are you sure you want to delete this comment?</span>
+              </TextNormal>
+            </AccessRestrictedNormal>
+            <ButtonBox>
+              <LaterButton onClick={() => setOpenNormalModal(!openNormalModal)}>
+                Cancle
+              </LaterButton>
+              <NowButton onClick={handleDelete}>
+                {deleteMutation.isPending ? 'Deleting...' : 'Delete'}
+              </NowButton>
+            </ButtonBox>
+          </div>
+        </AccessRestrictedWrapper>
+      </Modal>
     </Comments>
   );
 }
