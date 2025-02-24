@@ -31,7 +31,7 @@ export default function StudentVerificat({
   const autoLoginMutation = useMutation({
     mutationFn: async () => {
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/user/login`,
+        `${import.meta.env.VITE_API_DOMAIN}/user/login`,
         {
           method: 'POST',
           headers: {
@@ -86,7 +86,7 @@ export default function StudentVerificat({
       }
 
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/user/univrequest`,
+        `${import.meta.env.VITE_API_DOMAIN}/user/univrequest`,
         {
           method: 'POST',
           headers: {

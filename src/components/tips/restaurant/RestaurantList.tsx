@@ -7,7 +7,7 @@ import { useSearchParams } from 'react-router-dom';
 
 const fetchRestaurants = async () => {
   const response = await fetch(
-    `${import.meta.env.VITE_API_URL}/tips/tips-restaurants`
+    `${import.meta.env.VITE_API_DOMAIN}/tips/tips-restaurants`
   );
   return response.json();
 };

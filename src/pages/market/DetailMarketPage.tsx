@@ -72,7 +72,7 @@ export default function DetailMarketPage() {
   async function fetchPostDetail(postId: number): Promise<MarketPostDetail> {
     const accessToken = localStorage.getItem('accessToken');
     const response = await fetch(
-      `${import.meta.env.VITE_API_URL}/posting/market/${postId}`,
+      `${import.meta.env.VITE_API_DOMAIN}/posting/market/${postId}`,
       {
         method: 'GET',
         headers: {
@@ -100,7 +100,7 @@ export default function DetailMarketPage() {
       }
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/posting/${id}/scrap`,
+          `${import.meta.env.VITE_API_DOMAIN}/posting/${id}/scrap`,
           {
             method: 'POST',
             headers: {

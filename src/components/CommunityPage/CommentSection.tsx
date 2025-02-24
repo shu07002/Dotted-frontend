@@ -57,7 +57,7 @@ export default function CommentSection({ post, origin }: CommentSectionProps) {
   >({
     mutationFn: async (data) => {
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/posting/comment/create`,
+        `${import.meta.env.VITE_API_DOMAIN}/posting/comment/create`,
         {
           method: 'POST',
           headers: {

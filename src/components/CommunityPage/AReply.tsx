@@ -50,7 +50,7 @@ export default function AReply({ reply }: AReplyProps) {
       }
 
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/posting/comment/${reply.id}/delete`,
+        `${import.meta.env.VITE_API_DOMAIN}/posting/comment/${reply.id}/delete`,
         {
           method: 'DELETE',
           headers: {
@@ -80,7 +80,7 @@ export default function AReply({ reply }: AReplyProps) {
       }
 
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/posting/comment/${reply.id}/like`,
+        `${import.meta.env.VITE_API_DOMAIN}/posting/comment/${reply.id}/like`,
         {
           method: 'POST',
           headers: {
@@ -126,7 +126,7 @@ export default function AReply({ reply }: AReplyProps) {
       };
 
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/posting/comment/${reply.id}/update`,
+        `${import.meta.env.VITE_API_DOMAIN}/posting/comment/${reply.id}/update`,
         {
           method: 'PATCH',
           headers: {

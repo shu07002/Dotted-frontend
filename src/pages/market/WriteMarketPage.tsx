@@ -103,7 +103,7 @@ export default function WriteMarketPage() {
       }
 
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/posting/market/create`,
+        `${import.meta.env.VITE_API_DOMAIN}/posting/market/create`,
         {
           method: 'POST',
           headers: {
@@ -287,7 +287,7 @@ export default function WriteMarketPage() {
       }
       console.log(data);
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/posting/market/${postId}/update`,
+        `${import.meta.env.VITE_API_DOMAIN}/posting/market/${postId}/update`,
         {
           method: 'PATCH',
           headers: {

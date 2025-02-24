@@ -92,12 +92,15 @@ export default function MoreButton({
         ? `/posting/${origin}/${postId}/delete`
         : `/posting/${postId}/delete`;
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL}${path}`, {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
+      const response = await fetch(
+        `${import.meta.env.VITE_API_DOMAIN}${path}`,
+        {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          }
         }
-      });
+      );
       if (!response.ok) {
         throw new Error('Failed to delete post');
       }
@@ -156,7 +159,7 @@ export default function MoreButton({
       console.log(updatedPostData);
 
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/posting/market/${post.id}/update`,
+        `${import.meta.env.VITE_API_DOMAIN}/posting/market/${post.id}/update`,
         {
           method: 'PATCH',
           headers: {
@@ -202,7 +205,7 @@ export default function MoreButton({
 
       // POST /management/report
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/management/report`,
+        `${import.meta.env.VITE_API_DOMAIN}/management/report`,
         {
           method: 'POST',
           headers: {

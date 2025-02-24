@@ -45,7 +45,7 @@ export default function Header({ scrollY }: { scrollY: number }) {
         Authorization: `Bearer ${localStorage.getItem('accessToken')}`
       };
       const evtSource = new EventSource(
-        `${import.meta.env.VITE_API_URL}/notification/stream`,
+        `${import.meta.env.VITE_API_DOMAIN}/notification/stream`,
         { headers: headers, withCredentials: true }
       );
       console.log('열려라 참깨!');

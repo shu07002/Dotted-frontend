@@ -11,7 +11,7 @@ interface NewPasswordPartProps {
 
 async function changePasswordRequest(email: string, newPassword: string) {
   const response = await fetch(
-    `${import.meta.env.VITE_API_URL}/user/password-reset/change`,
+    `${import.meta.env.VITE_API_DOMAIN}/user/password-reset/change`,
     {
       method: 'POST',
       headers: {

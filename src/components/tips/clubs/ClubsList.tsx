@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 
 // const fetchClubData = async () => {
 //   const response = await fetch(
-//     `${import.meta.env.VITE_API_URL}/tips/tips-clubs`
+//     `${import.meta.env.VITE_API_DOMAIN}/tips/tips-clubs`
 //   );
 //   return response.json();
 // };
