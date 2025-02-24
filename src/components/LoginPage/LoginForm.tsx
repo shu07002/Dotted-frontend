@@ -8,7 +8,7 @@ import LoginWithOtherEmail from './LoginWithOtherEmail';
 import SignUpPropmpt from './SignUpPropmpt';
 import Eye from '@/assets/svg/LoginPage/Eye.svg?react';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import ErrorMsg from '../SignUpPage/ErrorMsg';
 import { useMutation } from '@tanstack/react-query';
@@ -20,6 +20,7 @@ export interface LoginProps {
 
 export default function LoginForm() {
   const [eyeOn, setEyeOn] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   const {
     register,
     formState: { errors },
@@ -47,7 +48,8 @@ export default function LoginForm() {
           },
           body: JSON.stringify({
             email: emailValue,
-            password: passwordValue
+            password: passwordValue,
+            remember_me: rememberMe
           })
         }
       );
@@ -92,7 +94,11 @@ export default function LoginForm() {
 
       <OptionBox>
         <div>
-          <StyledCheckBox /> <span>Remember me</span>
+          <StyledCheckBox
+            checked={rememberMe}
+            onChange={() => setRememberMe((prev) => !prev)}
+          />
+          <span>Remember me</span>
         </div>
         <ForgetPassword onClick={() => navigate('forgetpass')}>
           forget password?

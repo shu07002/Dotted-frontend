@@ -8,7 +8,6 @@ import PasswordKey from '@/assets/svg/LoginPage/PasswordKey.svg?react';
 import SendCodePart from './SendCodePart';
 import VerifyCodePart from './VerifyCodePart';
 import NewPasswordPart from './NewPasswordPart';
-import { usePasswordResetEmail } from '@/hooks/usePasswordResetEmail';
 
 const firstSectionProps = {
   title: 'Forget Password',
@@ -53,12 +52,13 @@ export default function ForgetPassForm() {
       />
     ) : step === 2 ? (
       <VerifyCodePart
+        email={email}
         onChangeStep={onChangeStep}
         code={code}
         setCode={setCode}
       />
     ) : (
-      <NewPasswordPart />
+      <NewPasswordPart email={email} />
     );
 
   return (

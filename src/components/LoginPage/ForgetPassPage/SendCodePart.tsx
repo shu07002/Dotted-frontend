@@ -1,3 +1,4 @@
+import ErrorMsg from '@/components/SignUpPage/ErrorMsg';
 import { usePasswordResetEmail } from '@/hooks/usePasswordResetEmail';
 import { UseMutationResult } from '@tanstack/react-query';
 import { useState } from 'react';
@@ -37,10 +38,8 @@ export default function SendCodePart({
       <SendCodeButton onClick={handleSubmit} disabled={mutation.isPending}>
         {mutation.isPending ? 'Sending...' : 'Send Code'}
       </SendCodeButton>
-
-      {/* ✅ API 응답 메시지 표시 */}
-      {mutation.isSuccess && <p></p>}
-      {mutation.isError && <p></p>}
+      {/* ✅ API 응답 메시지 표시 */}-
+      {mutation.isError && <ErrorMsg msg="This email is not registered." />}
     </SendCodePartWrapper>
   );
 }
