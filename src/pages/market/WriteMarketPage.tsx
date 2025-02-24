@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
+
 import ImgBox from '@/components/MarketPage/ImgBox';
 import { useBlocker, useLocation, useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
-import { fetchWithAuth } from '@/utils/auth'; // auth.ts에서 정의한 fetchWithAuth를 import
+import { fetchWithAuth } from '@/utils/auth';
 
 interface MarketData {
   title: string;
@@ -35,6 +36,7 @@ interface OriginalImage {
 export default function WriteMarketPage() {
   const { register, handleSubmit, setValue } = useForm<MarketData>();
   const [previews, setPreviews] = useState<(string | null)[]>([]);
+  //const [imgFiles, setImgFiles] = useState<(File | null)[]>([null]);
   const imgFileRef = useRef<HTMLInputElement>(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const blocker = useBlocker(({ currentLocation, nextLocation }) => {
@@ -42,22 +44,27 @@ export default function WriteMarketPage() {
     return currentLocation.pathname !== nextLocation.pathname;
   });
   const [editMode, setEditMode] = useState(false);
+
   const navigate = useNavigate();
+
   const { state } = useLocation();
+
   const originalImageList = useRef<OriginalImage[]>([]);
 
   useEffect(() => {
     if (state && state.postId) {
       console.log(state);
       setEditMode(true);
+
       // state에 있는 데이터로 form 필드 채우기
       setValue('title', state.title || '');
       setValue('price', state.price || '');
       setValue('content', state.content || '');
+
       // 기존 이미지 목록을 previews 상태에 넣어주기
       if (state.images) {
         originalImageList.current = state.images; // 원본 이미지 저장
-        setPreviews(state.images.map((img: OriginalImage) => img.image_url));
+        setPreviews(state.images.map((img: OriginalImage) => img.image_url)); // 이미지 미리보기로 설정
       }
     }
   }, [state, setValue]);
@@ -88,12 +95,9 @@ export default function WriteMarketPage() {
     };
   }, [isSubmitted]);
 
-  // -------------------------------------
-  // 1) 게시글 생성 Mutation
-  // -------------------------------------
   const postingMutation = useMutation({
     mutationFn: async (data: MarketData) => {
-      // fetchWithAuth 내부에서 토큰 유효성 검사/갱신이 처리됨
+      // fetchWithAuth 내부에서 토큰 유효성 검사 및 갱신이 자동으로 처리됨
       const response = await fetchWithAuth<any>(
         `${import.meta.env.VITE_API_DOMAIN}/posting/market/create`,
         {
@@ -118,6 +122,146 @@ export default function WriteMarketPage() {
       console.error('❌ 글쓰기 실패:', error);
     }
   });
+
+  const onSubmit = async (data: MarketData) => {
+    if (postingMutation.isPending || updateMutation.isPending) return;
+
+    if (editMode && state?.postId) {
+      // 🔥 수정 모드 (editMode)
+      const imagesPayload: ImagePayload[] = [];
+
+      // Get current order of images after potential drag-and-drop reordering
+      previews.forEach((preview, newOrder) => {
+        // Case 1: Handle existing images that were kept
+        const originalImage = originalImageList.current.find(
+          (img) => img.image_url === preview
+        );
+
+        if (originalImage) {
+          imagesPayload.push({
+            image_id: originalImage.id,
+            action: 'keep',
+            order: newOrder + 1 // Adding 1 because API expects 1-based index
+          });
+        }
+        // Case 2: Handle new images that were added
+        else if (preview) {
+          imagesPayload.push({
+            action: 'add',
+            order: newOrder + 1,
+            image_data: preview
+          });
+        }
+      });
+
+      // Case 3: Handle deleted images
+      originalImageList.current.forEach((original) => {
+        if (!previews.includes(original.image_url)) {
+          imagesPayload.push({
+            image_id: original.id,
+            action: 'delete',
+            order: -1
+          });
+        }
+      });
+
+      const requestData: MarketUpdateData = {
+        title: data.title,
+        content: data.content,
+        price: data.price,
+        images: imagesPayload
+      };
+
+      console.log('Update request data:', requestData); // 디버깅용
+
+      try {
+        await updateMutation.mutateAsync({
+          postId: state.postId,
+          data: requestData
+        });
+
+        // setIsSubmitted(true);
+        // blocker.reset?.();
+        // setTimeout(() => {
+        //   navigate('/market');
+        // }, 100);
+      } catch (error) {
+        console.error('Update failed:', error);
+        alert('Failed to update the post. Please try again.');
+      }
+    } else {
+      // 🔥 새 글 작성 모드
+      // Filter out null values from previews array
+      const validImages = previews.filter(
+        (preview): preview is string => preview !== null
+      );
+
+      const requestData: MarketData = {
+        title: data.title,
+        content: data.content,
+        price: data.price,
+        images: validImages
+      };
+
+      console.log('Create request data:', requestData); // 디버깅용
+
+      try {
+        await postingMutation.mutateAsync(requestData);
+
+        // setIsSubmitted(true);
+        // blocker.reset?.();
+        // setTimeout(() => {
+        //   navigate('/market');
+        // }, 100);
+      } catch (error) {
+        console.error('Creation failed:', error);
+        alert('Failed to create the post. Please try again.');
+      }
+    }
+  };
+
+  const handleDeleteImage = (index: number) => {
+    //setImgFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
+    setPreviews((prevPreviews) => prevPreviews.filter((_, i) => i !== index));
+  };
+
+  const onSaveImage = (file: File) => {
+    const reader = new FileReader();
+
+    if (file) {
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        // 이미지 파일 배열 업데이트
+        // setImgFiles((prevFiles) => {
+        //   const updatedFiles = [...prevFiles];
+        //   // + 버튼을 누른 순간 null로 자리가 이미 존재
+        //   // 따라서 사진을 추가할 자리의 index를 가져가자!
+        //   updatedFiles[index] = file;
+        //   return updatedFiles;
+        // });
+
+        // 미리보기 배열 업데이트
+        setPreviews((prevPreviews) => {
+          const updatedPreviews = [...prevPreviews];
+          updatedPreviews[updatedPreviews.length] = reader.result as string;
+          console.log(updatedPreviews.length);
+          return updatedPreviews;
+        });
+      };
+    }
+  };
+
+  useEffect(() => {
+    console.log(previews);
+  }, [previews]);
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+
+    if (file) {
+      onSaveImage(file);
+    }
+  };
 
   // -------------------------------------
   // 2) 게시글 수정 Mutation (PATCH)
@@ -156,196 +300,11 @@ export default function WriteMarketPage() {
     }
   });
 
-  /**
-   * 에디터 내용에서 data URL을 추출합니다. (새로 추가된 이미지)
-   * <img src="data:...."> 형태만 뽑아낸다고 가정
-   */
-  const extractBase64Images = (htmlContent: string) => {
-    const srcArray: string[] = [];
-    const imgTagRegex = /<img[^>]*src=["'](data:[^"']+)["'][^>]*>/g;
-    let match;
-    while ((match = imgTagRegex.exec(htmlContent)) !== null) {
-      srcArray.push(match[1]);
-    }
-    return srcArray;
-  };
-
-  /**
-   * 최종 content에서 <img src="...">를 전부 뽑아내서,
-   * 기존 이미지가 여전히 남아있는지(keep), 사라졌는지(delete), 새로 추가되었는지(add) 판별하는 로직 예시
-   */
-  const buildImagePayloadForUpdate = (
-    htmlContent: string,
-    originalImages: OriginalImage[]
-  ): ImagePayload[] => {
-    // 1) 최종 content에서 모든 img src 추출
-    const allImgRegex = /<img[^>]*src=["']([^"']+)["'][^>]*>/g;
-    const foundSrcList: string[] = [];
-    let match;
-    while ((match = allImgRegex.exec(htmlContent)) !== null) {
-      foundSrcList.push(match[1]);
-    }
-
-    // 2) 결과로 보낼 image 배열
-    const imagePayload: ImagePayload[] = [];
-    let order = 1;
-
-    // 2-1) 기존 이미지에 대해 keep/delete 판단
-    for (const original of originalImages) {
-      if (foundSrcList.includes(original.image_url)) {
-        // 에디터 최종 내용에 원본 url이 남아있으면 keep
-        imagePayload.push({
-          image_id: original.id,
-          action: 'keep',
-          order: order++
-        });
-      } else {
-        // 최종 내용에 없으면 delete
-        imagePayload.push({
-          image_id: original.id,
-          action: 'delete',
-          order: -1
-        });
-      }
-    }
-
-    // 2-2) 새로 추가된 base64 이미지(add)
-    for (const src of foundSrcList) {
-      if (src.startsWith('data:')) {
-        imagePayload.push({
-          action: 'add',
-          order: order++,
-          image_data: src
-        });
-      }
-    }
-
-    return imagePayload;
-  };
-
-  // -------------------------------------
-  // onSubmit
-  // -------------------------------------
-  const onSubmit = async (data: MarketData) => {
-    // 중복 클릭 방지
-    if (postingMutation.isPending || updateMutation.isPending) return;
-
-    if (editMode && state?.postId) {
-      // -----------------------------
-      // 기존 게시글 수정 로직 (editMode)
-      // -----------------------------
-      const imagesPayload: ImagePayload[] = [];
-
-      // 새 순서대로 기존 이미지와 새 이미지 처리
-      previews.forEach((preview, newOrder) => {
-        // Case 1: 기존 이미지가 있다면 keep
-        const originalImage = originalImageList.current.find(
-          (img) => img.image_url === preview
-        );
-        if (originalImage) {
-          imagesPayload.push({
-            image_id: originalImage.id,
-            action: 'keep',
-            order: newOrder + 1 // API는 1-based index
-          });
-        }
-        // Case 2: 새로 추가된 이미지 (base64)
-        else if (preview) {
-          imagesPayload.push({
-            action: 'add',
-            order: newOrder + 1,
-            image_data: preview
-          });
-        }
-      });
-
-      // Case 3: 삭제된 이미지 처리
-      originalImageList.current.forEach((original) => {
-        if (!previews.includes(original.image_url)) {
-          imagesPayload.push({
-            image_id: original.id,
-            action: 'delete',
-            order: -1
-          });
-        }
-      });
-
-      const updateData: MarketUpdateData = {
-        title: data.title,
-        content: data.content,
-        price: data.price,
-        images: imagesPayload
-      };
-
-      console.log('Update request data:', updateData);
-
-      try {
-        await updateMutation.mutateAsync({
-          postId: state.postId,
-          data: updateData
-        });
-      } catch (error) {
-        console.error('❌ 글수정 실패:', error);
-        alert('Failed to update the post. Please try again.');
-      }
-    } else {
-      // -----------------------------
-      // 새 게시글 작성 로직
-      // -----------------------------
-      const validImages = previews.filter(
-        (preview): preview is string => preview !== null
-      );
-      const requestData: MarketData = {
-        title: data.title,
-        content: data.content,
-        price: data.price,
-        images: validImages
-      };
-
-      console.log('Create request data:', requestData);
-
-      try {
-        await postingMutation.mutateAsync(requestData);
-      } catch (error) {
-        console.error('❌ 글작성 실패:', error);
-        alert('Failed to create the post. Please try again.');
-      }
-    }
-  };
-
-  const handleDeleteImage = (index: number) => {
-    setPreviews((prevPreviews) => prevPreviews.filter((_, i) => i !== index));
-  };
-
-  const onSaveImage = (file: File) => {
-    const reader = new FileReader();
-    if (file) {
-      reader.readAsDataURL(file);
-      reader.onloadend = () => {
-        setPreviews((prevPreviews) => {
-          const updatedPreviews = [...prevPreviews, reader.result as string];
-          console.log(updatedPreviews.length);
-          return updatedPreviews;
-        });
-      };
-    }
-  };
-
-  useEffect(() => {
-    console.log(previews);
-  }, [previews]);
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      onSaveImage(file);
-    }
-  };
-
   return (
     <WriteMarketPageContainer>
       <WriteMarketPageWrapper>
         <Title>Market</Title>
+
         <Form onSubmit={handleSubmit(onSubmit)}>
           <label htmlFor="title">
             <span>Title</span>
@@ -356,6 +315,7 @@ export default function WriteMarketPage() {
               {...register('title', { required: 'Please enter a title' })}
             />
           </label>
+
           <label htmlFor="price">
             <span>Price</span>
             <input
@@ -366,6 +326,7 @@ export default function WriteMarketPage() {
               {...register('price', { required: 'Please enter a price' })}
             />
           </label>
+
           <label htmlFor="image">
             <span>Image</span>
             <ImgBox
@@ -376,14 +337,16 @@ export default function WriteMarketPage() {
               setPreviews={setPreviews}
             />
           </label>
+
           <label htmlFor="content">
             <span>Content</span>
             <textarea
               placeholder="Please write content"
               id="content"
-              {...register('content', { required: 'Please enter content' })}
+              {...register('content', { required: 'Please enter a content' })}
             />
           </label>
+
           {editMode ? (
             <SubmitButton type="submit">
               {updateMutation.isPending ? 'Updating...' : 'Edit'}
