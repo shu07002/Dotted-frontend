@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import ArrowSVG from '@/assets/svg/SignUpPage/ArrowSVG.svg?react';
 import { useNavigate } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
 
 export default function SignUpComplete() {
   const navigate = useNavigate();

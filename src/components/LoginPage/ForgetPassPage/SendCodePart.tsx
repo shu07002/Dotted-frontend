@@ -1,7 +1,5 @@
 import ErrorMsg from '@/components/SignUpPage/ErrorMsg';
 import { usePasswordResetEmail } from '@/hooks/usePasswordResetEmail';
-import { UseMutationResult } from '@tanstack/react-query';
-import { useState } from 'react';
 import styled from 'styled-components';
 
 interface SendCodePartProps {

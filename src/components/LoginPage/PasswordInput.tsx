@@ -1,4 +1,4 @@
-import { FieldErrors, UseFormRegister } from 'react-hook-form';
+import { UseFormRegister } from 'react-hook-form';
 import styled from 'styled-components';
 import { LoginProps } from './LoginForm';
 

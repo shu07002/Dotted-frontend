@@ -8,7 +8,7 @@ import LoginWithOtherEmail from './LoginWithOtherEmail';
 import SignUpPropmpt from './SignUpPropmpt';
 import Eye from '@/assets/svg/LoginPage/Eye.svg?react';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import ErrorMsg from '../SignUpPage/ErrorMsg';
 import { useMutation } from '@tanstack/react-query';
