@@ -1,16 +1,19 @@
-import React from 'react';
+import { useEffect, useRef } from 'react';
 import ReactQuill, { Quill } from 'react-quill-new';
+import 'react-quill-new/dist/quill.snow.css';
 import styled from 'styled-components';
 import { ImageResize } from 'quill-image-resize-module-ts';
+import { UseFormSetValue, UseFormTrigger, UseFormWatch } from 'react-hook-form';
+import { CommunityData } from '@/pages/community/WriteCommunityPage';
 
 Quill.register('modules/ImageResize', ImageResize);
 
 const modules = {
   toolbar: [
     [{ font: [] }],
-    [{ size: ['small', false, 'large', 'huge'] }], // custom dropdown
+    [{ size: ['small', false, 'large', 'huge'] }],
     [{ header: [1, 2, 3, 4, 5, 6, false] }],
-    [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+    [{ color: [] }, { background: [] }],
     ['bold', 'italic', 'underline', 'strike', 'blockquote'],
     [
       { list: 'ordered' },
@@ -39,27 +42,44 @@ const formats = [
   'strike',
   'blockquote',
   'list',
-
   'indent',
   'link',
   'image'
 ];
 
 interface EditorProps {
-  content: string;
-  setContent: React.Dispatch<React.SetStateAction<string>>;
+  setValue: UseFormSetValue<CommunityData>;
+  watch: UseFormWatch<CommunityData>;
+  trigger: UseFormTrigger<CommunityData>;
 }
 
-export default function Editor({ content, setContent }: EditorProps) {
+export default function Editor({ setValue, watch, trigger }: EditorProps) {
+  const quillRef = useRef<ReactQuill>(null);
+
+  // 폼 데이터와 동기화
+  const content = watch('content');
+
+  useEffect(() => {
+    if (quillRef.current) {
+      setValue('content', content);
+    }
+  }, [content, setValue]);
+
+  const handleChange = (value: string) => {
+    setValue('content', value);
+    trigger('content'); // 변경될 때마다 검증 실행
+  };
+
   return (
     <EditorWrapper>
       <StyledReactQuill
+        ref={quillRef}
         placeholder="Please write content"
         theme="snow"
         modules={modules}
         formats={formats}
-        value={content}
-        onChange={setContent}
+        value={content || ''}
+        onChange={handleChange}
       />
     </EditorWrapper>
   );
@@ -72,12 +92,11 @@ const EditorWrapper = styled.div`
 
 const StyledReactQuill = styled(ReactQuill)`
   width: 100%;
-
   box-sizing: border-box;
 
   .ql-editor,
   .ql-blank {
-    height: 42.6rem;
+    min-height: 42.6rem;
   }
 
   .ql-size-small {

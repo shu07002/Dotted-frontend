@@ -1,20 +1,20 @@
-import PostingList from '@/components/CommunityPage/PostingList';
 import SearchBar from '@/components/CommunityPage/SearchBar';
 import TagList from '@/components/CommunityPage/TagList';
+import MakrketList from '@/components/MarketPage/MakrketList';
 import { useSearchPosts } from '@/hooks/useSearchPosts';
-import { CommunityPost, EachPost } from '@/types/CommunityPost';
+import { EachMarketPost, MarketPost } from '@/types/MarketPost';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-const tags = ['All', 'HOT', 'Campus Life', 'Travel', 'Living', 'Others'];
-const POST_PER_PAGE = 5; // 서버에서 받아오는 page 당 개수가 맞다면 굳이 slice 안해도 됨
+const tags = ['All', 'Only For Sale'];
+const POST_PER_PAGE = 5;
 
-export default function CommunityPage() {
+export default function MarketPage() {
   const [selectedTag, setSelectedTag] = useState('All');
-  const [searchResults, setSearchResults] = useState<CommunityPost>();
-  const [pagedData, setPagedData] = useState<EachPost[]>([]);
+  const [searchResults, setSearchResults] = useState<MarketPost>();
+  const [pagedData, setPagedData] = useState<EachMarketPost[]>([]);
 
   const [keyword, setKeyword] = useState('');
   const [searchType, setSearchType] = useState('all');
@@ -31,7 +31,6 @@ export default function CommunityPage() {
     ? Math.ceil(searchResults.count / POST_PER_PAGE)
     : 1;
 
-  // 페이지네이션 그룹 계산
   const groupSize = 5;
   const currentGroup = Math.floor((currentPage - 1) / groupSize);
   const startPage = currentGroup * groupSize + 1;
@@ -40,18 +39,25 @@ export default function CommunityPage() {
   // 1) 태그/페이지/검색어에 따라 서버에서 데이터 가져오기
   const handleSearch = () => {
     // 로딩 표시를 위해 isLoading 사용
+    let realTag = selectedTag;
+    if (selectedTag === 'Only For Sale') {
+      console.log(selectedTag);
+      realTag = 'FOR_SALE';
+    }
+
     searchPosts.mutate(
       {
-        name: '',
+        name: 'market',
         keyword,
         searchType,
-        tag: selectedTag,
+        status: realTag,
         page: currentPage
       },
       {
         onSuccess: (data) => {
-          setSearchResults(data as CommunityPost);
-          setPagedData(data.results as EachPost[]); // 서버에서 이미 페이지별로 results 제공
+          console.log(data);
+          setSearchResults(data as MarketPost);
+          setPagedData(data.results as EachMarketPost[]); // 서버에서 이미 페이지별로 results 제공
         },
         onError: (error) => {
           console.error('❌ 검색 실패:', error);
@@ -64,14 +70,19 @@ export default function CommunityPage() {
   // 뒤로 가기 시에는 URL 파라미터 유지 → 자동으로 currentPage 유지
   const onClickTag = (tag: string) => {
     setSelectedTag(tag);
-    setSearchParams({ page: '1', tag, keyword });
+    let realTag = tag;
+    if (tag === 'Only For Sale') {
+      console.log(tag);
+      realTag = 'FOR_SALE';
+    }
+    console.log(realTag);
+    setSearchParams({ page: '1', status: realTag, keyword });
   };
 
   // 3) 페이지 변경 시 URL 파라미터 업데이트
   const handlePageChange = (targetPage: number) => {
     setSearchParams({ page: targetPage.toString(), tag: selectedTag, keyword });
   };
-
   // 4) 태그나 페이지 번호가 바뀔 때마다 서버에 요청
   useEffect(() => {
     handleSearch();
@@ -86,14 +97,19 @@ export default function CommunityPage() {
   const onChangeSearchType = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSearchType(e.target.value);
   };
-
-  // 로딩 상태는 useSearchPosts().isLoading 등으로 처리 가능
   const isLoading = searchPosts.isPending;
 
   return (
-    <CommunityPageContainer>
+    <MarketPageContainer>
       <Wrapper>
-        <Title>Community</Title>
+        <Title>Market</Title>
+        <Notice>
+          <span>
+            In the market community, you can use the secret comment function
+            {`\n`}
+            when sharing sensitive information related to transaction
+          </span>
+        </Notice>
 
         <TagAndSearch>
           <TagList
@@ -121,7 +137,7 @@ export default function CommunityPage() {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <PostingList pagedData={pagedData} />
+              <MakrketList pagedData={pagedData} />
             </motion.div>
           </AnimatePresence>
         )}
@@ -134,21 +150,15 @@ export default function CommunityPage() {
             >
               {'<'}
             </button>
-
-            {Array.from({ length: endPage - startPage + 1 }, (_, idx) => {
-              const pageNumber = startPage + idx;
-              return (
-                <button
-                  key={pageNumber}
-                  className={currentPage === pageNumber ? 'selected' : ''}
-                  onClick={() => handlePageChange(pageNumber)}
-                  disabled={isLoading}
-                >
-                  {pageNumber}
-                </button>
-              );
-            })}
-
+            {Array.from({ length: endPage - startPage + 1 }, (_, idx) => (
+              <button
+                className={currentPage === idx + 1 ? 'selected' : ''}
+                key={idx}
+                onClick={() => handlePageChange(idx + 1)}
+              >
+                {idx + 1}
+              </button>
+            ))}
             <button
               onClick={() => handlePageChange(endPage + 1)}
               disabled={endPage === totalPages || isLoading}
@@ -157,15 +167,14 @@ export default function CommunityPage() {
             </button>
           </PaginationBox>
 
-          <WriteButton onClick={() => navigate('write')}>write</WriteButton>
+          <WriteButton onClick={() => navigate('write')}>Write</WriteButton>
         </BottomWrapper>
       </Wrapper>
-    </CommunityPageContainer>
+    </MarketPageContainer>
   );
 }
 
-// -------------------- 스타일 컴포넌트 --------------------
-const CommunityPageContainer = styled.div`
+const MarketPageContainer = styled.div`
   margin-top: 2.5rem;
   width: 100%;
   padding: 0 24.3rem;
@@ -189,8 +198,21 @@ const Title = styled.div`
   font-size: 3.6rem;
   font-style: normal;
   font-weight: 700;
-  line-height: 3.6rem;
+  line-height: 3.6rem; /* 100% */
   letter-spacing: -0.18rem;
+`;
+
+const Notice = styled.div`
+  margin: 2rem 0;
+  > span {
+    white-space: pre-wrap;
+    color: ${({ theme }) => theme.colors.gray400};
+    font-family: Pretendard;
+    font-size: 1.6rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 2rem; /* 125% */
+  }
 `;
 
 const TagAndSearch = styled.div`
@@ -198,7 +220,6 @@ const TagAndSearch = styled.div`
   justify-content: space-between;
   align-items: end;
   margin-top: 2rem;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.gray300};
 
   @media (max-width: 1125px) {
     flex-direction: column;
@@ -207,13 +228,6 @@ const TagAndSearch = styled.div`
       margin-bottom: 2rem;
     }
   }
-`;
-
-const BottomWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: relative;
 `;
 
 const PaginationBox = styled.div`
@@ -244,6 +258,13 @@ const PaginationBox = styled.div`
   }
 `;
 
+const BottomWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+`;
+
 const WriteButton = styled.button`
   cursor: pointer;
   display: flex;
@@ -258,10 +279,11 @@ const WriteButton = styled.button`
   background-color: ${({ theme }) => theme.colors.gray700};
   border: none;
 
-  color: #fff;
+  color: var(--Gray-Gray_light-gray-50_light, #fff);
   text-align: center;
   font-family: Inter;
   font-size: 1.4rem;
+  font-style: normal;
   font-weight: 600;
   line-height: normal;
 
