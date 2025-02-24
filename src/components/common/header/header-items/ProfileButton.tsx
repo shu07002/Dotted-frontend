@@ -1,7 +1,7 @@
 import ProfileIcon from '@/assets/icons/header/profile.svg?react';
 import DownIcon from '@/assets/icons/header/down.svg?react';
 import styled from 'styled-components';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 export default function ProfileButton() {
   useEffect(() => {}, []);

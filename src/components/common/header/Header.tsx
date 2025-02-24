@@ -33,10 +33,10 @@ export default function Header({ scrollY }: { scrollY: number }) {
   const navigate = useNavigate();
   const [hoveredTab, setHoveredTab] = useState<string>('');
   const [notice, setNotice] = useState<AllInfoNotification | null>(null);
-  const [isLogined, setisLogined] = useState(() => {
+  const isLogined = () => {
     if (localStorage.getItem('accessToken')) return true;
     else return false;
-  });
+  };
 
   // ...
 
@@ -101,7 +101,7 @@ export default function Header({ scrollY }: { scrollY: number }) {
           <HeaderNav setHoveredTab={setHoveredTab} />
         </LeftSection>
         <RightSection onMouseEnter={() => setHoveredTab('')}>
-          {isLogined ? (
+          {isLogined() ? (
             <>
               <AlarmButton notice={notice} />
               <ProfileButton />
