@@ -84,7 +84,7 @@ export default function DetailCommunityPage() {
   async function fetchPostDetail(postId: number): Promise<PostDetail> {
     const accessToken = localStorage.getItem('accessToken');
     const response = await fetch(
-      `${import.meta.env.VITE_API_URL}/posting/${postId}`,
+      `${import.meta.env.VITE_API_DOMAIN}/posting/${postId}`,
       {
         method: 'GET',
         headers: {
@@ -112,7 +112,7 @@ export default function DetailCommunityPage() {
       }
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/posting/${id}/like`,
+          `${import.meta.env.VITE_API_DOMAIN}/posting/${id}/like`,
           {
             method: 'POST',
             headers: {
@@ -153,7 +153,7 @@ export default function DetailCommunityPage() {
       }
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/posting/${id}/scrap`,
+          `${import.meta.env.VITE_API_DOMAIN}/posting/${id}/scrap`,
           {
             method: 'POST',
             headers: {

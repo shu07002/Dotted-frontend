@@ -1,11 +1,20 @@
 import styled from 'styled-components';
 import AlramIcon from '@/assets/icons/header/alarm.svg?react';
+import { AllInfoNotification } from '../Header';
+import { useNavigate } from 'react-router-dom';
 
-export default function AlarmButton() {
+interface AlarmButtonProps {
+  notice: AllInfoNotification | null;
+}
+
+export default function AlarmButton({ notice }: AlarmButtonProps) {
+  const navigate = useNavigate();
   return (
-    <AlarmBox>
+    <AlarmBox
+      onClick={() => navigate('/notification', { state: { notice: notice } })}
+    >
       <AlramIcon />
-      <p></p>
+      {notice && <p></p>}
     </AlarmBox>
   );
 }

@@ -51,7 +51,7 @@ export default function AComment({ comment, origin }: ACommentProps) {
       }
 
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/posting/comment/${comment.id}/like`,
+        `${import.meta.env.VITE_API_DOMAIN}/posting/comment/${comment.id}/like`,
         {
           method: 'POST',
           headers: {
@@ -92,7 +92,7 @@ export default function AComment({ comment, origin }: ACommentProps) {
       };
 
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/posting/comment/${comment.id}/update`,
+        `${import.meta.env.VITE_API_DOMAIN}/posting/comment/${comment.id}/update`,
         {
           method: 'PATCH',
           headers: {
@@ -141,7 +141,7 @@ export default function AComment({ comment, origin }: ACommentProps) {
       };
 
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/posting/comment/create`,
+        `${import.meta.env.VITE_API_DOMAIN}/posting/comment/create`,
         {
           method: 'POST',
           headers: {
@@ -186,7 +186,7 @@ export default function AComment({ comment, origin }: ACommentProps) {
       }
 
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/posting/comment/${comment.id}/delete`,
+        `${import.meta.env.VITE_API_DOMAIN}/posting/comment/${comment.id}/delete`,
         {
           method: 'DELETE',
           headers: {

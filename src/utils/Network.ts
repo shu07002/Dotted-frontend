@@ -9,11 +9,16 @@ class Network {
   // 토큰 재발급 여부
   private isRefreshing = false;
   // 재발급 요청에 대한 Promise 객체
-  private refreshTokenPromise: Promise<{ accessToken: string }> | null = null;
+  private refreshTokenPromise: Promise<{ access: string }> | null = null;
 
   // 실제 토큰은 인스턴스 프로퍼티로 관리하지 않음
-  private accessToken = localStorage.getItem('accessToken');
-  private refreshToken = localStorage.getItem('refreshToken');
+  private get accessToken() {
+    return localStorage.getItem('accessToken');
+  }
+
+  private get refreshToken() {
+    return localStorage.getItem('refreshToken');
+  }
 
   async request(requestInit: IRequestInit) {
     try {
@@ -23,7 +28,7 @@ class Network {
         ...requestOptions,
         headers: {
           ...requestOptions.headers,
-          Authorization: `Bearer ${this.accessToken}`
+          Authorization: this.accessToken ? `Bearer ${this.accessToken}` : ''
         }
       });
 
@@ -42,37 +47,36 @@ class Network {
   // 토큰 만료 시 토큰 재발급 후 기존 요청 재시도
   private async handleExpiredAccessToken(requestInit: IRequestInit) {
     try {
-      const { url, ...requestOptions } = requestInit;
-
       if (!this.isRefreshing) {
         this.isRefreshing = true;
         this.refreshTokenPromise = this.getReIssuedAccessToken();
 
-        const { accessToken: reIssuedAccessToken } =
-          await this.refreshTokenPromise;
-        this.accessToken = reIssuedAccessToken;
+        const { access: reIssuedAccessToken } = await this.refreshTokenPromise;
+        console.log('새 Access Token:', reIssuedAccessToken);
+        localStorage.setItem('accessToken', reIssuedAccessToken);
 
         this.isRefreshing = false;
       } else if (this.refreshTokenPromise) {
         await this.refreshTokenPromise;
       }
 
-      // ✅ 새 Access Token을 적용한 후 원래 요청을 다시 시도
-      const retryResponse = await fetch(url, {
-        ...requestOptions,
+      const retryResponse = await fetch(requestInit.url, {
+        ...requestInit,
         headers: {
-          ...requestOptions.headers,
-          Authorization: `Bearer ${this.accessToken}`
+          ...requestInit.headers,
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`
         }
       });
 
       if (!retryResponse.ok) throw new Error(retryResponse.statusText);
-
       return retryResponse;
     } catch (error: any) {
       console.error('Token refresh failed, logging out...', error);
+
       localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
       window.location.href = '/login';
+
       throw new Error(error.message);
     }
   }
@@ -80,6 +84,10 @@ class Network {
   // Refresh Token을 이용해 새로운 Access Token 발급
   private async getReIssuedAccessToken() {
     try {
+      if (!this.refreshToken) {
+        throw new Error('No Refresh Token found. User needs to log in again.');
+      }
+
       const response = await fetch('/user/refresh', {
         method: 'POST',
         headers: {
@@ -89,14 +97,16 @@ class Network {
       });
 
       if (!response.ok) {
+        if (response.status === 401) {
+          throw new Error('Refresh Token expired');
+        }
         throw new Error(response.statusText);
       }
 
       const data = await response.json(); // { accessToken: 'new-token' }
 
-      // ✅ 새 Access Token을 저장 (localStorage & this.accessToken)
+      // ✅ 새 Access Token을 저장
       localStorage.setItem('accessToken', data.accessToken);
-      this.accessToken = data.accessToken;
 
       return data;
     } catch (error: any) {

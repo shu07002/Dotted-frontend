@@ -105,7 +105,7 @@ export default function WriteCommunityPage() {
       }
 
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/posting/create`,
+        `${import.meta.env.VITE_API_DOMAIN}/posting/create`,
         {
           method: 'POST',
           headers: {
@@ -147,7 +147,7 @@ export default function WriteCommunityPage() {
       }
 
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/posting/${postId}/update`,
+        `${import.meta.env.VITE_API_DOMAIN}/posting/${postId}/update`,
         {
           method: 'PATCH',
           headers: {
