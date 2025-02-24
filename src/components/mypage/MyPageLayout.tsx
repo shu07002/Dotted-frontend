@@ -36,7 +36,7 @@ export default function MyPageLayout() {
 }
 
 const Layout = styled.div`
-  padding: 7rem 12.2rem 0 12.2rem;
+  padding: 4rem 12.2rem 0 12.2rem;
   display: grid;
   grid-template-columns: 21rem 1fr;
 `;
@@ -44,7 +44,7 @@ const Layout = styled.div`
 const MyPageSideBar = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+
   > h1 {
     font-size: 3.2rem;
     font-weight: 700;
@@ -59,6 +59,7 @@ const List = styled.ul`
   flex-direction: column;
   gap: 1.2rem;
   margin-top: 3.6rem;
+
   > li {
     font-size: 1.6rem;
     font-weight: 400;

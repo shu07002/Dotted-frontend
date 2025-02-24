@@ -9,7 +9,7 @@ export default function ProfileModal() {
   return (
     <ModalBox {...HeaderModalAnimation}>
       <List>
-        <li onClick={() => navigate('/mypage')}>My Page</li>
+        <li onClick={() => navigate('/mypage/profile')}>My Page</li>
         <li>Log out</li>
       </List>
     </ModalBox>

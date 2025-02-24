@@ -17,6 +17,10 @@ import WriteCommunityPage from './pages/community/WriteCommunityPage';
 import DetailCommunityPage from './pages/community/DetailCommunityPage';
 import EditProfilePage from './pages/mypage/EditProfilePage';
 import MyPageLayout from './components/mypage/MyPageLayout';
+import VerificationPage from './pages/mypage/VerificationPage';
+import MyPostsPage from './pages/mypage/MyPostsPage';
+import MyCommentsPage from './pages/mypage/MyCommentsPage';
+import MyScrapsPage from './pages/mypage/MyScrapsPage';
 
 const Router = createBrowserRouter([
   {
@@ -80,6 +84,22 @@ const Router = createBrowserRouter([
           {
             path: 'profile',
             element: <EditProfilePage />
+          },
+          {
+            path: 'verification',
+            element: <VerificationPage />
+          },
+          {
+            path: 'posts',
+            element: <MyPostsPage />
+          },
+          {
+            path: 'comments',
+            element: <MyCommentsPage />
+          },
+          {
+            path: 'scraps',
+            element: <MyScrapsPage />
           }
         ]
       }

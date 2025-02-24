@@ -4,6 +4,7 @@ import Router from './Router';
 import { RouterProvider } from 'react-router-dom';
 import { GlobalThemeProvider } from './context/ThemeContext';
 import ReactQueryProvider from './context/ReactQueryProvider';
+import './style/style.css';
 
 function App() {
   return (
