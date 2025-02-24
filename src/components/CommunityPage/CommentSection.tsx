@@ -6,6 +6,7 @@ import { MarketPostDetail } from '@/pages/market/DetailMarketPage';
 import { useMutation } from '@tanstack/react-query';
 import AComment from './AComment';
 import Locker from '@/assets/svg/MarketPage/Locker.svg?react';
+import { fetchWithAuth } from '@/utils/auth'; // auth.ts 경로에 맞게 수정
 
 interface CommentSectionProps {
   post: PostDetail | MarketPostDetail;
@@ -14,8 +15,8 @@ interface CommentSectionProps {
 
 export default function CommentSection({ post, origin }: CommentSectionProps) {
   const [comment, setComment] = useState('');
-  const [comments, setComments] = useState(post.comments); // ✅ 댓글 상태 추가
-  const [commentCount, setCommentCount] = useState(post.comment_count); // ✅ 댓글 개수 상태 추가
+  const [comments, setComments] = useState<Comment[]>(post.comments); // 댓글 상태
+  const [commentCount, setCommentCount] = useState(post.comment_count); // 댓글 개수 상태
   const [isSecret, setIsSecret] = useState(false);
 
   // 댓글 추가 함수
@@ -24,12 +25,7 @@ export default function CommentSection({ post, origin }: CommentSectionProps) {
       return;
     }
 
-    const accessToken = window.localStorage.getItem('accessToken');
-    if (!accessToken) {
-      alert('Login is required.');
-      return;
-    }
-
+    // 요청 데이터 준비
     const requestData = {
       post: post.id,
       content: comment.trim(),
@@ -40,7 +36,6 @@ export default function CommentSection({ post, origin }: CommentSectionProps) {
     try {
       const newComment = await postCommentMutation.mutateAsync(requestData);
       setComment('');
-
       setComments((prev: Comment[]) => [...prev, newComment]);
       setCommentCount((prev) => prev + 1);
     } catch (error) {
@@ -51,25 +46,23 @@ export default function CommentSection({ post, origin }: CommentSectionProps) {
 
   // React Query Mutation (댓글 등록)
   const postCommentMutation = useMutation<
-    Comment, // ✅ 응답 데이터 타입 (새로운 댓글)
-    Error, // ✅ 에러 타입
-    { post: number; content: string; parent: number | null; is_secret: boolean } // ✅ 요청 데이터 타입
+    Comment, // 응답 데이터 타입 (새로운 댓글)
+    Error, // 에러 타입
+    { post: number; content: string; parent: number | null; is_secret: boolean } // 요청 데이터 타입
   >({
     mutationFn: async (data) => {
-      const response = await fetch(
+      // fetchWithAuth 내부에서 토큰 갱신/검증이 처리됩니다.
+      const response = await fetchWithAuth<Comment>(
         `${import.meta.env.VITE_API_DOMAIN}/posting/comment/create`,
         {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${window.localStorage.getItem('accessToken')}`
+            'Content-Type': 'application/json'
           },
           body: JSON.stringify(data)
         }
       );
-
-      if (!response.ok) throw new Error('Failed to create comment');
-      return response.json();
+      return response;
     },
     onSuccess: (data) => {
       console.log('✅ 댓글 작성 성공:', data);
@@ -82,12 +75,12 @@ export default function CommentSection({ post, origin }: CommentSectionProps) {
   return (
     <CommentSectionWrapper>
       <CommentCount>
-        Comment <span> {commentCount}</span>
+        Comment <span>{commentCount}</span>
       </CommentCount>
 
       <CommentsListWrapper>
-        {comments.map((comment, idx) => (
-          <AComment comment={comment} origin={origin} key={idx} />
+        {comments.map((commentItem, idx) => (
+          <AComment comment={commentItem} origin={origin} key={idx} />
         ))}
       </CommentsListWrapper>
 
@@ -129,18 +122,14 @@ const SecretButton = styled.button<{ $isSecret: boolean }>`
   right: 1rem;
   display: flex;
   gap: 1rem;
-
   align-items: center;
   padding: 0.8rem;
-
   border-radius: 0.5rem;
   border: 1px solid
     ${({ theme, $isSecret }) =>
       $isSecret ? theme.colors.purple600 : theme.colors.gray300};
-
   color: ${({ theme, $isSecret }) =>
     $isSecret ? theme.colors.purple600 : theme.colors.gray400};
-
   text-align: center;
   font-family: Inter;
   font-size: 1.6rem;
@@ -148,7 +137,6 @@ const SecretButton = styled.button<{ $isSecret: boolean }>`
   font-weight: 300;
   line-height: normal;
   letter-spacing: -0.08rem;
-
   > svg {
     > path {
       fill: ${({ theme, $isSecret }) =>
@@ -173,7 +161,6 @@ const CommentCount = styled.div`
   line-height: normal;
   letter-spacing: -0.1rem;
   margin-bottom: 2.1rem;
-
   > span {
     color: ${({ theme }) => theme.colors.purple600};
   }
@@ -190,25 +177,21 @@ const CommentInputWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   gap: 1.8rem;
-
   label {
     position: relative;
     width: 100%;
     textarea {
       resize: none;
       border: none;
-
       padding: 2rem;
       width: 100%;
       height: 100%;
       border-radius: 0.4rem;
       background: ${({ theme }) => theme.colors.gray100};
-
       font-family: Inter;
       font-size: 1.6rem;
       font-style: normal;
       font-weight: 300;
-
       letter-spacing: -0.08rem;
     }
   }
@@ -221,7 +204,6 @@ const CommentButton = styled.button`
   height: 10rem;
   border-radius: 0.4rem;
   background: ${({ theme }) => theme.colors.purple600};
-
   color: ${({ theme }) => theme.colors.gray50};
   text-align: center;
   font-family: Inter;

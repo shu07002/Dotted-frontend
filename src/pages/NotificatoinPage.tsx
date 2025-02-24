@@ -3,6 +3,7 @@ import Trashcan from '@/assets/svg/Notification/Trashcan.svg?react';
 import Bell from '@/assets/svg/Notification/Bell.svg?react';
 import { useEffect, useState } from 'react';
 import { EventSourcePolyfill, NativeEventSource } from 'event-source-polyfill';
+import { isTokenExpired, refreshAccessToken } from '@/utils/auth';
 
 export interface NotiList {
   id: number;
@@ -26,32 +27,45 @@ export interface AllInfoNotification {
 
 export default function NotificatoinPage() {
   const [notice, setNotice] = useState<AllInfoNotification | null>(null);
+
   useEffect(() => {
-    const RunSSE = () => {
-      if (!localStorage.getItem('accessToken')) return;
-      const EventSource = EventSourcePolyfill || NativeEventSource;
-      const headers = {
-        Authorization: `Bearer ${localStorage.getItem('accessToken')}`
-      };
-      const evtSource = new EventSource(
+    const runSSE = async () => {
+      // 토큰이 없는 경우 연결하지 않음
+      let accessToken = localStorage.getItem('accessToken');
+      if (!accessToken) return;
+
+      // 토큰 만료 여부 체크, 만료되었다면 갱신 시도
+      if (isTokenExpired(accessToken)) {
+        try {
+          await refreshAccessToken();
+          accessToken = localStorage.getItem('accessToken');
+        } catch (error) {
+          console.error('토큰 갱신 실패:', error);
+          return;
+        }
+      }
+
+      const EventSourceConstructor = EventSourcePolyfill || NativeEventSource;
+      const headers = { Authorization: `Bearer ${accessToken}` };
+
+      const evtSource = new EventSourceConstructor(
         `${import.meta.env.VITE_API_DOMAIN}/notification/stream`,
         { headers: headers, withCredentials: true }
       );
-      console.log('열려라 참깨!');
-      console.log('참깨빵 준비 중, 순살 고기 준비 중:', evtSource);
 
-      evtSource.onmessage = function (event) {
+      console.log('SSE 연결됨:', evtSource);
+
+      evtSource.onmessage = (event) => {
         try {
           console.log('Event received:', event);
           const newEvent = JSON.parse(event.data);
-          console.log(newEvent);
           setNotice((prev) => {
             if (prev === null) return newEvent;
 
-            // 기존 리스트 + 새 데이터 리스트 합치기
+            // 기존 리스트와 새 데이터 합치기
             const updatedList = [newEvent.list[0], ...prev.list];
 
-            // 🔥 id 기준으로 중복 제거
+            // id 기준 중복 제거
             const uniqueList = Array.from(
               new Map(updatedList.map((item) => [item.id, item])).values()
             );
@@ -59,28 +73,30 @@ export default function NotificatoinPage() {
             return { ...prev, list: uniqueList };
           });
         } catch (err) {
-          console.error('Error parsing event data:', err);
+          console.error('이벤트 데이터 파싱 에러:', err);
         }
       };
 
       evtSource.onerror = async (err) => {
-        console.error('evtSource failed:', err);
+        console.error('SSE 에러:', err);
         evtSource.close();
-        setTimeout(RunSSE, 1000);
+        // 1초 후 재연결 시도
+        setTimeout(runSSE, 1000);
       };
 
       return () => {
         evtSource.close();
-        console.log('닫혀라 참깨!!!!');
+        console.log('SSE 연결 종료');
       };
     };
 
-    return RunSSE();
+    runSSE();
   }, []);
 
   useEffect(() => {
     console.log(notice);
   }, [notice]);
+
   return (
     <NotificationPageContainer>
       <Wrapper>
@@ -101,7 +117,6 @@ export default function NotificatoinPage() {
                     <From>{item.notification_type}</From>
                     <Content>{item.content}</Content>
                   </LeftDiv>
-
                   <RightDiv>
                     <DeleteButton>
                       <div>

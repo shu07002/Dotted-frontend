@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { useBlocker, useLocation, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import { useBlocker, useLocation, useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import TagBox from '@/components/WriteCommunityPage/TagBox';
 import Editor from '@/components/WriteCommunityPage/Editor';
+import { fetchWithAuth } from '@/utils/auth'; // auth.ts에서 정의한 fetchWithAuth를 import
 
+// -------------------- 타입 정의 --------------------
 export interface CommunityData {
   title: string;
   content: string;
@@ -99,31 +101,29 @@ export default function WriteCommunityPage() {
   // -------------------------------------
   const postingMutation = useMutation({
     mutationFn: async (data: CommunityData) => {
-      const accessToken = window.localStorage.getItem('accessToken');
-      if (!accessToken) {
-        throw new Error('No access token found. Please log in again.');
-      }
-
-      const response = await fetch(
+      // fetchWithAuth 내부에서 토큰 유효성 검사/갱신이 처리됨
+      const response = await fetchWithAuth<any>(
         `${import.meta.env.VITE_API_DOMAIN}/posting/create`,
         {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${accessToken}`
+            'Content-Type': 'application/json'
           },
           body: JSON.stringify(data)
         }
       );
-
-      if (!response.ok) throw new Error('Failed to posting');
-      return response.json();
+      return response;
     },
     onSuccess: (data) => {
       console.log('🎉 글쓰기 성공:', data);
       setIsSubmitted(true);
-      blocker.reset?.();
-      navigate('/community');
+      // blocker가 막고 있다면 해제하고 이동
+      if (blocker.state === 'blocked') {
+        blocker.reset();
+      }
+      setTimeout(() => {
+        navigate('/community');
+      }, 100);
     },
     onError: (error) => {
       console.error('❌ 글쓰기 실패:', error);
@@ -141,30 +141,25 @@ export default function WriteCommunityPage() {
       postId: number;
       data: CommunityUpdateData;
     }) => {
-      const accessToken = window.localStorage.getItem('accessToken');
-      if (!accessToken) {
-        throw new Error('No access token found. Please log in again.');
-      }
-
-      const response = await fetch(
+      // fetchWithAuth 내부에서 토큰 관리 수행
+      const response = await fetchWithAuth<any>(
         `${import.meta.env.VITE_API_DOMAIN}/posting/${postId}/update`,
         {
           method: 'PATCH',
           headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${accessToken}`
+            'Content-Type': 'application/json'
           },
           body: JSON.stringify(data)
         }
       );
-
-      if (!response.ok) throw new Error('Failed to update post');
-      return response.json();
+      return response;
     },
     onSuccess: (data) => {
       console.log('🎉 글수정 성공:', data);
       setIsSubmitted(true);
-      blocker.reset?.();
+      if (blocker.state === 'blocked') {
+        blocker.reset();
+      }
       setTimeout(() => {
         navigate('/community');
       }, 100);
@@ -228,8 +223,6 @@ export default function WriteCommunityPage() {
     }
 
     // 2-2) 새로 추가된 base64 이미지(add)
-    // 이미 foundSrcList에 base64가 들어있음.
-    // 그 중에 기존 url이 아닌 data: 로 시작하는 것은 새 이미지로 판단
     for (const src of foundSrcList) {
       if (src.startsWith('data:')) {
         imagePayload.push({

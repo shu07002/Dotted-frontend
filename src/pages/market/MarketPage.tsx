@@ -61,6 +61,7 @@ export default function MarketPage() {
         },
         onError: (error) => {
           console.error('❌ 검색 실패:', error);
+          navigate('/login');
         }
       }
     );

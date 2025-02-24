@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import SubHeader from './SubHeader';
 import { useNavigate } from 'react-router-dom';
 import { EventSourcePolyfill, NativeEventSource } from 'event-source-polyfill';
+import { isTokenExpired, refreshAccessToken } from '@/utils/auth';
 
 export interface NotiList {
   id: number;
@@ -32,52 +33,61 @@ export default function Header({ scrollY }: { scrollY: number }) {
   const navigate = useNavigate();
   const [hoveredTab, setHoveredTab] = useState<string>('');
   const [notice, setNotice] = useState<AllInfoNotification | null>(null);
+  const [isLogined, setisLogined] = useState(() => {
+    if (localStorage.getItem('accessToken')) return true;
+    else return false;
+  });
+
+  // ...
 
   useEffect(() => {
-    console.log('scrollY:', scrollY);
-  }, [hoveredTab]);
-
-  useEffect(() => {
-    const RunSSE = () => {
-      if (!localStorage.getItem('accessToken')) return;
-      const EventSource = EventSourcePolyfill || NativeEventSource;
-      const headers = {
-        Authorization: `Bearer ${localStorage.getItem('accessToken')}`
-      };
-      const evtSource = new EventSource(
-        `${import.meta.env.VITE_API_DOMAIN}/notification/stream`,
-        { headers: headers, withCredentials: true }
-      );
-      console.log('열려라 참깨!');
-      console.log('참깨빵 준비 중, 순살 고기 준비 중:', evtSource);
-
-      evtSource.onmessage = function (event) {
+    const setupSSE = async () => {
+      let accessToken = localStorage.getItem('accessToken');
+      if (isTokenExpired(accessToken)) {
         try {
-          console.log('Event received:', event);
+          await refreshAccessToken();
+          accessToken = localStorage.getItem('accessToken');
+        } catch (error) {
+          console.error('토큰 갱신 실패:', error);
+          return;
+        }
+      }
+
+      const EventSourceConstructor = EventSourcePolyfill || NativeEventSource;
+      const evtSource = new EventSourceConstructor(
+        `${import.meta.env.VITE_API_DOMAIN}/notification/stream`,
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
+          withCredentials: true
+        }
+      );
+
+      evtSource.onmessage = (event) => {
+        try {
           const newEvent = JSON.parse(event.data);
-          console.log(newEvent);
           setNotice((prev) => {
             if (prev === null) return newEvent;
-            else return { ...prev, list: [[newEvent.list[0]], ...prev.list] };
+            return { ...prev, list: [newEvent.list[0], ...prev.list] };
           });
         } catch (err) {
-          console.error('Error parsing event data:', err);
+          console.error('이벤트 데이터 파싱 에러:', err);
         }
       };
 
       evtSource.onerror = async (err) => {
-        console.error('evtSource failed:', err);
+        console.error('SSE 에러:', err);
         evtSource.close();
-        setTimeout(RunSSE, 1000);
+        // 일정 시간 후 재연결 시도
+        setTimeout(setupSSE, 1000);
       };
 
       return () => {
         evtSource.close();
-        console.log('닫혀라 참깨!!!!');
+        console.log('SSE 연결 종료');
       };
     };
 
-    return RunSSE();
+    setupSSE();
   }, []);
 
   return (
@@ -91,15 +101,38 @@ export default function Header({ scrollY }: { scrollY: number }) {
           <HeaderNav setHoveredTab={setHoveredTab} />
         </LeftSection>
         <RightSection onMouseEnter={() => setHoveredTab('')}>
-          <AlarmButton notice={notice} />
-          <ProfileButton />
-          <LanguageButton />
+          {isLogined ? (
+            <>
+              <AlarmButton notice={notice} />
+              <ProfileButton />
+              <LanguageButton />
+            </>
+          ) : (
+            <LoginButton onClick={() => navigate('/login')}>Login</LoginButton>
+          )}
         </RightSection>
       </UpWrapper>
       <SubHeader hoveredTab={hoveredTab} />
     </HeaderContainer>
   );
 }
+
+const LoginButton = styled.button`
+  background-color: ${({ theme }) => theme.colors.purple600};
+  padding: 0.7rem 1.5rem;
+  border-radius: 2.4rem;
+  color: ${({ theme }) => theme.colors.gray50};
+  text-align: center;
+  font-family: Inter;
+  font-size: 2.1rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: -0.07rem;
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.purple450};
+  }
+`;
 
 const HeaderContainer = styled.div`
   width: 100%;

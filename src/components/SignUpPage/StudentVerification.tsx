@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-
 import WarnSVG from '@/assets/svg/SignUpPage/ErrorMsgSVG.svg?react';
 import ImgFileSVG from '@/assets/svg/SignUpPage/ImgFileSVG.svg?react';
 import TimeSVG from '@/assets/svg/SignUpPage/TimeSVG.svg?react';
@@ -10,6 +9,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { SignUpFormData } from '@/types/signUpFormData';
 import { UseFormWatch } from 'react-hook-form';
+import { fetchWithAuth } from '@/utils/auth'; // auth.ts 경로에 맞게 수정
 
 interface StudentVerificatProps {
   onChangeStep: () => void;
@@ -25,33 +25,28 @@ export default function StudentVerificat({
   const [imgFile, setImgFile] = useState<File | null>(null);
 
   let emailValue = watch('email');
-  if (emailValue) if (!emailValue.includes('@')) emailValue += '@sogang.ac.kr';
+  if (emailValue && !emailValue.includes('@')) {
+    emailValue += '@sogang.ac.kr';
+  }
   const passwordValue = watch('password');
 
+  // 자동 로그인 Mutation: fetchWithAuth를 사용해 토큰 갱신 로직이 내부에서 수행됨
   const autoLoginMutation = useMutation({
     mutationFn: async () => {
-      const response = await fetch(
+      // 로그인은 JSON 요청이므로 Content-Type 헤더를 추가
+      const data = await fetchWithAuth<any>(
         `${import.meta.env.VITE_API_DOMAIN}/user/login`,
         {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            email: emailValue, // 🔹 자동 로그인할 계정 정보
+            email: emailValue,
             password: passwordValue
           })
         }
       );
-
-      if (!response.ok) {
-        throw new Error('자동 로그인 실패');
-      }
-
-      return response.json();
+      return data;
     },
-
-    // 🚨 일단 로컬 스토리지에 저장하여 테스트
     onSuccess: (data) => {
       console.log('✅ 자동 로그인 성공:', data);
       localStorage.setItem('accessToken', data.access);
@@ -62,10 +57,9 @@ export default function StudentVerificat({
     }
   });
 
-  // 페이지 렌더링 시 자동 로그인 실행
+  // 페이지 렌더링 시 토큰 없으면 자동 로그인 시도
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
-
     if (!token) {
       console.log('🔹 토큰 없음, 자동 로그인 시도');
       autoLoginMutation.mutate();
@@ -74,34 +68,20 @@ export default function StudentVerificat({
     }
   }, []);
 
+  // 업로드 Mutation: FormData 전송이므로 Content-Type 헤더는 생략
   const uploadUniversityImageMutation = useMutation({
     mutationFn: async (file: File) => {
       const formData = new FormData();
-      formData.append('image_upload', file); // ✅ 파일 추가
-
-      // 로컬 스토리지에서 access_token 가져오기
-      const accessToken = localStorage.getItem('accessToken');
-      if (!accessToken) {
-        throw new Error('No access token found. Please log in again.');
-      }
-
-      const response = await fetch(
+      formData.append('image_upload', file);
+      const data = await fetchWithAuth<any>(
         `${import.meta.env.VITE_API_DOMAIN}/user/univrequest`,
         {
           method: 'POST',
-          headers: {
-            Authorization: `Bearer ${accessToken}`
-          },
           body: formData
         }
       );
-
-      if (!response.ok) {
-        throw new Error('University verification request failed.');
-      }
-
       onChangeStep();
-      return response.json();
+      return data;
     },
     onSuccess: (data) => {
       console.log('🎉 University verification request successful:', data);
@@ -116,7 +96,6 @@ export default function StudentVerificat({
   });
 
   const onClickReupload = () => {
-    console.log(imgFileRef.current);
     if (imgFileRef.current) {
       imgFileRef.current.value = '';
       imgFileRef.current.click();
@@ -130,17 +109,13 @@ export default function StudentVerificat({
 
   const onSaveImage = () => {
     const reader = new FileReader();
-
     if (imgFileRef.current?.files) {
       const file = imgFileRef.current.files[0];
-      console.log(file);
       setImgFile(file);
-
       if (file) {
         reader.readAsDataURL(file);
         reader.onloadend = () => {
           setPreview(reader.result as string);
-
           if (imgFileRef.current) {
             imgFileRef.current.value = '';
           }
@@ -154,7 +129,6 @@ export default function StudentVerificat({
       alert('Please Attach Image File');
       return;
     }
-
     uploadUniversityImageMutation.mutate(imgFile);
   };
 
@@ -162,16 +136,13 @@ export default function StudentVerificat({
     <StudentVerificationLayout>
       <StudentVerificationWrapper>
         <Title>Student Verification</Title>
-
         <Guide>
           <span>Please upload an image file to </span>
           <span>prove that you are a student at Sogang University.</span>
         </Guide>
-
         <Example>
           ex. Student ID Card, Saint Main page Screenshot, Course Records
         </Example>
-
         <Warnning>
           <div>
             <WarnSVG />
@@ -181,7 +152,6 @@ export default function StudentVerificat({
             You can hide other personal details such as card numbers or photos.
           </span>
         </Warnning>
-
         <AttatchImage>
           {preview === '' ? (
             <>
@@ -206,14 +176,12 @@ export default function StudentVerificat({
             style={{ display: 'none', cursor: 'pointer' }}
           />
         </AttatchImage>
-
         {preview !== '' && (
           <ButtonWrapper>
             <button onClick={onClickReupload}>reupload</button>
             <button onClick={onClickDelete}>delete</button>
           </ButtonWrapper>
         )}
-
         <Notice>
           <div>
             <ItemWrapper>
@@ -240,12 +208,11 @@ export default function StudentVerificat({
               <UnlockSVG />
             </ItemWrapper>
             <span>
-              <span>Community</span>
-              and <span>Market</span> can be used after you are approved.
+              <span>Community</span> and <span>Market</span> can be used after
+              you are approved.
             </span>
           </div>
         </Notice>
-
         <SubmitButtonLayout>
           <SubmitButtonWrapper>
             <SubmitButton onClick={onClickImgSubmit}>Submit</SubmitButton>

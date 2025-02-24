@@ -9,10 +9,12 @@ import { useMutation } from '@tanstack/react-query';
 import ReplySection from './ReplySection';
 import Modal from 'react-modal';
 import Locker from '@/assets/svg/MarketPage/Locker.svg?react';
+import { fetchWithAuth } from '@/utils/auth'; // auth.ts 경로에 맞게 수정
 
-interface ACommentProps {
-  comment: Comment;
-  origin?: string;
+// 반환 타입을 정의 (필요에 따라 실제 API 스펙에 맞게 수정)
+interface CommentLikeResponse {
+  is_liked: boolean;
+  like_count: number;
 }
 
 const customStyles = {
@@ -31,7 +33,13 @@ const customStyles = {
   }
 };
 
-export default function AComment({ comment, origin }: ACommentProps) {
+export default function AComment({
+  comment,
+  origin
+}: {
+  comment: Comment;
+  origin?: string;
+}) {
   const [isCommentLiked, setIsCommentLiked] = useState(comment.is_liked);
   const [likeCount, setLikeCount] = useState(comment.like_count);
   const [isOpenRecomment, setIsOpenRecomment] = useState(false);
@@ -43,28 +51,13 @@ export default function AComment({ comment, origin }: ACommentProps) {
   const [openNormalModal, setOpenNormalModal] = useState(false);
   const [isSecret, setIsSecret] = useState(false);
 
-  const commentLikeMutation = useMutation({
+  // 댓글 좋아요 mutation (반환 타입을 CommentLikeResponse로 지정)
+  const commentLikeMutation = useMutation<CommentLikeResponse, Error, void>({
     mutationFn: async () => {
-      const accessToken = window.localStorage.getItem('accessToken');
-      if (!accessToken) {
-        throw new Error('Login required');
-      }
-
-      const response = await fetch(
+      return await fetchWithAuth<CommentLikeResponse>(
         `${import.meta.env.VITE_API_DOMAIN}/posting/comment/${comment.id}/like`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${accessToken}`
-          }
-        }
+        { method: 'POST' }
       );
-
-      if (!response.ok) {
-        throw new Error('Failed to like the comment');
-      }
-      return response.json();
     },
     onSuccess: (data) => {
       setIsCommentLiked(data.is_liked);
@@ -79,38 +72,25 @@ export default function AComment({ comment, origin }: ACommentProps) {
     commentLikeMutation.mutate();
   };
 
-  const updateCommentMutation = useMutation({
+  // 댓글 수정 mutation (반환 타입을 Comment로 지정)
+  const updateCommentMutation = useMutation<Comment, Error, void>({
     mutationFn: async () => {
-      const accessToken = window.localStorage.getItem('accessToken');
-      if (!accessToken) {
-        throw new Error('Login required');
-      }
-
       const requestData = {
         content: editedContent,
-        is_secret: isSecret // 공개 댓글
+        is_secret: isSecret
       };
 
-      const response = await fetch(
+      return await fetchWithAuth<Comment>(
         `${import.meta.env.VITE_API_DOMAIN}/posting/comment/${comment.id}/update`,
         {
           method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${accessToken}`
-          },
           body: JSON.stringify(requestData)
         }
       );
-
-      if (!response.ok) {
-        throw new Error('Failed to update comment');
-      }
-      return response.json();
     },
     onSuccess: (updatedComment) => {
-      setEditedContent(updatedComment.content); // 최신 댓글 내용 업데이트
-      setIsEditing(false); // 수정 모드 종료
+      setEditedContent(updatedComment.content);
+      setIsEditing(false);
     },
     onError: (error) => {
       console.error('❌ 댓글 수정 실패:', error);
@@ -123,43 +103,31 @@ export default function AComment({ comment, origin }: ACommentProps) {
   };
 
   const onClickRecomment = () => {
-    setIsOpenRecomment(!isOpenRecomment);
+    setIsOpenRecomment((prev) => !prev);
   };
 
-  const recommentMutation = useMutation({
+  // 대댓글 작성 mutation (반환 타입을 Comment로 지정)
+  const recommentMutation = useMutation<Comment, Error, void>({
     mutationFn: async () => {
-      const accessToken = window.localStorage.getItem('accessToken');
-      if (!accessToken) {
-        throw new Error('Login required');
-      }
-
       const requestData = {
         post: comment.post, // 게시글 ID
         content: recomment.trim(), // 대댓글 내용
         parent: comment.id, // 원본 댓글 ID
-        is_secret: isSecret // 공개 대댓글
+        is_secret: isSecret // 공개 여부
       };
 
-      const response = await fetch(
+      return await fetchWithAuth<Comment>(
         `${import.meta.env.VITE_API_DOMAIN}/posting/comment/create`,
         {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${accessToken}`
-          },
           body: JSON.stringify(requestData)
         }
       );
-
-      if (!response.ok) {
-        throw new Error('Failed to post recomment');
-      }
-      return response.json();
     },
     onSuccess: (newComment) => {
-      setReplies((prev) => [...prev, newComment]); // 대댓글 목록에 즉시 추가
-      setRecomment(''); // 입력창 초기화
+      // newComment이 Comment 타입이므로, prev의 타입과 일치합니다.
+      setReplies((prev) => [...prev, newComment]);
+      setRecomment('');
     },
     onError: (error) => {
       console.error('❌ 대댓글 작성 실패:', error);
@@ -171,33 +139,13 @@ export default function AComment({ comment, origin }: ACommentProps) {
     recommentMutation.mutate();
   };
 
-  // 2) 버튼 클릭 시 삭제 Mutation 실행
-  const handleDelete = () => {
-    setOpenNormalModal(false);
-
-    deleteMutation.mutate();
-  };
-
-  const deleteMutation = useMutation({
+  // 댓글 삭제 mutation (반환 타입을 void로 지정)
+  const deleteMutation = useMutation<void, Error, void>({
     mutationFn: async () => {
-      const accessToken = window.localStorage.getItem('accessToken');
-      if (!accessToken) {
-        throw new Error('Login required');
-      }
-
-      const response = await fetch(
+      return await fetchWithAuth<void>(
         `${import.meta.env.VITE_API_DOMAIN}/posting/comment/${comment.id}/delete`,
-        {
-          method: 'DELETE',
-          headers: {
-            Authorization: `Bearer ${accessToken}`
-          }
-        }
+        { method: 'DELETE' }
       );
-
-      if (!response.ok) {
-        throw new Error('Failed to delete comment');
-      }
     },
     onSuccess: () => {
       setEditedContent('Deleted Comment');
@@ -206,6 +154,11 @@ export default function AComment({ comment, origin }: ACommentProps) {
       console.error('❌ 댓글 삭제 실패:', error);
     }
   });
+
+  const handleDelete = () => {
+    setOpenNormalModal(false);
+    deleteMutation.mutate();
+  };
 
   return (
     <Comments>
@@ -243,7 +196,6 @@ export default function AComment({ comment, origin }: ACommentProps) {
           <button onClick={onClickRecomment}>
             <CommentSVG className={`${isOpenRecomment && 'recomment'}`} />
           </button>
-
           {comment.content !== 'Deleted Comment' && (
             <MoreWrapper>
               <button onClick={() => setOpenMore((prev) => !prev)}>
@@ -269,7 +221,7 @@ export default function AComment({ comment, origin }: ACommentProps) {
         <Modal
           isOpen={openNormalModal}
           style={customStyles}
-          onRequestClose={() => setOpenNormalModal(!openNormalModal)}
+          onRequestClose={() => setOpenNormalModal((prev) => !prev)}
           contentLabel="example"
         >
           <AccessRestrictedWrapper>
@@ -281,7 +233,7 @@ export default function AComment({ comment, origin }: ACommentProps) {
               </AccessRestrictedNormal>
               <ButtonBox>
                 <LaterButton
-                  onClick={() => setOpenNormalModal(!openNormalModal)}
+                  onClick={() => setOpenNormalModal((prev) => !prev)}
                 >
                   Cancle
                 </LaterButton>
@@ -292,7 +244,6 @@ export default function AComment({ comment, origin }: ACommentProps) {
             </div>
           </AccessRestrictedWrapper>
         </Modal>
-
         {isOpenRecomment && (
           <CommentInputWrapper>
             <label htmlFor="comment">
@@ -321,7 +272,6 @@ export default function AComment({ comment, origin }: ACommentProps) {
             <CommentButton onClick={handleRecommentSubmit}>Reply</CommentButton>
           </CommentInputWrapper>
         )}
-
         {replies.length > 0 && <ReplySection replies={replies} />}
       </div>
     </Comments>
@@ -335,18 +285,14 @@ const SecretButton = styled.button<{ $isSecret: boolean }>`
   right: 1rem;
   display: flex;
   gap: 1rem;
-
   align-items: center;
   padding: 0.8rem;
-
   border-radius: 0.5rem;
   border: 1px solid
     ${({ theme, $isSecret }) =>
       $isSecret ? theme.colors.purple600 : theme.colors.gray300};
-
   color: ${({ theme, $isSecret }) =>
     $isSecret ? theme.colors.purple600 : theme.colors.gray400};
-
   text-align: center;
   font-family: Inter;
   font-size: 1.6rem;
@@ -354,7 +300,6 @@ const SecretButton = styled.button<{ $isSecret: boolean }>`
   font-weight: 300;
   line-height: normal;
   letter-spacing: -0.08rem;
-
   > svg {
     > path {
       fill: ${({ theme, $isSecret }) =>
@@ -371,28 +316,22 @@ const CommentInputWrapper = styled.div`
   width: 100%;
   height: 10rem;
   display: flex;
-
   gap: 1.8rem;
-
   textarea {
     width: 100%;
     resize: none;
     border: none;
-
     padding: 2rem;
     width: 100%;
     height: 100%;
     border-radius: 0.4rem;
     background: ${({ theme }) => theme.colors.gray100};
-
     font-family: Inter;
     font-size: 1.6rem;
     font-style: normal;
     font-weight: 300;
-
     letter-spacing: -0.08rem;
   }
-
   label {
     position: relative;
     width: 100%;
@@ -400,18 +339,15 @@ const CommentInputWrapper = styled.div`
       width: 100%;
       resize: none;
       border: none;
-
       padding: 2rem;
       width: 100%;
       height: 100%;
       border-radius: 0.4rem;
       background: ${({ theme }) => theme.colors.gray100};
-
       font-family: Inter;
       font-size: 1.6rem;
       font-style: normal;
       font-weight: 300;
-
       letter-spacing: -0.08rem;
     }
   }
@@ -424,7 +360,6 @@ const CommentButton = styled.button`
   height: 10rem;
   border-radius: 0.4rem;
   background: ${({ theme }) => theme.colors.purple600};
-
   color: ${({ theme }) => theme.colors.gray50};
   text-align: center;
   font-family: Inter;
@@ -439,7 +374,6 @@ const Comments = styled.li`
   display: flex;
   gap: 2.1rem;
   margin-bottom: 3.1rem;
-
   > div {
     display: flex;
     flex-direction: column;
@@ -454,14 +388,12 @@ const Comments = styled.li`
         font-weight: 600;
         letter-spacing: -0.1rem;
       }
-
       &:nth-child(2) {
         color: ${({ theme }) => theme.colors.gray700};
         font-size: 2rem;
         font-weight: 300;
         letter-spacing: -0.1rem;
       }
-
       &:nth-child(3) {
         color: ${({ theme }) => theme.colors.gray500};
         font-size: 1.4rem;
@@ -480,7 +412,6 @@ const ButtonWrapper = styled.div`
   display: flex;
   align-items: center;
   gap: 2rem;
-
   > button {
     min-width: 2rem;
     padding: 0;
@@ -491,7 +422,6 @@ const ButtonWrapper = styled.div`
     align-items: center;
     justify-content: center;
     gap: 1.2rem;
-
     > svg {
       &.commentLiked {
         > path {
@@ -499,7 +429,6 @@ const ButtonWrapper = styled.div`
           stroke: ${({ theme }) => theme.colors.purple600};
         }
       }
-
       &.recomment {
         fill: ${({ theme }) => theme.colors.purple600};
         stroke: ${({ theme }) => theme.colors.purple600};
@@ -517,11 +446,9 @@ const Menu = styled.div`
   position: absolute;
   top: -250%;
   left: 150%;
-
   margin-top: 1rem;
   background-color: ${({ theme }) => theme.colors.gray100};
   color: ${({ theme }) => theme.colors.gray800};
-
   > div {
     cursor: pointer;
     padding: 1rem;
@@ -547,7 +474,6 @@ const AccessRestrictedWrapper = styled.div`
   position: absolute;
   z-index: 10;
   top: 0;
-
   display: flex;
   justify-content: center;
   align-items: center;
@@ -564,15 +490,12 @@ const AccessRestrictedNormal = styled.div`
   flex-shrink: 0;
   border-radius: 5px 5px 0 0;
   background: ${({ theme }) => theme.colors.backgroundLayer1};
-
-  /* popup */
   box-shadow: 2px 2px 2px 0px rgba(0, 0, 0, 0.11);
 `;
 
 const TextNormal = styled.div`
   display: flex;
   justify-content: center;
-
   > span {
     color: ${({ theme }) => theme.colors.gray700};
     text-align: center;
@@ -580,9 +503,8 @@ const TextNormal = styled.div`
     font-size: 20px;
     font-style: normal;
     font-weight: 400;
-    line-height: 34px; /* 170% */
+    line-height: 34px;
     letter-spacing: -0.8px;
-
     > span {
       font-weight: 700;
     }
@@ -595,7 +517,6 @@ const ButtonBox = styled.div`
   height: 7.4rem;
   border-radius: 0 0 5px 5px;
   background: ${({ theme }) => theme.colors.backgroundLayer1};
-
   > div {
     cursor: pointer;
     display: flex;
@@ -606,7 +527,7 @@ const ButtonBox = styled.div`
     font-size: 20px;
     font-style: normal;
     font-weight: 500;
-    line-height: 25px; /* 125% */
+    line-height: 25px;
     letter-spacing: -0.6px;
   }
 `;
@@ -617,6 +538,7 @@ const LaterButton = styled.div`
   background: ${({ theme }) => theme.colors.backgroundBase};
   color: ${({ theme }) => theme.colors.gray700};
 `;
+
 const NowButton = styled.div`
   width: 50%;
   border-radius: 0px 0px 5px 0px;
