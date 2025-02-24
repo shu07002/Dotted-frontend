@@ -18,13 +18,15 @@ interface PersoPersonalInformationProps {
   register: UseFormRegister<SignUpFormData>;
   watch: UseFormWatch<SignUpFormData>;
   setValue: UseFormSetValue<SignUpFormData>;
+  loginType: string;
 }
 
 export default function PersonalInformation({
   isSogangEmail,
   register,
   watch,
-  setValue
+  setValue,
+  loginType
 }: PersoPersonalInformationProps) {
   useEffect(() => {
     if (isSogangEmail && !watch('email').includes('@')) {
@@ -36,15 +38,12 @@ export default function PersonalInformation({
   return (
     <PersonalInformationWrapper>
       <div style={{ width: '60.5rem' }}>
-        <Password register={register} watch={watch} />
-
+        {!loginType && <Password register={register} watch={watch} />}
         <Nickname register={register} watch={watch} />
 
         <Box>
           <Name register={register} />
-
           <Birth setValue={setValue} register={register} />
-
           <Group setValue={setValue} />
         </Box>
 

@@ -7,4 +7,5 @@ export interface SignUpFormData {
   student_type: string;
   passwordCheck: string;
   login_type: string;
+  social_id: string;
 }

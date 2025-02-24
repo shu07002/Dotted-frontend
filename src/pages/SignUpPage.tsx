@@ -1,7 +1,7 @@
 import BackButton from '@/components/common/Login,SignUp/BackButton';
 import SignUpForm from '@/components/SignUpPage/SignUpForm';
 import PageLayout from '@/components/common/Login,SignUp/PageLayout';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import EmailVerification from '@/components/SignUpPage/EmailVerification';
 import styled from 'styled-components';
 import PersonalInformation from '@/components/SignUpPage/PersonalInformation';
@@ -12,6 +12,7 @@ import { SignUpFormData } from '@/types/signUpFormData';
 import { useMutation } from '@tanstack/react-query';
 import SignUpComplete from '@/components/SignUpPage/SignUpComplete';
 import Modal from 'react-modal';
+import { useLocation } from 'react-router-dom';
 
 Modal.setAppElement('#root');
 
@@ -34,6 +35,7 @@ const customStyles = {
 // 학생증 사진 인증 페이지 모달로 분리 ✅
 
 export default function SignUpPage() {
+  const { state } = useLocation();
   const [step, setStep] = useState(1);
   const [isSogangEmail, setIsSogangEmail] = useState(false);
   const [isCheckedTOS, setisCheckedTOS] = useState(false); // false
@@ -42,6 +44,20 @@ export default function SignUpPage() {
   const isChecked = isCheckedTOS && isCheckedPP;
 
   const { register, handleSubmit, watch, setValue } = useForm<SignUpFormData>();
+
+  useEffect(() => {
+    if (state) {
+      console.log(state);
+      setisCheckedPP(true);
+      setisCheckedTOS(true);
+      setValue('email', state.email);
+      setValue('login_type', state.login_type);
+      setValue('name', state.name);
+      setValue('social_id', state.social_id);
+      setValue('password', state.social_id);
+      setStep(3);
+    }
+  }, []);
 
   if (isModalOpen) {
     document.body.style.overflow = 'hidden';
@@ -59,6 +75,8 @@ export default function SignUpPage() {
         dataToSend.email = `${dataToSend.email}@sogang.ac.kr`;
 
       //console.log(dataToSend);
+
+      console.log(dataToSend);
 
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/user/register`,
@@ -156,6 +174,7 @@ export default function SignUpPage() {
           register={register}
           watch={watch}
           setValue={setValue}
+          loginType={state.login_type}
         />
       )}
 
