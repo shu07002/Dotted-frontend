@@ -55,7 +55,6 @@ export default function CommunityPage() {
         },
         onError: (error) => {
           console.error('❌ 검색 실패:', error);
-          navigate('/login');
         }
       }
     );
