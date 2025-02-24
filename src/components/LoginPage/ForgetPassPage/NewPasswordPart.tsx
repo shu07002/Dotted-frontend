@@ -113,6 +113,8 @@ export default function NewPasswordPart({ email }: NewPasswordPartProps) {
           />
           <EyeStyled $eyeOn={eyeOn2} onClick={onClickEyeOn2} />
         </div>
+
+        <ErrorMsg msg="Password does not match" />
       </InputWrapper>
       {newPassword !== '' &&
         newPasswordCheck !== '' &&

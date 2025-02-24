@@ -1,53 +1,222 @@
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { communityData } from '@/components/CommunityPage/testData';
 import { useEffect, useState } from 'react';
-import Posting from '../../components/CommunityPage/Posting';
+import Posting from '@/components/CommunityPage/Posting';
+import CommentSection from '@/components/CommunityPage/CommentSection';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
-import CommentSection from '../../components/CommunityPage/CommentSection';
-import { CommunityPost } from '@/types/CommunityPost';
-import PostingList from '@/components/CommunityPage/PostingList';
+// -------------------- 타입 정의 --------------------
+export interface PostImage {
+  id: number;
+  post: number; // post_id (FK)
+  image_url: string;
+  blob_name: string;
+  order: number;
+}
+
+export interface PostDetail {
+  id: number;
+  writer_id: string;
+  writer_nickname: string;
+  tag: string;
+  created_at: string;
+  title: string;
+  content: string;
+  images: PostImage[]; // 이미지 배열
+  comments: Comment[]; // 댓글 목록 (구조에 따라 수정 가능)
+  view_count: number;
+  like_count: number;
+  scrap_count: number;
+  comment_count: number;
+  is_mine: boolean;
+  is_liked: boolean;
+  is_scrapped: boolean;
+}
+
+export interface Comment {
+  content: string;
+  id: number;
+  created_at: string;
+  is_deleted: boolean;
+  is_liked: boolean;
+  is_mine: boolean;
+  is_secret: boolean;
+  like_count: number;
+  parent: null;
+  post: number;
+  replies: Comment[];
+  root_parent: number;
+  user_id: number;
+  user_nickname: string;
+}
 
 export default function DetailCommunityPage() {
   const { id } = useParams();
-  const [post] = communityData.filter((el) => el.id === Number(id));
-
+  const postId = Number(id);
   const [isLiked, setIsLiked] = useState(false);
   const [isScraped, setIsScraped] = useState(false);
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pagedData, setPagedData] = useState<CommunityPost[]>([]);
+  // API를 통해 상세 게시글을 가져옴
+  const {
+    data: post,
+    isLoading,
+    isError
+  } = useQuery<PostDetail, Error>({
+    queryKey: ['postDetail', postId],
+    queryFn: () => fetchPostDetail(postId)
+  });
 
-  const data = communityData.filter((el) => el.id !== Number(id));
+  // "other posts"는 기존 dummy 데이터를 사용 (현재 게시글 제외)
+  // const otherPostsData = communityData.filter((el: any) => el.id !== postId);
+
+  // // 기타 게시글 페이지네이션 (dummy 데이터 사용)
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const [pagedData, setPagedData] = useState<any[]>([]);
 
   useEffect(() => {
-    const start = (currentPage - 1) * 3;
-    const end = start + 3;
-    setPagedData(data.slice(start, end));
-  }, [currentPage]);
+    if (post) {
+      setIsLiked(post.is_liked);
+      setIsScraped(post.is_scrapped);
+    }
+  }, [post]);
+
+  // -------------------- API 호출 함수 --------------------
+  async function fetchPostDetail(postId: number): Promise<PostDetail> {
+    const accessToken = localStorage.getItem('accessToken');
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}/posting/${postId}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`
+        }
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch post detail (status: ${response.status})`
+      );
+    }
+
+    return response.json();
+  }
+
+  const likeMutation = useMutation({
+    mutationFn: async () => {
+      const accessToken = localStorage.getItem('accessToken');
+      if (!accessToken) {
+        console.error('No access');
+        return;
+      }
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/posting/${id}/like`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${accessToken}`
+            },
+            body: JSON.stringify({ id })
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error('Failed to like');
+        }
+
+        return await response.json();
+      } catch (error) {
+        console.log(error);
+        throw error; // onError 핸들러에서 처리됨
+      } finally {
+        // 요청 성공/실패 여부와 관계없이 항상 실행됨
+      }
+    },
+    onSuccess: (data) => {
+      setIsLiked(data.is_liked);
+      console.log(data);
+    },
+    onError: (error) => {
+      console.log(`Error: ${error.message}`);
+    }
+  });
+
+  const scrapMutation = useMutation({
+    mutationFn: async () => {
+      const accessToken = localStorage.getItem('accessToken');
+      if (!accessToken) {
+        console.error('No access');
+        return;
+      }
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/posting/${id}/scrap`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${accessToken}`
+            },
+            body: JSON.stringify({ id })
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error('Failed to like');
+        }
+
+        return await response.json();
+      } catch (error) {
+        console.log(error);
+        throw error; // onError 핸들러에서 처리됨
+      } finally {
+        // 요청 성공/실패 여부와 관계없이 항상 실행됨
+      }
+    },
+    onSuccess: (data) => {
+      setIsScraped(data.is_scrapped);
+      console.log(data);
+    },
+    onError: (error) => {
+      console.log(`Error: ${error.message}`);
+    }
+  });
 
   const onClickLike = () => {
     setIsLiked(!isLiked);
+    likeMutation.mutate();
   };
 
   const onClickScrap = () => {
     setIsScraped(!isScraped);
+    scrapMutation.mutate();
   };
 
-  function handleDirectionBtn(targetPage: number) {
-    if (targetPage < 1) {
-      setCurrentPage(1);
-    } else if (targetPage > Math.ceil(data.length / 3)) {
-      setCurrentPage(Math.ceil(data.length / 3));
-    } else {
-      setCurrentPage(targetPage);
-    }
+  // function handleDirectionBtn(targetPage: number) {
+  //   if (targetPage < 1) {
+  //     setCurrentPage(1);
+  //   } else if (targetPage > Math.ceil(otherPostsData.length / 3)) {
+  //     setCurrentPage(Math.ceil(otherPostsData.length / 3));
+  //   } else {
+  //     setCurrentPage(targetPage);
+  //   }
+  // }
+
+  // function handlePageChange(targetPage: number) {
+  //   setCurrentPage(targetPage);
+  // }
+
+  if (isLoading) {
+    return <div style={{ minHeight: '116rem' }} />;
   }
 
-  function handlePageChange(targetPage: number) {
-    setCurrentPage(targetPage);
+  if (isError || !post) {
+    return <div style={{ minHeight: '116rem' }} />;
   }
-
+  console.log(post);
   return (
     <DetailCommunityPageContainer>
       <Wrapper>
@@ -61,33 +230,38 @@ export default function DetailCommunityPage() {
 
         <CommentSection post={post} />
 
-        <OtherPostWrapper>
+        {/* <OtherPostWrapper>
           <Text>other posts</Text>
           <PostingList pagedData={pagedData} />
           <PaginationBox>
             <button onClick={() => handleDirectionBtn(currentPage - 1)}>
               {'<'}
             </button>
-            {Array.from({ length: Math.ceil(data.length / 3) }, (_, idx) => (
-              <button
-                className={currentPage === idx + 1 ? 'selected' : ''}
-                key={idx}
-                onClick={() => handlePageChange(idx + 1)}
-              >
-                {idx + 1}
-              </button>
-            ))}
+            {Array.from(
+              { length: Math.ceil(otherPostsData.length / 3) },
+              (_, idx) => (
+                <button
+                  className={currentPage === idx + 1 ? 'selected' : ''}
+                  key={idx}
+                  onClick={() => handlePageChange(idx + 1)}
+                >
+                  {idx + 1}
+                </button>
+              )
+            )}
             <button onClick={() => handleDirectionBtn(currentPage + 1)}>
               {'>'}
             </button>
           </PaginationBox>
-        </OtherPostWrapper>
+        </OtherPostWrapper> */}
       </Wrapper>
     </DetailCommunityPageContainer>
   );
 }
 
+// -------------------- 스타일 컴포넌트 --------------------
 const DetailCommunityPageContainer = styled.div`
+  min-height: 116rem;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -101,46 +275,46 @@ const Wrapper = styled.div`
   padding: 0 23rem;
 `;
 
-const OtherPostWrapper = styled.div`
-  margin-bottom: 9rem;
-`;
+// const OtherPostWrapper = styled.div`
+//   margin-bottom: 9rem;
+// `;
 
-const Text = styled.div`
-  padding: 1.5rem;
-  color: ${({ theme }) => theme.colors.purple600};
-  font-family: Inter;
-  font-size: 2rem;
-  font-style: normal;
-  font-weight: 600;
-  line-height: normal;
-  letter-spacing: -0.1rem;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.gray300};
-`;
+// const Text = styled.div`
+//   padding: 1.5rem;
+//   color: ${({ theme }) => theme.colors.purple600};
+//   font-family: Inter;
+//   font-size: 2rem;
+//   font-style: normal;
+//   font-weight: 600;
+//   line-height: normal;
+//   letter-spacing: -0.1rem;
+//   border-bottom: 1px solid ${({ theme }) => theme.colors.gray300};
+// `;
 
-const PaginationBox = styled.div`
-  width: 100%;
-  padding: 5rem 0;
-  display: flex;
-  justify-content: center;
-  gap: 1.5rem;
+// const PaginationBox = styled.div`
+//   width: 100%;
+//   padding: 5rem 0;
+//   display: flex;
+//   justify-content: center;
+//   gap: 1.5rem;
 
-  button {
-    width: 3.1rem;
-    height: 3.1rem;
-    border-radius: 50%;
-    border: none;
-    background: none;
-    font-size: 1.6rem;
-    font-weight: 400;
+//   button {
+//     width: 3.1rem;
+//     height: 3.1rem;
+//     border-radius: 50%;
+//     border: none;
+//     background: none;
+//     font-size: 1.6rem;
+//     font-weight: 400;
 
-    &.selected {
-      background-color: ${({ theme }) => theme.colors.purple600};
-      color: ${({ theme }) => theme.colors.gray50};
-    }
+//     &.selected {
+//       background-color: ${({ theme }) => theme.colors.purple600};
+//       color: ${({ theme }) => theme.colors.gray50};
+//     }
 
-    &:hover {
-      background-color: ${({ theme }) => theme.colors.backgroundBase};
-      cursor: pointer;
-    }
-  }
-`;
+//     &:hover {
+//       background-color: ${({ theme }) => theme.colors.backgroundBase};
+//       cursor: pointer;
+//     }
+//   }
+// `;
