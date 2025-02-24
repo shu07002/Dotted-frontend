@@ -20,6 +20,7 @@ import Google from './pages/Google';
 import MarketPage from './pages/market/MarketPage';
 import WriteMarketPage from './pages/market/WriteMarketPage';
 import DetailMarketPage from './pages/market/DetailMarketPage';
+import NotificatoinPage from './pages/NotificatoinPage';
 
 const Router = createBrowserRouter([
   {
@@ -89,6 +90,10 @@ const Router = createBrowserRouter([
           { path: 'detail/:id', element: <DetailMarketPage /> },
           { path: 'detail/:id/edit', element: <WriteMarketPage /> }
         ]
+      },
+      {
+        path: 'notification',
+        element: <NotificatoinPage />
       }
     ]
   },

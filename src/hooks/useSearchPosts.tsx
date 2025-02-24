@@ -1,5 +1,7 @@
+// useSearchPosts.ts
 import { CommunityPost } from '@/types/CommunityPost';
 import { MarketPost } from '@/types/MarketPost';
+import { fetchWithAuth } from '@/utils/auth';
 import { useMutation } from '@tanstack/react-query';
 
 interface SearchPostsParams {
@@ -20,7 +22,6 @@ const fetchPosts = async ({
   page
 }: SearchPostsParams): Promise<CommunityPost | MarketPost> => {
   const queryParams = new URLSearchParams();
-  const accessToken = localStorage.getItem('accessToken');
   const apiLink = { url: 'posting' };
 
   if (keyword) queryParams.append('keyword', keyword);
@@ -29,28 +30,18 @@ const fetchPosts = async ({
 
   if (name === 'market') {
     apiLink.url = 'posting/market';
-    if (status) queryParams.append('status', status); // 마켓의 경우 status 사용
+    if (status) queryParams.append('status', status);
   } else {
-    if (tag && tag !== 'All') queryParams.append('tag', tag); // 커뮤니티의 경우 tag 사용
+    if (tag && tag !== 'All') queryParams.append('tag', tag);
   }
 
   console.log(queryParams.toString());
-  const response = await fetch(
-    `${import.meta.env.VITE_API_URL}/${apiLink.url}?${queryParams.toString()}`,
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`
-      }
-    }
-  );
+  const url = `${import.meta.env.VITE_API_URL}/${apiLink.url}?${queryParams.toString()}`;
 
-  if (!response.ok) {
-    throw new Error(`Error fetching posts: ${response.status}`);
-  }
-
-  return response.json();
+  // fetchWithAuth를 사용하여 401 발생 시 자동 재발급 및 재시도 처리
+  return fetchWithAuth<CommunityPost | MarketPost>(url, {
+    method: 'GET'
+  });
 };
 
 export const useSearchPosts = () => {
