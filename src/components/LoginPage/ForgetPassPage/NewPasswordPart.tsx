@@ -40,7 +40,7 @@ export default function NewPasswordPart() {
           <EyeStyled $eyeOn={eyeOn2} onClick={onClickEyeOn2} />
         </div>
 
-        <ErrorMsg />
+        <ErrorMsg msg="Password do not match" />
       </InputWrapper>
 
       <SubmitButton>Submit</SubmitButton>

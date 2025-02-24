@@ -1,14 +1,18 @@
+import { UseFormRegister } from 'react-hook-form';
 import styled from 'styled-components';
+import { LoginProps } from './LoginForm';
 
 interface PasswordInputProps {
   eyeOn: boolean;
+  register: UseFormRegister<LoginProps>;
 }
 
-export default function PasswordInput({ eyeOn }: PasswordInputProps) {
+export default function PasswordInput({ eyeOn, register }: PasswordInputProps) {
   return (
     <PasswordInputWrapper
       placeholder="Password"
       type={eyeOn ? 'text' : 'password'}
+      {...register('password', { required: 'Plaese write down your password' })}
     />
   );
 }

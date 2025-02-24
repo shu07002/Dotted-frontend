@@ -5,31 +5,40 @@ import Name from './Name';
 import Birth from './Birth';
 import Group from './Group';
 import Info from './Info';
-import SubmitButton from './SubmitButton';
 import { SignUpFormData } from '@/types/signUpFormData';
 import {
   UseFormRegister,
   UseFormSetValue,
   UseFormWatch
 } from 'react-hook-form';
+import { useEffect } from 'react';
 
 interface PersoPersonalInformationProps {
+  isSogangEmail: boolean;
   register: UseFormRegister<SignUpFormData>;
   watch: UseFormWatch<SignUpFormData>;
   setValue: UseFormSetValue<SignUpFormData>;
 }
 
 export default function PersonalInformation({
+  isSogangEmail,
   register,
   watch,
   setValue
 }: PersoPersonalInformationProps) {
+  useEffect(() => {
+    if (isSogangEmail && !watch('email').includes('@')) {
+      const email = watch('email');
+      const domain = '@sogang.ac.kr';
+      setValue('email', email + domain);
+    }
+  }, []);
   return (
     <PersonalInformationWrapper>
       <div style={{ width: '60.5rem' }}>
         <Password register={register} watch={watch} />
 
-        <Nickname register={register} />
+        <Nickname register={register} watch={watch} />
 
         <Box>
           <Name register={register} />
@@ -41,7 +50,7 @@ export default function PersonalInformation({
 
         <Info />
 
-        <SubmitButton />
+        <SubmitButton type="submit">Submit</SubmitButton>
       </div>
     </PersonalInformationWrapper>
   );
@@ -60,4 +69,24 @@ const Box = styled.div`
   border-radius: 5px;
   border: 1px solid ${({ theme }) => theme.colors.gray300};
   padding: 0 2.3rem;
+`;
+
+const SubmitButton = styled.button`
+  cursor: pointer;
+  margin-top: 2.6rem;
+  margin-bottom: 15.5rem;
+  width: 100%;
+  height: 50px;
+  flex-shrink: 0;
+  border-radius: 5px;
+  border: none;
+  background: ${({ theme }) => theme.colors.purple600};
+  color: ${({ theme }) => theme.colors.gray50};
+  text-align: center;
+  font-family: Pretendard;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 36px; /* 180% */
+  letter-spacing: -1px;
 `;

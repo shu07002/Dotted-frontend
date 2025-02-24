@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 export default function SignUpComplete() {
   const navigate = useNavigate();
+
   return (
     <SignUpCompleteContainer>
       <Wrapper>
@@ -17,7 +18,8 @@ export default function SignUpComplete() {
         <Text>Sign Up Complete !</Text>
 
         <ToLoginButton onClick={() => navigate('/login')}>
-          Go to Log In <ArrowSVG />
+          Go to Log In
+          <ArrowSVG />
         </ToLoginButton>
       </Wrapper>
     </SignUpCompleteContainer>
@@ -61,7 +63,7 @@ const Text = styled.span`
   letter-spacing: -1.2px;
 `;
 
-const ToLoginButton = styled.button`
+const ToLoginButton = styled.div`
   display: flex;
   gap: 2rem;
   justify-content: center;

@@ -1,7 +1,11 @@
 import styled from 'styled-components';
 import ErrorMsgSVG from '@/assets/svg/SignUpPage/ErrorMsgSVG.svg?react';
 
-export default function ErrorMsg() {
+interface ErrorMsgProps {
+  msg: string | undefined;
+}
+
+export default function ErrorMsg({ msg }: ErrorMsgProps) {
   return (
     <div
       style={{
@@ -12,7 +16,7 @@ export default function ErrorMsg() {
       }}
     >
       <ErrorMsgSVG />
-      <ErrorText>Password does not match</ErrorText>
+      <ErrorText>{msg}</ErrorText>
     </div>
   );
 }

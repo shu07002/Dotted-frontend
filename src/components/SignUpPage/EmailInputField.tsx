@@ -2,8 +2,11 @@ import styled from 'styled-components';
 import SendCodeButton from './SendCodeButton';
 import { UseFormRegister } from 'react-hook-form';
 import { SignUpFormData } from '@/types/signUpFormData';
+import ErrorMsg from './ErrorMsg';
 
 interface isSogangEmail {
+  loading: boolean;
+  isError: boolean;
   isSogangEmail: boolean;
   isSendCodeClicked: boolean;
   isSubmitClicked: boolean;
@@ -12,6 +15,8 @@ interface isSogangEmail {
 }
 
 export default function EmailInputField({
+  loading,
+  isError,
   isSogangEmail,
   isSendCodeClicked,
   isSubmitClicked,
@@ -39,8 +44,9 @@ export default function EmailInputField({
         </label>
         {emailDomain ? <span>{emailDomain}</span> : null}
       </EmailInput>
-
+      {isError && <ErrorMsg msg="Already registered email" />}
       <SendCodeButton
+        loading={loading}
         isSendCodeClicked={isSendCodeClicked}
         isSubmitClicked={isSubmitClicked}
         onClickSendCodeButton={onClickSendCodeButton}
@@ -65,7 +71,6 @@ const EmailInputFieldWrapper = styled.div`
 `;
 
 const EmailInput = styled.div<{ $isSogangEmail: boolean }>`
-  margin-bottom: 2.6rem;
   display: flex;
   gap: 2rem;
   align-items: center;

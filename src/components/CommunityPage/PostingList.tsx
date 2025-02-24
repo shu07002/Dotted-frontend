@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import Eye from '@/assets/svg/CommunityPage/Eye.svg?react';
-import { CommunityPost } from '@/types/CommunityPost';
+import { EachPost } from '@/types/CommunityPost';
+import { useNavigate } from 'react-router-dom';
 
 const PostingTagsColors: Record<string, string> = {
   Living: `purple950`,
@@ -11,6 +12,9 @@ const PostingTagsColors: Record<string, string> = {
 
 const getTagColor = (tag: string) => PostingTagsColors[tag];
 const PostingTagWrapper = ({ tag }: { tag: string }) => {
+  if (tag === 'Campus Life') {
+    tag = 'Campus';
+  }
   return (
     <PostingTag $color={getTagColor(tag)}>
       <div>{tag}</div>
@@ -19,19 +23,15 @@ const PostingTagWrapper = ({ tag }: { tag: string }) => {
 };
 
 interface PostingListProps {
-  pagedData: CommunityPost[];
+  pagedData: EachPost[];
 }
 
 export default function PostingList({ pagedData }: PostingListProps) {
+  const navigate = useNavigate();
   return (
     <PostingListWrapper>
-      {pagedData.map((post: CommunityPost, idx: number) => (
-        <li
-          key={idx}
-          onClick={() =>
-            (window.location.href = `/community/detail/${post.id}`)
-          }
-        >
+      {pagedData.map((post: EachPost, idx: number) => (
+        <li key={idx} onClick={() => navigate(`/community/detail/${post.id}`)}>
           <PostingTagContainer>
             <PostingTagWrapper tag={post.tag} />
             <div></div>
@@ -42,13 +42,13 @@ export default function PostingList({ pagedData }: PostingListProps) {
               <span>[{post.comment_count}]</span>
             </PostingTitle>
             <PostingWriter>
-              <span>{post.createdAt}</span>
+              <span>{post.created_at}</span>
               <span>•</span>
               <span>by</span>
-              <span>{post.writer}</span>
+              <span>{post.writer_nickname}</span>
               <span>•</span>
               <span>
-                <Eye /> {post.view}
+                <Eye /> {post.view_count}
               </span>
             </PostingWriter>
           </PostingInfo>
@@ -60,6 +60,7 @@ export default function PostingList({ pagedData }: PostingListProps) {
 
 const PostingListWrapper = styled.ul`
   width: 100%;
+  height: 46rem;
 
   > li {
     padding: 1.5rem 0;
