@@ -17,7 +17,6 @@ import WriteCommunityPage from './pages/community/WriteCommunityPage';
 import DetailCommunityPage from './pages/community/DetailCommunityPage';
 import Footer from './components/common/Footer';
 import Google from './pages/Google';
-import SignUpGoogle from './components/SignUpPage/SignUpGoogle';
 
 const Router = createBrowserRouter([
   {
@@ -77,10 +76,7 @@ const Router = createBrowserRouter([
 
   {
     path: 'sign-up',
-    children: [
-      { path: '', element: <SignUpPage /> },
-      { path: 'google', element: <SignUpGoogle /> }
-    ]
+    children: [{ path: '', element: <SignUpPage /> }]
   },
   {
     path: 'login',
