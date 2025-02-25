@@ -167,7 +167,9 @@ export default function MarketPage() {
             </button>
           </PaginationBox>
 
-          <WriteButton onClick={() => navigate('write')}>Write</WriteButton>
+          <WriteButtonWrapper>
+            <WriteButton onClick={() => navigate('write')}>write</WriteButton>
+          </WriteButtonWrapper>
         </BottomWrapper>
       </Wrapper>
     </MarketPageContainer>
@@ -182,8 +184,12 @@ const MarketPageContainer = styled.div`
   flex-direction: column;
   align-items: center;
 
-  @media (max-width: 1024px) {
+  @media (max-width: 1200px) {
     padding: 0 10rem;
+  }
+
+  @media (max-width: 700px) {
+    padding: 0 2rem;
   }
 `;
 
@@ -263,27 +269,41 @@ const BottomWrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   position: relative;
+  @media (max-width: 1024px) {
+    display: block;
+  }
+`;
+
+const WriteButtonWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: end;
+  position: absolute;
+  right: 0;
+
+  @media (max-width: 1024px) {
+    position: relative;
+    margin-bottom: 6rem;
+  }
 `;
 
 const WriteButton = styled.button`
   cursor: pointer;
   display: flex;
+  border-radius: 0.5rem;
   align-items: center;
   justify-content: center;
   width: 11.8rem;
   height: 3.4rem;
   flex-shrink: 0;
-  position: absolute;
-  right: 0;
-  border-radius: 0.5rem;
+
   background-color: ${({ theme }) => theme.colors.gray700};
   border: none;
 
-  color: var(--Gray-Gray_light-gray-50_light, #fff);
+  color: #fff;
   text-align: center;
   font-family: Inter;
   font-size: 1.4rem;
-  font-style: normal;
   font-weight: 600;
   line-height: normal;
 

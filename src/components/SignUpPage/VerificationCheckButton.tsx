@@ -15,7 +15,7 @@ export default function VerificationCheckButton({
         onClick={onClickVerificationCheck}
         disabled={isLoading} // Prevent multiple clicks
       >
-        Verification Check
+        Check Availability
       </VerificationCheckButtonWrapper>
     </Wrapper>
   );
