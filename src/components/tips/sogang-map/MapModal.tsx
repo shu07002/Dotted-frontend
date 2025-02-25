@@ -21,7 +21,7 @@ export default function MapModal({
       <ExitIcon className="exit" onClick={() => setModalOpen(false)} />
       <h1>
         <BuildingIcon />
-        {selectedBuildingData?.building_name}
+        {selectedBuildingData?.name}
       </h1>
       <div>
         <h2>Entrance</h2>
@@ -37,7 +37,7 @@ export default function MapModal({
       </div>
       <StudyingSpotDiv>
         <h2>Studying spots</h2>
-        {selectedBuildingData?.studying_spots.map((spot) => (
+        {selectedBuildingData?.studyingspots?.map((spot) => (
           <div key={spot.id}>
             <figure>
               {spot.photo && <img src={spot.photo} alt="studying spot" />}
@@ -45,14 +45,14 @@ export default function MapModal({
                 <h3>{spot.name}</h3>
                 <p>
                   <LocationIcon />
-                  {spot.location}
+                  {spot.location_detail}
                 </p>
                 <p className="openhour">
                   <TimeIcon />
                   {spot.open_hours}
                 </p>
                 <Tags>
-                  {spot.tags.map((tag) => (
+                  {spot.tags?.map((tag) => (
                     <span key={tag.id}>{tag.name} </span>
                   ))}
                 </Tags>
@@ -63,7 +63,7 @@ export default function MapModal({
       </StudyingSpotDiv>
       <StudyingSpotDiv>
         <h2>Cafeterias</h2>
-        {selectedBuildingData?.cafeterias.map((spot) => (
+        {selectedBuildingData?.cafeterias?.map((spot) => (
           <div key={spot.id}>
             <figure>
               {spot.photo && <img src={spot.photo} alt="studying spot" />}
@@ -71,14 +71,66 @@ export default function MapModal({
                 <h3>{spot.name}</h3>
                 <p>
                   <LocationIcon />
-                  {spot.location}
+                  {spot.location_detail}
                 </p>
                 <p className="openhour">
                   <TimeIcon />
                   {spot.open_hours}
                 </p>
                 <Tags>
-                  {spot.tags.map((tag) => (
+                  {spot.tags?.map((tag) => (
+                    <span key={tag.id}>{tag.name} </span>
+                  ))}
+                </Tags>
+              </figcaption>
+            </figure>
+          </div>
+        ))}
+      </StudyingSpotDiv>
+      <StudyingSpotDiv>
+        <h2>Printers</h2>
+        {selectedBuildingData?.printers?.map((spot) => (
+          <div key={spot.id}>
+            <figure>
+              {spot.photo && <img src={spot.photo} alt="studying spot" />}
+              <figcaption>
+                <h3>{spot.name}</h3>
+                <p>
+                  <LocationIcon />
+                  {spot.location_detail}
+                </p>
+                <p className="openhour">
+                  <TimeIcon />
+                  {spot.open_hours}
+                </p>
+                <Tags>
+                  {spot.tags?.map((tag) => (
+                    <span key={tag.id}>{tag.name} </span>
+                  ))}
+                </Tags>
+              </figcaption>
+            </figure>
+          </div>
+        ))}
+      </StudyingSpotDiv>
+      <StudyingSpotDiv>
+        <h2>Health Centers</h2>
+        {selectedBuildingData?.healthcenters?.map((spot) => (
+          <div key={spot.id}>
+            <figure>
+              {spot.photo && <img src={spot.photo} alt="studying spot" />}
+              <figcaption>
+                <h3>{spot.name}</h3>
+                <p>
+                  <LocationIcon />
+                  {spot.location_detail}
+                </p>
+                <p className="openhour">
+                  <TimeIcon />
+                  {spot.open_hours}
+                </p>
+                <Tags>
+                  {spot.tags?.map((tag) => (
                     <span key={tag.id}>{tag.name} </span>
                   ))}
                 </Tags>

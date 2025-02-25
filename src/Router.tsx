@@ -21,6 +21,8 @@ import MarketPage from './pages/market/MarketPage';
 import WriteMarketPage from './pages/market/WriteMarketPage';
 import DetailMarketPage from './pages/market/DetailMarketPage';
 import NotificatoinPage from './pages/NotificatoinPage';
+import OnboardingPage from './pages/about/OnboardingPage';
+import NoticePage from './pages/about/NoticePage';
 
 const Router = createBrowserRouter([
   {
@@ -94,6 +96,13 @@ const Router = createBrowserRouter([
       {
         path: 'notification',
         element: <NotificatoinPage />
+      },
+      {
+        path: 'about',
+        children: [
+          { path: 'onboarding', element: <OnboardingPage /> },
+          { path: 'notice', element: <NoticePage /> }
+        ]
       }
     ]
   },

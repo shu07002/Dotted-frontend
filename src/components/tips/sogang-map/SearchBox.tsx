@@ -32,7 +32,7 @@ export default function SearchBox() {
     if (data && !isLoading) {
       setBuildingsData(data);
       const names = data.map((building: BuildsDataType) => ({
-        name: building.building_name,
+        name: building.name,
         building_id: building.id
       }));
       setBuildingNames(names);
