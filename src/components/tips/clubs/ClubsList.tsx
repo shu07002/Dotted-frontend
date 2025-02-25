@@ -55,6 +55,7 @@ export default function ClubsList({
           </li>
         ))}
       </List>
+      <CopyRight>copyright by 총동아리 연합회</CopyRight>
 
       {/* 페이지네이션 UI */}
       <PaginationBox>
@@ -92,6 +93,11 @@ export default function ClubsList({
   );
 }
 
+const CopyRight = styled.div`
+  margin-top: 3rem;
+  color: ${({ theme }) => theme.colors.gray400};
+`;
+
 const ListWrapper = styled.div`
   width: 100%;
   margin-top: 1.5rem;
@@ -105,7 +111,7 @@ const List = styled.ul`
 
   li {
     width: inherit;
-    height: 17rem;
+
     background-color: ${({ theme }) => theme.colors.backgroundLayer1};
     border-radius: 1.6rem;
     border: 1px solid ${({ theme }) => theme.colors.gray300};
@@ -118,7 +124,7 @@ const List = styled.ul`
       height: 14rem;
       flex-shrink: 0;
       border-radius: 1.6rem;
-      object-fit: cover;
+      object-fit: contain;
     }
 
     div {

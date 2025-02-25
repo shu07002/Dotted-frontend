@@ -6,7 +6,7 @@ interface NextButtonProps {
 
 export default function NextButton({ onChangeStep }: NextButtonProps) {
   return (
-    <NextButtonWrapper onClick={onChangeStep}>
+    <NextButtonWrapper onClick={() => onChangeStep()}>
       <NextButtonText>Next</NextButtonText>
     </NextButtonWrapper>
   );

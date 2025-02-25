@@ -12,7 +12,6 @@ const hospitalTabs = [
   'Internal Medicine',
   'Dentistry',
   'Otolaryngology',
-  'Obstetrics',
   'Dermatology',
   'Orthopedics',
   'General'

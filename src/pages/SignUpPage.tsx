@@ -69,7 +69,7 @@ export default function SignUpPage() {
     if (step === 4 && !isSogangEmail && !isModalOpen) {
       setIsModalOpen(true);
     }
-  }, [step, isSogangEmail, isModalOpen]);
+  }, [step, isSogangEmail]);
 
   const signUpMutation = useMutation({
     mutationFn: async (userData: SignUpFormData) => {
@@ -139,6 +139,12 @@ export default function SignUpPage() {
     closeModal();
   };
 
+  useEffect(() => {
+    console.log(step);
+  }, [step]);
+
+  const login_type = watch('login_type');
+
   const onSubmitSignUp = (data: SignUpFormData) => {
     signUpMutation.mutate(data);
   };
@@ -178,7 +184,7 @@ export default function SignUpPage() {
           register={register}
           watch={watch}
           setValue={setValue}
-          loginType={state.login_type}
+          loginType={login_type}
         />
       )}
 

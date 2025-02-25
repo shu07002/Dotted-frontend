@@ -18,7 +18,7 @@ interface PersoPersonalInformationProps {
   register: UseFormRegister<SignUpFormData>;
   watch: UseFormWatch<SignUpFormData>;
   setValue: UseFormSetValue<SignUpFormData>;
-  loginType: string;
+  loginType?: string;
 }
 
 export default function PersonalInformation({
@@ -38,7 +38,9 @@ export default function PersonalInformation({
   return (
     <PersonalInformationWrapper>
       <div style={{ width: '60.5rem' }}>
-        {!loginType && <Password register={register} watch={watch} />}
+        {loginType === 'EMAIL' && (
+          <Password register={register} watch={watch} />
+        )}
         <Nickname register={register} watch={watch} />
 
         <Box>

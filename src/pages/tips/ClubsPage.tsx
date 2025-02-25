@@ -5,6 +5,7 @@ import ArtIcon from '@/assets/svg/tips/clubs/art.svg?react';
 import ReligionIcon from '@/assets/svg/tips/clubs/religion.svg?react';
 import PEIcon from '@/assets/svg/tips/clubs/pe.svg?react';
 import AcademicIcon from '@/assets/svg/tips/clubs/academic.svg?react';
+import SocialIcon from '@/assets/svg/tips/clubs/social.svg?react';
 import React, { useEffect, useState } from 'react';
 import SearchBox from '@/components/tips/clubs/SearchBox';
 import ClubsList from '@/components/tips/clubs/ClubsList';
@@ -14,6 +15,7 @@ import { useQuery } from '@tanstack/react-query';
 const clubTabs = [
   { name: 'All', src: 'all' },
   { name: 'Volunteer', src: 'volunteer' },
+  { name: 'Social Culture', src: 'social' },
   { name: 'Performing Arts', src: 'art' },
   { name: 'Religious', src: 'religion' },
   { name: 'Sports', src: 'pe' },
@@ -26,7 +28,8 @@ const clubIcons: Record<string, React.FC> = {
   art: ArtIcon,
   religion: ReligionIcon,
   pe: PEIcon,
-  academic: AcademicIcon
+  academic: AcademicIcon,
+  social: SocialIcon
 };
 
 export interface ClubData {
@@ -120,9 +123,9 @@ export default function ClubsPage() {
           onInputChange={setInputValue}
           onSearch={handleSearch}
         />
-        <a target="_blank" rel="noopener noreferrer">
+        {/* <a target="_blank" rel="noopener noreferrer">
           Download Club Guidebook ⟶
-        </a>
+        </a> */}
       </HeaderSection>
       {clubs && <ClubsList filterdData={filterdData} />}
     </Main>
@@ -134,6 +137,19 @@ const Main = styled.main`
   padding: 5rem 24rem 2.6rem 24rem;
   display: flex;
   flex-direction: column;
+
+  @media (max-width: 900px) {
+    padding-right: 10rem;
+    padding-left: 10rem;
+  }
+  @media (max-width: 700px) {
+    padding-right: 5rem;
+    padding-left: 5rem;
+  }
+  @media (max-width: 480px) {
+    padding-right: 2rem;
+    padding-left: 2rem;
+  }
 `;
 
 const HeaderSection = styled.section`
@@ -153,9 +169,18 @@ const HeaderSection = styled.section`
 const Nav = styled.nav`
   width: 100%;
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   gap: 5rem;
   padding: 2.8rem 0;
+
+  @media (max-width: 900px) {
+    gap: 3rem;
+  }
+
+  @media (max-width: 480px) {
+    gap: 2rem;
+  }
 `;
 
 const TabElement = styled.div<{ $active: boolean }>`
@@ -183,7 +208,8 @@ const TabElement = styled.div<{ $active: boolean }>`
       width: 2.4rem;
       height: 2.4rem;
       path {
-        stroke: ${({ theme }) => theme.colors.gray500};
+        stroke: ${({ $active, theme }) =>
+          $active ? theme.colors.purple600 : theme.colors.gray500};
       }
 
       g {
@@ -196,9 +222,11 @@ const TabElement = styled.div<{ $active: boolean }>`
   }
 
   > p {
+    text-align: center;
     font-size: 1.5rem;
     font-weight: 400;
     letter-spacing: -0.75px;
-    color: ${({ theme }) => theme.colors.gray500};
+    color: ${({ $active, theme }) =>
+      $active ? theme.colors.purple600 : theme.colors.gray500};
   }
 `;

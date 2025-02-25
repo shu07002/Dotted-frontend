@@ -90,7 +90,7 @@ const SubHeaderWrapper = styled(motion.div)`
   flex-wrap: wrap;
 
   @media (max-width: 480px) {
-    height: 5.5rem;
+    height: 6.5rem;
   }
 `;
 
