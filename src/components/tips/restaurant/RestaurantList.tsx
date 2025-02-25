@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
 import NavigateIcon from '@/assets/svg/tips/restaurant/navigate.svg?react';
 import LinkIcon from '@/assets/svg/tips/restaurant/link.svg?react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 const fetchRestaurants = async () => {
@@ -23,12 +23,15 @@ interface RestaurantData {
 }
 
 export default function RestaurantList() {
-  const [filterdData, setFilterdData] = useState<RestaurantData[]>([]);
   const [searchParam, setSearchParam] = useSearchParams();
   const { data, error, isLoading } = useQuery({
     queryKey: ['tipsRestaurants'],
     queryFn: fetchRestaurants
   });
+
+  useEffect(() => {
+    setSearchParam({ q: 'all' });
+  }, []);
 
   const selectedTab = searchParam.get('q') || 'all';
   const filteredRestaurants = data?.filter((restaurant: RestaurantData) => {
@@ -43,7 +46,7 @@ export default function RestaurantList() {
 
   return (
     <ListSection>
-      {!isLoading && filterdData ? (
+      {!isLoading && filteredRestaurants ? (
         <List>
           {filteredRestaurants.map((el: RestaurantData, idx: number) => (
             <RestaurantBox key={idx}>
