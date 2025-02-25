@@ -48,11 +48,7 @@ const fetchClubs = async (): Promise<ClubData[]> => {
 };
 
 export default function ClubsPage() {
-  const {
-    data: clubs,
-    isLoading,
-    error
-  } = useQuery({
+  const { data: clubs } = useQuery({
     queryKey: ['tipsClubs'],
     queryFn: fetchClubs
   });
