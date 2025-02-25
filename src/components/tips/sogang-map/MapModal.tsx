@@ -35,110 +35,118 @@ export default function MapModal({
             : 'All departments'}
         </p>
       </div>
-      <StudyingSpotDiv>
-        <h2>Studying spots</h2>
-        {selectedBuildingData?.studyingspots?.map((spot) => (
-          <div key={spot.id}>
-            <figure>
-              {spot.photo && <img src={spot.photo} alt="studying spot" />}
-              <figcaption>
-                <h3>{spot.name}</h3>
-                <p>
-                  <LocationIcon />
-                  {spot.location_detail}
-                </p>
-                <p className="openhour">
-                  <TimeIcon />
-                  {spot.open_hours}
-                </p>
-                <Tags>
-                  {spot.tags?.map((tag) => (
-                    <span key={tag.id}>{tag.name} </span>
-                  ))}
-                </Tags>
-              </figcaption>
-            </figure>
-          </div>
-        ))}
-      </StudyingSpotDiv>
-      <StudyingSpotDiv>
-        <h2>Cafeterias</h2>
-        {selectedBuildingData?.cafeterias?.map((spot) => (
-          <div key={spot.id}>
-            <figure>
-              {spot.photo && <img src={spot.photo} alt="studying spot" />}
-              <figcaption>
-                <h3>{spot.name}</h3>
-                <p>
-                  <LocationIcon />
-                  {spot.location_detail}
-                </p>
-                <p className="openhour">
-                  <TimeIcon />
-                  {spot.open_hours}
-                </p>
-                <Tags>
-                  {spot.tags?.map((tag) => (
-                    <span key={tag.id}>{tag.name} </span>
-                  ))}
-                </Tags>
-              </figcaption>
-            </figure>
-          </div>
-        ))}
-      </StudyingSpotDiv>
-      <StudyingSpotDiv>
-        <h2>Printers</h2>
-        {selectedBuildingData?.printers?.map((spot) => (
-          <div key={spot.id}>
-            <figure>
-              {spot.photo && <img src={spot.photo} alt="studying spot" />}
-              <figcaption>
-                <h3>{spot.name}</h3>
-                <p>
-                  <LocationIcon />
-                  {spot.location_detail}
-                </p>
-                <p className="openhour">
-                  <TimeIcon />
-                  {spot.open_hours}
-                </p>
-                <Tags>
-                  {spot.tags?.map((tag) => (
-                    <span key={tag.id}>{tag.name} </span>
-                  ))}
-                </Tags>
-              </figcaption>
-            </figure>
-          </div>
-        ))}
-      </StudyingSpotDiv>
-      <StudyingSpotDiv>
-        <h2>Health Centers</h2>
-        {selectedBuildingData?.healthcenters?.map((spot) => (
-          <div key={spot.id}>
-            <figure>
-              {spot.photo && <img src={spot.photo} alt="studying spot" />}
-              <figcaption>
-                <h3>{spot.name}</h3>
-                <p>
-                  <LocationIcon />
-                  {spot.location_detail}
-                </p>
-                <p className="openhour">
-                  <TimeIcon />
-                  {spot.open_hours}
-                </p>
-                <Tags>
-                  {spot.tags?.map((tag) => (
-                    <span key={tag.id}>{tag.name} </span>
-                  ))}
-                </Tags>
-              </figcaption>
-            </figure>
-          </div>
-        ))}
-      </StudyingSpotDiv>
+      {selectedBuildingData?.studyingspots.length! > 0 && (
+        <StudyingSpotDiv>
+          <h2>Studying spots</h2>
+          {selectedBuildingData?.studyingspots?.map((spot) => (
+            <div key={spot.id}>
+              <figure>
+                {spot.photo && <img src={spot.photo} alt="studying spot" />}
+                <figcaption>
+                  <h3>{spot.name}</h3>
+                  <p>
+                    <LocationIcon />
+                    {spot.location_detail}
+                  </p>
+                  <p className="openhour">
+                    <TimeIcon />
+                    {spot.open_hours}
+                  </p>
+                  <Tags>
+                    {spot.tags?.map((tag) => (
+                      <span key={tag.id}>{tag.name} </span>
+                    ))}
+                  </Tags>
+                </figcaption>
+              </figure>
+            </div>
+          ))}
+        </StudyingSpotDiv>
+      )}
+      {selectedBuildingData?.cafeterias.length! > 0 && (
+        <StudyingSpotDiv>
+          <h2>Cafeterias</h2>
+          {selectedBuildingData?.cafeterias?.map((spot) => (
+            <div key={spot.id}>
+              <figure>
+                {spot.photo && <img src={spot.photo} alt="studying spot" />}
+                <figcaption>
+                  <h3>{spot.name}</h3>
+                  <p>
+                    <LocationIcon />
+                    {spot.location_detail}
+                  </p>
+                  <p className="openhour">
+                    <TimeIcon />
+                    {spot.open_hours}
+                  </p>
+                  <Tags>
+                    {spot.tags?.map((tag) => (
+                      <span key={tag.id}>{tag.name} </span>
+                    ))}
+                  </Tags>
+                </figcaption>
+              </figure>
+            </div>
+          ))}
+        </StudyingSpotDiv>
+      )}
+      {selectedBuildingData?.printers.length! > 0 && (
+        <StudyingSpotDiv>
+          <h2>Printers</h2>
+          {selectedBuildingData?.printers?.map((spot) => (
+            <div key={spot.id}>
+              <figure>
+                {spot.photo && <img src={spot.photo} alt="studying spot" />}
+                <figcaption>
+                  <h3>{spot.name}</h3>
+                  <p>
+                    <LocationIcon />
+                    {spot.location_detail}
+                  </p>
+                  <p className="openhour">
+                    <TimeIcon />
+                    {spot.open_hours}
+                  </p>
+                  <Tags>
+                    {spot.tags?.map((tag) => (
+                      <span key={tag.id}>{tag.name} </span>
+                    ))}
+                  </Tags>
+                </figcaption>
+              </figure>
+            </div>
+          ))}
+        </StudyingSpotDiv>
+      )}
+      {selectedBuildingData?.healthcenters.length! > 0 && (
+        <StudyingSpotDiv>
+          <h2>Health Centers</h2>
+          {selectedBuildingData?.healthcenters?.map((spot) => (
+            <div key={spot.id}>
+              <figure>
+                {spot.photo && <img src={spot.photo} alt="studying spot" />}
+                <figcaption>
+                  <h3>{spot.name}</h3>
+                  <p>
+                    <LocationIcon />
+                    {spot.location_detail}
+                  </p>
+                  <p className="openhour">
+                    <TimeIcon />
+                    {spot.open_hours}
+                  </p>
+                  <Tags>
+                    {spot.tags?.map((tag) => (
+                      <span key={tag.id}>{tag.name} </span>
+                    ))}
+                  </Tags>
+                </figcaption>
+              </figure>
+            </div>
+          ))}
+        </StudyingSpotDiv>
+      )}
     </ModalWrapper>
   );
 }
