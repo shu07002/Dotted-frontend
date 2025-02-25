@@ -6,33 +6,35 @@ import Hospital from '@/assets/svg/MainPage/Hospital.svg?react';
 import FAQ from '@/assets/svg/MainPage/FAQ.svg?react';
 import Clubs from '@/assets/svg/MainPage/Clubs.svg?react';
 import Culture from '@/assets/svg/MainPage/Culture.svg?react';
+import { useNavigate } from 'react-router-dom';
 
 export default function Tips() {
+  const navigate = useNavigate();
   return (
     <TipsWrapper>
       <Title>Tips for Sogang</Title>
       <Contents>
-        <Item>
+        <Item onClick={() => navigate('/tips/sogang-map')}>
           <SogangMap />
           <span>Sogang Map</span>
         </Item>
-        <Item>
+        <Item onClick={() => navigate('/tips/restaurant')}>
           <Restaurant />
           <span>Restaurant</span>
         </Item>
-        <Item>
+        <Item onClick={() => navigate('/tips/hospital')}>
           <Hospital />
           <span>Hospital</span>
         </Item>
-        <Item>
+        <Item onClick={() => navigate('/tips/faq')}>
           <FAQ />
           <span>FAQ</span>
         </Item>
-        <Item>
+        <Item onClick={() => navigate('/tips/clubs')}>
           <Clubs />
           <span>Clubs Map</span>
         </Item>
-        <Item>
+        <Item onClick={() => navigate('/tips/culture')}>
           <Culture />
           <span>Culture</span>
         </Item>
@@ -78,6 +80,7 @@ const Contents = styled.nav`
 `;
 
 const Item = styled.div`
+  border-radius: 100%;
   cursor: pointer;
   display: flex;
   gap: 2.4rem;

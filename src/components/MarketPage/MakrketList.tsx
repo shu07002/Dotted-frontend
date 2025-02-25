@@ -43,7 +43,6 @@ export default function MakrketList({ pagedData }: MarketListProps) {
     </MarketListContainer>
   );
 }
-
 const Tag = styled.div`
   z-index: 10;
   position: absolute;
