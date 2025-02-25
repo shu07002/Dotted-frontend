@@ -1,4 +1,5 @@
 import { EachMarketPost } from '@/types/MarketPost';
+import { formatRelativeTime } from '@/utils/formatTime';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -32,7 +33,7 @@ export default function MakrketList({ pagedData }: MarketListProps) {
                 <span>{post.title}</span>
                 <div>
                   <span>{post.price}</span>
-                  <span>{post.created_at}</span>
+                  <span>{formatRelativeTime(post.created_at)}</span>
                 </div>
               </ItemInfo>
             </li>
@@ -42,7 +43,6 @@ export default function MakrketList({ pagedData }: MarketListProps) {
     </MarketListContainer>
   );
 }
-
 const Tag = styled.div`
   z-index: 10;
   position: absolute;

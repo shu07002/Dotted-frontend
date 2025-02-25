@@ -10,6 +10,7 @@ import ReplySection from './ReplySection';
 import Modal from 'react-modal';
 import Locker from '@/assets/svg/MarketPage/Locker.svg?react';
 import { fetchWithAuth } from '@/utils/auth'; // auth.ts 경로에 맞게 수정
+import { formatRelativeTime } from '@/utils/formatTime';
 
 // 반환 타입을 정의 (필요에 따라 실제 API 스펙에 맞게 수정)
 interface CommentLikeResponse {
@@ -185,7 +186,7 @@ export default function AComment({
           <>
             <div>{comment.user_nickname}</div>
             <div>{editedContent}</div>
-            <div>{comment.created_at}</div>
+            <div>{formatRelativeTime(comment.created_at)}</div>
           </>
         )}
         <ButtonWrapper>

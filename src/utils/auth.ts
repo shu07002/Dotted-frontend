@@ -23,13 +23,16 @@ export async function refreshAccessToken(): Promise<void> {
     throw new Error('No refresh token found');
   }
 
-  const response = await fetch(`${import.meta.env.VITE_API_URL}/user/refresh`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ refresh: refreshToken })
-  });
+  const response = await fetch(
+    `${import.meta.env.VITE_API_URL}/api/user/refresh`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ refresh: refreshToken })
+    }
+  );
 
   if (!response.ok) {
     localStorage.removeItem('accessToken');

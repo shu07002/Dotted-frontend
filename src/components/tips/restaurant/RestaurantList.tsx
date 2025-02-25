@@ -48,33 +48,36 @@ export default function RestaurantList() {
     <ListSection>
       {!isLoading && filteredRestaurants ? (
         <List>
-          {filteredRestaurants.map((el: RestaurantData, idx: number) => (
-            <RestaurantBox key={idx}>
-              <img src={el.photo} alt={el.name} />
-              <Description>
-                <RestaurantInfo>
-                  <h1>{el.name}</h1>
-                  <p>{el.type}</p>
-                </RestaurantInfo>
-                <RestaurantLocation>
-                  <span className="location__distance">
-                    <NavigateIcon />
-                    <span>{el.distance}m from School</span>
-                  </span>
-                  <span className="location__link">
-                    <a target="_blank" href={el.naver_map_link}>
-                      <LinkIcon />
-                      {'naver map'}
-                    </a>
-                    <a target="_blank" href={el.google_map_link}>
-                      <LinkIcon />
-                      {'google map'}
-                    </a>
-                  </span>
-                </RestaurantLocation>
-              </Description>
-            </RestaurantBox>
-          ))}
+          {filteredRestaurants.map((el: RestaurantData, idx: number) => {
+            console.log(el.photo);
+            return (
+              <RestaurantBox key={idx}>
+                <img src={el.photo} alt={el.name} />
+                <Description>
+                  <RestaurantInfo>
+                    <h1>{el.name}</h1>
+                    <p>{el.type}</p>
+                  </RestaurantInfo>
+                  <RestaurantLocation>
+                    <span className="location__distance">
+                      <NavigateIcon />
+                      <span>{el.distance}m from School</span>
+                    </span>
+                    <span className="location__link">
+                      <a target="_blank" href={el.naver_map_link}>
+                        <LinkIcon />
+                        {'naver map'}
+                      </a>
+                      <a target="_blank" href={el.google_map_link}>
+                        <LinkIcon />
+                        {'google map'}
+                      </a>
+                    </span>
+                  </RestaurantLocation>
+                </Description>
+              </RestaurantBox>
+            );
+          })}
         </List>
       ) : (
         <List>

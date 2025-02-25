@@ -87,7 +87,11 @@ const SubHeaderWrapper = styled(motion.div)`
   border-bottom: 0.5px solid ${({ theme }) => theme.colors.gray400};
   display: flex;
   align-items: center;
-  padding-left: 25.7rem;
+  flex-wrap: wrap;
+
+  @media (max-width: 480px) {
+    height: 5.5rem;
+  }
 `;
 
 const SubElement = styled.div`
@@ -117,6 +121,10 @@ const SubElement = styled.div`
     line-height: 2.1rem;
     letter-spacing: -0.8px;
     margin: 0 1.9rem;
+
+    @media (max-width: 480px) {
+      margin: 0.2rem 1rem;
+    }
   }
 
   &:last-child > p {

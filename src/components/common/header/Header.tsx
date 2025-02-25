@@ -2,12 +2,13 @@ import styled from 'styled-components';
 import HeaderNav from './header-items/HeaderNav';
 import AlarmButton from './header-items/AlarmButton';
 import ProfileButton from './header-items/ProfileButton';
-import LanguageButton from './header-items/LanguageButton';
-import { useEffect, useState } from 'react';
+//import LanguageButton from './header-items/LanguageButton';
+import { useEffect, useState, useRef } from 'react';
 import SubHeader from './SubHeader';
 import { useNavigate } from 'react-router-dom';
 import { EventSourcePolyfill, NativeEventSource } from 'event-source-polyfill';
 import { isTokenExpired, refreshAccessToken } from '@/utils/auth';
+import ArrowDown from '@/assets/svg/tips/faq/arrow.svg?react';
 
 export interface NotiList {
   id: number;
@@ -33,13 +34,14 @@ export default function Header({ scrollY }: { scrollY: number }) {
   const navigate = useNavigate();
   const [hoveredTab, setHoveredTab] = useState<string>('');
   const [notice, setNotice] = useState<AllInfoNotification | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const mobileNavRef = useRef<HTMLDivElement>(null);
+
   const isLogined = () => {
-    if (localStorage.getItem('accessToken')) return true;
-    else return false;
+    return !!localStorage.getItem('accessToken');
   };
 
-  // ...
-
+  // SSE 관련 useEffect는 그대로 유지
   useEffect(() => {
     const setupSSE = async () => {
       let accessToken = localStorage.getItem('accessToken');
@@ -62,8 +64,6 @@ export default function Header({ scrollY }: { scrollY: number }) {
         }
       );
 
-      //console.log('SSE 연결됨:', evtSource);
-
       evtSource.onmessage = (event) => {
         try {
           const newEvent = JSON.parse(event.data);
@@ -78,9 +78,7 @@ export default function Header({ scrollY }: { scrollY: number }) {
       };
 
       evtSource.onerror = async () => {
-        //console.error('SSE 에러:', err);
         evtSource.close();
-        // 일정 시간 후 재연결 시도
         setTimeout(setupSSE, 1000);
       };
 
@@ -93,6 +91,27 @@ export default function Header({ scrollY }: { scrollY: number }) {
     setupSSE();
   }, []);
 
+  // 모바일 네브 외부 클릭 시 닫히게 하는 useEffect
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleClickOutside = (event: MouseEvent) => {
+      // 모바일 네브 내부 또는 토글 버튼에서 stopPropagation을 했으므로
+      // 여기에 도달했다면 외부 클릭으로 판단합니다.
+      if (
+        mobileNavRef.current &&
+        !mobileNavRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [isOpen]);
+
   return (
     <HeaderContainer onMouseLeave={() => setHoveredTab('')}>
       <UpWrapper $scrollY={scrollY}>
@@ -101,24 +120,66 @@ export default function Header({ scrollY }: { scrollY: number }) {
             <img src="/logo.svg" alt="logo" />
             <span>Dotted</span>
           </Logo>
-          <HeaderNav setHoveredTab={setHoveredTab} />
+          <HeaderNavWrapper>
+            <HeaderNav setHoveredTab={setHoveredTab} />
+          </HeaderNavWrapper>
+          <ArrowWrapper
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsOpen((prev) => !prev);
+            }}
+          >
+            <ArrowDown />
+          </ArrowWrapper>
         </LeftSection>
         <RightSection onMouseEnter={() => setHoveredTab('')}>
           {isLogined() ? (
             <>
               <AlarmButton notice={notice} />
               <ProfileButton />
-              <LanguageButton />
+              {/* <LanguageButton /> */}
             </>
           ) : (
             <LoginButton onClick={() => navigate('/login')}>Login</LoginButton>
           )}
         </RightSection>
       </UpWrapper>
+      {isOpen && (
+        <MobileNav ref={mobileNavRef} onClick={(e) => e.stopPropagation()}>
+          <HeaderNav setHoveredTab={setHoveredTab} />
+        </MobileNav>
+      )}
       <SubHeader hoveredTab={hoveredTab} />
     </HeaderContainer>
   );
 }
+
+const HeaderNavWrapper = styled.div`
+  @media (max-width: 900px) {
+    display: none;
+  }
+`;
+
+const MobileNav = styled.nav`
+  width: 100%;
+  padding: 0 7.7rem;
+  display: none;
+  @media (max-width: 900px) {
+    display: block;
+  }
+  @media (max-width: 700px) {
+    padding-right: 2rem;
+    padding-left: 2rem;
+  }
+`;
+
+const ArrowWrapper = styled.div`
+  display: none;
+  cursor: pointer;
+  @media (max-width: 920px) {
+    display: block;
+  }
+`;
 
 const LoginButton = styled.button`
   background-color: ${({ theme }) => theme.colors.purple600};
@@ -139,18 +200,18 @@ const LoginButton = styled.button`
 
 const HeaderContainer = styled.div`
   width: 100%;
+  padding: 0 7.7rem;
+  @media (max-width: 700px) {
+    padding-right: 2rem;
+    padding-left: 2rem;
+  }
   position: fixed;
   top: 0;
   z-index: 1000;
 `;
 
 const UpWrapper = styled.div<{ $scrollY: number }>`
-  width: 100vw;
   height: 8rem;
-  /* background-color: ${({ theme, $scrollY }) =>
-    $scrollY > 0
-      ? theme.colors.backgroundLayer2
-      : theme.colors.backgroundLayer2}; */
   background-color: ${({ theme }) => theme.colors.backgroundLayer2};
   color: ${({ theme }) => theme.colors.gray700};
   display: flex;
@@ -162,8 +223,6 @@ const LeftSection = styled.div`
   align-items: center;
   gap: 2.8rem;
   height: 100%;
-  width: 50%;
-  margin-left: 9.1rem;
 `;
 
 const RightSection = styled.div`
@@ -173,7 +232,6 @@ const RightSection = styled.div`
   gap: 1rem;
   width: fit-content;
   height: 100%;
-  margin-right: 9.1rem;
 `;
 
 const Logo = styled.div`
@@ -186,11 +244,9 @@ const Logo = styled.div`
   line-height: 2.1rem;
   letter-spacing: -2.16px;
   cursor: pointer;
-
   &:hover {
     opacity: 0.9;
   }
-
   > img {
     width: 3.5rem;
     height: 3.5rem;
