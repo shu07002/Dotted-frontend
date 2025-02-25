@@ -36,7 +36,7 @@ const fetchPosts = async ({
   }
 
   console.log(queryParams.toString());
-  const url = `${import.meta.env.VITE_API_DOMAIN}/${apiLink.url}?${queryParams.toString()}`;
+  const url = `${import.meta.env.VITE_API_DOMAIN}/api/${apiLink.url}?${queryParams.toString()}`;
 
   // fetchWithAuth를 사용하여 401 발생 시 자동 재발급 및 재시도 처리
   return fetchWithAuth<CommunityPost | MarketPost>(url, {

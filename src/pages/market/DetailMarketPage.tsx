@@ -1,11 +1,12 @@
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
-
 import { useEffect, useState } from 'react';
 import CommentSection from '@/components/CommunityPage/CommentSection';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import MarketPosting from '@/components/MarketPage/MarketPosting';
+import { fetchWithAuth } from '@/utils/auth'; // auth.ts 경로에 맞게 수정
 
+// -------------------- 타입 정의 --------------------
 export interface MarketPostImage {
   id: number;
   post: number; // post_id (FK)
@@ -53,13 +54,23 @@ export default function DetailMarketPage() {
   const postId = Number(id);
   const [isScraped, setIsScraped] = useState(false);
 
+  // API를 통해 상세 게시글을 가져옴 (fetchWithAuth 사용)
   const {
     data: post,
     isLoading,
     isError
   } = useQuery<MarketPostDetail, Error>({
     queryKey: ['postDetail', postId],
-    queryFn: () => fetchPostDetail(postId)
+    queryFn: () =>
+      fetchWithAuth<MarketPostDetail>(
+        `${import.meta.env.VITE_API_DOMAIN}/api/posting/market/${postId}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      )
   });
 
   useEffect(() => {
@@ -69,70 +80,34 @@ export default function DetailMarketPage() {
   }, [post]);
 
   // -------------------- API 호출 함수 --------------------
-  async function fetchPostDetail(postId: number): Promise<MarketPostDetail> {
-    const accessToken = localStorage.getItem('accessToken');
-    const response = await fetch(
-      `${import.meta.env.VITE_API_DOMAIN}/posting/market/${postId}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`
-        }
-      }
-    );
+  // 게시글 상세 조회는 위의 useQuery에서 fetchWithAuth를 사용하여 호출함
 
-    if (!response.ok) {
-      throw new Error(
-        `Failed to fetch post detail (status: ${response.status})`
-      );
-    }
-
-    return response.json();
-  }
-
+  // 스크랩 Mutation (fetchWithAuth 사용)
   const scrapMutation = useMutation({
     mutationFn: async () => {
-      const accessToken = localStorage.getItem('accessToken');
-      if (!accessToken) {
-        console.error('No access');
-        return;
-      }
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_API_DOMAIN}/posting/${id}/scrap`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${accessToken}`
-            },
-            body: JSON.stringify({ id })
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error('Failed to like');
+      // fetchWithAuth 내부에서 토큰 관리가 수행됨
+      return await fetchWithAuth<any>(
+        `${import.meta.env.VITE_API_DOMAIN}/api/posting/${id}/scrap`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ id })
         }
-
-        return await response.json();
-      } catch (error) {
-        console.log(error);
-        throw error; // onError 핸들러에서 처리됨
-      } finally {
-        // 요청 성공/실패 여부와 관계없이 항상 실행됨
-      }
+      );
     },
     onSuccess: (data) => {
       setIsScraped(data.is_scrapped);
       console.log(data);
     },
-    onError: (error) => {
+    onError: (error: any) => {
       console.log(`Error: ${error.message}`);
     }
   });
 
   const onClickScrap = () => {
+    // UI 상에서 즉시 스크랩 상태 토글
     setIsScraped(!isScraped);
     scrapMutation.mutate();
   };

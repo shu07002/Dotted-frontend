@@ -45,7 +45,7 @@ export default function VerifyCodePart({
 
   async function verifyCodeRequest(email: string, code: string) {
     const response = await fetch(
-      `${import.meta.env.VITE_API_DOMAIN}/user/password-reset/verify`,
+      `${import.meta.env.VITE_API_DOMAIN}/api/user/password-reset/verify`,
       {
         method: 'POST',
         headers: {

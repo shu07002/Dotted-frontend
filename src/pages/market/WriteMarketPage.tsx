@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import ImgBox from '@/components/MarketPage/ImgBox';
 import { useBlocker, useLocation, useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
+import { fetchWithAuth } from '@/utils/auth';
 
 interface MarketData {
   title: string;
@@ -96,26 +97,18 @@ export default function WriteMarketPage() {
 
   const postingMutation = useMutation({
     mutationFn: async (data: MarketData) => {
-      const accessToken = window.localStorage.getItem('accessToken');
-
-      if (!accessToken) {
-        throw new Error('No access token found. Please log in again.');
-      }
-
-      const response = await fetch(
-        `${import.meta.env.VITE_API_DOMAIN}/posting/market/create`,
+      // fetchWithAuth 내부에서 토큰 유효성 검사 및 갱신이 자동으로 처리됨
+      const response = await fetchWithAuth<any>(
+        `${import.meta.env.VITE_API_DOMAIN}/api/posting/market/create`,
         {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${accessToken}`
+            'Content-Type': 'application/json'
           },
           body: JSON.stringify(data)
         }
       );
-
-      if (!response.ok) throw new Error('Failed to posting');
-      return response.json();
+      return response;
     },
     onSuccess: (data) => {
       console.log('🎉 글쓰기 성공:', data);
@@ -126,7 +119,7 @@ export default function WriteMarketPage() {
       }, 100);
     },
     onError: (error) => {
-      console.error('❌ 글쓰기기 실패:', error);
+      console.error('❌ 글쓰기 실패:', error);
     }
   });
 
@@ -281,25 +274,18 @@ export default function WriteMarketPage() {
       postId: number;
       data: MarketUpdateData;
     }) => {
-      const accessToken = window.localStorage.getItem('accessToken');
-      if (!accessToken) {
-        throw new Error('No access token found. Please log in again.');
-      }
-      console.log(data);
-      const response = await fetch(
-        `${import.meta.env.VITE_API_DOMAIN}/posting/market/${postId}/update`,
+      // fetchWithAuth 내부에서 토큰 관리 수행
+      const response = await fetchWithAuth<any>(
+        `${import.meta.env.VITE_API_DOMAIN}/api/posting/market/${postId}/update`,
         {
           method: 'PATCH',
           headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${accessToken}`
+            'Content-Type': 'application/json'
           },
           body: JSON.stringify(data)
         }
       );
-
-      if (!response.ok) throw new Error('Failed to update post');
-      return response.json();
+      return response;
     },
     onSuccess: (data) => {
       console.log('🎉 글수정 성공:', data);

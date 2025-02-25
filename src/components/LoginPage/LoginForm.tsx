@@ -40,7 +40,7 @@ export default function LoginForm() {
   const loginMutation = useMutation({
     mutationFn: async () => {
       const response = await fetch(
-        `${import.meta.env.VITE_API_DOMAIN}/user/login`,
+        `${import.meta.env.VITE_API_DOMAIN}/api/user/login`,
         {
           method: 'POST',
           headers: {

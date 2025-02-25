@@ -7,7 +7,7 @@ import MapModal from './MapModal';
 
 const fetchBuildings = async () => {
   const response = await fetch(
-    `${import.meta.env.VITE_API_DOMAIN}/tips/map-building`
+    `${import.meta.env.VITE_API_DOMAIN}/api/tips/map-building`
   );
   return response.json();
 };

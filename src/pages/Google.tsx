@@ -15,7 +15,7 @@ const Google = () => {
         try {
           // 백엔드의 Google OAuth 처리 엔드포인트로 인증 코드 전달
           const response = await fetch(
-            `${import.meta.env.VITE_API_DOMAIN}/user/login/google/callback?code=${code}`,
+            `${import.meta.env.VITE_API_DOMAIN}/api/user/login/google/callback?code=${code}`,
             {
               method: 'GET', // 백엔드는 보통 POST 요청을 기대함
               headers: {

@@ -8,6 +8,7 @@ import { useMutation } from '@tanstack/react-query';
 import Modal from 'react-modal';
 import ReportFlag from '@/assets/svg/CommunityPage/ReportFlag.svg?react';
 import Change from '@/assets/svg/MarketPage/Change.svg?react';
+import { fetchWithAuth } from '@/utils/auth'; // auth.ts에서 import
 
 Modal.setAppElement('#root');
 
@@ -26,17 +27,6 @@ const customStyles = {
     zIndex: 9999
   }
 };
-
-//post
-//openMore
-//navigate
-//Menu
-//replaceconetnet
-
-// TODO
-// 노말모달, 리포트모달 스테이트 내부 선언
-// replaceconetnet, 오픈 모어, 셋오픈 모어어 프롭스로 가져오기
-// post.tag 마켓이면 status, 아니면 tag로 하기기
 
 interface MoreButtonProps {
   post: MarketPostDetail | PostDetail;
@@ -59,11 +49,9 @@ export default function MoreButton({
 
   const [reportType, setReportType] = useState('');
   const [reportContent, setReportContent] = useState('');
-
   const [statusType, setStatusType] = useState('');
 
   let replacedContent = post.content;
-
   const navigate = useNavigate();
 
   if (openNormalModal || openReportModal) {
@@ -72,116 +60,84 @@ export default function MoreButton({
     document.body.style.overflow = 'auto';
   }
 
-  // 2) 버튼 클릭 시 삭제 Mutation 실행
-  const handleDelete = () => {
-    setOpenNormalModal(false);
+  // 이미지 URL 교체 (필요한 경우)
+  if (post.images && post.images.length > 0) {
+    post.images.forEach((imgObj, index) => {
+      const placeholder = `src={images[${index}].image_url}`;
+      const realSrc = `src="${imgObj.image_url}"`;
+      replacedContent = replacedContent.replace(placeholder, realSrc);
+    });
+  }
 
-    deleteMutation.mutate(post.id);
-  };
-  const handleChange = (e: any) => setReportType(e.target.value);
-  const handleStatusChange = (e: any) => setStatusType(e.target.value);
-
-  const deleteMutation = useMutation({
+  // 삭제 Mutation
+  const deleteMutation = useMutation<void, Error, number>({
     mutationFn: async (postId: number) => {
-      const accessToken = window.localStorage.getItem('accessToken');
-      if (!accessToken) {
-        throw new Error('No access token found. Please log in again.');
-      }
-
       const path = origin
-        ? `/posting/${origin}/${postId}/delete`
-        : `/posting/${postId}/delete`;
-
-      const response = await fetch(
+        ? `/api/posting/${origin}/${postId}/delete`
+        : `/api/posting/${postId}/delete`;
+      return await fetchWithAuth<void>(
         `${import.meta.env.VITE_API_DOMAIN}${path}`,
-        {
-          method: 'DELETE',
-          headers: {
-            Authorization: `Bearer ${accessToken}`
-          }
-        }
+        { method: 'DELETE' }
       );
-      if (!response.ok) {
-        throw new Error('Failed to delete post');
-      }
-
-      const responseBody = await response.text();
-      return responseBody ? JSON.parse(responseBody) : null;
     },
-    onSuccess: (data) => {
-      console.log('✅ 삭제 성공:', data);
-      // 삭제 성공 시 원하는 페이지로 이동
+    onSuccess: () => {
+      console.log('✅ 삭제 성공');
       if (origin) {
         navigate(`/${origin}`);
-      } else navigate('/community');
+      } else {
+        navigate('/community');
+      }
     },
     onError: (error) => {
       console.error('❌ 삭제 실패:', error);
     }
   });
 
-  if (post.images && post.images.length > 0) {
-    post.images.forEach((imgObj, index) => {
-      // 'src="{images[0].image_url}"' => 'src="https://example.com/img1.png"'
-      const placeholder = `src={images[${index}].image_url}`;
-      const realSrc = `src="${imgObj.image_url}"`;
+  const handleDelete = () => {
+    setOpenNormalModal(false);
+    deleteMutation.mutate(post.id);
+  };
 
-      replacedContent = replacedContent.replace(placeholder, realSrc);
-    });
-  }
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setReportType(e.target.value);
+  const handleStatusChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setStatusType(e.target.value);
 
-  const changeStatusMutate = useMutation({
+  // 상태 변경 Mutation (마켓 게시글)
+  const changeStatusMutate = useMutation<any, Error, void>({
     mutationFn: async () => {
-      const accessToken = window.localStorage.getItem('accessToken');
-      if (!accessToken) {
-        throw new Error('No access token found. Please log in again.');
-      }
-
       if (!('status' in post) || !('price' in post)) {
         throw new Error(
           'Invalid post type. Only market posts can change status.'
         );
       }
-
-      // 기존 post 데이터를 유지하면서 status만 업데이트
       const updatedPostData = {
         title: post.title,
         content: post.content,
         price: post.price,
-        status: statusType, // 새롭게 변경할 status 값
+        status: statusType,
         images: post.images.map((img, index) => ({
           image_id: img.id,
           action: 'keep',
           order: index + 1
         }))
       };
-
       console.log(updatedPostData);
-
-      const response = await fetch(
-        `${import.meta.env.VITE_API_DOMAIN}/posting/market/${post.id}/update`,
+      return await fetchWithAuth<any>(
+        `${import.meta.env.VITE_API_DOMAIN}/api/posting/market/${post.id}/update`,
         {
           method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${accessToken}`
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(updatedPostData)
         }
       );
-
-      if (!response.ok) {
-        throw new Error('Failed to update status');
-      }
-
-      return response.json();
     },
     onSuccess: (data) => {
       console.log('✅ 상태 변경 성공:', data);
-      setOpenChangeModal(false); // 모달 닫기
+      setOpenChangeModal(false);
       if (setLocalStatus) setLocalStatus(statusType);
       if ('status' in post) {
-        post.status = statusType;
+        (post as MarketPostDetail).status = statusType;
       }
     },
     onError: (error) => {
@@ -190,44 +146,29 @@ export default function MoreButton({
     }
   });
 
-  const reportMutation = useMutation({
+  // 신고 Mutation
+  const reportMutation = useMutation<any, Error, void>({
     mutationFn: async () => {
-      const accessToken = window.localStorage.getItem('accessToken');
-      if (!accessToken) {
-        throw new Error('No access token found. Please log in again.');
-      }
       const dataToSend = {
-        report_type: reportType, // 라디오 버튼에서 선택한 신고 유형
-        content_type: 'Post', // 게시글 신고
-        object_id: post.id, // 게시글 ID
-        reason: reportContent // 신고 사유
+        report_type: reportType,
+        content_type: 'Post',
+        object_id: post.id,
+        reason: reportContent
       };
-
-      // POST /management/report
-      const response = await fetch(
-        `${import.meta.env.VITE_API_DOMAIN}/management/report`,
+      return await fetchWithAuth<any>(
+        `${import.meta.env.VITE_API_DOMAIN}/api/management/report`,
         {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${accessToken}`
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(dataToSend)
         }
       );
-
-      if (!response.ok) {
-        throw new Error('Failed to report');
-      }
-      return response.json();
     },
-    onSuccess: (data) => {
-      console.log('✅ 신고 성공:', data);
+    onSuccess: () => {
+      console.log('✅ 신고 성공');
       setReportContent('');
       setReportType('');
-      // 신고 후 모달 닫기
       setOpenReportModal(false);
-      // 필요하다면 후처리 (예: 알림, 페이지 이동 등)
       alert('Your report has been submitted.');
     },
     onError: (error) => {
@@ -236,7 +177,7 @@ export default function MoreButton({
     }
   });
 
-  // "Yes" 버튼 클릭 시 신고 mutation 실행
+  // 신고 버튼 클릭 시 실행
   const ReportMutation = () => {
     if (!reportType) {
       alert('Please select a report type.');
@@ -248,6 +189,7 @@ export default function MoreButton({
     }
     reportMutation.mutate();
   };
+
   return (
     <>
       <button onClick={() => setOpenMore((prev) => !prev)}>
@@ -289,8 +231,8 @@ export default function MoreButton({
       <Modal
         isOpen={openNormalModal}
         style={customStyles}
-        onRequestClose={() => setOpenNormalModal(!openNormalModal)}
-        contentLabel="example"
+        onRequestClose={() => setOpenNormalModal((prev) => !prev)}
+        contentLabel="Delete Modal"
       >
         <AccessRestrictedWrapper>
           <div>
@@ -300,7 +242,7 @@ export default function MoreButton({
               </TextNormal>
             </AccessRestrictedNormal>
             <ButtonBox>
-              <LaterButton onClick={() => setOpenNormalModal(!openNormalModal)}>
+              <LaterButton onClick={() => setOpenNormalModal((prev) => !prev)}>
                 Cancle
               </LaterButton>
               <NowButton onClick={handleDelete}>
@@ -314,8 +256,8 @@ export default function MoreButton({
       <Modal
         isOpen={openReportModal}
         style={customStyles}
-        onRequestClose={() => setOpenReportModal(!openReportModal)}
-        contentLabel="example"
+        onRequestClose={() => setOpenReportModal((prev) => !prev)}
+        contentLabel="Report Modal"
       >
         <AccessRestrictedWrapper>
           <div>
@@ -385,7 +327,7 @@ export default function MoreButton({
               </div>
             </AccessRestrictedReport>
             <ButtonBox>
-              <LaterButton onClick={() => setOpenReportModal(!openReportModal)}>
+              <LaterButton onClick={() => setOpenReportModal((prev) => !prev)}>
                 No
               </LaterButton>
               <NowButton onClick={ReportMutation}>Yes</NowButton>
@@ -397,8 +339,8 @@ export default function MoreButton({
       <Modal
         isOpen={openChangeModal}
         style={customStyles}
-        onRequestClose={() => setOpenReportModal(!openChangeModal)}
-        contentLabel="example"
+        onRequestClose={() => setOpenChangeModal((prev) => !prev)}
+        contentLabel="Change Modal"
       >
         <AccessRestrictedWrapper>
           <div>
@@ -410,7 +352,6 @@ export default function MoreButton({
                   </div>
                   Change Condition
                 </span>
-
                 <form>
                   <ChangeRadioWrapper>
                     <ChangeHiddenRadio
@@ -443,7 +384,7 @@ export default function MoreButton({
               </TextReport>
             </AccessRestrictedReport>
             <ButtonBox>
-              <LaterButton onClick={() => setOpenChangeModal(!openChangeModal)}>
+              <LaterButton onClick={() => setOpenChangeModal((prev) => !prev)}>
                 Cancel
               </LaterButton>
               <ChangeNowButton onClick={() => changeStatusMutate.mutate()}>

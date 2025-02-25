@@ -16,7 +16,7 @@ const sendPasswordResetEmail = async (
   email: string
 ): Promise<PasswordResetResponse> => {
   const response = await fetch(
-    `${import.meta.env.VITE_API_DOMAIN}/user/password-reset/email`,
+    `${import.meta.env.VITE_API_DOMAIN}/api/user/password-reset/email`,
     {
       method: 'POST',
       headers: {

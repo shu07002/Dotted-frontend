@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Posting from '@/components/CommunityPage/Posting';
 import CommentSection from '@/components/CommunityPage/CommentSection';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { fetchWithAuth } from '@/utils/auth'; // auth.ts 경로에 맞게 수정
 
 // -------------------- 타입 정의 --------------------
 export interface PostImage {
@@ -56,22 +57,24 @@ export default function DetailCommunityPage() {
   const [isLiked, setIsLiked] = useState(false);
   const [isScraped, setIsScraped] = useState(false);
 
-  // API를 통해 상세 게시글을 가져옴
+  // 게시글 상세 조회 API (fetchWithAuth 적용)
   const {
     data: post,
     isLoading,
     isError
   } = useQuery<PostDetail, Error>({
     queryKey: ['postDetail', postId],
-    queryFn: () => fetchPostDetail(postId)
+    queryFn: () =>
+      fetchWithAuth<PostDetail>(
+        `${import.meta.env.VITE_API_DOMAIN}/api/posting/${postId}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      )
   });
-
-  // "other posts"는 기존 dummy 데이터를 사용 (현재 게시글 제외)
-  // const otherPostsData = communityData.filter((el: any) => el.id !== postId);
-
-  // // 기타 게시글 페이지네이션 (dummy 데이터 사용)
-  // const [currentPage, setCurrentPage] = useState(1);
-  // const [pagedData, setPagedData] = useState<any[]>([]);
 
   useEffect(() => {
     if (post) {
@@ -80,107 +83,48 @@ export default function DetailCommunityPage() {
     }
   }, [post]);
 
-  // -------------------- API 호출 함수 --------------------
-  async function fetchPostDetail(postId: number): Promise<PostDetail> {
-    const accessToken = localStorage.getItem('accessToken');
-    const response = await fetch(
-      `${import.meta.env.VITE_API_DOMAIN}/posting/${postId}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`
-        }
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error(
-        `Failed to fetch post detail (status: ${response.status})`
-      );
-    }
-
-    return response.json();
-  }
-
+  // 좋아요 Mutation (fetchWithAuth 적용)
   const likeMutation = useMutation({
     mutationFn: async () => {
-      const accessToken = localStorage.getItem('accessToken');
-      if (!accessToken) {
-        console.error('No access');
-        return;
-      }
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_API_DOMAIN}/posting/${id}/like`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${accessToken}`
-            },
-            body: JSON.stringify({ id })
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error('Failed to like');
+      return await fetchWithAuth<any>(
+        `${import.meta.env.VITE_API_DOMAIN}/api/posting/${id}/like`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ id })
         }
-
-        return await response.json();
-      } catch (error) {
-        console.log(error);
-        throw error; // onError 핸들러에서 처리됨
-      } finally {
-        // 요청 성공/실패 여부와 관계없이 항상 실행됨
-      }
+      );
     },
     onSuccess: (data) => {
       setIsLiked(data.is_liked);
       console.log(data);
     },
-    onError: (error) => {
+    onError: (error: any) => {
       console.log(`Error: ${error.message}`);
     }
   });
 
+  // 스크랩 Mutation (fetchWithAuth 적용)
   const scrapMutation = useMutation({
     mutationFn: async () => {
-      const accessToken = localStorage.getItem('accessToken');
-      if (!accessToken) {
-        console.error('No access');
-        return;
-      }
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_API_DOMAIN}/posting/${id}/scrap`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${accessToken}`
-            },
-            body: JSON.stringify({ id })
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error('Failed to like');
+      return await fetchWithAuth<any>(
+        `${import.meta.env.VITE_API_DOMAIN}/api/posting/${id}/scrap`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ id })
         }
-
-        return await response.json();
-      } catch (error) {
-        console.log(error);
-        throw error; // onError 핸들러에서 처리됨
-      } finally {
-        // 요청 성공/실패 여부와 관계없이 항상 실행됨
-      }
+      );
     },
     onSuccess: (data) => {
       setIsScraped(data.is_scrapped);
       console.log(data);
     },
-    onError: (error) => {
+    onError: (error: any) => {
       console.log(`Error: ${error.message}`);
     }
   });
@@ -194,20 +138,6 @@ export default function DetailCommunityPage() {
     setIsScraped(!isScraped);
     scrapMutation.mutate();
   };
-
-  // function handleDirectionBtn(targetPage: number) {
-  //   if (targetPage < 1) {
-  //     setCurrentPage(1);
-  //   } else if (targetPage > Math.ceil(otherPostsData.length / 3)) {
-  //     setCurrentPage(Math.ceil(otherPostsData.length / 3));
-  //   } else {
-  //     setCurrentPage(targetPage);
-  //   }
-  // }
-
-  // function handlePageChange(targetPage: number) {
-  //   setCurrentPage(targetPage);
-  // }
 
   if (isLoading) {
     return <div style={{ minHeight: '116rem' }} />;
@@ -227,33 +157,7 @@ export default function DetailCommunityPage() {
           onClickLike={onClickLike}
           onClickScrap={onClickScrap}
         />
-
         <CommentSection post={post} />
-
-        {/* <OtherPostWrapper>
-          <Text>other posts</Text>
-          <PostingList pagedData={pagedData} />
-          <PaginationBox>
-            <button onClick={() => handleDirectionBtn(currentPage - 1)}>
-              {'<'}
-            </button>
-            {Array.from(
-              { length: Math.ceil(otherPostsData.length / 3) },
-              (_, idx) => (
-                <button
-                  className={currentPage === idx + 1 ? 'selected' : ''}
-                  key={idx}
-                  onClick={() => handlePageChange(idx + 1)}
-                >
-                  {idx + 1}
-                </button>
-              )
-            )}
-            <button onClick={() => handleDirectionBtn(currentPage + 1)}>
-              {'>'}
-            </button>
-          </PaginationBox>
-        </OtherPostWrapper> */}
       </Wrapper>
     </DetailCommunityPageContainer>
   );
