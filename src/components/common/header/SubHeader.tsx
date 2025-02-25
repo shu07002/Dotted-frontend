@@ -8,8 +8,8 @@ interface SubHeaderProps {
 }
 
 const aboutsubs = [
-  { title: 'What is Dotted?', link: '' },
-  { title: 'Notice', link: '' }
+  { title: 'What is Dotted?', link: '/about/onboarding' },
+  { title: 'Notice', link: '/about/notice' }
 ];
 
 const tipssubs = [
@@ -23,6 +23,7 @@ const tipssubs = [
 
 export default function SubHeader({ hoveredTab }: SubHeaderProps) {
   const { pathname } = useLocation();
+  console.log(hoveredTab);
 
   //location이 tips나 about일 때만 subheader를 보여줌
   const handlePathname = (pathname: string) => {

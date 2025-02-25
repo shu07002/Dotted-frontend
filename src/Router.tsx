@@ -16,6 +16,8 @@ import CommunityPage from './pages/community/CommunityPage';
 import WriteCommunityPage from './pages/community/WriteCommunityPage';
 import DetailCommunityPage from './pages/community/DetailCommunityPage';
 import Footer from './components/common/Footer';
+import OnboardingPage from './pages/about/OnboardingPage';
+import NoticePage from './pages/about/NoticePage';
 
 const Router = createBrowserRouter([
   {
@@ -68,6 +70,13 @@ const Router = createBrowserRouter([
           { path: '', element: <CommunityPage /> },
           { path: 'write', element: <WriteCommunityPage /> },
           { path: 'detail/:id', element: <DetailCommunityPage /> }
+        ]
+      },
+      {
+        path: 'about',
+        children: [
+          { path: 'onboarding', element: <OnboardingPage /> },
+          { path: 'notice', element: <NoticePage /> }
         ]
       }
     ]
