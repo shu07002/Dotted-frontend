@@ -5,16 +5,18 @@ import ArtIcon from '@/assets/svg/tips/clubs/art.svg?react';
 import ReligionIcon from '@/assets/svg/tips/clubs/religion.svg?react';
 import PEIcon from '@/assets/svg/tips/clubs/pe.svg?react';
 import AcademicIcon from '@/assets/svg/tips/clubs/academic.svg?react';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import SearchBox from '@/components/tips/clubs/SearchBox';
 import ClubsList from '@/components/tips/clubs/ClubsList';
+import { useSearchParams } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 
 const clubTabs = [
   { name: 'All', src: 'all' },
   { name: 'Volunteer', src: 'volunteer' },
-  { name: 'Art', src: 'art' },
-  { name: 'Religion', src: 'religion' },
-  { name: 'P.E', src: 'pe' },
+  { name: 'Performing Arts', src: 'art' },
+  { name: 'Religious', src: 'religion' },
+  { name: 'Sports', src: 'pe' },
   { name: 'Academic', src: 'academic' }
 ];
 
@@ -27,7 +29,57 @@ const clubIcons: Record<string, React.FC> = {
   academic: AcademicIcon
 };
 
+export interface ClubData {
+  id: number;
+  college: number;
+  college_name: string;
+  name: string;
+  photo: string;
+  intro: string;
+  category: string;
+}
+
+const fetchClubs = async (): Promise<ClubData[]> => {
+  const res = await fetch(`${import.meta.env.VITE_API_DOMAIN}/api/campus/club`);
+  if (!res.ok) {
+    throw new Error('Failed to fetch clubs');
+  }
+  return res.json();
+};
+
 export default function ClubsPage() {
+  const {
+    data: clubs,
+    isLoading,
+    error
+  } = useQuery({
+    queryKey: ['tipsClubs'],
+    queryFn: fetchClubs
+  });
+  const [searchParam, setSearchParam] = useSearchParams();
+  const [filterdData, setFilterdData] = useState<ClubData[]>([]);
+
+  function handleTabClick(tab: string) {
+    setSearchParam({ q: tab.toLowerCase() });
+  }
+
+  useEffect(() => {
+    setSearchParam({ q: 'all' });
+  }, []);
+
+  useEffect(() => {
+    if (clubs) {
+      const filtered = clubs.filter((el: ClubData) => {
+        if (searchParam.get('q') === 'all') {
+          return el;
+        } else {
+          return el.category.toLowerCase() === searchParam.get('q');
+        }
+      });
+      setFilterdData(filtered);
+    }
+  }, [clubs, searchParam]);
+
   return (
     <Main>
       <HeaderSection>
@@ -36,7 +88,9 @@ export default function ClubsPage() {
             const IconComponent = clubIcons[tab.src];
             return (
               <TabElement key={idx}>
-                <span>{<IconComponent />}</span>
+                <span onClick={() => handleTabClick(tab.name)}>
+                  {<IconComponent />}
+                </span>
                 <p>{tab.name}</p>
               </TabElement>
             );
@@ -45,7 +99,7 @@ export default function ClubsPage() {
         <SearchBox />
         <a target="_blank">Download Club Guidebook ⟶</a>
       </HeaderSection>
-      <ClubsList />
+      {clubs && <ClubsList filterdData={filterdData} />}
     </Main>
   );
 }
