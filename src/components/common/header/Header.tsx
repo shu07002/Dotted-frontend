@@ -8,6 +8,7 @@ import SubHeader from './SubHeader';
 import { useNavigate } from 'react-router-dom';
 import { EventSourcePolyfill, NativeEventSource } from 'event-source-polyfill';
 import { isTokenExpired, refreshAccessToken } from '@/utils/auth';
+import ArrowDown from '@/assets/svg/tips/faq/arrow.svg?react';
 
 export interface NotiList {
   id: number;
@@ -37,6 +38,7 @@ export default function Header({ scrollY }: { scrollY: number }) {
     if (localStorage.getItem('accessToken')) return true;
     else return false;
   };
+  const [isOpen, setIsOpen] = useState(false);
 
   // ...
 
@@ -101,24 +103,63 @@ export default function Header({ scrollY }: { scrollY: number }) {
             <img src="/logo.svg" alt="logo" />
             <span>Dotted</span>
           </Logo>
-          <HeaderNav setHoveredTab={setHoveredTab} />
+          <HeaderNavWrapper>
+            <HeaderNav setHoveredTab={setHoveredTab} />
+          </HeaderNavWrapper>
+          <ArrowWrapper onClick={() => setIsOpen((prev) => !prev)}>
+            <ArrowDown />
+          </ArrowWrapper>
         </LeftSection>
         <RightSection onMouseEnter={() => setHoveredTab('')}>
           {isLogined() ? (
             <>
               <AlarmButton notice={notice} />
               <ProfileButton />
-              <LanguageButton />
+              {/* <LanguageButton /> */}
             </>
           ) : (
             <LoginButton onClick={() => navigate('/login')}>Login</LoginButton>
           )}
         </RightSection>
       </UpWrapper>
+      {isOpen && (
+        <MobileNav>
+          <HeaderNav setHoveredTab={setHoveredTab} />
+        </MobileNav>
+      )}
       <SubHeader hoveredTab={hoveredTab} />
     </HeaderContainer>
   );
 }
+
+const HeaderNavWrapper = styled.div`
+  @media (max-width: 900px) {
+    display: none;
+  }
+`;
+
+const MobileNav = styled.nav`
+  width: 100%;
+  padding: 0 7.7rem;
+
+  display: none;
+  @media (max-width: 900px) {
+    display: block;
+  }
+
+  @media (max-width: 700px) {
+    padding-right: 2rem;
+    padding-left: 2rem;
+  }
+`;
+
+const ArrowWrapper = styled.div`
+  display: none;
+  cursor: pointer;
+  @media (max-width: 920px) {
+    display: block;
+  }
+`;
 
 const LoginButton = styled.button`
   background-color: ${({ theme }) => theme.colors.purple600};
@@ -139,13 +180,18 @@ const LoginButton = styled.button`
 
 const HeaderContainer = styled.div`
   width: 100%;
+  padding: 0 7.7rem;
+
+  @media (max-width: 700px) {
+    padding-right: 2rem;
+    padding-left: 2rem;
+  }
   position: fixed;
   top: 0;
   z-index: 1000;
 `;
 
 const UpWrapper = styled.div<{ $scrollY: number }>`
-  width: 100vw;
   height: 8rem;
   /* background-color: ${({ theme, $scrollY }) =>
     $scrollY > 0
@@ -162,8 +208,6 @@ const LeftSection = styled.div`
   align-items: center;
   gap: 2.8rem;
   height: 100%;
-  width: 50%;
-  margin-left: 9.1rem;
 `;
 
 const RightSection = styled.div`
@@ -173,7 +217,6 @@ const RightSection = styled.div`
   gap: 1rem;
   width: fit-content;
   height: 100%;
-  margin-right: 9.1rem;
 `;
 
 const Logo = styled.div`

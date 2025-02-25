@@ -131,6 +131,11 @@ const Main = styled.main`
   flex-direction: column;
   align-items: center;
   margin-bottom: 13.9rem;
+
+  @media (max-width: 700px) {
+    padding-right: 2rem;
+    padding-left: 2rem;
+  }
 `;
 
 const Wrapper = styled.div`

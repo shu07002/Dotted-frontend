@@ -86,7 +86,6 @@ const SubHeaderWrapper = styled(motion.div)`
   border-bottom: 0.5px solid ${({ theme }) => theme.colors.gray400};
   display: flex;
   align-items: center;
-  padding-left: 25.7rem;
 `;
 
 const SubElement = styled.div`

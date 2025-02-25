@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import { fetchWithAuth } from '@/utils/auth';
 import { useQuery } from '@tanstack/react-query';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 // types/user.ts
 
@@ -71,6 +71,10 @@ export default function ProfileButton() {
 }
 
 const ProfileBox = styled.div`
+  @media (max-width: 920px) {
+    gap: 1rem;
+    margin-right: 1rem;
+  }
   position: relative;
   display: flex;
   justify-content: center;
@@ -100,6 +104,9 @@ const ProfileBox = styled.div`
   }
 
   > span {
+    @media (max-width: 920px) {
+      display: none;
+    }
     margin-left: 1.2rem;
     margin-right: 0.3rem;
     text-align: center;
