@@ -22,7 +22,7 @@ const checkNickname = async (
   setMsg: React.Dispatch<React.SetStateAction<string>>
 ) => {
   const response = await fetch(
-    `${import.meta.env.VITE_API_DOMAIN}/user/nickname-check?nickname=${nickname}`
+    `${import.meta.env.VITE_API_DOMAIN}/api/user/nickname-check?nickname=${nickname}`
   );
 
   if (!response.ok) {

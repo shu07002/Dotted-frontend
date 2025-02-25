@@ -66,7 +66,7 @@ export default function DetailCommunityPage() {
     queryKey: ['postDetail', postId],
     queryFn: () =>
       fetchWithAuth<PostDetail>(
-        `${import.meta.env.VITE_API_DOMAIN}/posting/${postId}`,
+        `${import.meta.env.VITE_API_DOMAIN}/api/posting/${postId}`,
         {
           method: 'GET',
           headers: {
@@ -87,7 +87,7 @@ export default function DetailCommunityPage() {
   const likeMutation = useMutation({
     mutationFn: async () => {
       return await fetchWithAuth<any>(
-        `${import.meta.env.VITE_API_DOMAIN}/posting/${id}/like`,
+        `${import.meta.env.VITE_API_DOMAIN}/api/posting/${id}/like`,
         {
           method: 'POST',
           headers: {
@@ -110,7 +110,7 @@ export default function DetailCommunityPage() {
   const scrapMutation = useMutation({
     mutationFn: async () => {
       return await fetchWithAuth<any>(
-        `${import.meta.env.VITE_API_DOMAIN}/posting/${id}/scrap`,
+        `${import.meta.env.VITE_API_DOMAIN}/api/posting/${id}/scrap`,
         {
           method: 'POST',
           headers: {

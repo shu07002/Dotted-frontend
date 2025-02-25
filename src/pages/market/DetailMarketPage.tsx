@@ -63,7 +63,7 @@ export default function DetailMarketPage() {
     queryKey: ['postDetail', postId],
     queryFn: () =>
       fetchWithAuth<MarketPostDetail>(
-        `${import.meta.env.VITE_API_DOMAIN}/posting/market/${postId}`,
+        `${import.meta.env.VITE_API_DOMAIN}/api/posting/market/${postId}`,
         {
           method: 'GET',
           headers: {
@@ -87,7 +87,7 @@ export default function DetailMarketPage() {
     mutationFn: async () => {
       // fetchWithAuth 내부에서 토큰 관리가 수행됨
       return await fetchWithAuth<any>(
-        `${import.meta.env.VITE_API_DOMAIN}/posting/${id}/scrap`,
+        `${import.meta.env.VITE_API_DOMAIN}/api/posting/${id}/scrap`,
         {
           method: 'POST',
           headers: {

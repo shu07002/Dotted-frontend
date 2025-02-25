@@ -55,7 +55,7 @@ export default function AComment({
   const commentLikeMutation = useMutation<CommentLikeResponse, Error, void>({
     mutationFn: async () => {
       return await fetchWithAuth<CommentLikeResponse>(
-        `${import.meta.env.VITE_API_DOMAIN}/posting/comment/${comment.id}/like`,
+        `${import.meta.env.VITE_API_DOMAIN}/api/posting/comment/${comment.id}/like`,
         { method: 'POST' }
       );
     },
@@ -81,7 +81,7 @@ export default function AComment({
       };
 
       return await fetchWithAuth<Comment>(
-        `${import.meta.env.VITE_API_DOMAIN}/posting/comment/${comment.id}/update`,
+        `${import.meta.env.VITE_API_DOMAIN}/api/posting/comment/${comment.id}/update`,
         {
           method: 'PATCH',
           body: JSON.stringify(requestData)
@@ -117,7 +117,7 @@ export default function AComment({
       };
 
       return await fetchWithAuth<Comment>(
-        `${import.meta.env.VITE_API_DOMAIN}/posting/comment/create`,
+        `${import.meta.env.VITE_API_DOMAIN}/api/posting/comment/create`,
         {
           method: 'POST',
           body: JSON.stringify(requestData)
@@ -143,7 +143,7 @@ export default function AComment({
   const deleteMutation = useMutation<void, Error, void>({
     mutationFn: async () => {
       return await fetchWithAuth<void>(
-        `${import.meta.env.VITE_API_DOMAIN}/posting/comment/${comment.id}/delete`,
+        `${import.meta.env.VITE_API_DOMAIN}/api/posting/comment/${comment.id}/delete`,
         { method: 'DELETE' }
       );
     },

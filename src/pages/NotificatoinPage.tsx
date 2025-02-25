@@ -29,10 +29,18 @@ export default function NotificatoinPage() {
   const [notice, setNotice] = useState<AllInfoNotification | null>(null);
 
   useEffect(() => {
+    let accessToken = localStorage.getItem('accessToken');
+    if (!accessToken) return;
+    const EventSourceConstructor = EventSourcePolyfill || NativeEventSource;
+    const headers = { Authorization: `Bearer ${accessToken}` };
+
+    const evtSource = new EventSourceConstructor(
+      `${import.meta.env.VITE_API_DOMAIN}/api/notification/stream`,
+      { headers: headers, withCredentials: true }
+    );
+
     const runSSE = async () => {
       // 토큰이 없는 경우 연결하지 않음
-      let accessToken = localStorage.getItem('accessToken');
-      if (!accessToken) return;
 
       // 토큰 만료 여부 체크, 만료되었다면 갱신 시도
       if (isTokenExpired(accessToken)) {
@@ -44,14 +52,6 @@ export default function NotificatoinPage() {
           return;
         }
       }
-
-      const EventSourceConstructor = EventSourcePolyfill || NativeEventSource;
-      const headers = { Authorization: `Bearer ${accessToken}` };
-
-      const evtSource = new EventSourceConstructor(
-        `${import.meta.env.VITE_API_DOMAIN}/notification/stream`,
-        { headers: headers, withCredentials: true }
-      );
 
       console.log('SSE 연결됨:', evtSource);
 
@@ -91,6 +91,11 @@ export default function NotificatoinPage() {
     };
 
     runSSE();
+
+    return () => {
+      evtSource.close();
+      console.log('SSE 연결 종료');
+    };
   }, []);
 
   useEffect(() => {

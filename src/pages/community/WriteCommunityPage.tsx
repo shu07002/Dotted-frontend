@@ -103,7 +103,7 @@ export default function WriteCommunityPage() {
     mutationFn: async (data: CommunityData) => {
       // fetchWithAuth 내부에서 토큰 유효성 검사/갱신이 처리됨
       const response = await fetchWithAuth<any>(
-        `${import.meta.env.VITE_API_DOMAIN}/posting/create`,
+        `${import.meta.env.VITE_API_DOMAIN}/api/posting/create`,
         {
           method: 'POST',
           headers: {
@@ -143,7 +143,7 @@ export default function WriteCommunityPage() {
     }) => {
       // fetchWithAuth 내부에서 토큰 관리 수행
       const response = await fetchWithAuth<any>(
-        `${import.meta.env.VITE_API_DOMAIN}/posting/${postId}/update`,
+        `${import.meta.env.VITE_API_DOMAIN}/api/posting/${postId}/update`,
         {
           method: 'PATCH',
           headers: {

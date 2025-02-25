@@ -35,7 +35,7 @@ export default function StudentVerificat({
     mutationFn: async () => {
       // 로그인은 JSON 요청이므로 Content-Type 헤더를 추가
       const data = await fetchWithAuth<any>(
-        `${import.meta.env.VITE_API_DOMAIN}/user/login`,
+        `${import.meta.env.VITE_API_DOMAIN}/api/user/login`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -74,7 +74,7 @@ export default function StudentVerificat({
       const formData = new FormData();
       formData.append('image_upload', file);
       const data = await fetchWithAuth<any>(
-        `${import.meta.env.VITE_API_DOMAIN}/user/univrequest`,
+        `${import.meta.env.VITE_API_DOMAIN}/api/user/univrequest`,
         {
           method: 'POST',
           body: formData

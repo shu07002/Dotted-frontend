@@ -73,8 +73,8 @@ export default function MoreButton({
   const deleteMutation = useMutation<void, Error, number>({
     mutationFn: async (postId: number) => {
       const path = origin
-        ? `/posting/${origin}/${postId}/delete`
-        : `/posting/${postId}/delete`;
+        ? `/api/posting/${origin}/${postId}/delete`
+        : `/api/posting/${postId}/delete`;
       return await fetchWithAuth<void>(
         `${import.meta.env.VITE_API_DOMAIN}${path}`,
         { method: 'DELETE' }
@@ -124,7 +124,7 @@ export default function MoreButton({
       };
       console.log(updatedPostData);
       return await fetchWithAuth<any>(
-        `${import.meta.env.VITE_API_DOMAIN}/posting/market/${post.id}/update`,
+        `${import.meta.env.VITE_API_DOMAIN}/api/posting/market/${post.id}/update`,
         {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
@@ -156,7 +156,7 @@ export default function MoreButton({
         reason: reportContent
       };
       return await fetchWithAuth<any>(
-        `${import.meta.env.VITE_API_DOMAIN}/management/report`,
+        `${import.meta.env.VITE_API_DOMAIN}/api/management/report`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },

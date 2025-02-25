@@ -79,7 +79,7 @@ export default function SignUpPage() {
       console.log(dataToSend);
 
       const response = await fetch(
-        `${import.meta.env.VITE_API_DOMAIN}/user/register`,
+        `${import.meta.env.VITE_API_DOMAIN}/api/user/register`,
         {
           method: 'POST', // ✅ POST 요청으로 변경
           headers: {

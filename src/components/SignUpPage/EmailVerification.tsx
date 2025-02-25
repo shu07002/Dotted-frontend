@@ -53,7 +53,7 @@ export default function EmailVerification({
       setLoading(true);
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_API_DOMAIN}/user/email`,
+          `${import.meta.env.VITE_API_DOMAIN}/api/user/email`,
           {
             method: 'POST',
             headers: {
@@ -90,7 +90,7 @@ export default function EmailVerification({
   const verifyCodeMutation = useMutation({
     mutationFn: async ({ code, token }: { code: string; token: string }) => {
       const response = await fetch(
-        `${import.meta.env.VITE_API_DOMAIN}/user/verify`,
+        `${import.meta.env.VITE_API_DOMAIN}/api/user/verify`,
         {
           method: 'POST',
           headers: {

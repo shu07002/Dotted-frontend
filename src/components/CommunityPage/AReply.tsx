@@ -42,7 +42,7 @@ export default function AReply({ reply }: { reply: Comment }) {
   const deleteMutation = useMutation<void, Error, void>({
     mutationFn: async () => {
       return await fetchWithAuth<void>(
-        `${import.meta.env.VITE_API_DOMAIN}/posting/comment/${reply.id}/delete`,
+        `${import.meta.env.VITE_API_DOMAIN}/api/posting/comment/${reply.id}/delete`,
         { method: 'DELETE' }
       );
     },
@@ -58,7 +58,7 @@ export default function AReply({ reply }: { reply: Comment }) {
   const replyLikeMutation = useMutation<ReplyLikeResponse, Error, void>({
     mutationFn: async () => {
       return await fetchWithAuth<ReplyLikeResponse>(
-        `${import.meta.env.VITE_API_DOMAIN}/posting/comment/${reply.id}/like`,
+        `${import.meta.env.VITE_API_DOMAIN}/api/posting/comment/${reply.id}/like`,
         { method: 'POST' }
       );
     },
@@ -83,7 +83,7 @@ export default function AReply({ reply }: { reply: Comment }) {
         is_secret: false // 공개 댓글로 가정
       };
       return await fetchWithAuth<Comment>(
-        `${import.meta.env.VITE_API_DOMAIN}/posting/comment/${reply.id}/update`,
+        `${import.meta.env.VITE_API_DOMAIN}/api/posting/comment/${reply.id}/update`,
         {
           method: 'PATCH',
           headers: {

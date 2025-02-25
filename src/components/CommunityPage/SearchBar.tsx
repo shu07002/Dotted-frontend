@@ -16,6 +16,11 @@ export default function SearchBar({
   onChangeSearchType,
   handleSearch
 }: SearchBarProps) {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
   return (
     <SearchBarWrapper>
       <Filter onChange={onChangeSearchType} value={searchType}>
@@ -32,6 +37,7 @@ export default function SearchBar({
             placeholder="Search"
             value={keyword}
             onChange={onChangeSearch}
+            onKeyDown={handleKeyDown}
           />
         </label>
 

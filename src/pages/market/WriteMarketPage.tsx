@@ -99,7 +99,7 @@ export default function WriteMarketPage() {
     mutationFn: async (data: MarketData) => {
       // fetchWithAuth 내부에서 토큰 유효성 검사 및 갱신이 자동으로 처리됨
       const response = await fetchWithAuth<any>(
-        `${import.meta.env.VITE_API_DOMAIN}/posting/market/create`,
+        `${import.meta.env.VITE_API_DOMAIN}/api/posting/market/create`,
         {
           method: 'POST',
           headers: {
@@ -276,7 +276,7 @@ export default function WriteMarketPage() {
     }) => {
       // fetchWithAuth 내부에서 토큰 관리 수행
       const response = await fetchWithAuth<any>(
-        `${import.meta.env.VITE_API_DOMAIN}/posting/market/${postId}/update`,
+        `${import.meta.env.VITE_API_DOMAIN}/api/posting/market/${postId}/update`,
         {
           method: 'PATCH',
           headers: {

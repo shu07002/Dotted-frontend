@@ -55,16 +55,19 @@ export default function Header({ scrollY }: { scrollY: number }) {
 
       const EventSourceConstructor = EventSourcePolyfill || NativeEventSource;
       const evtSource = new EventSourceConstructor(
-        `${import.meta.env.VITE_API_DOMAIN}/notification/stream`,
+        `${import.meta.env.VITE_API_DOMAIN}/api/notification/stream`,
         {
           headers: { Authorization: `Bearer ${accessToken}` },
           withCredentials: true
         }
       );
 
+      //console.log('SSE 연결됨:', evtSource);
+
       evtSource.onmessage = (event) => {
         try {
           const newEvent = JSON.parse(event.data);
+          console.log(newEvent);
           setNotice((prev) => {
             if (prev === null) return newEvent;
             return { ...prev, list: [newEvent.list[0], ...prev.list] };
@@ -75,7 +78,7 @@ export default function Header({ scrollY }: { scrollY: number }) {
       };
 
       evtSource.onerror = async (err) => {
-        console.error('SSE 에러:', err);
+        //console.error('SSE 에러:', err);
         evtSource.close();
         // 일정 시간 후 재연결 시도
         setTimeout(setupSSE, 1000);

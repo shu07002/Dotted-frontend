@@ -53,7 +53,7 @@ export default function CommentSection({ post, origin }: CommentSectionProps) {
     mutationFn: async (data) => {
       // fetchWithAuth 내부에서 토큰 갱신/검증이 처리됩니다.
       const response = await fetchWithAuth<Comment>(
-        `${import.meta.env.VITE_API_DOMAIN}/posting/comment/create`,
+        `${import.meta.env.VITE_API_DOMAIN}/api/posting/comment/create`,
         {
           method: 'POST',
           headers: {
