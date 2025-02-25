@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import AppleIcon from '@/assets/svg/SignUpPage/AppleIconSVG.svg?react';
+//import AppleIcon from '@/assets/svg/SignUpPage/AppleIconSVG.svg?react';
 import Email from '@/assets/svg/SignUpPage/EmailSVG.svg?react';
 import GoogleLoginButton from './GooleLoginButton';
 
@@ -16,10 +16,10 @@ export default function SignUpWithOtherEmail({
     <SignUpWithOtherEmailWrapper>
       <GoogleLoginButton isChecked={isChecked} text="Sign up with Apple" />
 
-      <BlackButtonWrapper>
+      {/* <BlackButtonWrapper>
         <AppleIconStyled />
         <span>Sign up with Apple</span>
-      </BlackButtonWrapper>
+      </BlackButtonWrapper> */}
 
       <GrayButtonWrapper onClick={() => onChangeStep()}>
         <EmailIconStyled />
@@ -38,29 +38,29 @@ const SignUpWithOtherEmailWrapper = styled.div`
   margin-bottom: 17.1rem;
 `;
 
-const BlackButtonWrapper = styled.div`
-  cursor: pointer;
-  width: 38.6rem;
-  height: 3.8rem;
-  flex-shrink: 0;
-  border-radius: 24px;
-  background: ${({ theme }) => theme.colors.gray800};
-  display: flex;
-  justify-content: center;
-  align-items: center;
+// const BlackButtonWrapper = styled.div`
+//   cursor: pointer;
+//   width: 38.6rem;
+//   height: 3.8rem;
+//   flex-shrink: 0;
+//   border-radius: 24px;
+//   background: ${({ theme }) => theme.colors.gray800};
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
 
-  > span {
-    width: 176px;
-    color: ${({ theme }) => theme.colors.gray50};
-    text-align: center;
-    font-family: Inter;
-    font-size: 15px;
-    font-style: normal;
-    font-weight: 300;
-    line-height: normal;
-    letter-spacing: -0.45px;
-  }
-`;
+//   > span {
+//     width: 176px;
+//     color: ${({ theme }) => theme.colors.gray50};
+//     text-align: center;
+//     font-family: Inter;
+//     font-size: 15px;
+//     font-style: normal;
+//     font-weight: 300;
+//     line-height: normal;
+//     letter-spacing: -0.45px;
+//   }
+// `;
 
 const GrayButtonWrapper = styled.div`
   cursor: pointer;
@@ -86,11 +86,11 @@ const GrayButtonWrapper = styled.div`
   }
 `;
 
-const AppleIconStyled = styled(AppleIcon)`
-  path {
-    fill: ${({ theme }) => theme.colors.gray50};
-  }
-`;
+// const AppleIconStyled = styled(AppleIcon)`
+//   path {
+//     fill: ${({ theme }) => theme.colors.gray50};
+//   }
+// `;
 
 const EmailIconStyled = styled(Email)`
   path {

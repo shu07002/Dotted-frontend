@@ -65,7 +65,11 @@ export default function SignUpPage() {
     document.body.style.overflow = 'auto';
   }
 
-  if (step === 4 && !isSogangEmail) setIsModalOpen(true);
+  useEffect(() => {
+    if (step === 4 && !isSogangEmail && !isModalOpen) {
+      setIsModalOpen(true);
+    }
+  }, [step, isSogangEmail, isModalOpen]);
 
   const signUpMutation = useMutation({
     mutationFn: async (userData: SignUpFormData) => {

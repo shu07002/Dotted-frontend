@@ -22,9 +22,18 @@ export default function AccessRestrictedModal({
             <span>
               To full access ‘Community’ and ‘Market’ you
               <span>
-                {' '}
                 need to <br />
                 verify that you are a student at Sogang university.
+              </span>
+            </span>
+          </Text>
+
+          <Text>
+            <span>
+              <span>
+                Beta period: Free access to Community and Market until March
+                22nd without verification.After that date, only verified
+                students will have full access.
               </span>
             </span>
           </Text>
