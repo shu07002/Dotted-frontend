@@ -1,12 +1,32 @@
 import styled from 'styled-components';
 import SearchIcon from '@/assets/svg/tips/clubs/search.svg?react';
 
-export default function SearchBox() {
+interface SearchBoxProps {
+  searchValue: string;
+  onInputChange: (value: string) => void;
+  onSearch: () => void;
+}
+
+export default function SearchBox({
+  searchValue,
+  onInputChange,
+  onSearch
+}: SearchBoxProps) {
   return (
     <Wrapper>
       <span>
-        <input type="text" placeholder="Search" />
-        <SearchIcon />
+        <input
+          type="text"
+          placeholder="Search"
+          value={searchValue}
+          onChange={(e) => onInputChange(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              onSearch();
+            }
+          }}
+        />
+        <SearchIcon onClick={onSearch} style={{ cursor: 'pointer' }} />
       </span>
     </Wrapper>
   );

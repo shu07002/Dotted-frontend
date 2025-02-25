@@ -5,16 +5,18 @@ import ArtIcon from '@/assets/svg/tips/clubs/art.svg?react';
 import ReligionIcon from '@/assets/svg/tips/clubs/religion.svg?react';
 import PEIcon from '@/assets/svg/tips/clubs/pe.svg?react';
 import AcademicIcon from '@/assets/svg/tips/clubs/academic.svg?react';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import SearchBox from '@/components/tips/clubs/SearchBox';
 import ClubsList from '@/components/tips/clubs/ClubsList';
+import { useSearchParams } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 
 const clubTabs = [
   { name: 'All', src: 'all' },
   { name: 'Volunteer', src: 'volunteer' },
-  { name: 'Art', src: 'art' },
-  { name: 'Religion', src: 'religion' },
-  { name: 'P.E', src: 'pe' },
+  { name: 'Performing Arts', src: 'art' },
+  { name: 'Religious', src: 'religion' },
+  { name: 'Sports', src: 'pe' },
   { name: 'Academic', src: 'academic' }
 ];
 
@@ -27,25 +29,102 @@ const clubIcons: Record<string, React.FC> = {
   academic: AcademicIcon
 };
 
+export interface ClubData {
+  id: number;
+  college: number;
+  college_name: string;
+  name: string;
+  photo: string;
+  intro: string;
+  category: string;
+}
+
+const fetchClubs = async (): Promise<ClubData[]> => {
+  const res = await fetch(`${import.meta.env.VITE_API_DOMAIN}/api/campus/club`);
+  if (!res.ok) {
+    throw new Error('Failed to fetch clubs');
+  }
+  return res.json();
+};
+
 export default function ClubsPage() {
+  const { data: clubs } = useQuery({
+    queryKey: ['tipsClubs'],
+    queryFn: fetchClubs
+  });
+  const [searchParam, setSearchParam] = useSearchParams();
+  const [filterdData, setFilterdData] = useState<ClubData[]>([]);
+  const [inputValue, setInputValue] = useState(''); // 인풋창 값
+  const [searchTerm, setSearchTerm] = useState(''); // 실제 검색어
+
+  function handleTabClick(tab: string) {
+    setInputValue('');
+    setSearchTerm('');
+    setSearchParam({ q: tab.toLowerCase() });
+  }
+
+  // 엔터 또는 서치 아이콘 클릭 시 실행
+  function handleSearch() {
+    setSearchParam({ q: 'all' });
+    setSearchTerm(inputValue);
+  }
+
+  // 초기 탭을 all로 설정
+  useEffect(() => {
+    setSearchParam({ q: 'all' });
+  }, []);
+
+  useEffect(() => {
+    if (clubs) {
+      let filtered = clubs;
+      // 검색어가 존재하면 검색어에 해당하는 클럽들만 필터링 (카테고리 무시)
+      if (searchTerm.trim() !== '') {
+        filtered = clubs.filter(
+          (club) =>
+            club.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            club.intro.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+      } else {
+        // 검색어가 없으면 선택된 카테고리에 따라 필터링 (all인 경우 전체 표시)
+        if (searchParam.get('q') !== 'all') {
+          filtered = clubs.filter(
+            (club: ClubData) =>
+              club.category.toLowerCase() === searchParam.get('q')
+          );
+        }
+      }
+      setFilterdData(filtered);
+    }
+  }, [clubs, searchTerm, searchParam]);
+
   return (
     <Main>
       <HeaderSection>
         <Nav>
           {clubTabs.map((tab, idx) => {
+            const isActive = searchParam.get('q') === tab.name.toLowerCase();
             const IconComponent = clubIcons[tab.src];
             return (
-              <TabElement key={idx}>
-                <span>{<IconComponent />}</span>
+              <TabElement key={idx} $active={isActive}>
+                <span onClick={() => handleTabClick(tab.name)}>
+                  <IconComponent />
+                </span>
                 <p>{tab.name}</p>
               </TabElement>
             );
           })}
         </Nav>
-        <SearchBox />
-        <a target="_blank">Download Club Guidebook ⟶</a>
+        {/* SearchBox에 인풋창 값, onChange, onSearch 핸들러 전달 */}
+        <SearchBox
+          searchValue={inputValue}
+          onInputChange={setInputValue}
+          onSearch={handleSearch}
+        />
+        <a target="_blank" rel="noopener noreferrer">
+          Download Club Guidebook ⟶
+        </a>
       </HeaderSection>
-      <ClubsList />
+      {clubs && <ClubsList filterdData={filterdData} />}
     </Main>
   );
 }
@@ -79,7 +158,7 @@ const Nav = styled.nav`
   padding: 2.8rem 0;
 `;
 
-const TabElement = styled.div`
+const TabElement = styled.div<{ $active: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -92,6 +171,8 @@ const TabElement = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: ${({ $active, theme }) =>
+      $active ? theme.colors.purple100 : ''};
 
     &:hover {
       background-color: ${({ theme }) => theme.colors.backgroundLayer1};
@@ -103,6 +184,13 @@ const TabElement = styled.div`
       height: 2.4rem;
       path {
         stroke: ${({ theme }) => theme.colors.gray500};
+      }
+
+      g {
+        path {
+          stroke: ${({ $active, theme }) =>
+            $active ? theme.colors.purple600 : ''};
+        }
       }
     }
   }
