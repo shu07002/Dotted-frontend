@@ -147,6 +147,14 @@ const Wrapper = styled.div`
   width: 100%;
   margin-top: 5.7rem;
   padding: 0 23rem;
+
+  @media (max-width: 1200px) {
+    padding: 0 10rem;
+  }
+
+  @media (max-width: 700px) {
+    padding: 0 2rem;
+  }
 `;
 
 const ContentWrapper = styled.div`

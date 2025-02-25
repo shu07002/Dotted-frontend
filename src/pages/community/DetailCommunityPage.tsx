@@ -177,6 +177,14 @@ const Wrapper = styled.div`
   max-width: 144rem;
   margin-top: 5.7rem;
   padding: 0 23rem;
+
+  @media (max-width: 1200px) {
+    padding: 0 10rem;
+  }
+
+  @media (max-width: 700px) {
+    padding: 0 2rem;
+  }
 `;
 
 // const OtherPostWrapper = styled.div`

@@ -160,17 +160,10 @@ const HeaderNavWrapper = styled.div`
   }
 `;
 
-const MobileNav = styled.nav`
+const MobileNav = styled.div`
   width: 100%;
-  padding: 0 7.7rem;
+
   display: none;
-  @media (max-width: 900px) {
-    display: block;
-  }
-  @media (max-width: 700px) {
-    padding-right: 2rem;
-    padding-left: 2rem;
-  }
 `;
 
 const ArrowWrapper = styled.div`
