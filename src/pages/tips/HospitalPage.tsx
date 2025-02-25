@@ -10,8 +10,7 @@ import { useHospitals } from '@/hooks/useHospital';
 const hospitalTabs = [
   'All',
   'Internal Medicine',
-  'Psychiatry',
-  'Dental Clinic',
+  'Dentistry',
   'Otolaryngology',
   'Obstetrics',
   'Dermatology',

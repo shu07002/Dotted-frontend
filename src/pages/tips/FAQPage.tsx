@@ -1,4 +1,5 @@
 import SearchBar from '@/components/CommunityPage/SearchBar';
+import React from 'react';
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Arrow from '@/assets/svg/tips/faq/arrow.svg?react';
@@ -84,6 +85,66 @@ export default function FAQPage() {
     setSearchParams({ page: targetPage.toString(), keyword, searchType });
   };
 
+  // 답변 문자열을 포맷팅하는 헬퍼 함수
+
+  function formatAnswer(text: string): React.ReactNode[] {
+    // 1. 개행 문자 정리: 여러 줄바꿈을 한 칸의 공백으로 변경
+    let normalized = text.replace(/\r\n/g, '\n').replace(/\n+/g, ' ');
+
+    // 2. 문장 마침표, 느낌표, 물음표 뒤에 줄바꿈을 삽입
+    // 단, 마침표 바로 앞 문자가 숫자일 경우(예: "1.")는 줄바꿈하지 않음.
+    // (?<=[^0-9])는 바로 앞 문자가 숫자가 아닌 경우를 의미합니다.
+    normalized = normalized.replace(/(?<=[^0-9])([.!?])\s+/g, '$1\n');
+
+    // 3. 줄바꿈 기준으로 분리
+    const lines = normalized.split('\n');
+
+    // 4. 각 줄 내에서 http/https URL 처리 (www로 시작하는 경우는 그대로 둠)
+    return lines.map((line, lineIndex) => {
+      // URL 패턴: http:// 또는 https:// 로 시작하는 문자열만 매칭
+      const parts = line.split(/((?:https?:\/\/)\S+)/g);
+      return (
+        <div key={lineIndex}>
+          {parts.map((part, partIndex) => {
+            if (/^(https?:\/\/)\S+/.test(part)) {
+              // URL 끝에 후행 문장부호(., !, ?, ) 등 분리
+              const match = part.match(/^(https?:\/\/\S+?)([.,!?)]*)$/);
+              if (match) {
+                const url = match[1];
+                const trailing = match[2];
+                return (
+                  <React.Fragment key={partIndex}>
+                    <a
+                      href={url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: 'blue', textDecoration: 'underline' }}
+                    >
+                      {url}
+                    </a>
+                    <span>{trailing}</span>
+                  </React.Fragment>
+                );
+              }
+              return (
+                <a
+                  key={partIndex}
+                  href={part}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: 'blue', textDecoration: 'underline' }}
+                >
+                  {part}
+                </a>
+              );
+            }
+            return <span key={partIndex}>{part}</span>;
+          })}
+        </div>
+      );
+    });
+  }
+
   return (
     <FAQPageContainer>
       <Wrapper>
@@ -119,7 +180,7 @@ export default function FAQPage() {
                   </div>
                 </FAQItem>
                 <Answer className={`answer ${isOpen ? 'open' : ''}`}>
-                  {item.answer}
+                  {formatAnswer(item.answer)}
                 </Answer>
               </div>
             );
@@ -157,6 +218,7 @@ export default function FAQPage() {
 
 const FAQPageContainer = styled.div`
   margin-top: 8rem;
+  min-height: 80rem;
   width: 100%;
   padding: 0 24.3rem;
   display: flex;
@@ -202,10 +264,7 @@ const NoticeAndSearch = styled.div`
   margin-bottom: 2.5rem;
 `;
 
-const FAQBox = styled.ul`
-  > li {
-  }
-`;
+const FAQBox = styled.ul``;
 
 const ArrowWrapper = styled.div<{ isOpen: boolean }>`
   display: flex;
@@ -270,7 +329,7 @@ const Answer = styled.div`
 
   &.open {
     border-top: 1px solid ${({ theme }) => theme.colors.purple600};
-    max-height: 30rem;
+    max-height: 100rem;
     padding: 2.5rem 3.8rem;
   }
 `;
