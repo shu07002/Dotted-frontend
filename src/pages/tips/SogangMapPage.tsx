@@ -50,7 +50,7 @@ export default function SogangMapPage() {
           onClick={() => handleTabClick('health')}
         >
           <HospitalIcon />
-          <span>hospital</span>
+          <span>health center</span>
         </LocationElement>
         <SearchBox />
       </LocationTab>

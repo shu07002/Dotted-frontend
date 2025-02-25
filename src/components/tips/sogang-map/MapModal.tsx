@@ -53,8 +53,8 @@ export default function MapModal({
                     {spot.open_hours}
                   </p>
                   <Tags>
-                    {spot.tags?.map((tag) => (
-                      <span key={tag.id}>{tag.name} </span>
+                    {spot.features?.map((feature) => (
+                      <span key={feature.id}>{feature.name} </span>
                     ))}
                   </Tags>
                 </figcaption>
@@ -81,8 +81,8 @@ export default function MapModal({
                     {spot.open_hours}
                   </p>
                   <Tags>
-                    {spot.tags?.map((tag) => (
-                      <span key={tag.id}>{tag.name} </span>
+                    {spot.features?.map((feature) => (
+                      <span key={feature.id}>{feature.name} </span>
                     ))}
                   </Tags>
                 </figcaption>
@@ -109,8 +109,8 @@ export default function MapModal({
                     {spot.open_hours}
                   </p>
                   <Tags>
-                    {spot.tags?.map((tag) => (
-                      <span key={tag.id}>{tag.name} </span>
+                    {spot.features?.map((feature) => (
+                      <span key={feature.id}>{feature.name} </span>
                     ))}
                   </Tags>
                 </figcaption>
@@ -137,7 +137,7 @@ export default function MapModal({
                     {spot.open_hours}
                   </p>
                   <Tags>
-                    {spot.tags?.map((tag) => (
+                    {spot.features?.map((tag) => (
                       <span key={tag.id}>{tag.name} </span>
                     ))}
                   </Tags>
@@ -175,6 +175,7 @@ const StudyingSpotDiv = styled.div`
     height: 12rem;
     border-radius: 4px;
     object-fit: cover;
+    flex-shrink: 0;
   }
   h2 {
     font-size: 1.3rem;
