@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
 import NavigateIcon from '@/assets/svg/tips/restaurant/navigate.svg?react';
 import LinkIcon from '@/assets/svg/tips/restaurant/link.svg?react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 const fetchRestaurants = async () => {
