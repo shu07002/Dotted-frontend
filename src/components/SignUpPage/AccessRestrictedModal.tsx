@@ -31,9 +31,9 @@ export default function AccessRestrictedModal({
           <Text>
             <span>
               <span>
-                Beta period: Free access to Community and Market until March
-                22nd without verification.After that date, only verified
-                students will have full access.
+                <ColorPurple>Beta period</ColorPurple>: Free access to Community
+                and Market until March 22nd without verification.After that
+                date, only verified students will have full access.
               </span>
             </span>
           </Text>
@@ -146,4 +146,8 @@ const NowButton = styled.div`
   border-radius: 0px 0px 5px 0px;
   background: ${({ theme }) => theme.colors.purple600};
   color: ${({ theme }) => theme.colors.gray50};
+`;
+
+const ColorPurple = styled.span`
+  color: ${({ theme }) => theme.colors.purple600};
 `;

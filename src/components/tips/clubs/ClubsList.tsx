@@ -37,6 +37,10 @@ export default function ClubsList({
     }
   }, [filterdData, currentPage]);
 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filterdData]);
+
   // 페이지 변경 함수
   function handlePageChange(targetPage: number) {
     setCurrentPage(targetPage);
@@ -55,7 +59,7 @@ export default function ClubsList({
           </li>
         ))}
       </List>
-      <CopyRight>copyright by 총동아리 연합회</CopyRight>
+      <CopyRight>© 총동아리연합회</CopyRight>
 
       {/* 페이지네이션 UI */}
       <PaginationBox>

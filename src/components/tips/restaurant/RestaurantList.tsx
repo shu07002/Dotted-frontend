@@ -107,7 +107,6 @@ const List = styled.ul`
 
 const RestaurantBox = styled.li`
   width: 100%;
-  height: 200px;
   background-color: ${({ theme }) => theme.colors.backgroundLayer1};
   border-radius: 1.6rem;
   overflow: hidden;
@@ -118,6 +117,16 @@ const RestaurantBox = styled.li`
     height: 100%;
     object-fit: cover;
     flex-shrink: 0;
+
+    @media (max-width: 700px) {
+      width: 100%;
+      aspect-ratio: 1.2;
+      height: auto;
+    }
+  }
+
+  @media (max-width: 700px) {
+    display: block;
   }
 `;
 
@@ -127,18 +136,31 @@ const Description = styled.div`
   padding: 1.9rem 2.7rem 3.9rem 2.7rem;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-around;
+
+  @media (max-width: 900px) {
+    padding: 1rem 1.3rem 1.9rem 1.3rem;
+  }
+
+  @media (max-width: 700px) {
+    height: auto;
+    flex-shrink: 0;
+  }
 `;
 
 const RestaurantInfo = styled.div`
   display: flex;
   flex-direction: column;
+  margin-bottom: 1rem;
   gap: 1rem;
   > h1 {
     font-size: 2.4rem;
     font-weight: 400;
     letter-spacing: -1px;
     color: ${({ theme }) => theme.colors.gray700};
+    @media (max-width: 700px) {
+      font-size: 2rem;
+    }
   }
 
   > p {
@@ -177,6 +199,10 @@ const RestaurantLocation = styled.div`
     display: flex;
     gap: 1.6rem;
 
+    @media (max-width: 700px) {
+      gap: 0rem;
+    }
+
     > a {
       display: flex;
       gap: 1rem;
@@ -186,6 +212,10 @@ const RestaurantLocation = styled.div`
       letter-spacing: -0.3px;
       text-decoration-line: underline;
       color: ${({ theme }) => theme.colors.gray500};
+
+      @media (max-width: 700px) {
+        font-size: 1rem;
+      }
 
       > svg {
         width: 1.7rem;

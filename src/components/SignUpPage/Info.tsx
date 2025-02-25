@@ -9,7 +9,7 @@ export default function Info() {
       </div>
       <div>
         <span>
-          This information collected (Real name, Birthday, and Group) is for
+          This information (Real name, Birthday, and Group) is collected for
           internal purposes and will not be shared publicly.
         </span>
       </div>

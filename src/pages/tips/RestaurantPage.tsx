@@ -52,6 +52,21 @@ export default function RestaurantPage() {
 const Main = styled.main`
   width: 100%;
   padding: 5rem 18rem 2.6rem 18rem;
+
+  @media (max-width: 1100px) {
+    padding-right: 8rem;
+    padding-left: 8rem;
+  }
+
+  @media (max-width: 900px) {
+    padding-right: 5rem;
+    padding-left: 5rem;
+  }
+
+  @media (max-width: 700px) {
+    padding-right: 2rem;
+    padding-left: 2rem;
+  }
   display: flex;
   flex-direction: column;
 `;
@@ -70,6 +85,7 @@ const HeaderSection = styled.section`
     gap: 1.2rem;
     padding: 1.6rem 0;
     margin-top: 2.6rem;
+    flex-wrap: wrap;
 
     > span {
       font-size: 1.5rem;
