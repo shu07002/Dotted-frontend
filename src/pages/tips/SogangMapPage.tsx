@@ -38,11 +38,17 @@ export default function SogangMapPage() {
           <CafeIcon />
           <span>cafeteria</span>
         </LocationElement>
-        <LocationElement className="printer">
+        <LocationElement
+          className="printer"
+          onClick={() => handleTabClick('printer')}
+        >
           <PrinterIcon />
           <span>printer</span>
         </LocationElement>
-        <LocationElement className="hospital">
+        <LocationElement
+          className="health"
+          onClick={() => handleTabClick('health')}
+        >
           <HospitalIcon />
           <span>hospital</span>
         </LocationElement>
@@ -156,7 +162,7 @@ const LocationElement = styled.li`
   &.printer {
     background-color: ${({ theme }) => theme.colors.purple950};
   }
-  &.hospital {
+  &.health {
     background-color: ${({ theme }) => theme.colors.purple1000};
   }
 `;

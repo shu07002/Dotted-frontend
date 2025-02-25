@@ -7,7 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 
 const fetchBuildings = async () => {
   const response = await fetch(
-    `${import.meta.env.VITE_API_URL}/tips/map-building`
+    `${import.meta.env.VITE_API_DOMAIN}/api/tips/map-building`
   );
   return response.json();
 };

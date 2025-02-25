@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 
 // const fetchCultureDetail = async (id: number) => {
 //   const response = await fetch(
-//     `${import.meta.env.VITE_API_URL}/tips/tips-clubs/${id}`
+//     `${import.meta.env.VITE_API_DOMAIN}/tips/tips-clubs/${id}`
 //   );
 //   return response.json();
 // };

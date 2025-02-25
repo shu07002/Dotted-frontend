@@ -1,19 +1,16 @@
 import styled from 'styled-components';
-import GoogleIcon from '@/assets/svg/SignUpPage/GoogleIconSVG.svg?react';
-import AppleIcon from '@/assets/svg/SignUpPage/AppleIconSVG.svg?react';
+//import AppleIcon from '@/assets/svg/SignUpPage/AppleIconSVG.svg?react';
+import GoogleLoginButton from '../SignUpPage/GooleLoginButton';
 
 export default function LoginWithOtherEmail() {
   return (
     <LoginWithOtherEmailWrapper>
-      <BlackButtonWrapper>
-        <GoogleIconStyled />
-        <span>Continue with Google</span>
-      </BlackButtonWrapper>
+      <GoogleLoginButton isChecked={true} text="Continue with Google" />
 
-      <BlackButtonWrapper>
+      {/* <BlackButtonWrapper>
         <AppleIconStyled />
         <span>Continue with Apple</span>
-      </BlackButtonWrapper>
+      </BlackButtonWrapper> */}
     </LoginWithOtherEmailWrapper>
   );
 }
@@ -27,34 +24,32 @@ const LoginWithOtherEmailWrapper = styled.div`
   margin-bottom: 4.8rem;
 `;
 
-const BlackButtonWrapper = styled.div`
-  cursor: pointer;
-  width: 386px;
-  height: 38px;
-  flex-shrink: 0;
-  border-radius: 24px;
-  background: ${({ theme }) => theme.colors.gray800};
-  display: flex;
-  justify-content: center;
-  align-items: center;
+// const BlackButtonWrapper = styled.div`
+//   cursor: pointer;
+//   width: 386px;
+//   height: 38px;
+//   flex-shrink: 0;
+//   border-radius: 24px;
+//   background: ${({ theme }) => theme.colors.gray800};
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
 
-  > span {
-    width: 176px;
-    color: ${({ theme }) => theme.colors.gray50};
-    text-align: center;
-    font-family: Inter;
-    font-size: 15px;
-    font-style: normal;
-    font-weight: 300;
-    line-height: normal;
-    letter-spacing: -0.45px;
-  }
-`;
+//   > span {
+//     width: 176px;
+//     color: ${({ theme }) => theme.colors.gray50};
+//     text-align: center;
+//     font-family: Inter;
+//     font-size: 15px;
+//     font-style: normal;
+//     font-weight: 300;
+//     line-height: normal;
+//     letter-spacing: -0.45px;
+//   }
+// `;
 
-const GoogleIconStyled = styled(GoogleIcon)``;
-
-const AppleIconStyled = styled(AppleIcon)`
-  path {
-    fill: ${({ theme }) => theme.colors.gray50};
-  }
-`;
+// const AppleIconStyled = styled(AppleIcon)`
+//   path {
+//     fill: ${({ theme }) => theme.colors.gray50};
+//   }
+// `;

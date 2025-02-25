@@ -16,6 +16,11 @@ import CommunityPage from './pages/community/CommunityPage';
 import WriteCommunityPage from './pages/community/WriteCommunityPage';
 import DetailCommunityPage from './pages/community/DetailCommunityPage';
 import Footer from './components/common/Footer';
+import Google from './pages/Google';
+import MarketPage from './pages/market/MarketPage';
+import WriteMarketPage from './pages/market/WriteMarketPage';
+import DetailMarketPage from './pages/market/DetailMarketPage';
+import NotificatoinPage from './pages/NotificatoinPage';
 import OnboardingPage from './pages/about/OnboardingPage';
 import NoticePage from './pages/about/NoticePage';
 
@@ -69,8 +74,28 @@ const Router = createBrowserRouter([
         children: [
           { path: '', element: <CommunityPage /> },
           { path: 'write', element: <WriteCommunityPage /> },
-          { path: 'detail/:id', element: <DetailCommunityPage /> }
+          { path: 'detail/:id', element: <DetailCommunityPage /> },
+          { path: 'detail/:id/edit', element: <WriteCommunityPage /> }
         ]
+      },
+      {
+        path: 'market',
+        children: [
+          {
+            path: '',
+            element: <MarketPage />
+          },
+          {
+            path: 'write',
+            element: <WriteMarketPage />
+          },
+          { path: 'detail/:id', element: <DetailMarketPage /> },
+          { path: 'detail/:id/edit', element: <WriteMarketPage /> }
+        ]
+      },
+      {
+        path: 'notification',
+        element: <NotificatoinPage />
       },
       {
         path: 'about',
@@ -84,14 +109,19 @@ const Router = createBrowserRouter([
 
   {
     path: 'sign-up',
-    element: <SignUpPage />
+    children: [{ path: '', element: <SignUpPage /> }]
   },
   {
     path: 'login',
     children: [
       { path: '', element: <LoginPage /> },
-      { path: 'forgetpass', element: <ForgetPassPage /> }
+      { path: 'forgetpass', element: <ForgetPassPage /> },
+      { path: 'google/callback', element: <Google /> }
     ]
+  },
+  {
+    path: 'user/login/google/callback',
+    element: <Google />
   }
 ]);
 

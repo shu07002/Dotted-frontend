@@ -1,59 +1,94 @@
 import PostingList from '@/components/CommunityPage/PostingList';
 import SearchBar from '@/components/CommunityPage/SearchBar';
 import TagList from '@/components/CommunityPage/TagList';
-import { communityData } from '@/components/CommunityPage/testData';
-import { CommunityPost } from '@/types/CommunityPost';
-
+import { useSearchPosts } from '@/hooks/useSearchPosts';
+import { CommunityPost, EachPost } from '@/types/CommunityPost';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-const data = communityData;
+const tags = ['All', 'HOT', 'Campus Life', 'Travel', 'Living', 'Others'];
+const POST_PER_PAGE = 5; // 서버에서 받아오는 page 당 개수가 맞다면 굳이 slice 안해도 됨
 
 export default function CommunityPage() {
   const [selectedTag, setSelectedTag] = useState('All');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pagedData, setPagedData] = useState<CommunityPost[]>([]);
+  const [searchResults, setSearchResults] = useState<CommunityPost>();
+  const [pagedData, setPagedData] = useState<EachPost[]>([]);
 
-  const [search, setSearch] = useState('');
-
+  const [keyword, setKeyword] = useState('');
   const [searchType, setSearchType] = useState('all');
 
-  const onChangeSearch = (e: any) => {
-    setSearch(e.target.value);
+  const searchPosts = useSearchPosts();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+
+  // 현재 페이지 번호
+  const currentPage = Number(searchParams.get('page')) || 1;
+
+  // 전체 페이지 계산 (서버에서 이미 페이지네이션 처리 시, 직접 계산 불필요할 수 있음)
+  const totalPages = searchResults
+    ? Math.ceil(searchResults.count / POST_PER_PAGE)
+    : 1;
+
+  // 페이지네이션 그룹 계산
+  const groupSize = 5;
+  const currentGroup = Math.floor((currentPage - 1) / groupSize);
+  const startPage = currentGroup * groupSize + 1;
+  const endPage = Math.min(startPage + groupSize - 1, totalPages);
+
+  // 1) 태그/페이지/검색어에 따라 서버에서 데이터 가져오기
+  const handleSearch = () => {
+    // 로딩 표시를 위해 isLoading 사용
+    searchPosts.mutate(
+      {
+        name: '',
+        keyword,
+        searchType,
+        tag: selectedTag,
+        page: currentPage
+      },
+      {
+        onSuccess: (data) => {
+          setSearchResults(data as CommunityPost);
+          setPagedData(data.results as EachPost[]); // 서버에서 이미 페이지별로 results 제공
+        },
+        onError: (error) => {
+          console.error('❌ 검색 실패:', error);
+        }
+      }
+    );
   };
 
-  const onChangeSearchType = (e: any) => {
+  // 2) 태그가 변경될 때마다 page=1로 세팅 (원한다면)
+  // 뒤로 가기 시에는 URL 파라미터 유지 → 자동으로 currentPage 유지
+  const onClickTag = (tag: string) => {
+    setSelectedTag(tag);
+    setSearchParams({ page: '1', tag, keyword });
+  };
+
+  // 3) 페이지 변경 시 URL 파라미터 업데이트
+  const handlePageChange = (targetPage: number) => {
+    setSearchParams({ page: targetPage.toString(), tag: selectedTag, keyword });
+  };
+
+  // 4) 태그나 페이지 번호가 바뀔 때마다 서버에 요청
+  useEffect(() => {
+    handleSearch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedTag, currentPage]);
+  // 주의: handleSearch가 의존성에 있으면 무한루프 → 빼고 사용
+
+  // 검색어/검색타입 변경 핸들러
+  const onChangeSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setKeyword(e.target.value);
+  };
+  const onChangeSearchType = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSearchType(e.target.value);
   };
 
-  const onClickTag = (tag: string) => {
-    setSelectedTag(tag);
-  };
-
-  useEffect(() => {
-    console.log(searchType);
-  }, [searchType]);
-
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'auto' });
-    const start = (currentPage - 1) * 8;
-    const end = start + 8;
-    setPagedData(data.slice(start, end));
-  }, [currentPage]);
-
-  function handleDirectionBtn(targetPage: number) {
-    if (targetPage < 1) {
-      setCurrentPage(1);
-    } else if (targetPage > Math.ceil(data.length / 8)) {
-      setCurrentPage(Math.ceil(data.length / 8));
-    } else {
-      setCurrentPage(targetPage);
-    }
-  }
-
-  function handlePageChange(targetPage: number) {
-    setCurrentPage(targetPage);
-  }
+  // 로딩 상태는 useSearchPosts().isLoading 등으로 처리 가능
+  const isLoading = searchPosts.isPending;
 
   return (
     <CommunityPageContainer>
@@ -61,43 +96,75 @@ export default function CommunityPage() {
         <Title>Community</Title>
 
         <TagAndSearch>
-          <TagList selectedTag={selectedTag} onClickTag={onClickTag} />
+          <TagList
+            tags={tags}
+            selectedTag={selectedTag}
+            onClickTag={onClickTag}
+          />
           <SearchBar
-            search={search}
+            keyword={keyword}
             searchType={searchType}
             onChangeSearch={onChangeSearch}
             onChangeSearchType={onChangeSearchType}
+            handleSearch={handleSearch}
           />
         </TagAndSearch>
 
-        <PostingList pagedData={pagedData} />
+        {isLoading ? (
+          <div style={{ minHeight: '46rem' }}></div>
+        ) : (
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={JSON.stringify(pagedData)} // 데이터 변경 시 애니메이션
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <PostingList pagedData={pagedData} />
+            </motion.div>
+          </AnimatePresence>
+        )}
 
         <BottomWrapper>
           <PaginationBox>
-            <button onClick={() => handleDirectionBtn(currentPage - 1)}>
+            <button
+              onClick={() => handlePageChange(startPage - 1)}
+              disabled={currentGroup === 0 || isLoading}
+            >
               {'<'}
             </button>
-            {Array.from({ length: Math.ceil(data.length / 8) }, (_, idx) => (
-              <button
-                className={currentPage === idx + 1 ? 'selected' : ''}
-                key={idx}
-                onClick={() => handlePageChange(idx + 1)}
-              >
-                {idx + 1}
-              </button>
-            ))}
-            <button onClick={() => handleDirectionBtn(currentPage + 1)}>
+
+            {Array.from({ length: endPage - startPage + 1 }, (_, idx) => {
+              const pageNumber = startPage + idx;
+              return (
+                <button
+                  key={pageNumber}
+                  className={currentPage === pageNumber ? 'selected' : ''}
+                  onClick={() => handlePageChange(pageNumber)}
+                  disabled={isLoading}
+                >
+                  {pageNumber}
+                </button>
+              );
+            })}
+
+            <button
+              onClick={() => handlePageChange(endPage + 1)}
+              disabled={endPage === totalPages || isLoading}
+            >
               {'>'}
             </button>
           </PaginationBox>
 
-          <WriteButton>Write</WriteButton>
+          <WriteButton onClick={() => navigate('write')}>write</WriteButton>
         </BottomWrapper>
       </Wrapper>
     </CommunityPageContainer>
   );
 }
 
+// -------------------- 스타일 컴포넌트 --------------------
 const CommunityPageContainer = styled.div`
   margin-top: 2.5rem;
   width: 100%;
@@ -122,7 +189,7 @@ const Title = styled.div`
   font-size: 3.6rem;
   font-style: normal;
   font-weight: 700;
-  line-height: 3.6rem; /* 100% */
+  line-height: 3.6rem;
   letter-spacing: -0.18rem;
 `;
 
@@ -140,6 +207,13 @@ const TagAndSearch = styled.div`
       margin-bottom: 2rem;
     }
   }
+`;
+
+const BottomWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
 `;
 
 const PaginationBox = styled.div`
@@ -170,13 +244,6 @@ const PaginationBox = styled.div`
   }
 `;
 
-const BottomWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: relative;
-`;
-
 const WriteButton = styled.button`
   cursor: pointer;
   display: flex;
@@ -191,11 +258,10 @@ const WriteButton = styled.button`
   background-color: ${({ theme }) => theme.colors.gray700};
   border: none;
 
-  color: var(--Gray-Gray_light-gray-50_light, #fff);
+  color: #fff;
   text-align: center;
   font-family: Inter;
   font-size: 1.4rem;
-  font-style: normal;
   font-weight: 600;
   line-height: normal;
 

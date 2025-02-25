@@ -1,28 +1,27 @@
 import styled from 'styled-components';
-import GoogleIcon from '@/assets/svg/SignUpPage/GoogleIconSVG.svg?react';
-import AppleIcon from '@/assets/svg/SignUpPage/AppleIconSVG.svg?react';
+//import AppleIcon from '@/assets/svg/SignUpPage/AppleIconSVG.svg?react';
 import Email from '@/assets/svg/SignUpPage/EmailSVG.svg?react';
+import GoogleLoginButton from './GooleLoginButton';
 
 interface SignUpWithOtherEmailProps {
-  onChangeStep: () => void;
+  onChangeStep: (step?: number) => void;
+  isChecked: boolean;
 }
 
 export default function SignUpWithOtherEmail({
-  onChangeStep
+  onChangeStep,
+  isChecked
 }: SignUpWithOtherEmailProps) {
   return (
     <SignUpWithOtherEmailWrapper>
-      <BlackButtonWrapper>
-        <GoogleIconStyled />
-        <span>Sign up with Google</span>
-      </BlackButtonWrapper>
+      <GoogleLoginButton isChecked={isChecked} text="Sign up with Apple" />
 
-      <BlackButtonWrapper>
+      {/* <BlackButtonWrapper>
         <AppleIconStyled />
         <span>Sign up with Apple</span>
-      </BlackButtonWrapper>
+      </BlackButtonWrapper> */}
 
-      <GrayButtonWrapper onClick={onChangeStep}>
+      <GrayButtonWrapper onClick={() => onChangeStep()}>
         <EmailIconStyled />
         <span>Sign up with Email</span>
       </GrayButtonWrapper>
@@ -39,29 +38,30 @@ const SignUpWithOtherEmailWrapper = styled.div`
   margin-bottom: 17.1rem;
 `;
 
-const BlackButtonWrapper = styled.div`
-  cursor: pointer;
-  width: 386px;
-  height: 38px;
-  flex-shrink: 0;
-  border-radius: 24px;
-  background: ${({ theme }) => theme.colors.gray800};
-  display: flex;
-  justify-content: center;
-  align-items: center;
+// const BlackButtonWrapper = styled.div`
+//   cursor: pointer;
+//   width: 38.6rem;
+//   height: 3.8rem;
+//   flex-shrink: 0;
+//   border-radius: 24px;
+//   background: ${({ theme }) => theme.colors.gray800};
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
 
-  > span {
-    width: 176px;
-    color: ${({ theme }) => theme.colors.gray50};
-    text-align: center;
-    font-family: Inter;
-    font-size: 15px;
-    font-style: normal;
-    font-weight: 300;
-    line-height: normal;
-    letter-spacing: -0.45px;
-  }
-`;
+//   > span {
+//     width: 176px;
+//     color: ${({ theme }) => theme.colors.gray50};
+//     text-align: center;
+//     font-family: Inter;
+//     font-size: 15px;
+//     font-style: normal;
+//     font-weight: 300;
+//     line-height: normal;
+//     letter-spacing: -0.45px;
+//   }
+// `;
+
 const GrayButtonWrapper = styled.div`
   cursor: pointer;
   width: 386px;
@@ -86,13 +86,11 @@ const GrayButtonWrapper = styled.div`
   }
 `;
 
-const GoogleIconStyled = styled(GoogleIcon)``;
-
-const AppleIconStyled = styled(AppleIcon)`
-  path {
-    fill: ${({ theme }) => theme.colors.gray50};
-  }
-`;
+// const AppleIconStyled = styled(AppleIcon)`
+//   path {
+//     fill: ${({ theme }) => theme.colors.gray50};
+//   }
+// `;
 
 const EmailIconStyled = styled(Email)`
   path {

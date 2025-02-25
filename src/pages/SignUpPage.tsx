@@ -1,7 +1,7 @@
 import BackButton from '@/components/common/Login,SignUp/BackButton';
 import SignUpForm from '@/components/SignUpPage/SignUpForm';
 import PageLayout from '@/components/common/Login,SignUp/PageLayout';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import EmailVerification from '@/components/SignUpPage/EmailVerification';
 import styled from 'styled-components';
 import PersonalInformation from '@/components/SignUpPage/PersonalInformation';
@@ -9,46 +9,107 @@ import StudentVerification from '@/components/SignUpPage/StudentVerification';
 import AccessRestrictedModal from '@/components/SignUpPage/AccessRestrictedModal';
 import { useForm } from 'react-hook-form';
 import { SignUpFormData } from '@/types/signUpFormData';
-//import { useMutation } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import SignUpComplete from '@/components/SignUpPage/SignUpComplete';
+import Modal from 'react-modal';
+import { useLocation } from 'react-router-dom';
+
+Modal.setAppElement('#root');
+
+const customStyles = {
+  content: {
+    width: '100%',
+    height: '100%',
+    overflow: 'hidden',
+    overflowY: 'hidden' as 'auto' | 'hidden' | 'scroll' | 'visible' | undefined,
+    backgroundColor: 'var(--Modal-Background)'
+  }
+};
+
+//🤖TODO
+// 닉네임 중복체크 후 변경 못하도록 ✅
+// 회원가입 데이터 확인 후 요청 ✅
+// 소셜 회원가입 연결
+// 서강 메일 가입 코스 확인
+// 입력 예외 처리
+// 학생증 사진 인증 페이지 모달로 분리 ✅
 
 export default function SignUpPage() {
+  const { state } = useLocation();
   const [step, setStep] = useState(1);
   const [isSogangEmail, setIsSogangEmail] = useState(false);
-  const [isCheckedTOS, setisCheckedTOS] = useState(false);
-  const [isCheckedPP, setisCheckedPP] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(true);
-
-  //🤖TODO
-  // 닉네임 중복체크 후 변경 못하도록
-  // 회원가입 데이터 확인 후 요청
+  const [isCheckedTOS, setisCheckedTOS] = useState(false); // false
+  const [isCheckedPP, setisCheckedPP] = useState(false); // false
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const isChecked = isCheckedTOS && isCheckedPP;
 
   const { register, handleSubmit, watch, setValue } = useForm<SignUpFormData>();
 
-  // const signUpMutation = useMutation({
-  //   mutationFn: async (userData: SignUpFormData) => {
-  //     const response = await fetch(`${import.meta.env.VITE_API_URL}/register`, {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json'
-  //       },
-  //       body: JSON.stringify(userData)
-  //     });
-  //     if (!response.ok) throw new Error('Failed to sign up');
-  //     return response.json();
-  //   },
-  //   onSuccess: (data) => {
-  //     console.log('🎉 회원가입 성공:', data);
+  useEffect(() => {
+    if (state) {
+      console.log(state);
+      setisCheckedPP(true);
+      setisCheckedTOS(true);
+      setValue('email', state.email);
+      setValue('login_type', state.login_type);
+      setValue('name', state.name);
+      setValue('social_id', state.social_id);
+      setValue('password', state.social_id);
+      setStep(3);
+    }
+  }, []);
 
-  //     // ☑️☑️☑️회원가입 성공 시 회원가입 성공 페이지로 이동동
-  //   },
-  //   onError: (error) => {
-  //     console.error('❌ 회원가입 실패:', error);
-  //   }
-  // });
+  if (isModalOpen) {
+    document.body.style.overflow = 'hidden';
+  } else {
+    document.body.style.overflow = 'auto';
+  }
 
-  const onChangeStep = () => {
-    if (isCheckedTOS && isCheckedPP) setStep((prevStep) => prevStep + 1);
+  useEffect(() => {
+    if (step === 4 && !isSogangEmail && !isModalOpen) {
+      setIsModalOpen(true);
+    }
+  }, [step, isSogangEmail, isModalOpen]);
+
+  const signUpMutation = useMutation({
+    mutationFn: async (userData: SignUpFormData) => {
+      const { passwordCheck, ...dataToSend } = userData;
+
+      if (!dataToSend.email.includes('@'))
+        dataToSend.email = `${dataToSend.email}@sogang.ac.kr`;
+
+      //console.log(dataToSend);
+
+      console.log(dataToSend);
+
+      const response = await fetch(
+        `${import.meta.env.VITE_API_DOMAIN}/api/user/register`,
+        {
+          method: 'POST', // ✅ POST 요청으로 변경
+          headers: {
+            'Content-Type': 'application/json' // ✅ JSON 요청 헤더 추가
+          },
+          body: JSON.stringify(dataToSend) // ✅ body에 userData 전송
+        }
+      );
+
+      if (!response.ok) throw new Error('Failed to sign up');
+
+      onChangeStep();
+      return response.json();
+    },
+    onSuccess: (data) => {
+      console.log('🎉 회원가입 성공:', data);
+      window.history.replaceState(null, '', '/login');
+      // ☑️ 회원가입 성공 후 로그인 페이지로 이동
+    },
+    onError: (error) => {
+      console.error('❌ 회원가입 실패:', error);
+    }
+  });
+
+  const onChangeStep = (step: number = 1) => {
+    if (isChecked) setStep((prevStep) => prevStep + step);
     else alert('Please agree to the terms and conditions. ');
   };
 
@@ -63,18 +124,23 @@ export default function SignUpPage() {
     setisCheckedPP(!isCheckedPP);
   };
 
-  const onClickLater = () => {
+  const closeModal = () => {
     setIsModalOpen(false);
+  };
+
+  const onClickLater = () => {
+    closeModal();
     onChangeStep();
+    window.localStorage.removeItem('accessToken');
+    window.localStorage.removeItem('refreshToken');
   };
 
   const onClickNow = () => {
-    setIsModalOpen(false);
+    closeModal();
   };
 
   const onSubmitSignUp = (data: SignUpFormData) => {
-    console.log(data);
-    //signUpMutation.mutate(data);
+    signUpMutation.mutate(data);
   };
 
   return (
@@ -98,6 +164,7 @@ export default function SignUpPage() {
 
       {step === 2 && (
         <EmailVerification
+          setValue={setValue}
           isSogangEmail={isSogangEmail}
           onChangeStep={onChangeStep}
           register={register}
@@ -107,21 +174,28 @@ export default function SignUpPage() {
 
       {step === 3 && (
         <PersonalInformation
+          isSogangEmail={isSogangEmail}
           register={register}
           watch={watch}
           setValue={setValue}
+          loginType={state.login_type}
         />
       )}
 
       {step === 4 && !isSogangEmail && (
         <>
-          {isModalOpen && (
+          <StyledModal
+            isOpen={isModalOpen}
+            onRequestClose={closeModal}
+            style={customStyles}
+            contentLabel="example"
+          >
             <AccessRestrictedModal
               onClickLater={onClickLater}
               onClickNow={onClickNow}
             />
-          )}
-          <StudentVerification />
+          </StyledModal>
+          <StudentVerification onChangeStep={onChangeStep} watch={watch} />
         </>
       )}
 
@@ -147,3 +221,5 @@ const SignUpTitle = styled.p`
   letter-spacing: -2px;
   margin-bottom: 2.6rem;
 `;
+
+const StyledModal = styled(Modal)``;

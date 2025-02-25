@@ -1,7 +1,13 @@
-import React from 'react';
+import { CommunityData } from '@/pages/community/WriteCommunityPage';
+import { useEffect } from 'react';
+import {
+  UseFormRegister,
+  UseFormSetValue,
+  UseFormWatch
+} from 'react-hook-form';
 import styled from 'styled-components';
 
-const tags = ['Living', 'Travel', 'Campus', 'Others'];
+const tags = ['Living', 'Travel', 'Campus Life', 'Others'];
 
 const PostingTagsColors: Record<string, string> = {
   Living: `purple950`,
@@ -13,28 +19,43 @@ const PostingTagsColors: Record<string, string> = {
 const getTagColor = (tag: string) => PostingTagsColors[tag];
 
 interface TagBoxProps {
-  selectedTag: string;
-  setSelectedTag: React.Dispatch<React.SetStateAction<string>>;
+  register: UseFormRegister<CommunityData>;
+  watch: UseFormWatch<CommunityData>;
+  setValue: UseFormSetValue<CommunityData>;
 }
 
-export default function TagBox({ selectedTag, setSelectedTag }: TagBoxProps) {
+export default function TagBox({ register, watch, setValue }: TagBoxProps) {
+  const tagValue = watch('tag');
+  useEffect(() => {
+    if (tagValue === 'Campus') {
+      setValue('tag', 'Campus Life');
+    }
+  }, [tagValue]);
+
+  const onClickTag = (tag: string) => {
+    setValue('tag', tag);
+  };
   return (
     <TagBoxWrapper>
       {tags.map((tag, idx) => (
         <Tag
           key={idx}
-          onClick={() => setSelectedTag(tag)}
-          $selected={selectedTag === tag}
-          $color={getTagColor(tag)}
+          $color={getTagColor(tag.split(/\s+/)[0])}
+          $selected={tagValue === tag}
+          onClick={() => onClickTag(tag)}
         >
           {tag}
         </Tag>
       ))}
+      <input
+        type="hidden"
+        {...register('tag', { required: 'Plaese select tag' })}
+      />
     </TagBoxWrapper>
   );
 }
 
-const TagBoxWrapper = styled.div`
+const TagBoxWrapper = styled.ul`
   width: 100%;
   height: 5.4rem;
 
@@ -51,7 +72,7 @@ const TagBoxWrapper = styled.div`
   letter-spacing: -0.065rem;
 `;
 
-const Tag = styled.div<{ $selected: boolean; $color: string }>`
+const Tag = styled.li<{ $selected: boolean; $color: string }>`
   color: ${({ theme, $selected }) =>
     $selected ? 'white' : theme.colors.gray400};
   display: flex;

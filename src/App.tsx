@@ -4,17 +4,20 @@ import Router from './Router';
 import { RouterProvider } from 'react-router-dom';
 import { GlobalThemeProvider } from './context/ThemeContext';
 import ReactQueryProvider from './context/ReactQueryProvider';
-
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 function App() {
   return (
-    <ReactQueryProvider>
-      <GlobalThemeProvider>
-        <AppContainer>
-          <GlobalStyles />
-          <RouterProvider router={Router} />
-        </AppContainer>
-      </GlobalThemeProvider>
-    </ReactQueryProvider>
+    <DndProvider backend={HTML5Backend}>
+      <ReactQueryProvider>
+        <GlobalThemeProvider>
+          <AppContainer>
+            <GlobalStyles />
+            <RouterProvider router={Router} />
+          </AppContainer>
+        </GlobalThemeProvider>
+      </ReactQueryProvider>
+    </DndProvider>
   );
 }
 

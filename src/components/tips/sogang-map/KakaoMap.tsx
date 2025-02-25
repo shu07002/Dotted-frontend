@@ -7,20 +7,20 @@ import MapModal from './MapModal';
 
 const fetchBuildings = async () => {
   const response = await fetch(
-    `${import.meta.env.VITE_API_URL}/tips/map-building`
+    `${import.meta.env.VITE_API_DOMAIN}/api/campus/building`
   );
   return response.json();
 };
 
 export type BuildsDataType = {
   id: number;
-  building_name: string;
+  name: string;
   entrance: string;
   departments: string;
-  studying_spots: {
+  studyingspots: {
     id: number;
     name: string;
-    location: string;
+    location_detail: string;
     open_hours: string;
     tags: { id: number; name: string }[];
     photo: string | null;
@@ -30,7 +30,27 @@ export type BuildsDataType = {
   cafeterias: {
     id: number;
     name: string;
-    location: string;
+    location_detail: string;
+    open_hours: string;
+    tags: { id: number; name: string }[];
+    photo: string;
+    building: number;
+    building_name: string;
+  }[];
+  healthcenters: {
+    id: number;
+    name: string;
+    location_detail: string;
+    open_hours: string;
+    tags: { id: number; name: string }[];
+    photo: string;
+    building: number;
+    building_name: string;
+  }[];
+  printers: {
+    id: number;
+    name: string;
+    location_detail: string;
     open_hours: string;
     tags: { id: number; name: string }[];
     photo: string;
@@ -55,6 +75,10 @@ export default function KakaoMap({ modalOpen, setModalOpen }: KakaoMapProps) {
     useState<BuildsDataType | null>(null);
   const [studyList, setStudyList] = useState<BuildsDataType[]>([]);
   const [cafeList, setCafeList] = useState<BuildsDataType[]>([]);
+  const [healthCenterList, setHealthCenterList] = useState<BuildsDataType[]>(
+    []
+  );
+  const [printerList, setPrinterList] = useState<BuildsDataType[]>([]);
   const [searchParams] = useSearchParams();
   const {
     data: fetchedData,
@@ -75,12 +99,22 @@ export default function KakaoMap({ modalOpen, setModalOpen }: KakaoMapProps) {
       setBuildingsData(fetchedData);
       setStudyList(
         fetchedData.filter(
-          (building: BuildsDataType) => building.studying_spots.length > 0
+          (building: BuildsDataType) => building.studyingspots?.length > 0
         )
       );
       setCafeList(
         fetchedData.filter(
-          (building: BuildsDataType) => building.cafeterias.length > 0
+          (building: BuildsDataType) => building.cafeterias?.length > 0
+        )
+      );
+      setHealthCenterList(
+        fetchedData.filter(
+          (building: BuildsDataType) => building.healthcenters?.length > 0
+        )
+      );
+      setPrinterList(
+        fetchedData.filter(
+          (building: BuildsDataType) => building.printers?.length > 0
         )
       );
     }
@@ -113,9 +147,9 @@ export default function KakaoMap({ modalOpen, setModalOpen }: KakaoMapProps) {
         map.addControl(control, window.kakao.maps.ControlPosition.BOTTOMLEFT);
         const markerImageUrl = 'https://i.imgur.com/8AasUJG.png',
           studyMarkerImageUrl = 'https://i.imgur.com/LkdoZZj.png',
-          cafeMarkerImageUrl = 'https://i.imgur.com/3A7y9aq.png';
-        // printerMarkerImageUrl = 'https://i.imgur.com/WCUDCMs.png',
-        // hospitalMarkerImageUrl = 'https://i.imgur.com/p4OR2Du.png';
+          cafeMarkerImageUrl = 'https://i.imgur.com/3A7y9aq.png',
+          printerMarkerImageUrl = 'https://i.imgur.com/WCUDCMs.png',
+          healthMarkerImageUrl = 'https://i.imgur.com/p4OR2Du.png';
 
         // 마커 생성 함수
         const handleMarker = (url: string, datas: BuildsDataType[]) => {
@@ -135,9 +169,9 @@ export default function KakaoMap({ modalOpen, setModalOpen }: KakaoMapProps) {
           // 마커 생성 및 표시
           datas.forEach(({ id }) => {
             // 마커 생성
-            const eng_name = buildings[id]?.eng_name;
-            const lat = buildings[id]?.lat;
-            const lon = buildings[id]?.lon;
+            const eng_name = buildings[id - 2]?.eng_name;
+            const lat = buildings[id - 2]?.lat;
+            const lon = buildings[id - 2]?.lon;
             const marker = new window.kakao.maps.Marker({
               position: new window.kakao.maps.LatLng(lat, lon),
               map,
@@ -180,6 +214,10 @@ export default function KakaoMap({ modalOpen, setModalOpen }: KakaoMapProps) {
             handleMarker(cafeMarkerImageUrl, cafeList);
           } else if (searchParams.get('spot') === 'all') {
             handleMarker(markerImageUrl, buildingsData);
+          } else if (searchParams.get('spot') === 'health') {
+            handleMarker(healthMarkerImageUrl, healthCenterList);
+          } else if (searchParams.get('spot') === 'printer') {
+            handleMarker(printerMarkerImageUrl, printerList);
           }
         } else {
           handleMarker(markerImageUrl, buildingsData);

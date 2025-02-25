@@ -68,4 +68,12 @@ em{
 strong {
     font-weight:bold
 }
+
+
+button {
+  cursor:pointer;
+  border:none;
+  background-color:transparent;
+  
+}
 `;

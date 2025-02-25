@@ -9,29 +9,31 @@ import SendCodePart from './SendCodePart';
 import VerifyCodePart from './VerifyCodePart';
 import NewPasswordPart from './NewPasswordPart';
 
+const firstSectionProps = {
+  title: 'Forget Password',
+  icon: <Icon icon={<Email />} />,
+  text: 'Please Enter Your Email Address To \nReceive a Verification Code '
+};
+
+const secondSectionProps = {
+  title: 'Enter Code',
+  icon: <Icon icon={<Unlock />} />,
+  text: 'Please Enter The Code \nSent to Your Email. '
+};
+
+const thirdSectionProps = {
+  title: 'Create New Password Code',
+  icon: <Icon icon={<PasswordKey />} />,
+  text: 'Your New Password Must Be Different \nfrom Previously Used Password. '
+};
+
 export default function ForgetPassForm() {
   const [step, setStep] = useState(1);
+  const [code, setCode] = useState('');
+  const [email, setEmail] = useState('');
 
   const onChangeStep = () => {
     setStep((prevStep) => prevStep + 1);
-  };
-
-  const firstSectionProps = {
-    title: 'Forget Password',
-    icon: <Icon icon={<Email />} />,
-    text: 'Please Enter Your Email Address To \nReceive a Verification Code '
-  };
-
-  const secondSectionProps = {
-    title: 'Enter Code',
-    icon: <Icon icon={<Unlock />} />,
-    text: 'Please Enter The Code \nSent to Your Email. '
-  };
-
-  const thirdSectionProps = {
-    title: 'Create New Password Code',
-    icon: <Icon icon={<PasswordKey />} />,
-    text: 'Your New Password Must Be Different \nfrom Previously Used Password. '
   };
 
   const currentSectionProps =
@@ -43,11 +45,20 @@ export default function ForgetPassForm() {
 
   const currentSectionPart =
     step === 1 ? (
-      <SendCodePart onChangeStep={onChangeStep} />
+      <SendCodePart
+        onChangeStep={onChangeStep}
+        email={email}
+        setEmail={setEmail}
+      />
     ) : step === 2 ? (
-      <VerifyCodePart onChangeStep={onChangeStep} />
+      <VerifyCodePart
+        email={email}
+        onChangeStep={onChangeStep}
+        code={code}
+        setCode={setCode}
+      />
     ) : (
-      <NewPasswordPart />
+      <NewPasswordPart email={email} />
     );
 
   return (

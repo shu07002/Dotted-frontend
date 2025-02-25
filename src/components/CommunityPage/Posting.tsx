@@ -1,12 +1,14 @@
 import styled from 'styled-components';
-import More from '@/assets/svg/CommunityPage/More.svg?react';
 import Eye from '@/assets/svg/CommunityPage/Eye.svg?react';
 import Profile from '@/assets/svg/CommunityPage/Profile.svg?react';
 import Like from '@/assets/svg/CommunityPage/Like.svg?react';
 import Scrap from '@/assets/svg/CommunityPage/Scrap.svg?react';
 
 import ReactQuill from 'react-quill-new';
-import { CommunityPost } from '@/types/CommunityPost';
+import 'react-quill-new/dist/quill.snow.css';
+import { PostDetail } from '@/pages/community/DetailCommunityPage';
+import { useState } from 'react';
+import MoreButton from './MoreButton';
 
 const PostingTagsColors: Record<string, string> = {
   Living: `purple950`,
@@ -25,7 +27,7 @@ const PostingTagWrapper = ({ tag }: { tag: string }) => {
 };
 
 interface PostingProps {
-  post: CommunityPost;
+  post: PostDetail;
   isLiked: boolean;
   isScraped: boolean;
   onClickLike: () => void;
@@ -39,6 +41,45 @@ export default function Posting({
   onClickLike,
   onClickScrap
 }: PostingProps) {
+  const [openMore, setOpenMore] = useState(false);
+  let replacedContent = post.content;
+
+  const [localLikeCount, setLocalLikeCount] = useState(post.like_count);
+  const [localLiked, setLocalLiked] = useState(post.is_liked);
+
+  const [localScrapCount, setLocalScrapCount] = useState(post.scrap_count);
+  const [localScrapped, setLocalScrapped] = useState(post.is_scrapped);
+
+  const handleLikeClick = () => {
+    if (localLiked) {
+      setLocalLikeCount((prev) => prev - 1);
+    } else {
+      setLocalLikeCount((prev) => prev + 1);
+    }
+    setLocalLiked((prev) => !prev);
+    onClickLike();
+  };
+
+  const handleScrapClick = () => {
+    if (localScrapped) {
+      setLocalScrapCount((prev) => prev - 1);
+    } else {
+      setLocalScrapCount((prev) => prev + 1);
+    }
+    setLocalScrapped((prev) => !prev);
+    onClickScrap();
+  };
+
+  if (post.images && post.images.length > 0) {
+    post.images.forEach((imgObj, index) => {
+      // 예: 'src="{images[0].image_url}"' => 'src="https://example.com/img1.png"'
+      const placeholder = `src={images[${index}].image_url}`;
+      const realSrc = `src="${imgObj.image_url}"`;
+
+      replacedContent = replacedContent.replace(placeholder, realSrc);
+    });
+  }
+
   return (
     <PostingWrapper>
       <InfoWrapper>
@@ -46,44 +87,47 @@ export default function Posting({
 
         <TitleWrapper>
           <Title>{post.title}</Title>
-          <button>
-            <More />
-          </button>
+
+          <MoreButton
+            post={post}
+            openMore={openMore}
+            setOpenMore={setOpenMore}
+          />
         </TitleWrapper>
 
         <PostingWriter>
           <Profile />
-          <span>{post.createdAt}</span>
+          <span>{post.created_at}</span>
           <span>•</span>
           <span>by</span>
           <span>•</span>
-          <span>{post.writer}</span>
+          <span>{post.writer_nickname}</span>
           <span>•</span>
           <span>
-            <Eye /> {post.view}
+            <Eye /> {post.view_count}
           </span>
         </PostingWriter>
       </InfoWrapper>
 
       <ContentWrapper>
         <StyledReactQuill
-          value={post.content}
+          value={replacedContent}
           readOnly={true}
           theme="snow"
           modules={{ toolbar: false }}
         />
 
         <ButtonWrapper>
-          <Button className={`${isLiked && 'liked'}`} onClick={onClickLike}>
+          <Button className={`${isLiked && 'liked'}`} onClick={handleLikeClick}>
             <Like />
-            <span>2 likes</span>
+            <span>{localLikeCount} likes</span>
           </Button>
           <Button
             className={`${isScraped && 'scraped'}`}
-            onClick={onClickScrap}
+            onClick={handleScrapClick}
           >
             <Scrap />
-            <span>2 scraps</span>
+            <span>{localScrapCount} scraps</span>
           </Button>
         </ButtonWrapper>
       </ContentWrapper>
@@ -131,13 +175,15 @@ const TitleWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-
+  position: relative;
   > button {
+    position: relative;
     border: none;
     background-color: transparent;
     cursor: pointer;
     min-width: 2rem;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
   }
@@ -211,7 +257,7 @@ const StyledReactQuill = styled(ReactQuill)`
 
   .ql-editor,
   .ql-blank {
-    height: 42.6rem;
+    min-height: 42.6rem;
   }
 
   .ql-size-small {
