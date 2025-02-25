@@ -9,6 +9,7 @@ import { useQuery } from '@tanstack/react-query';
 import { formatRelativeTime } from '@/utils/formatTime';
 import { CommunityPost, EachPost } from '@/types/CommunityPost';
 import { EachMarketPost, MarketPost } from '@/types/MarketPost';
+import { useEffect, useState } from 'react';
 
 async function fetchCommunityPosts(): Promise<EachPost[]> {
   // URL에 query string을 붙이기 위해 URL 객체 사용
@@ -46,6 +47,17 @@ export default function MainPage() {
     queryKey: ['marketPost'],
     queryFn: () => fetchMarketPosts()
   });
+
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   return (
     <Main>
@@ -85,7 +97,7 @@ export default function MainPage() {
             <MarketListContainer>
               <ul>
                 {onePageMarketData?.map((post, idx) => {
-                  if (idx > 2) return;
+                  if (idx > (isMobile ? 3 : 2)) return null;
                   const status = post.status
                     .toLocaleLowerCase()
                     .split('_')
