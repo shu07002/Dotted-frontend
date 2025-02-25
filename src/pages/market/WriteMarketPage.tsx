@@ -370,8 +370,12 @@ const WriteMarketPageContainer = styled.div`
   flex-direction: column;
   align-items: center;
 
-  @media (max-width: 1024px) {
+  @media (max-width: 1200px) {
     padding: 0 10rem;
+  }
+
+  @media (max-width: 700px) {
+    padding: 0 2rem;
   }
 `;
 

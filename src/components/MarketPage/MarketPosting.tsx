@@ -126,21 +126,33 @@ const ItemWrapper = styled.div`
     display: flex;
     justify-content: space-between;
     flex-direction: column;
-    min-width: 28rem; /* 최소 너비 설정 */
 
     &:nth-child(2) {
       width: 100%;
     }
   }
+
+  @media (max-width: 700px) {
+    flex-direction: column;
+  }
 `;
 
 const ImgCarouselWrapper = styled.div`
   background: ${({ theme }) => theme.colors.gray100};
-  width: 100%;
-  max-width: 40rem;
+
+  max-width: 30rem;
   aspect-ratio: 1/1;
   border-radius: 5px;
   position: relative;
+
+  @media (max-width: 900px) {
+    max-width: 23rem;
+  }
+
+  @media (max-width: 500px) {
+    width: 100%;
+    max-width: 100%;
+  }
 `;
 
 const StyledSlider = styled(Slider)`
@@ -222,9 +234,7 @@ const TagWrapper = styled.div`
   align-items: center;
 `;
 
-const Text = styled.div`
-  width: 100%;
-`;
+const Text = styled.div``;
 const Tag = styled.div`
   display: inline-flex;
   padding: 0.3rem 1.2rem;
@@ -310,9 +320,19 @@ const Writer = styled.div`
   }
   padding-bottom: 1.7rem;
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray300};
+
+  @media (max-width: 700px) {
+    border: none;
+  }
 `;
 
-const ScrapButtonWrapper = styled.div``;
+const ScrapButtonWrapper = styled.div`
+  @media (max-width: 700px) {
+    display: flex;
+    justify-content: end;
+    border: none;
+  }
+`;
 
 const ScrapButton = styled.button`
   cursor: pointer;

@@ -43,6 +43,11 @@ const NavWrapper = styled.nav`
   align-items: center;
   gap: 1.6rem;
   height: 100%;
+  background-color: ${({ theme }) => theme.colors.backgroundLayer2};
+  @media (max-width: 900px) {
+    width: 100%;
+    padding: 1rem;
+  }
 
   > div {
     text-align: center;
