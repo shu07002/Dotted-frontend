@@ -77,7 +77,7 @@ export default function Header({ scrollY }: { scrollY: number }) {
         }
       };
 
-      evtSource.onerror = async (err) => {
+      evtSource.onerror = async () => {
         //console.error('SSE 에러:', err);
         evtSource.close();
         // 일정 시간 후 재연결 시도

@@ -22,7 +22,7 @@ const hospitalTabs = [
 export default function HospitalPage() {
   const [searchParam, setSearchParam] = useSearchParams();
   const navBarRef = useRef<HTMLElement | null>(null);
-  const { data, isLoading, error } = useHospitals();
+  const { data } = useHospitals();
 
   function handleTabClick(tab: string) {
     setSearchParam({ q: tab.toLowerCase() });

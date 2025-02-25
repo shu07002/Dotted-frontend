@@ -10,7 +10,7 @@ const POSTS_PER_PAGE = 7; // 7개씩 표시
 export default function FAQPage() {
   const [keyword, setKeyword] = useState('');
   const [searchType, setSearchType] = useState('all');
-  const { data, isLoading, error } = useFAQ();
+  const { data } = useFAQ();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [filteredData, setFilteredData] = useState<EachFAQPost[]>([]);
   const [pagedData, setPagedData] = useState<EachFAQPost[]>([]);
