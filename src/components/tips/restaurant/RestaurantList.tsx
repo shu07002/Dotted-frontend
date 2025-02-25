@@ -7,7 +7,7 @@ import { useSearchParams } from 'react-router-dom';
 
 const fetchRestaurants = async () => {
   const response = await fetch(
-    `${import.meta.env.VITE_API_DOMAIN}/api/tips/tips-restaurants`
+    `${import.meta.env.VITE_API_DOMAIN}/api/place/restaurant`
   );
   return response.json();
 };
@@ -15,33 +15,26 @@ const fetchRestaurants = async () => {
 interface RestaurantData {
   id: number;
   name: string;
-  short_intro: string;
+  type: string;
   google_map_link: string;
   naver_map_link: string;
-  location: string;
+  distance: number;
   photo: string;
 }
 
 export default function RestaurantList() {
-  const [searchParam] = useSearchParams();
   const [filterdData, setFilterdData] = useState<RestaurantData[]>([]);
+  const [searchParam, setSearchParam] = useSearchParams();
   const { data, error, isLoading } = useQuery({
     queryKey: ['tipsRestaurants'],
     queryFn: fetchRestaurants
   });
 
-  useEffect(() => {
-    if (data) {
-      const filtered = data.filter((el: RestaurantData) => {
-        if (searchParam.get('q') === 'all') {
-          return el;
-        } else {
-          return el.location.toLowerCase() === searchParam.get('q');
-        }
-      });
-      setFilterdData(filtered);
-    }
-  }, [searchParam]);
+  const selectedTab = searchParam.get('q') || 'all';
+  const filteredRestaurants = data?.filter((restaurant: RestaurantData) => {
+    if (selectedTab === 'all') return true;
+    return restaurant.type.toLowerCase() === selectedTab;
+  });
 
   //if error
   if (error) {
@@ -52,18 +45,18 @@ export default function RestaurantList() {
     <ListSection>
       {!isLoading && filterdData ? (
         <List>
-          {data.map((el: RestaurantData, idx: number) => (
+          {filteredRestaurants.map((el: RestaurantData, idx: number) => (
             <RestaurantBox key={idx}>
               <img src={el.photo} alt={el.name} />
               <Description>
                 <RestaurantInfo>
                   <h1>{el.name}</h1>
-                  <p>{el.short_intro}</p>
+                  <p>{el.type}</p>
                 </RestaurantInfo>
                 <RestaurantLocation>
                   <span className="location__distance">
                     <NavigateIcon />
-                    <span>{el.location}</span>
+                    <span>{el.distance}m from School</span>
                   </span>
                   <span className="location__link">
                     <a target="_blank" href={el.naver_map_link}>

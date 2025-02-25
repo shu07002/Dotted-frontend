@@ -168,13 +168,13 @@ export default function FAQPage() {
             const isOpen = openIndex === idx;
             return (
               <div key={item.id}>
-                <FAQItem isOpen={isOpen} onClick={() => toggleFAQ(idx)}>
+                <FAQItem $isOpen={isOpen} onClick={() => toggleFAQ(idx)}>
                   <div className="question">
                     <div>
                       <div>{idx + 1 + (currentPage - 1) * POSTS_PER_PAGE}</div>
                       {item.question}
                     </div>
-                    <ArrowWrapper isOpen={isOpen}>
+                    <ArrowWrapper $isOpen={isOpen}>
                       <Arrow />
                     </ArrowWrapper>
                   </div>
@@ -266,14 +266,14 @@ const NoticeAndSearch = styled.div`
 
 const FAQBox = styled.ul``;
 
-const ArrowWrapper = styled.div<{ isOpen: boolean }>`
+const ArrowWrapper = styled.div<{ $isOpen: boolean }>`
   display: flex;
   align-items: center;
   transition: transform 0.3s ease;
-  transform: ${({ isOpen }) => (isOpen ? 'rotate(180deg)' : 'rotate(0deg)')};
+  transform: ${({ $isOpen }) => ($isOpen ? 'rotate(180deg)' : 'rotate(0deg)')};
 `;
 
-const FAQItem = styled.li<{ isOpen: boolean }>`
+const FAQItem = styled.li<{ $isOpen: boolean }>`
   &:first-child {
     border-top: 1px solid ${({ theme }) => theme.colors.purple600};
   }
@@ -283,8 +283,8 @@ const FAQItem = styled.li<{ isOpen: boolean }>`
   }
   cursor: pointer;
   padding: 2.5rem 4rem 2.5rem 2rem;
-  background-color: ${({ theme, isOpen }) =>
-    isOpen ? theme.colors.purple100 : ''};
+  background-color: ${({ theme, $isOpen }) =>
+    $isOpen ? theme.colors.purple100 : ''};
 
   transition: background-color 0.3s ease;
 
