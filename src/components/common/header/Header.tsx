@@ -200,7 +200,7 @@ const LoginButton = styled.button`
 
 const HeaderContainer = styled.div`
   width: 100%;
-  padding: 0 7.7rem;
+  padding: 0 9rem 0 7.7rem;
   @media (max-width: 700px) {
     padding-right: 2rem;
     padding-left: 2rem;

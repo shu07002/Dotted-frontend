@@ -14,7 +14,7 @@ export default function SignUpWithOtherEmail({
 }: SignUpWithOtherEmailProps) {
   return (
     <SignUpWithOtherEmailWrapper>
-      <GoogleLoginButton isChecked={isChecked} text="Sign up with Apple" />
+      <GoogleLoginButton isChecked={isChecked} text="Sign up with Google" />
 
       {/* <BlackButtonWrapper>
         <AppleIconStyled />
