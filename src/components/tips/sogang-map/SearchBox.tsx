@@ -37,7 +37,7 @@ export default function SearchBox() {
       }));
       setBuildingNames(names);
     }
-  }, []);
+  }, [data, isLoading]);
 
   useEffect(() => {
     if (searchParams.get('search')) {
@@ -72,20 +72,22 @@ export default function SearchBox() {
 
   return (
     <Wrapper>
-      <InputBox
-        style={{ borderRadius: isFocused ? '2.5rem 2.5rem 0 0' : '6.5rem' }}
-        className="search"
-      >
-        <SearchIcon className="search-icon" />
-        <input
-          onChange={(e) => handleInputChange(e)}
-          onFocus={() => handleInputFocus()}
-          onBlur={() => handleInputBlur()}
-          type="text"
-          placeholder="search..."
-          //   value={searchValue}
-        />
-      </InputBox>
+      {!isLoading && (
+        <InputBox
+          style={{ borderRadius: isFocused ? '2.5rem 2.5rem 0 0' : '6.5rem' }}
+          className="search"
+        >
+          <SearchIcon className="search-icon" />
+          <input
+            onChange={(e) => handleInputChange(e)}
+            onFocus={() => handleInputFocus()}
+            onBlur={() => handleInputBlur()}
+            type="text"
+            placeholder="search..."
+            //   value={searchValue}
+          />
+        </InputBox>
+      )}
       {isFocused && (
         <ResultBox>
           {filteredBuildingNames.length > 0 ? (
