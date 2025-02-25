@@ -6,6 +6,7 @@ import { NextArrow, PrevArrow } from '@/components/MainPage/CustomArrow';
 import Profile from '@/assets/svg/CommunityPage/Profile.svg?react';
 import Scrap from '@/assets/svg/CommunityPage/Scrap.svg?react';
 import MoreButton from '../CommunityPage/MoreButton';
+import { formatRelativeTime } from '@/utils/formatTime';
 
 const setting = {
   infinite: true,
@@ -94,7 +95,7 @@ export default function MarketPosting({
                 by <span>{post.writer_nickname}</span>
               </span>
               <span>•</span>
-              <span>{post.created_at}</span>
+              <span>{formatRelativeTime(post.created_at)}</span>
             </div>
           </Writer>
         </Text>

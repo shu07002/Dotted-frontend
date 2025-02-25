@@ -4,6 +4,7 @@ import Bell from '@/assets/svg/Notification/Bell.svg?react';
 import { useEffect, useState } from 'react';
 import { EventSourcePolyfill, NativeEventSource } from 'event-source-polyfill';
 import { isTokenExpired, refreshAccessToken } from '@/utils/auth';
+import { formatRelativeTime } from '@/utils/formatTime';
 
 export interface NotiList {
   id: number;
@@ -128,7 +129,7 @@ export default function NotificatoinPage() {
                         <Trashcan />
                       </div>
                     </DeleteButton>
-                    <Date>{item.created_at}</Date>
+                    <Date>{formatRelativeTime(item.created_at)}</Date>
                   </RightDiv>
                 </EachNotice>
               );

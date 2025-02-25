@@ -9,6 +9,7 @@ import 'react-quill-new/dist/quill.snow.css';
 import { PostDetail } from '@/pages/community/DetailCommunityPage';
 import { useState } from 'react';
 import MoreButton from './MoreButton';
+import { formatRelativeTime } from '@/utils/formatTime';
 
 const PostingTagsColors: Record<string, string> = {
   Living: `purple950`,
@@ -97,7 +98,7 @@ export default function Posting({
 
         <PostingWriter>
           <Profile />
-          <span>{post.created_at}</span>
+          <span>{formatRelativeTime(post.created_at)}</span>
           <span>•</span>
           <span>by</span>
           <span>•</span>

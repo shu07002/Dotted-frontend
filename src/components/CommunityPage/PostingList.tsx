@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import Eye from '@/assets/svg/CommunityPage/Eye.svg?react';
 import { EachPost } from '@/types/CommunityPost';
 import { useNavigate } from 'react-router-dom';
+import { formatRelativeTime } from '@/utils/formatTime';
 
 const PostingTagsColors: Record<string, string> = {
   Living: `purple950`,
@@ -42,7 +43,7 @@ export default function PostingList({ pagedData }: PostingListProps) {
               <span>[{post.comment_count}]</span>
             </PostingTitle>
             <PostingWriter>
-              <span>{post.created_at}</span>
+              <span>{formatRelativeTime(post.created_at)}</span>
               <span>•</span>
               <span>by</span>
               <span>{post.writer_nickname}</span>

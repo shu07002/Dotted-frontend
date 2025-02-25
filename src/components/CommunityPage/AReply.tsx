@@ -7,6 +7,7 @@ import More from '@/assets/svg/CommunityPage/More.svg?react';
 import { useMutation } from '@tanstack/react-query';
 import Modal from 'react-modal';
 import { fetchWithAuth } from '@/utils/auth'; // auth.ts 경로에 맞게 수정
+import { formatRelativeTime } from '@/utils/formatTime';
 
 // API 응답 타입 정의 (실제 API 스펙에 맞게 수정)
 interface ReplyLikeResponse {
@@ -137,7 +138,7 @@ export default function AReply({ reply }: { reply: Comment }) {
           <>
             <div>{reply.user_nickname}</div>
             <div>{editedContent}</div>
-            <div>{reply.created_at}</div>
+            <div>{formatRelativeTime(reply.created_at)}</div>
           </>
         )}
         <ButtonWrapper>
