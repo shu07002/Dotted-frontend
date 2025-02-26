@@ -275,7 +275,7 @@ const BottomWrapper = styled.div`
 `;
 
 const WriteButtonWrapper = styled.div`
-  width: 100%;
+  width: 11.8rem;
   display: flex;
   justify-content: end;
   position: absolute;

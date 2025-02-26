@@ -75,7 +75,7 @@ export default function Nickname({ register, watch }: NicknameProps) {
 
   const onClickVerificationCheck = () => {
     if (!nickname.trim()) {
-      alert('닉네임을 입력하세요.');
+      alert('Please write down your nickname');
       return;
     }
 
@@ -86,7 +86,10 @@ export default function Nickname({ register, watch }: NicknameProps) {
   return (
     <InputBox>
       <Label name="nickname">
-        <NicknameSVG /> <span>Nickname</span>
+        <div>
+          <NicknameSVG /> <span>Nickname</span>
+        </div>
+
         <SubText>You can change your nickname anytime</SubText>
       </Label>
 
@@ -120,6 +123,10 @@ const SubText = styled.span`
   font-weight: 300;
   line-height: 36px; /* 225% */
   letter-spacing: -0.48px;
+
+  @media (max-width: 460px) {
+    display: none;
+  }
 `;
 
 const Wrapper = styled.div`

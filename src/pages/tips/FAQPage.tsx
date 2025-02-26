@@ -225,8 +225,12 @@ const FAQPageContainer = styled.div`
   flex-direction: column;
   align-items: center;
 
-  @media (max-width: 1024px) {
+  @media (max-width: 1200px) {
     padding: 0 10rem;
+  }
+
+  @media (max-width: 700px) {
+    padding: 0 2rem;
   }
 `;
 
@@ -262,6 +266,10 @@ const NoticeAndSearch = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 2.5rem;
+
+  @media (max-width: 900px) {
+    flex-direction: column;
+  }
 `;
 
 const FAQBox = styled.ul``;
@@ -271,6 +279,8 @@ const ArrowWrapper = styled.div<{ $isOpen: boolean }>`
   align-items: center;
   transition: transform 0.3s ease;
   transform: ${({ $isOpen }) => ($isOpen ? 'rotate(180deg)' : 'rotate(0deg)')};
+  padding: 0.5rem;
+  padding-left: 1.5rem;
 `;
 
 const FAQItem = styled.li<{ $isOpen: boolean }>`
@@ -301,6 +311,10 @@ const FAQItem = styled.li<{ $isOpen: boolean }>`
     letter-spacing: -0.1rem;
     cursor: pointer;
 
+    @media (max-width: 700px) {
+      font-size: 1.5rem;
+    }
+
     > div {
       display: flex;
       gap: 2rem;
@@ -326,6 +340,10 @@ const Answer = styled.div`
   transition:
     max-height 0.3s ease,
     padding 0.3s ease;
+
+  @media (max-width: 700px) {
+    font-size: 1.5rem;
+  }
 
   &.open {
     border-top: 1px solid ${({ theme }) => theme.colors.purple600};

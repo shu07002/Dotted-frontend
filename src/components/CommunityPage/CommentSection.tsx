@@ -71,6 +71,7 @@ export default function CommentSection({ post, origin }: CommentSectionProps) {
       console.error('❌ 댓글 작성 실패:', error);
     }
   });
+  console.log(comment);
 
   return (
     <CommentSectionWrapper>

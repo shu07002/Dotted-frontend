@@ -21,7 +21,8 @@ const NextButtonWrapper = styled.div`
   align-items: center;
 
   margin-bottom: 2.3rem;
-  width: 60.5rem;
+  width: 100%;
+  max-width: 60.5rem;
   height: 50px;
   flex-shrink: 0;
   border-radius: 5px;

@@ -4,7 +4,6 @@ import 'slick-carousel/slick/slick-theme.css';
 import Carousel from '@/components/MainPage/Carousel';
 import Tips from '@/components/MainPage/Tips';
 import { useNavigate } from 'react-router-dom';
-import { fetchWithAuth } from '@/utils/auth';
 import { useQuery } from '@tanstack/react-query';
 import { formatRelativeTime } from '@/utils/formatTime';
 import { CommunityPost, EachPost } from '@/types/CommunityPost';
@@ -12,25 +11,25 @@ import { EachMarketPost, MarketPost } from '@/types/MarketPost';
 import { useEffect, useState } from 'react';
 
 async function fetchCommunityPosts(): Promise<EachPost[]> {
-  // URL에 query string을 붙이기 위해 URL 객체 사용
   const url = new URL(`${import.meta.env.VITE_API_URL}/api/posting`);
 
-  // GET 요청
-  const data = await fetchWithAuth<CommunityPost>(url.toString(), {
-    method: 'GET'
-  });
+  const response = await fetch(url.toString(), { method: 'GET' });
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  const data = (await response.json()) as CommunityPost;
   console.log(data);
   return data.results;
 }
 
 async function fetchMarketPosts(): Promise<EachMarketPost[]> {
-  // URL에 query string을 붙이기 위해 URL 객체 사용
   const url = new URL(`${import.meta.env.VITE_API_URL}/api/posting/market`);
 
-  // GET 요청
-  const data = await fetchWithAuth<MarketPost>(url.toString(), {
-    method: 'GET'
-  });
+  const response = await fetch(url.toString(), { method: 'GET' });
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  const data = (await response.json()) as MarketPost;
   console.log(data);
   return data.results;
 }

@@ -11,11 +11,15 @@ export default function Divider() {
 }
 
 const LineWrapper = styled.div`
+  width: 100%;
   margin-bottom: 3.9rem;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 1rem;
+  @media (max-width: 500px) {
+    gap: 0.5rem;
+  }
 
   > p {
     display: flex;
@@ -36,7 +40,17 @@ const LineWrapper = styled.div`
 `;
 
 const Line = styled.div`
-  width: 32.3rem;
+  padding-left: 2rem;
+  width: 100%;
+  max-width: 32.3rem;
+
+  @media (max-width: 750px) {
+    max-width: 20rem;
+  }
+
+  @media (max-width: 500px) {
+    max-width: 15rem;
+  }
   height: 1px;
   flex-shrink: 0;
   stroke-width: 1px;

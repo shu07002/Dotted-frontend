@@ -163,7 +163,12 @@ export default function AComment({
 
   return (
     <Comments>
-      <Profile />
+      {(comment.is_secret || comment.is_deleted) && !comment.is_mine ? (
+        <SecretProfile />
+      ) : (
+        <Profile />
+      )}
+
       <div style={{ width: '100%' }}>
         {isEditing ? (
           <CommentInputWrapper>
@@ -184,41 +189,62 @@ export default function AComment({
           </CommentInputWrapper>
         ) : (
           <>
-            <div>{comment.user_nickname}</div>
-            <div>{editedContent}</div>
+            {(comment.is_secret || comment.is_deleted) && !comment.is_mine ? (
+              <div></div>
+            ) : (
+              <NicknameDiv>
+                {comment.user_nickname}
+                {comment.is_mine && (
+                  <LockerDiv>
+                    <Locker />
+                  </LockerDiv>
+                )}
+              </NicknameDiv>
+            )}
+            <ConetentDiv>
+              {editedContent}
+              {comment.is_secret && !comment.is_mine && (
+                <LockerDiv>
+                  <Locker />
+                </LockerDiv>
+              )}
+            </ConetentDiv>
             <div>{formatRelativeTime(comment.created_at)}</div>
           </>
         )}
-        <ButtonWrapper>
-          <button onClick={onClickCommentLike}>
-            <Like className={`${isCommentLiked && 'commentLiked'}`} />
-            {likeCount}
-          </button>
-          <button onClick={onClickRecomment}>
-            <CommentSVG className={`${isOpenRecomment && 'recomment'}`} />
-          </button>
-          {comment.content !== 'Deleted Comment' && (
-            <MoreWrapper>
-              <button onClick={() => setOpenMore((prev) => !prev)}>
-                <More />
-                {openMore && (
-                  <Menu>
-                    {comment.is_mine ? (
-                      <>
-                        <div onClick={() => setIsEditing(true)}>Edit</div>
-                        <div onClick={() => setOpenNormalModal(true)}>
-                          Delete
-                        </div>
-                      </>
-                    ) : (
-                      <div>Report</div>
-                    )}
-                  </Menu>
-                )}
-              </button>
-            </MoreWrapper>
-          )}
-        </ButtonWrapper>
+        {((!comment.is_secret && !comment.is_deleted) || comment.is_mine) && (
+          <ButtonWrapper>
+            <button onClick={onClickCommentLike}>
+              <Like className={`${isCommentLiked && 'commentLiked'}`} />
+              {likeCount}
+            </button>
+            <button onClick={onClickRecomment}>
+              <CommentSVG className={`${isOpenRecomment && 'recomment'}`} />
+            </button>
+            {comment.content !== 'Deleted Comment' && (
+              <MoreWrapper>
+                <button onClick={() => setOpenMore((prev) => !prev)}>
+                  <More />
+                  {openMore && (
+                    <Menu>
+                      {comment.is_mine ? (
+                        <>
+                          <div onClick={() => setIsEditing(true)}>Edit</div>
+                          <div onClick={() => setOpenNormalModal(true)}>
+                            Delete
+                          </div>
+                        </>
+                      ) : (
+                        <div>Report</div>
+                      )}
+                    </Menu>
+                  )}
+                </button>
+              </MoreWrapper>
+            )}
+          </ButtonWrapper>
+        )}
+
         <Modal
           isOpen={openNormalModal}
           style={customStyles}
@@ -279,6 +305,12 @@ export default function AComment({
   );
 }
 
+const LockerDiv = styled.div``;
+
+const SecretProfile = styled.div`
+  width: 2.8rem;
+`;
+
 const SecretButton = styled.button<{ $isSecret: boolean }>`
   cursor: pointer;
   position: absolute;
@@ -307,6 +339,16 @@ const SecretButton = styled.button<{ $isSecret: boolean }>`
         $isSecret ? theme.colors.purple600 : theme.colors.gray400};
     }
   }
+`;
+
+const ConetentDiv = styled.div`
+  display: flex;
+  gap: 1rem;
+`;
+
+const NicknameDiv = styled.div`
+  display: flex;
+  gap: 1rem;
 `;
 
 const MoreWrapper = styled.div`

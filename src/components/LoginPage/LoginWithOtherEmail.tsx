@@ -16,12 +16,14 @@ export default function LoginWithOtherEmail() {
 }
 
 const LoginWithOtherEmailWrapper = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 1.2rem;
   margin-bottom: 4.8rem;
+  padding-left: 2rem;
 `;
 
 // const BlackButtonWrapper = styled.div`

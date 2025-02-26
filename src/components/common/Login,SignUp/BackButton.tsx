@@ -13,7 +13,7 @@ export default function BackButton() {
 }
 
 const BackButtonWrapper = styled.div`
-  padding: 7rem 0 0 10rem;
+  padding: 5% 0 0 1%;
   position: relative;
 `;
 const BackButtonComponent = styled(BackButtonSVG)`

@@ -37,7 +37,7 @@ export default function PersonalInformation({
   }, []);
   return (
     <PersonalInformationWrapper>
-      <div style={{ width: '60.5rem' }}>
+      <div>
         {loginType === 'EMAIL' && (
           <Password register={register} watch={watch} />
         )}
@@ -58,15 +58,23 @@ export default function PersonalInformation({
 }
 
 const PersonalInformationWrapper = styled.div`
+  width: 100%;
+
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   position: relative;
+
+  > div {
+    max-width: 60.5rem;
+    @media (max-width: 700px) {
+      padding: 0 2rem;
+    }
+  }
 `;
 
 const Box = styled.div`
-  width: 60.5rem;
   border-radius: 5px;
   border: 1px solid ${({ theme }) => theme.colors.gray300};
   padding: 0 2.3rem;

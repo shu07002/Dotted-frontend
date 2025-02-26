@@ -15,7 +15,8 @@ const CreateEmailButtonBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 386px;
+  width: 100%;
+  max-width: 38.6rem;
   height: 38px;
   flex-shrink: 0;
   border-radius: 24px;
@@ -27,6 +28,9 @@ const CreateEmailText = styled.p`
   text-align: center;
   font-family: Inter;
   font-size: 20px;
+  @media (max-width: 400px) {
+    font-size: 15px;
+  }
   font-style: normal;
   font-weight: 300;
   line-height: normal;

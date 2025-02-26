@@ -37,8 +37,10 @@ export default function SignUpForm({
         onChangeStep={onChangeStep}
         onChangeIsSogangEmail={onChangeIsSogangEmail}
       />
+      <DividerWrapper>
+        <Divider />
+      </DividerWrapper>
 
-      <Divider />
       <GoogleOAuthProvider
         clientId={`${import.meta.env.VITE_GOOGLE_CLIENT_ID}`}
       >
@@ -52,10 +54,16 @@ export default function SignUpForm({
 }
 
 const SignUpFormWrapper = styled.div`
+  padding-left: 2rem;
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   margin-bottom: 17.1rem;
+`;
+
+const DividerWrapper = styled.div`
+  width: 100%;
+  padding-left: 2rem;
 `;

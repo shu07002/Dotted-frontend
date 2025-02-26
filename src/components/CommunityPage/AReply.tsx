@@ -8,6 +8,7 @@ import { useMutation } from '@tanstack/react-query';
 import Modal from 'react-modal';
 import { fetchWithAuth } from '@/utils/auth'; // auth.ts 경로에 맞게 수정
 import { formatRelativeTime } from '@/utils/formatTime';
+import Locker from '@/assets/svg/MarketPage/Locker.svg?react';
 
 // API 응답 타입 정의 (실제 API 스펙에 맞게 수정)
 interface ReplyLikeResponse {
@@ -115,7 +116,7 @@ export default function AReply({ reply }: { reply: Comment }) {
 
   return (
     <Comments>
-      <Profile />
+      {reply.is_secret && !reply.is_mine ? <SecretProfile /> : <Profile />}
       <div style={{ width: '100%' }}>
         {isEditing ? (
           <CommentInputWrapper>
@@ -136,38 +137,58 @@ export default function AReply({ reply }: { reply: Comment }) {
           </CommentInputWrapper>
         ) : (
           <>
-            <div>{reply.user_nickname}</div>
-            <div>{editedContent}</div>
+            {reply.is_secret && !reply.is_mine ? (
+              <div></div>
+            ) : (
+              <NicknameDiv>
+                {reply.user_nickname}
+                {reply.is_mine && (
+                  <LockerDiv>
+                    <Locker />
+                  </LockerDiv>
+                )}
+              </NicknameDiv>
+            )}
+            <ConetentDiv>
+              {editedContent}
+              {reply.is_secret && !reply.is_mine && (
+                <LockerDiv>
+                  <Locker />
+                </LockerDiv>
+              )}
+            </ConetentDiv>
             <div>{formatRelativeTime(reply.created_at)}</div>
           </>
         )}
-        <ButtonWrapper>
-          <button onClick={onClickReplyLike}>
-            <Like className={`${isCommentLiked && 'commentLiked'}`} />
-            {likeCount}
-          </button>
-          {reply.content !== 'Deleted Comment' && (
-            <MoreWrapper>
-              <button onClick={() => setOpenMore((prev) => !prev)}>
-                <More />
-                {openMore && (
-                  <Menu>
-                    {reply.is_mine ? (
-                      <>
-                        <div onClick={() => setIsEditing(true)}>Edit</div>
-                        <div onClick={() => setOpenNormalModal(true)}>
-                          Delete
-                        </div>
-                      </>
-                    ) : (
-                      <div>Report</div>
-                    )}
-                  </Menu>
-                )}
-              </button>
-            </MoreWrapper>
-          )}
-        </ButtonWrapper>
+        {((!reply.is_secret && !reply.is_deleted) || reply.is_mine) && (
+          <ButtonWrapper>
+            <button onClick={onClickReplyLike}>
+              <Like className={`${isCommentLiked && 'commentLiked'}`} />
+              {likeCount}
+            </button>
+            {reply.content !== 'Deleted Comment' && (
+              <MoreWrapper>
+                <button onClick={() => setOpenMore((prev) => !prev)}>
+                  <More />
+                  {openMore && (
+                    <Menu>
+                      {reply.is_mine ? (
+                        <>
+                          <div onClick={() => setIsEditing(true)}>Edit</div>
+                          <div onClick={() => setOpenNormalModal(true)}>
+                            Delete
+                          </div>
+                        </>
+                      ) : (
+                        <div>Report</div>
+                      )}
+                    </Menu>
+                  )}
+                </button>
+              </MoreWrapper>
+            )}
+          </ButtonWrapper>
+        )}
       </div>
       <Modal
         isOpen={openNormalModal}
@@ -196,6 +217,18 @@ export default function AReply({ reply }: { reply: Comment }) {
     </Comments>
   );
 }
+
+const LockerDiv = styled.div``;
+
+const ConetentDiv = styled.div`
+  display: flex;
+  gap: 1rem;
+`;
+
+const NicknameDiv = styled.div`
+  display: flex;
+  gap: 1rem;
+`;
 
 const AccessRestrictedWrapper = styled.div`
   width: 100%;
@@ -297,10 +330,14 @@ const Menu = styled.div`
   }
 `;
 
+const SecretProfile = styled.div`
+  width: 2.8rem;
+`;
+
 const Comments = styled.div`
   display: flex;
   gap: 2.1rem;
-  margin-top: 3.1rem;
+  margin-top: 2rem;
   > div {
     display: flex;
     flex-direction: column;
@@ -308,14 +345,17 @@ const Comments = styled.div`
     > div {
       font-family: Inter;
       &:first-child {
+        color: ${({ theme }) => theme.colors.gray700};
         font-size: 2rem;
         font-weight: 600;
       }
       &:nth-child(2) {
+        color: ${({ theme }) => theme.colors.gray700};
         font-size: 2rem;
         font-weight: 300;
       }
       &:nth-child(3) {
+        color: ${({ theme }) => theme.colors.gray500};
         font-size: 1.4rem;
         font-weight: 300;
       }

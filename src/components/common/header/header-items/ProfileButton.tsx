@@ -71,7 +71,7 @@ export default function ProfileButton() {
 }
 
 const ProfileBox = styled.div`
-  @media (max-width: 920px) {
+  @media (max-width: 900px) {
     gap: 1rem;
     margin-right: 1rem;
   }
@@ -104,7 +104,7 @@ const ProfileBox = styled.div`
   }
 
   > span {
-    @media (max-width: 920px) {
+    @media (max-width: 900px) {
       display: none;
     }
     margin-left: 1.2rem;
