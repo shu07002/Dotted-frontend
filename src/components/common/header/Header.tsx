@@ -8,7 +8,6 @@ import SubHeader from './SubHeader';
 import { useNavigate } from 'react-router-dom';
 import { EventSourcePolyfill, NativeEventSource } from 'event-source-polyfill';
 import { isTokenExpired, refreshAccessToken } from '@/utils/auth';
-import ArrowDown from '@/assets/svg/tips/faq/arrow.svg?react';
 
 export interface NotiList {
   id: number;
@@ -128,9 +127,7 @@ export default function Header({ scrollY }: { scrollY: number }) {
               e.stopPropagation();
               setIsOpen((prev) => !prev);
             }}
-          >
-            <ArrowDown />
-          </ArrowWrapper>
+          ></ArrowWrapper>
         </LeftSection>
         <RightSection onMouseEnter={() => setHoveredTab('')}>
           {isLogined() ? (
@@ -144,11 +141,11 @@ export default function Header({ scrollY }: { scrollY: number }) {
           )}
         </RightSection>
       </UpWrapper>
-      {isOpen && (
-        <MobileNav ref={mobileNavRef} onClick={(e) => e.stopPropagation()}>
-          <HeaderNav setHoveredTab={setHoveredTab} />
-        </MobileNav>
-      )}
+
+      <MobileNav ref={mobileNavRef} onClick={(e) => e.stopPropagation()}>
+        <HeaderNav setHoveredTab={setHoveredTab} />
+      </MobileNav>
+
       <SubHeader hoveredTab={hoveredTab} />
     </HeaderContainer>
   );
