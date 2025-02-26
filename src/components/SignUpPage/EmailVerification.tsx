@@ -172,6 +172,7 @@ export default function EmailVerification({
 }
 
 const EmailVerificationWrapper = styled.section`
+  width: 100%;
   margin-top: 3.2rem;
 
   position: relative;
@@ -179,6 +180,11 @@ const EmailVerificationWrapper = styled.section`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  @media (max-width: 700px) {
+    padding: 0 2rem;
+  }
+
   > p {
     color: ${({ theme }) => theme.colors.gray800};
     text-align: center;

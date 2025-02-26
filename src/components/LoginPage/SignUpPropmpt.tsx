@@ -18,6 +18,10 @@ const SignUpPropmpWrapper = styled.div`
   display: flex;
   gap: 2.1rem;
   margin-bottom: 25rem;
+
+  @media (max-width: 400px) {
+    flex-direction: column;
+  }
 `;
 
 const Text = styled.span`
@@ -45,6 +49,13 @@ const GoToSignUp = styled.div`
   text-decoration-thickness: auto;
   text-underline-offset: auto;
   text-underline-position: from-font;
+
+  @media (max-width: 400px) {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    justify-content: center;
+  }
 `;
 
 const ArrowStyled = styled(Arrow)`

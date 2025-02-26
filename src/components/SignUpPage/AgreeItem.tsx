@@ -56,6 +56,10 @@ const AgreeItemBox = styled.div`
     font-weight: 400;
     line-height: normal;
     letter-spacing: -0.8px;
+
+    @media (max-width: 410px) {
+      font-size: 15px;
+    }
   }
 `;
 

@@ -44,9 +44,16 @@ const NavWrapper = styled.nav`
   gap: 1.6rem;
   height: 100%;
   background-color: ${({ theme }) => theme.colors.backgroundLayer2};
+
   @media (max-width: 900px) {
-    width: 100%;
-    padding: 1rem;
+    padding: 0 9rem 0 7.7rem;
+    padding-bottom: 1rem;
+  }
+
+  @media (max-width: 700px) {
+    padding-right: 4rem;
+    padding-left: 2em;
+    padding-bottom: 1rem;
   }
 
   > div {

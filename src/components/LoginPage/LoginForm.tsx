@@ -84,13 +84,11 @@ export default function LoginForm() {
         {errors.email && <ErrorMsg msg={errors.email.message} />}
       </EmailInputWrapper>
 
-      <div>
-        <PasswordWrapper>
-          <PasswordInput eyeOn={eyeOn} register={register} />
-          <EyeStyled $eyeOn={eyeOn} onClick={onClickEyeOn} />
-        </PasswordWrapper>
-        {errors.password && <ErrorMsg msg={errors.password.message} />}
-      </div>
+      <PasswordWrapper>
+        <PasswordInput eyeOn={eyeOn} register={register} />
+        <EyeStyled $eyeOn={eyeOn} onClick={onClickEyeOn} />
+      </PasswordWrapper>
+      {errors.password && <ErrorMsg msg={errors.password.message} />}
 
       <OptionBox>
         <div>
@@ -105,11 +103,15 @@ export default function LoginForm() {
         </ForgetPassword>
       </OptionBox>
 
-      <LoginButton type="submit" disabled={loginMutation.isPending}>
-        {loginMutation.isPending ? 'Logging in...' : 'Login'}
-      </LoginButton>
+      <LoginButtonWrapper>
+        <LoginButton type="submit" disabled={loginMutation.isPending}>
+          {loginMutation.isPending ? 'Logging in...' : 'Login'}
+        </LoginButton>
+      </LoginButtonWrapper>
 
-      <Divider />
+      <DividerWrapper>
+        <Divider />
+      </DividerWrapper>
 
       <LoginWithOtherEmail />
 
@@ -117,6 +119,17 @@ export default function LoginForm() {
     </LoginFormWrapper>
   );
 }
+
+const DividerWrapper = styled.div`
+  width: 100%;
+  padding-left: 2rem;
+`;
+
+const LoginButtonWrapper = styled.div`
+  padding-left: 2rem;
+  width: 100%;
+  max-width: 38.6rem;
+`;
 
 const LoginFormWrapper = styled.form`
   position: relative;
@@ -129,6 +142,9 @@ const LoginFormWrapper = styled.form`
 
 const PasswordWrapper = styled.div`
   position: relative;
+  width: 100%;
+  max-width: 60.5rem;
+  padding-left: 2rem;
 `;
 
 const EyeStyled = styled(Eye)<{ $eyeOn: boolean }>`
@@ -152,6 +168,11 @@ const OptionBox = styled.div`
   gap: 5.1rem;
   margin-top: 3.1rem;
   margin-bottom: 2.9rem;
+
+  @media (max-width: 440px) {
+    flex-direction: column;
+    gap: 1rem;
+  }
 
   > div {
     display: flex;
@@ -198,7 +219,7 @@ const ForgetPassword = styled.div`
 
 const LoginButton = styled.button`
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
-  width: 38.6rem;
+  width: 100%;
   height: 3.8rem;
   flex-shrink: 0;
   border-radius: 24px;
@@ -218,4 +239,7 @@ const LoginButton = styled.button`
 
 const EmailInputWrapper = styled.div`
   margin-bottom: 2.1rem;
+  width: 100%;
+  max-width: 60.5rem;
+  padding-left: 2rem;
 `;

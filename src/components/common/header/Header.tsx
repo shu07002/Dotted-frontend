@@ -164,6 +164,9 @@ const MobileNav = styled.div`
   width: 100%;
 
   display: none;
+  @media (max-width: 900px) {
+    display: block;
+  }
 `;
 
 const ArrowWrapper = styled.div`
@@ -193,22 +196,19 @@ const LoginButton = styled.button`
 
 const HeaderContainer = styled.div`
   width: 100%;
-  padding: 0 9rem 0 7.7rem;
-  @media (max-width: 900px) {
-    padding-right: 5rem;
-    padding-left: 5rem;
-  }
 
-  @media (max-width: 700px) {
-    padding-right: 2rem;
-    padding-left: 2rem;
-  }
   position: fixed;
   top: 0;
   z-index: 1000;
 `;
 
 const UpWrapper = styled.div<{ $scrollY: number }>`
+  padding: 0 9rem 0 7.7rem;
+
+  @media (max-width: 700px) {
+    padding-right: 2rem;
+    padding-left: 2em;
+  }
   height: 8rem;
   background-color: ${({ theme }) => theme.colors.backgroundLayer2};
   color: ${({ theme }) => theme.colors.gray700};

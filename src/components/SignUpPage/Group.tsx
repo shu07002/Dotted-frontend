@@ -49,8 +49,9 @@ export default function Group({ setValue }: GroupProps) {
 
 const GroupWrapper = styled.div`
   padding: 1.1rem;
-  width: 398px;
-  height: 88px;
+  width: 100%;
+  max-width: 39.8rem;
+
   flex-shrink: 0;
   border-radius: 5px;
   border: 1px solid ${({ theme }) => theme.colors.gray300};

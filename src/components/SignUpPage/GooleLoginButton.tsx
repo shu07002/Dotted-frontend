@@ -38,7 +38,8 @@ export default GoogleLoginButton;
 
 const BlackButtonWrapper = styled.div`
   cursor: pointer;
-  width: 38.6rem;
+  width: 100%;
+  max-width: 36.6rem;
   height: 3.8rem;
   flex-shrink: 0;
   border-radius: 24px;

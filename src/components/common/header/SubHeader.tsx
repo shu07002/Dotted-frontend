@@ -89,8 +89,13 @@ const SubHeaderWrapper = styled(motion.div)`
   align-items: center;
   flex-wrap: wrap;
 
+  padding: 0 7.7rem;
+
   @media (max-width: 480px) {
     height: 6.5rem;
+  }
+  @media (max-width: 700px) {
+    padding-left: 2rem;
   }
 `;
 

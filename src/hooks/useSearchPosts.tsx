@@ -1,7 +1,6 @@
 // useSearchPosts.ts
 import { CommunityPost } from '@/types/CommunityPost';
 import { MarketPost } from '@/types/MarketPost';
-import { fetchWithAuth } from '@/utils/auth';
 import { useMutation } from '@tanstack/react-query';
 
 interface SearchPostsParams {
@@ -38,10 +37,12 @@ const fetchPosts = async ({
   console.log(queryParams.toString());
   const url = `${import.meta.env.VITE_API_DOMAIN}/api/${apiLink.url}?${queryParams.toString()}`;
 
-  // fetchWithAuth를 사용하여 401 발생 시 자동 재발급 및 재시도 처리
-  return fetchWithAuth<CommunityPost | MarketPost>(url, {
-    method: 'GET'
-  });
+  const response = await fetch(url, { method: 'GET' });
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  const data = await response.json();
+  return data;
 };
 
 export const useSearchPosts = () => {

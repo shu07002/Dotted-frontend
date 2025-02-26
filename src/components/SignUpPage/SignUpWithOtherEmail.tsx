@@ -30,6 +30,7 @@ export default function SignUpWithOtherEmail({
 }
 
 const SignUpWithOtherEmailWrapper = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -64,7 +65,8 @@ const SignUpWithOtherEmailWrapper = styled.div`
 
 const GrayButtonWrapper = styled.div`
   cursor: pointer;
-  width: 386px;
+  width: 100%;
+  max-width: 36.6rem;
   height: 38px;
   flex-shrink: 0;
   border-radius: 24px;

@@ -75,7 +75,7 @@ const BirthSelectWrapper = styled.div`
 
 const Select = styled.select`
   padding: 0 1rem;
-  width: 104px;
+  width: 100%;
   height: 50px;
   flex-shrink: 0;
   flex: 1;

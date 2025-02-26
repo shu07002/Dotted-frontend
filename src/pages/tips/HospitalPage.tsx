@@ -117,11 +117,24 @@ export default function HospitalPage() {
 
 const Main = styled.main`
   min-width: 40rem;
+  @media (max-width: 500px) {
+    min-width: 30rem;
+  }
   width: 100%;
   min-height: 80rem;
   padding: 5rem 18rem 2.6rem 18rem;
   display: flex;
   flex-direction: column;
+
+  @media (max-width: 1220px) {
+    padding-left: 10rem;
+    padding-right: 10rem;
+  }
+
+  @media (max-width: 700px) {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
 `;
 
 const NavContainer = styled.div`
@@ -171,6 +184,12 @@ const HeaderSection = styled.section`
   padding: 1rem;
   display: flex;
   align-items: center;
+
+  @media (max-width: 500px) {
+    min-width: 30rem;
+    padding: 0;
+    padding-top: 1rem;
+  }
 `;
 
 const LeftButton = styled.div`
@@ -181,6 +200,9 @@ const LeftButton = styled.div`
   &:hover {
     opacity: 0.8;
   }
+  @media (max-width: 500px) {
+    padding-left: 0;
+  }
 `;
 
 const RightButton = styled.div`
@@ -190,6 +212,9 @@ const RightButton = styled.div`
   padding: 0 1rem;
   &:hover {
     opacity: 0.8;
+  }
+  @media (max-width: 500px) {
+    padding-right: 0;
   }
 `;
 
@@ -221,6 +246,10 @@ const HospitalListWrapper = styled.div`
     > li {
       padding: 2.3rem 2.7rem 4rem 2.7rem;
       min-width: 40rem;
+
+      @media (max-width: 500px) {
+        min-width: 30rem;
+      }
       border-radius: 1.6rem;
       background: ${({ theme }) => theme.colors.backgroundLayer1};
       .hospital_type {

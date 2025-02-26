@@ -19,9 +19,8 @@ export default function PasswordInput({ eyeOn, register }: PasswordInputProps) {
 
 const PasswordInputWrapper = styled.input`
   padding-left: 2.3rem;
-  width: 60.5rem;
+  width: 100%;
   height: 5rem;
-  flex-shrink: 0;
   border-radius: 5px;
   border: 1px solid ${({ theme }) => theme.colors.gray300};
   background: ${({ theme }) => theme.colors.backgroundLayer2};
