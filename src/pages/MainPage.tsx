@@ -4,7 +4,6 @@ import 'slick-carousel/slick/slick-theme.css';
 import Carousel from '@/components/MainPage/Carousel';
 import Tips from '@/components/MainPage/Tips';
 import { useNavigate } from 'react-router-dom';
-import { fetchWithAuth } from '@/utils/auth';
 import { useQuery } from '@tanstack/react-query';
 import { formatRelativeTime } from '@/utils/formatTime';
 import { CommunityPost, EachPost } from '@/types/CommunityPost';
