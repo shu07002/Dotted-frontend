@@ -20,6 +20,7 @@ interface RestaurantData {
   naver_map_link: string;
   distance: number;
   photo: string;
+  intro: string;
 }
 
 export default function RestaurantList() {
@@ -49,7 +50,7 @@ export default function RestaurantList() {
       {!isLoading && filteredRestaurants ? (
         <List>
           {filteredRestaurants.map((el: RestaurantData, idx: number) => {
-            console.log(el.photo);
+            console.log(el);
             return (
               <RestaurantBox key={idx}>
                 <img src={el.photo} alt={el.name} />
@@ -57,6 +58,7 @@ export default function RestaurantList() {
                   <RestaurantInfo>
                     <h1>{el.name}</h1>
                     <p>{el.type}</p>
+                    <p>{el.intro}</p>
                   </RestaurantInfo>
                   <RestaurantLocation>
                     <span className="location__distance">
@@ -103,6 +105,10 @@ const List = styled.ul`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 4.6rem;
+
+  @media (max-width: 470px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
 `;
 
 const RestaurantBox = styled.li`
@@ -118,14 +124,14 @@ const RestaurantBox = styled.li`
     object-fit: cover;
     flex-shrink: 0;
 
-    @media (max-width: 700px) {
+    @media (max-width: 900px) {
       width: 100%;
       aspect-ratio: 1.2;
       height: auto;
     }
   }
 
-  @media (max-width: 700px) {
+  @media (max-width: 900px) {
     display: block;
   }
 `;
@@ -133,7 +139,7 @@ const RestaurantBox = styled.li`
 const Description = styled.div`
   width: 100%;
   height: 100%;
-  padding: 1.9rem 2.7rem 3.9rem 2.7rem;
+  padding: 1.9rem 2.7rem 2rem 2.7rem;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -142,7 +148,7 @@ const Description = styled.div`
     padding: 1rem 1.3rem 1.9rem 1.3rem;
   }
 
-  @media (max-width: 700px) {
+  @media (max-width: 900px) {
     height: auto;
     flex-shrink: 0;
   }
@@ -158,7 +164,7 @@ const RestaurantInfo = styled.div`
     font-weight: 400;
     letter-spacing: -1px;
     color: ${({ theme }) => theme.colors.gray700};
-    @media (max-width: 700px) {
+    @media (max-width: 900px) {
       font-size: 2rem;
     }
   }
@@ -199,7 +205,7 @@ const RestaurantLocation = styled.div`
     display: flex;
     gap: 1.6rem;
 
-    @media (max-width: 700px) {
+    @media (max-width: 900px) {
       gap: 0rem;
     }
 
@@ -213,7 +219,7 @@ const RestaurantLocation = styled.div`
       text-decoration-line: underline;
       color: ${({ theme }) => theme.colors.gray500};
 
-      @media (max-width: 700px) {
+      @media (max-width: 900px) {
         font-size: 1rem;
       }
 

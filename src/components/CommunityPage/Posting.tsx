@@ -121,14 +121,18 @@ export default function Posting({
         <ButtonWrapper>
           <Button className={`${isLiked && 'liked'}`} onClick={handleLikeClick}>
             <Like />
-            <span>{localLikeCount} likes</span>
+            <span>
+              {localLikeCount} <span>likes</span>
+            </span>
           </Button>
           <Button
             className={`${isScraped && 'scraped'}`}
             onClick={handleScrapClick}
           >
             <Scrap />
-            <span>{localScrapCount} scraps</span>
+            <span>
+              {localScrapCount} <span>scraps</span>
+            </span>
           </Button>
         </ButtonWrapper>
       </ContentWrapper>
@@ -297,6 +301,11 @@ const Button = styled.button`
     font-weight: 300;
     line-height: normal;
     letter-spacing: -0.08rem;
+    > span {
+      @media (max-width: 460px) {
+        display: none;
+      }
+    }
   }
 
   &:hover {
