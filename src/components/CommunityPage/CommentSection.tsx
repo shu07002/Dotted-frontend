@@ -105,7 +105,7 @@ export default function CommentSection({ post, origin }: CommentSectionProps) {
               $isSecret={isSecret}
             >
               <Locker />
-              secret comment
+              <span>secret comment</span>
             </SecretButton>
           )}
         </label>
@@ -144,6 +144,12 @@ const SecretButton = styled.button<{ $isSecret: boolean }>`
         $isSecret ? theme.colors.purple600 : theme.colors.gray400};
     }
   }
+
+  > span {
+    @media (max-width: 700px) {
+      display: none;
+    }
+  }
 `;
 
 const CommentSectionWrapper = styled.section`
@@ -175,6 +181,10 @@ const CommentsListWrapper = styled.ul`
 const CommentInputWrapper = styled.div`
   width: 100%;
   height: 10rem;
+
+  @media (max-width: 400px) {
+    height: 12rem;
+  }
   display: flex;
   justify-content: space-between;
   gap: 1.8rem;
@@ -203,6 +213,11 @@ const CommentButton = styled.button`
   border: none;
   padding: 0 2rem;
   height: 10rem;
+
+  @media (max-width: 400px) {
+    height: 12rem;
+    padding: 0 1rem;
+  }
   border-radius: 0.4rem;
   background: ${({ theme }) => theme.colors.purple600};
   color: ${({ theme }) => theme.colors.gray50};

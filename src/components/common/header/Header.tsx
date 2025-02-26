@@ -195,18 +195,19 @@ const LoginButton = styled.button`
 `;
 
 const HeaderContainer = styled.div`
-  width: 100%;
+  z-index: 1000;
 
   position: fixed;
   top: 0;
-  z-index: 1000;
+  left: 0;
+  right: 0;
 `;
 
 const UpWrapper = styled.div<{ $scrollY: number }>`
   padding: 0 9rem 0 7.7rem;
 
   @media (max-width: 700px) {
-    padding-right: 2rem;
+    padding-right: 4rem;
     padding-left: 2em;
   }
   height: 8rem;

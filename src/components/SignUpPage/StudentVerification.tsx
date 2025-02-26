@@ -144,9 +144,9 @@ export default function StudentVerificat({
           ex. Student ID Card, Saint Main page Screenshot, Course Records
         </Example>
         <Warnning>
-          <div>
+          {/* <div>
             <WarnSVG />
-          </div>
+          </div> */}
           <span>
             Your real name and university name must be visible. <br />
             You can hide other personal details such as card numbers or photos.
@@ -188,9 +188,12 @@ export default function StudentVerificat({
               <StyledPentagonSVG />
               <TimeSVG />
             </ItemWrapper>
-            <span>
+            <span className="PC">
               It takes some <span>time</span> to accept you because we have to
               check this file.
+            </span>
+            <span className="Mobile">
+              File verification may take <span>1–2 days.</span>
             </span>
           </div>
           <div>
@@ -198,8 +201,11 @@ export default function StudentVerificat({
               <StyledPentagonSVG />
               <TrashcanSVG />
             </ItemWrapper>
-            <span>
+            <span className="PC">
               We will <span>destroy</span> this file after checking.
+            </span>
+            <span className="Mobile">
+              Your file will be <span>deleted</span> after verification.
             </span>
           </div>
           <div>
@@ -207,9 +213,13 @@ export default function StudentVerificat({
               <StyledPentagonSVG />
               <UnlockSVG />
             </ItemWrapper>
-            <span>
+            <span className="PC">
               <span>Community</span> and <span>Market</span> can be used after
               you are approved.
+            </span>
+            <span className="Mobile">
+              You can access <span>Community</span> and <span>Market</span>
+              after approval.
             </span>
           </div>
         </Notice>
@@ -228,10 +238,11 @@ const StudentVerificationLayout = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 0 2rem;
 `;
 
 const StudentVerificationWrapper = styled.div`
-  width: 94.2rem;
+  max-width: 94.2rem;
 `;
 
 const Title = styled.div`
@@ -246,6 +257,9 @@ const Title = styled.div`
   color: ${({ theme }) => theme.colors.gray700};
   font-family: Pretendard;
   font-size: 36px;
+  @media (max-width: 700px) {
+    font-size: 33px;
+  }
   font-style: normal;
   font-weight: 700;
   line-height: 36px; /* 100% */
@@ -259,6 +273,9 @@ const Guide = styled.div`
       color: ${({ theme }) => theme.colors.purple600};
       font-family: Pretendard;
       font-size: 24px;
+      @media (max-width: 700px) {
+        font-size: 21px;
+      }
       font-style: normal;
       font-weight: 700;
       line-height: 36px;
@@ -267,6 +284,9 @@ const Guide = styled.div`
     color: ${({ theme }) => theme.colors.gray700};
     font-family: Pretendard;
     font-size: 24px;
+    @media (max-width: 700px) {
+      font-size: 21px;
+    }
     font-style: normal;
     font-weight: 500;
     line-height: 36px; /* 150% */
@@ -279,6 +299,9 @@ const Example = styled.div`
   color: ${({ theme }) => theme.colors.gray500};
   font-family: Pretendard;
   font-size: 20px;
+  @media (max-width: 700px) {
+    font-size: 17px;
+  }
   font-style: normal;
   font-weight: 300;
   line-height: 36px; /* 180% */
@@ -296,6 +319,9 @@ const Warnning = styled.div`
     color: var(--Semantic-Negative-900, #ea3729);
     font-family: Pretendard;
     font-size: 20px;
+    @media (max-width: 700px) {
+      font-size: 17px;
+    }
     font-style: normal;
     font-weight: 500;
     line-height: 32px; /* 160% */
@@ -336,6 +362,9 @@ const AttatchImage = styled.div`
         text-align: center;
         font-family: Pretendard;
         font-size: 16px;
+        @media (max-width: 700px) {
+          font-size: 13px;
+        }
         font-style: normal;
         font-weight: 300;
         line-height: 36px; /* 225% */
@@ -346,6 +375,9 @@ const AttatchImage = styled.div`
       text-align: center;
       font-family: Pretendard;
       font-size: 24px;
+      @media (max-width: 700px) {
+        font-size: 21px;
+      }
       font-style: normal;
       font-weight: 700;
       line-height: 36px; /* 150% */
@@ -355,25 +387,51 @@ const AttatchImage = styled.div`
 `;
 
 const Notice = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 2rem;
+  @media (max-width: 700px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
   position: relative;
   justify-content: space-evenly;
   margin-bottom: 6.2rem;
   > div {
     display: flex;
     flex-direction: column;
-
     align-items: center;
-    width: 22.4rem;
+
+    @media (max-width: 700px) {
+      align-items: start;
+      justify-content: center;
+    }
+
+    max-width: 22.4rem;
 
     > span {
-      color: ${({ theme }) => theme.colors.gray600};
+      &.PC {
+        @media (max-width: 700px) {
+          display: none;
+        }
+      }
+
+      &.Mobile {
+        display: none;
+        @media (max-width: 700px) {
+          display: block;
+        }
+      }
       text-align: center;
       font-family: Pretendard;
       font-size: 20px;
+      @media (max-width: 700px) {
+        font-size: 17px;
+        position: absolute;
+        left: 13rem;
+      }
       font-style: normal;
       font-weight: 400;
-      line-height: 36px; /* 180% */
+      line-height: 28px; /* 180% */
       letter-spacing: -0.2px;
 
       > span {
@@ -388,6 +446,10 @@ const ItemWrapper = styled.div`
   height: 10rem;
   position: relative;
   margin-bottom: 1.6rem;
+
+  @media (max-width: 700px) {
+    margin: 0;
+  }
   > svg {
     position: absolute;
     &:last-child {
@@ -431,6 +493,9 @@ const ButtonWrapper = styled.div`
     text-align: center;
     font-family: Pretendard;
     font-size: 20px;
+    @media (max-width: 700px) {
+      font-size: 17px;
+    }
     font-style: normal;
     font-weight: 500;
     line-height: 36px; /* 180% */
@@ -452,6 +517,9 @@ const SubmitButton = styled.div`
   text-align: center;
   font-family: Pretendard;
   font-size: 20px;
+  @media (max-width: 700px) {
+    font-size: 17px;
+  }
   font-style: normal;
   font-weight: 500;
   line-height: 36px; /* 180% */

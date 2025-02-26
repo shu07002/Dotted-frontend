@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
 import Fire from '@/assets/svg/CommunityPage/Fire.svg?react';
+import { useLocation } from 'react-router-dom';
 
 interface TagListProps {
   tags: string[];
@@ -13,8 +14,10 @@ export default function TagList({
   selectedTag,
   onClickTag
 }: TagListProps) {
+  const location = useLocation();
+  const isMarket = location.pathname.includes('market');
   return (
-    <TagListContainer>
+    <TagListContainer $isMarket={isMarket}>
       {tags.map((tag, idx) => {
         return (
           <TagWrapper key={idx}>
@@ -44,7 +47,7 @@ export default function TagList({
   );
 }
 
-const TagListContainer = styled.ul`
+const TagListContainer = styled.ul<{ $isMarket: boolean }>`
   display: flex;
   align-items: end;
 
@@ -60,7 +63,10 @@ const TagListContainer = styled.ul`
 
   @media (max-width: 786px) {
     display: grid;
-    grid-template-columns: repeat(3, minmax(4rem, 1fr));
+    ${({ $isMarket }) =>
+      $isMarket
+        ? 'grid-template-columns: repeat(2, minmax(4rem, 1fr));'
+        : 'grid-template-columns: repeat(3, minmax(4rem, 1fr));'}
   }
 `;
 
