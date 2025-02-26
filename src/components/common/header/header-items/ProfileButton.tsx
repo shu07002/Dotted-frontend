@@ -59,7 +59,7 @@ export default function ProfileButton() {
     <ProfileBox onClick={() => setIsOpen((prev) => !prev)}>
       {isOpen && (
         <Menu>
-          <div>my page</div>
+          <div onClick={() => navigate('/mypage')}>my page</div>
           <div onClick={onClickLogout}>logout</div>
         </Menu>
       )}
