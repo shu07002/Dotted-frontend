@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import WarnSVG from '@/assets/svg/SignUpPage/ErrorMsgSVG.svg?react';
+//import WarnSVG from '@/assets/svg/SignUpPage/ErrorMsgSVG.svg?react';
 import ImgFileSVG from '@/assets/svg/SignUpPage/ImgFileSVG.svg?react';
 import TimeSVG from '@/assets/svg/SignUpPage/TimeSVG.svg?react';
 import TrashcanSVG from '@/assets/svg/SignUpPage/TrashcanSVG.svg?react';
