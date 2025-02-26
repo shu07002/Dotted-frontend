@@ -16,8 +16,8 @@ interface RestaurantData {
   id: number;
   name: string;
   type: string;
-  google_map_link: string;
-  naver_map_link: string;
+  google_map: string;
+  naver_map: string;
   distance: number;
   photo: string;
   intro: string;
@@ -66,11 +66,11 @@ export default function RestaurantList() {
                       <span>{el.distance}m from School</span>
                     </span>
                     <span className="location__link">
-                      <a target="_blank" href={el.naver_map_link}>
+                      <a target="_blank" href={el.naver_map}>
                         <LinkIcon />
                         {'naver map'}
                       </a>
-                      <a target="_blank" href={el.google_map_link}>
+                      <a target="_blank" href={el.google_map}>
                         <LinkIcon />
                         {'google map'}
                       </a>
@@ -194,6 +194,8 @@ const RestaurantLocation = styled.div`
     }
 
     > span {
+      display: flex;
+      gap: 1rem;
       font-size: 1.4rem;
       font-weight: 400;
       letter-spacing: -0.7px;
@@ -203,15 +205,11 @@ const RestaurantLocation = styled.div`
 
   & .location__link {
     display: flex;
-    gap: 1.6rem;
-
-    @media (max-width: 900px) {
-      gap: 0rem;
-    }
+    gap: 1rem;
 
     > a {
       display: flex;
-      gap: 1rem;
+      gap: 0.5rem;
       align-items: center;
       font-size: 1.4rem;
       font-weight: 400;
