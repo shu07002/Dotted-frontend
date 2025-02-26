@@ -57,7 +57,6 @@ export default function RestaurantList() {
                 <Description>
                   <RestaurantInfo>
                     <h1>{el.name}</h1>
-                    <p>{el.type}</p>
                     <p>{el.intro}</p>
                   </RestaurantInfo>
                   <RestaurantLocation>

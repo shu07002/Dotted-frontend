@@ -61,7 +61,6 @@ export default function PostingList({ pagedData }: PostingListProps) {
 
 const PostingListWrapper = styled.ul`
   width: 100%;
-  height: 46rem;
 
   > li {
     padding: 1.5rem 0;
@@ -140,11 +139,19 @@ const PostingWriter = styled.div`
     line-height: normal;
     letter-spacing: -0.07rem;
     font-size: 1.4rem;
+
+    @media (max-width: 500) {
+      font-size: 1.2rem;
+    }
     gap: 0.5rem;
 
     > svg {
       display: flex;
       align-items: center;
+
+      @media (max-width: 500) {
+        font-size: 1.2rem;
+      }
     }
   }
 `;

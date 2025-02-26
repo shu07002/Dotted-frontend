@@ -206,7 +206,7 @@ const TagAndSearch = styled.div`
   margin-top: 2rem;
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray300};
 
-  @media (max-width: 1125px) {
+  @media (max-width: 1260px) {
     flex-direction: column;
     align-items: normal;
     > ul:first-child {
