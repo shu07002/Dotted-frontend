@@ -35,6 +35,7 @@ export default function NotificatoinPage() {
     const EventSourceConstructor = EventSourcePolyfill || NativeEventSource;
     const headers = { Authorization: `Bearer ${accessToken}` };
 
+    console.log(`${import.meta.env.VITE_API_DOMAIN}/api/notification/stream`);
     const evtSource = new EventSourceConstructor(
       `${import.meta.env.VITE_API_DOMAIN}/api/notification/stream`,
       { headers: headers, withCredentials: true }
@@ -171,7 +172,7 @@ const DeleteAll = styled.button`
   font-size: 1.6rem;
   font-style: normal;
   font-weight: 600;
-  line-height: 3.6rem; /* 225% */
+  line-height: 3.6rem;
   letter-spacing: -0.048rem;
 `;
 
@@ -238,7 +239,7 @@ const From = styled.div`
   font-size: 1.6rem;
   font-style: normal;
   font-weight: 500;
-  line-height: 3.6rem; /* 225% */
+  line-height: 3.6rem;
   letter-spacing: -0.08rem;
 `;
 
@@ -248,7 +249,7 @@ const Content = styled.div`
   font-size: 2.4rem;
   font-style: normal;
   font-weight: 500;
-  line-height: 3.6rem; /* 150% */
+  line-height: 3.6rem;
   letter-spacing: -0.12rem;
 `;
 
@@ -277,6 +278,6 @@ const Date = styled.div`
   font-size: 1.6rem;
   font-style: normal;
   font-weight: 500;
-  line-height: 3.6rem; /* 225% */
+  line-height: 3.6rem;
   letter-spacing: -0.08rem;
 `;

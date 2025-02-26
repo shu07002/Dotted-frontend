@@ -201,10 +201,10 @@ const HeaderContainer = styled.div`
 `;
 
 const UpWrapper = styled.div<{ $scrollY: number }>`
-  padding: 0 9rem 0 7.7rem;
+  padding: 0 7.7rem 0 7.7rem;
 
   @media (max-width: 700px) {
-    padding-right: 4rem;
+    padding-right: 2rem;
     padding-left: 2em;
   }
   height: 8rem;

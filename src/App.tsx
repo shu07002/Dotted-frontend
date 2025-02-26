@@ -25,7 +25,6 @@ function App() {
 export default App;
 
 const AppContainer = styled.div`
-  width: 100vw;
   overflow-x: hidden;
 
   background-color: ${({ theme }) => theme.colors.backgroundLayer2};

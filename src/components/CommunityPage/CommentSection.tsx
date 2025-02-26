@@ -134,6 +134,9 @@ const SecretButton = styled.button<{ $isSecret: boolean }>`
   text-align: center;
   font-family: Inter;
   font-size: 1.6rem;
+  @media (max-width: 460px) {
+    font-size: 1.3rem;
+  }
   font-style: normal;
   font-weight: 300;
   line-height: normal;
@@ -163,6 +166,9 @@ const CommentCount = styled.div`
   color: ${({ theme }) => theme.colors.gray800};
   font-family: Inter;
   font-size: 2rem;
+  @media (max-width: 460px) {
+    font-size: 1.7rem;
+  }
   font-style: normal;
   font-weight: 600;
   line-height: normal;
@@ -201,6 +207,9 @@ const CommentInputWrapper = styled.div`
       background: ${({ theme }) => theme.colors.gray100};
       font-family: Inter;
       font-size: 1.6rem;
+      @media (max-width: 460px) {
+        font-size: 1.3rem;
+      }
       font-style: normal;
       font-weight: 300;
       letter-spacing: -0.08rem;
@@ -224,6 +233,9 @@ const CommentButton = styled.button`
   text-align: center;
   font-family: Inter;
   font-size: 1.6rem;
+  @media (max-width: 460px) {
+    font-size: 1.3rem;
+  }
   font-style: normal;
   font-weight: 500;
   line-height: normal;
