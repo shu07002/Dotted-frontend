@@ -87,15 +87,15 @@ const SubHeaderWrapper = styled(motion.div)`
   border-bottom: 0.5px solid ${({ theme }) => theme.colors.gray400};
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
-
+  overflow-x: auto;
   padding: 0 7.7rem;
 
-  @media (max-width: 480px) {
-    height: 6.5rem;
-  }
   @media (max-width: 700px) {
     padding-left: 2rem;
+  }
+
+  &::-webkit-scrollbar {
+    display: none;
   }
 `;
 
@@ -104,6 +104,7 @@ const SubElement = styled.div`
   align-items: center;
 
   > a {
+    white-space: nowrap;
     color: ${({ theme }) => theme.colors.gray500};
     text-decoration: none;
     font-size: 1.4rem;

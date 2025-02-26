@@ -89,13 +89,15 @@ export default function MarketPosting({
           </Title>
           <Price>₩ {post.price}</Price>
           <Writer>
-            <Profile />
             <div>
-              <span>
-                by <span>{post.writer_nickname}</span>
-              </span>
-              <span>•</span>
-              <span>{formatRelativeTime(post.created_at)}</span>
+              <Profile />
+              <div>
+                <span>
+                  by <span>{post.writer_nickname}</span>
+                </span>
+                <span>•</span>
+                <span>{formatRelativeTime(post.created_at)}</span>
+              </div>
             </div>
           </Writer>
         </Text>
@@ -105,13 +107,22 @@ export default function MarketPosting({
             onClick={handleScrapClick}
             className={`${isScraped && 'scraped'}`}
           >
-            <Scrap /> <span>{localScrapCount} scraps</span>
+            <Scrap />
+            <span>
+              {localScrapCount} <MobileScrap>scraps</MobileScrap>
+            </span>
           </ScrapButton>
         </ScrapButtonWrapper>
       </div>
     </ItemWrapper>
   );
 }
+
+const MobileScrap = styled.span`
+  @media (max-width: 470px) {
+    display: none;
+  }
+`;
 
 const ItemWrapper = styled.div`
   display: flex;
@@ -149,7 +160,7 @@ const ImgCarouselWrapper = styled.div`
     max-width: 23rem;
   }
 
-  @media (max-width: 500px) {
+  @media (max-width: 700px) {
     width: 100%;
     max-width: 100%;
   }
@@ -307,14 +318,19 @@ const Writer = styled.div`
 
   > div {
     display: flex;
-    align-items: center;
     gap: 1rem;
-    > span {
+    justify-content: space-between;
+    > div {
       display: flex;
       align-items: center;
       gap: 1rem;
       > span {
-        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        > span {
+          font-weight: 600;
+        }
       }
     }
   }

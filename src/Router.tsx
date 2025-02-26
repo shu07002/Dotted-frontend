@@ -23,6 +23,7 @@ import DetailMarketPage from './pages/market/DetailMarketPage';
 import NotificatoinPage from './pages/NotificatoinPage';
 import OnboardingPage from './pages/about/OnboardingPage';
 import NoticePage from './pages/about/NoticePage';
+import ScrollToTop from './components/common/ScrollToTop';
 
 const Router = createBrowserRouter([
   {
@@ -30,6 +31,7 @@ const Router = createBrowserRouter([
     // errorElement:
     element: (
       <ProtectedRoute>
+        <ScrollToTop />
         <HeaderLayout />
         <Outlet />
         {/*📌HeaderLayout안에 Outlet이 있는 것보다 밖에 있는게 더 직관적인거 같아서 밖으로 뺐습니다!*/}
