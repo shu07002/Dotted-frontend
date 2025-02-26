@@ -9,35 +9,109 @@ import SignUpPropmpt from './SignUpPropmpt';
 import Eye from '@/assets/svg/LoginPage/Eye.svg?react';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import ErrorMsg from '../SignUpPage/ErrorMsg';
+import { useMutation } from '@tanstack/react-query';
+
+export interface LoginProps {
+  email: string;
+  password: string;
+}
 
 export default function LoginForm() {
   const [eyeOn, setEyeOn] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
+  const {
+    register,
+    formState: { errors },
+    watch,
+    handleSubmit
+  } = useForm<LoginProps>();
+
+  const emailValue = watch('email');
+  const passwordValue = watch('password');
+
   const navigate = useNavigate();
 
   const onClickEyeOn = () => {
     setEyeOn(!eyeOn);
   };
+
+  const loginMutation = useMutation({
+    mutationFn: async () => {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_DOMAIN}/api/user/login`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            email: emailValue,
+            password: passwordValue,
+            remember_me: rememberMe
+          })
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('로그인 실패');
+      }
+
+      return response.json();
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      window.localStorage.setItem('accessToken', data.access);
+      window.localStorage.setItem('refreshToken', data.refresh);
+      navigate('/');
+    },
+    onError: (error) => {
+      console.error('❌ 로그인 실패:', error);
+      alert('Login failed.');
+    }
+  });
+
+  const onClickLogin = () => {
+    if (emailValue !== '' && passwordValue !== '') loginMutation.mutate();
+  };
+
   return (
-    <LoginFormWrapper>
+    <LoginFormWrapper onSubmit={handleSubmit(onClickLogin)}>
       <Greeting text="Login to Dotted" />
-      <EmailInput />
+      <EmailInputWrapper>
+        <EmailInput register={register} />
+        {errors.email && <ErrorMsg msg={errors.email.message} />}
+      </EmailInputWrapper>
+
       <PasswordWrapper>
-        <PasswordInput eyeOn={eyeOn} />
+        <PasswordInput eyeOn={eyeOn} register={register} />
         <EyeStyled $eyeOn={eyeOn} onClick={onClickEyeOn} />
       </PasswordWrapper>
+      {errors.password && <ErrorMsg msg={errors.password.message} />}
 
       <OptionBox>
         <div>
-          <StyledCheckBox /> <span>Remember me</span>
+          <StyledCheckBox
+            checked={rememberMe}
+            onChange={() => setRememberMe((prev) => !prev)}
+          />
+          <span>Remember me</span>
         </div>
         <ForgetPassword onClick={() => navigate('forgetpass')}>
           forget password?
         </ForgetPassword>
       </OptionBox>
 
-      <LoginButton>Login</LoginButton>
+      <LoginButtonWrapper>
+        <LoginButton type="submit" disabled={loginMutation.isPending}>
+          {loginMutation.isPending ? 'Logging in...' : 'Login'}
+        </LoginButton>
+      </LoginButtonWrapper>
 
-      <Divider />
+      <DividerWrapper>
+        <Divider />
+      </DividerWrapper>
 
       <LoginWithOtherEmail />
 
@@ -46,7 +120,18 @@ export default function LoginForm() {
   );
 }
 
-const LoginFormWrapper = styled.div`
+const DividerWrapper = styled.div`
+  width: 100%;
+  padding-left: 2rem;
+`;
+
+const LoginButtonWrapper = styled.div`
+  padding-left: 2rem;
+  width: 100%;
+  max-width: 38.6rem;
+`;
+
+const LoginFormWrapper = styled.form`
   position: relative;
   display: flex;
   flex-direction: column;
@@ -57,6 +142,9 @@ const LoginFormWrapper = styled.div`
 
 const PasswordWrapper = styled.div`
   position: relative;
+  width: 100%;
+  max-width: 60.5rem;
+  padding-left: 2rem;
 `;
 
 const EyeStyled = styled(Eye)<{ $eyeOn: boolean }>`
@@ -80,6 +168,11 @@ const OptionBox = styled.div`
   gap: 5.1rem;
   margin-top: 3.1rem;
   margin-bottom: 2.9rem;
+
+  @media (max-width: 440px) {
+    flex-direction: column;
+    gap: 1rem;
+  }
 
   > div {
     display: flex;
@@ -125,12 +218,13 @@ const ForgetPassword = styled.div`
 `;
 
 const LoginButton = styled.button`
-  cursor: pointer;
-  width: 38.6rem;
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
+  width: 100%;
   height: 3.8rem;
   flex-shrink: 0;
   border-radius: 24px;
-  background: ${({ theme }) => theme.colors.purple1050};
+  background: ${({ theme, disabled }) =>
+    disabled ? theme.colors.gray500 : theme.colors.purple1050};
   color: ${({ theme }) => theme.colors.gray50};
   text-align: center;
   font-family: Inter;
@@ -140,4 +234,12 @@ const LoginButton = styled.button`
   line-height: normal;
   letter-spacing: -0.6px;
   margin-bottom: 3.7rem;
+  transition: background 0.3s;
+`;
+
+const EmailInputWrapper = styled.div`
+  margin-bottom: 2.1rem;
+  width: 100%;
+  max-width: 60.5rem;
+  padding-left: 2rem;
 `;

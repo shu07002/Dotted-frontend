@@ -4,6 +4,7 @@ import Divider from '../common/Login,SignUp/Divider';
 import SignUpWithOtherEmail from './SignUpWithOtherEmail';
 import styled from 'styled-components';
 import Greeting from '../common/Login,SignUp/Greeting';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 interface SignUpFormProps {
   onChangeStep: () => void;
@@ -22,6 +23,7 @@ export default function SignUpForm({
   isCheckedTOS,
   isCheckedPP
 }: SignUpFormProps) {
+  const isChecked = isCheckedPP && isCheckedPP;
   return (
     <SignUpFormWrapper>
       <Greeting text="Welcome to Dotted" />
@@ -35,19 +37,33 @@ export default function SignUpForm({
         onChangeStep={onChangeStep}
         onChangeIsSogangEmail={onChangeIsSogangEmail}
       />
+      <DividerWrapper>
+        <Divider />
+      </DividerWrapper>
 
-      <Divider />
-
-      <SignUpWithOtherEmail onChangeStep={onChangeStep} />
+      <GoogleOAuthProvider
+        clientId={`${import.meta.env.VITE_GOOGLE_CLIENT_ID}`}
+      >
+        <SignUpWithOtherEmail
+          onChangeStep={onChangeStep}
+          isChecked={isChecked}
+        />
+      </GoogleOAuthProvider>
     </SignUpFormWrapper>
   );
 }
 
 const SignUpFormWrapper = styled.div`
+  padding-left: 2rem;
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   margin-bottom: 17.1rem;
+`;
+
+const DividerWrapper = styled.div`
+  width: 100%;
+  padding-left: 2rem;
 `;

@@ -1,47 +1,47 @@
 import styled from 'styled-components';
-import { clubData } from './testData';
 import { useEffect, useState } from 'react';
-// import { useQuery } from '@tanstack/react-query';
+import { ClubData } from '@/pages/tips/ClubsPage';
 
-// const fetchClubData = async () => {
-//   const response = await fetch(
-//     `${import.meta.env.VITE_API_URL}/tips/tips-clubs`
-//   );
-//   return response.json();
-// };
+// 한 페이지에 보여줄 클럽 수
+const POST_PER_PAGE = 5;
 
-interface ClubData {
-  imgUrl: string;
-  name: string;
-  desc: string;
-}
+// 페이지네이션 그룹 크기(페이지 버튼 몇 개씩 묶을지)
+const GROUP_SIZE = 5;
 
-export default function ClubsList() {
-  // const {data, loading, error} = useQuery({
-  //     queryKey: ['tipsClubs'],
-  //     queryFn: fetchClubData
-  // })
-  const data = clubData;
-  const [pagedData, setPagedData] = useState<ClubData[]>([]);
+export default function ClubsList({
+  filterdData
+}: {
+  filterdData: ClubData[];
+}) {
+  // 현재 페이지
   const [currentPage, setCurrentPage] = useState(1);
+  // 현재 페이지에 해당하는 클럽 목록
+  const [pagedData, setPagedData] = useState<ClubData[]>([]);
 
-  //pagination 처리
+  // 전체 페이지 계산
+  const totalPages = filterdData
+    ? Math.ceil(filterdData.length / POST_PER_PAGE)
+    : 1;
+
+  // 그룹 단위 페이지네이션 계산
+  const currentGroup = Math.floor((currentPage - 1) / GROUP_SIZE);
+  const startPage = currentGroup * GROUP_SIZE + 1;
+  const endPage = Math.min(startPage + GROUP_SIZE - 1, totalPages);
+
+  // 현재 페이지가 바뀔 때마다 보여줄 데이터(pagedData) 갱신
   useEffect(() => {
-    const start = (currentPage - 1) * 4;
-    const end = start + 4;
-    setPagedData(data.slice(start, end));
-  }, [currentPage]);
-
-  function handleDirectionBtn(targetPage: number) {
-    if (targetPage < 1) {
-      setCurrentPage(1);
-    } else if (targetPage > Math.ceil(data.length / 4)) {
-      setCurrentPage(Math.ceil(data.length / 4));
-    } else {
-      setCurrentPage(targetPage);
+    if (filterdData) {
+      const startIndex = (currentPage - 1) * POST_PER_PAGE;
+      const endIndex = startIndex + POST_PER_PAGE;
+      setPagedData(filterdData.slice(startIndex, endIndex));
     }
-  }
+  }, [filterdData, currentPage]);
 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filterdData]);
+
+  // 페이지 변경 함수
   function handlePageChange(targetPage: number) {
     setCurrentPage(targetPage);
   }
@@ -49,36 +49,58 @@ export default function ClubsList() {
   return (
     <ListWrapper>
       <List>
-        {pagedData.map((club: ClubData, idx: number) => (
-          <li key={idx}>
-            <img src={club.imgUrl} alt="club" />
+        {pagedData.map((club: ClubData) => (
+          <li key={club.id}>
+            <img src={club.photo} alt="club" />
             <div>
               <h3>{club.name}</h3>
-              <p>{club.desc}</p>
+              <p>{club.intro}</p>
             </div>
           </li>
         ))}
       </List>
+      <CopyRight>© 총동아리연합회</CopyRight>
+
+      {/* 페이지네이션 UI */}
       <PaginationBox>
-        <button onClick={() => handleDirectionBtn(currentPage - 1)}>
+        {/* 이전 그룹으로 이동 */}
+        <button
+          onClick={() => handlePageChange(startPage - 1)}
+          disabled={currentGroup === 0}
+        >
           {'<'}
         </button>
-        {Array.from({ length: Math.ceil(data.length / 4) }, (_, idx) => (
-          <button
-            className={currentPage === idx + 1 ? 'selected' : ''}
-            key={idx}
-            onClick={() => handlePageChange(idx + 1)}
-          >
-            {idx + 1}
-          </button>
-        ))}
-        <button onClick={() => handleDirectionBtn(currentPage + 1)}>
+
+        {/* 그룹 단위로 페이지 번호 버튼 생성 */}
+        {Array.from({ length: endPage - startPage + 1 }, (_, idx) => {
+          const pageNumber = startPage + idx;
+          return (
+            <button
+              key={pageNumber}
+              className={currentPage === pageNumber ? 'selected' : ''}
+              onClick={() => handlePageChange(pageNumber)}
+            >
+              {pageNumber}
+            </button>
+          );
+        })}
+
+        {/* 다음 그룹으로 이동 */}
+        <button
+          onClick={() => handlePageChange(endPage + 1)}
+          disabled={endPage === totalPages}
+        >
           {'>'}
         </button>
       </PaginationBox>
     </ListWrapper>
   );
 }
+
+const CopyRight = styled.div`
+  margin-top: 3rem;
+  color: ${({ theme }) => theme.colors.gray400};
+`;
 
 const ListWrapper = styled.div`
   width: 100%;
@@ -93,7 +115,7 @@ const List = styled.ul`
 
   li {
     width: inherit;
-    height: 17rem;
+
     background-color: ${({ theme }) => theme.colors.backgroundLayer1};
     border-radius: 1.6rem;
     border: 1px solid ${({ theme }) => theme.colors.gray300};
@@ -106,6 +128,7 @@ const List = styled.ul`
       height: 14rem;
       flex-shrink: 0;
       border-radius: 1.6rem;
+      object-fit: contain;
     }
 
     div {
@@ -156,6 +179,11 @@ const PaginationBox = styled.div`
     &:hover {
       background-color: ${({ theme }) => theme.colors.backgroundBase};
       cursor: pointer;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
   }
 `;

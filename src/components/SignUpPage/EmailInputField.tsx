@@ -2,8 +2,11 @@ import styled from 'styled-components';
 import SendCodeButton from './SendCodeButton';
 import { UseFormRegister } from 'react-hook-form';
 import { SignUpFormData } from '@/types/signUpFormData';
+import ErrorMsg from './ErrorMsg';
 
 interface isSogangEmail {
+  loading: boolean;
+  isError: boolean;
   isSogangEmail: boolean;
   isSendCodeClicked: boolean;
   isSubmitClicked: boolean;
@@ -12,6 +15,8 @@ interface isSogangEmail {
 }
 
 export default function EmailInputField({
+  loading,
+  isError,
   isSogangEmail,
   isSendCodeClicked,
   isSubmitClicked,
@@ -26,21 +31,27 @@ export default function EmailInputField({
 
   return (
     <EmailInputFieldWrapper>
-      <span>{emailText}</span>
-      <EmailInput $isSogangEmail={isSogangEmail}>
-        <label htmlFor="email">
-          <input
-            id="email"
-            type={isSogangEmail ? 'text' : 'email'}
-            placeholder={emailPlaceholder}
-            {...register('email', { required: 'Plaese write down your email' })}
-            readOnly={isSendCodeClicked}
-          />
-        </label>
-        {emailDomain ? <span>{emailDomain}</span> : null}
-      </EmailInput>
+      <div>
+        <span>{emailText}</span>
+        <EmailInput $isSogangEmail={isSogangEmail}>
+          <label htmlFor="email">
+            <input
+              id="email"
+              type={isSogangEmail ? 'text' : 'email'}
+              placeholder={emailPlaceholder}
+              {...register('email', {
+                required: 'Plaese write down your email'
+              })}
+              readOnly={isSendCodeClicked}
+            />
+          </label>
+          {emailDomain ? <span>{emailDomain}</span> : null}
+        </EmailInput>
+      </div>
 
+      {isError && <ErrorMsg msg="Already registered email" />}
       <SendCodeButton
+        loading={loading}
         isSendCodeClicked={isSendCodeClicked}
         isSubmitClicked={isSubmitClicked}
         onClickSendCodeButton={onClickSendCodeButton}
@@ -50,29 +61,37 @@ export default function EmailInputField({
 }
 
 const EmailInputFieldWrapper = styled.div`
-  width: 60.5rem;
+  width: 100%;
   margin-top: 5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
-  > span {
-    color: ${({ theme }) => theme.colors.gray600};
-    font-family: Inter;
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 36px; /* 200% */
-    letter-spacing: -0.9px;
+  > div {
+    width: 100%;
+    max-width: 60.5rem;
+    > span {
+      color: ${({ theme }) => theme.colors.gray600};
+      font-family: Inter;
+      font-size: 18px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 36px; /* 200% */
+      letter-spacing: -0.9px;
+    }
   }
 `;
 
 const EmailInput = styled.div<{ $isSogangEmail: boolean }>`
-  margin-bottom: 2.6rem;
   display: flex;
   gap: 2rem;
   align-items: center;
+  width: 100%;
   > label {
+    width: 100%;
     input {
       padding-left: 2.3rem;
-      width: ${(props) => (props.$isSogangEmail ? '38.2rem' : '60.5rem')};
+      width: 100%;
       height: 5rem;
       flex-shrink: 0;
       border-radius: 5px;

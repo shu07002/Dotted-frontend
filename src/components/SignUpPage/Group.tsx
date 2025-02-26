@@ -11,32 +11,35 @@ interface GroupProps {
 }
 
 export default function Group({ setValue }: GroupProps) {
-  const [selectedGroup, setSelectedGroup] = useState('International Student');
+  const [selectedGroup, setSelectedGroup] = useState({
+    full: 'International Student',
+    short: 'INTER'
+  });
 
   useEffect(() => {
-    setValue('group', selectedGroup);
+    setValue('student_type', selectedGroup.short);
   }, [selectedGroup]);
   return (
     <InputBox>
-      <Label name="group">
+      <Label name="student_type">
         <GroupSVG /> Select your Group
       </Label>
       <GroupWrapper>
         {[
-          'International Student',
-          'Exchange Student',
-          'Language Education Center',
-          'Others'
-        ].map((item) => (
-          <RadioLabel key={item}>
+          { full: 'International Student', short: 'INTER' },
+          { full: 'Exchange Student', short: 'EXCHANGE' },
+          { full: 'Language Education Center', short: 'LANGUAGE' },
+          { full: 'Others', short: 'OTHER' }
+        ].map((item, idx) => (
+          <RadioLabel key={idx}>
             <RadioInput
               type="radio"
-              name="group"
-              value={item}
-              checked={selectedGroup === item}
+              name="student_type"
+              value={item.short}
+              checked={selectedGroup.short === item.short}
               onChange={() => setSelectedGroup(item)}
             />
-            {item}
+            {item.full}
           </RadioLabel>
         ))}
       </GroupWrapper>
@@ -46,8 +49,9 @@ export default function Group({ setValue }: GroupProps) {
 
 const GroupWrapper = styled.div`
   padding: 1.1rem;
-  width: 398px;
-  height: 88px;
+  width: 100%;
+  max-width: 39.8rem;
+
   flex-shrink: 0;
   border-radius: 5px;
   border: 1px solid ${({ theme }) => theme.colors.gray300};

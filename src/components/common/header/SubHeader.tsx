@@ -8,8 +8,8 @@ interface SubHeaderProps {
 }
 
 const aboutsubs = [
-  { title: 'What is Dotted?', link: '' },
-  { title: 'Notice', link: '' }
+  { title: 'What is Dotted?', link: '/about/onboarding' },
+  { title: 'Notice', link: '/about/notice' }
 ];
 
 const tipssubs = [
@@ -23,6 +23,7 @@ const tipssubs = [
 
 export default function SubHeader({ hoveredTab }: SubHeaderProps) {
   const { pathname } = useLocation();
+  console.log(hoveredTab);
 
   //location이 tips나 about일 때만 subheader를 보여줌
   const handlePathname = (pathname: string) => {
@@ -86,7 +87,16 @@ const SubHeaderWrapper = styled(motion.div)`
   border-bottom: 0.5px solid ${({ theme }) => theme.colors.gray400};
   display: flex;
   align-items: center;
-  padding-left: 25.7rem;
+  flex-wrap: wrap;
+
+  padding: 0 7.7rem;
+
+  @media (max-width: 480px) {
+    height: 6.5rem;
+  }
+  @media (max-width: 700px) {
+    padding-left: 2rem;
+  }
 `;
 
 const SubElement = styled.div`
@@ -116,6 +126,10 @@ const SubElement = styled.div`
     line-height: 2.1rem;
     letter-spacing: -0.8px;
     margin: 0 1.9rem;
+
+    @media (max-width: 480px) {
+      margin: 0.2rem 1rem;
+    }
   }
 
   &:last-child > p {

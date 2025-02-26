@@ -19,7 +19,7 @@ export default function Birth({ setValue, register }: BirthProps) {
 
   useEffect(() => {
     if (year && month && day) {
-      const formattedBirth = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+      const formattedBirth = `${year}${month.padStart(2, '0')}${day.padStart(2, '0')}`;
       setValue('birth', formattedBirth);
     }
   }, [year, month, day]);
@@ -75,7 +75,7 @@ const BirthSelectWrapper = styled.div`
 
 const Select = styled.select`
   padding: 0 1rem;
-  width: 104px;
+  width: 100%;
   height: 50px;
   flex-shrink: 0;
   flex: 1;

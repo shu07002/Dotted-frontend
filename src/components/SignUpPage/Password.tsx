@@ -26,7 +26,7 @@ export default function Password({ register, watch }: PasswordProps) {
 
         <Input
           type="password"
-          placeholder="●●●●●●●●●●●"
+          placeholder="password"
           {...register('password', {
             required: 'Plaese write down your password',
             minLength: {
@@ -47,13 +47,13 @@ export default function Password({ register, watch }: PasswordProps) {
         </Label>
         <Input
           type="password"
-          placeholder="●●●●●●●●●●●"
+          placeholder="password"
           {...register('passwordCheck', {
             required: 'Plaese write down your password check'
           })}
         />
 
-        {isVaild ? null : <ErrorMsg />}
+        {isVaild ? null : <ErrorMsg msg="Password does not match" />}
       </InputBox>
     </>
   );

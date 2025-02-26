@@ -141,7 +141,13 @@ export const buildings = [
   {
     id: 24,
     eng_name: 'Gonzaga Convention',
-    lat: 37.5511507,
-    lon: 126.9429554
+    lat: 37.550893518,
+    lon: 126.9436827522177
+  },
+  {
+    id: 25,
+    eng_name: 'Choi Yang-Eop Hall (CY)',
+    lat: 37.550990519,
+    lon: 126.94228785
   }
 ];

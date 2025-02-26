@@ -14,26 +14,38 @@ export default function SignUpWithSogangEmail({
   onChangeIsSogangEmail
 }: SignUpWithSogangEmailProps) {
   return (
-    <SogangEmailWrapper>
-      <Recomended />
+    <SogangEmailContainer>
+      <SogangEmailWrapper>
+        <Recomended />
 
-      <MainText />
+        <MainText />
 
-      <ButtonBoxWrapper>
-        <SogangSignUpButton
-          onChangeStep={onChangeStep}
-          onChangeIsSogangEmail={onChangeIsSogangEmail}
-        />
-        <CreateEmailButton />
-      </ButtonBoxWrapper>
-    </SogangEmailWrapper>
+        <ButtonBoxWrapper>
+          <SogangSignUpButton
+            onChangeStep={onChangeStep}
+            onChangeIsSogangEmail={onChangeIsSogangEmail}
+          />
+          <CreateEmailButton />
+        </ButtonBoxWrapper>
+      </SogangEmailWrapper>
+    </SogangEmailContainer>
   );
 }
+
+const SogangEmailContainer = styled.div`
+  width: 100%;
+  max-width: 66rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
 const SogangEmailWrapper = styled.div`
   margin-top: 2.9rem;
   margin-bottom: 5.7rem;
   position: relative;
-  width: 66rem;
+  width: 100%;
   height: 23.3rem;
   flex-shrink: 0;
   border-radius: 16px;
@@ -42,6 +54,8 @@ const SogangEmailWrapper = styled.div`
 `;
 
 const ButtonBoxWrapper = styled.div`
+  width: 100%;
+  padding: 1rem;
   display: flex;
   gap: 1.9rem;
   align-items: center;

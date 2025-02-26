@@ -1,19 +1,19 @@
 import styled from 'styled-components';
 import BackButtonSVG from '@/assets/svg/SignUpPage/BackButtonSVG.svg?react';
-import { useTheme } from '@/context/ThemeContext';
+// import { useTheme } from '@/context/ThemeContext';
 
 export default function BackButton() {
-  const { themeMode, toggleTheme } = useTheme();
+  // const { themeMode, toggleTheme } = useTheme();
   return (
     <BackButtonWrapper>
-      <BackButtonComponent onClick={() => console.log('ASdasd')} />
-      <button onClick={() => toggleTheme()}>지금은 {themeMode}</button>
+      <BackButtonComponent onClick={() => window.history.back()} />
+      {/* <button onClick={() => toggleTheme()}>지금은 {themeMode}</button> */}
     </BackButtonWrapper>
   );
 }
 
 const BackButtonWrapper = styled.div`
-  padding: 7rem 0 0 10rem;
+  padding: 5% 0 0 1%;
   position: relative;
 `;
 const BackButtonComponent = styled(BackButtonSVG)`

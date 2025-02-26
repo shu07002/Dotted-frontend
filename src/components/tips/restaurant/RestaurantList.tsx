@@ -2,12 +2,12 @@ import { useQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
 import NavigateIcon from '@/assets/svg/tips/restaurant/navigate.svg?react';
 import LinkIcon from '@/assets/svg/tips/restaurant/link.svg?react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 const fetchRestaurants = async () => {
   const response = await fetch(
-    `${import.meta.env.VITE_API_URL}/tips/tips-restaurants`
+    `${import.meta.env.VITE_API_DOMAIN}/api/place/restaurant`
   );
   return response.json();
 };
@@ -15,33 +15,29 @@ const fetchRestaurants = async () => {
 interface RestaurantData {
   id: number;
   name: string;
-  short_intro: string;
+  type: string;
   google_map_link: string;
   naver_map_link: string;
-  location: string;
+  distance: number;
   photo: string;
 }
 
 export default function RestaurantList() {
-  const [searchParam] = useSearchParams();
-  const [filterdData, setFilterdData] = useState<RestaurantData[]>([]);
+  const [searchParam, setSearchParam] = useSearchParams();
   const { data, error, isLoading } = useQuery({
     queryKey: ['tipsRestaurants'],
     queryFn: fetchRestaurants
   });
 
   useEffect(() => {
-    if (data) {
-      const filtered = data.filter((el: RestaurantData) => {
-        if (searchParam.get('q') === 'all') {
-          return el;
-        } else {
-          return el.location.toLowerCase() === searchParam.get('q');
-        }
-      });
-      setFilterdData(filtered);
-    }
-  }, [searchParam]);
+    setSearchParam({ q: 'all' });
+  }, []);
+
+  const selectedTab = searchParam.get('q') || 'all';
+  const filteredRestaurants = data?.filter((restaurant: RestaurantData) => {
+    if (selectedTab === 'all') return true;
+    return restaurant.type.toLowerCase() === selectedTab;
+  });
 
   //if error
   if (error) {
@@ -50,35 +46,38 @@ export default function RestaurantList() {
 
   return (
     <ListSection>
-      {!isLoading && filterdData ? (
+      {!isLoading && filteredRestaurants ? (
         <List>
-          {data.map((el: RestaurantData, idx: number) => (
-            <RestaurantBox key={idx}>
-              <img src={el.photo} alt={el.name} />
-              <Description>
-                <RestaurantInfo>
-                  <h1>{el.name}</h1>
-                  <p>{el.short_intro}</p>
-                </RestaurantInfo>
-                <RestaurantLocation>
-                  <span className="location__distance">
-                    <NavigateIcon />
-                    <span>{el.location}</span>
-                  </span>
-                  <span className="location__link">
-                    <a target="_blank" href={el.naver_map_link}>
-                      <LinkIcon />
-                      {'naver map'}
-                    </a>
-                    <a target="_blank" href={el.google_map_link}>
-                      <LinkIcon />
-                      {'google map'}
-                    </a>
-                  </span>
-                </RestaurantLocation>
-              </Description>
-            </RestaurantBox>
-          ))}
+          {filteredRestaurants.map((el: RestaurantData, idx: number) => {
+            console.log(el.photo);
+            return (
+              <RestaurantBox key={idx}>
+                <img src={el.photo} alt={el.name} />
+                <Description>
+                  <RestaurantInfo>
+                    <h1>{el.name}</h1>
+                    <p>{el.type}</p>
+                  </RestaurantInfo>
+                  <RestaurantLocation>
+                    <span className="location__distance">
+                      <NavigateIcon />
+                      <span>{el.distance}m from School</span>
+                    </span>
+                    <span className="location__link">
+                      <a target="_blank" href={el.naver_map_link}>
+                        <LinkIcon />
+                        {'naver map'}
+                      </a>
+                      <a target="_blank" href={el.google_map_link}>
+                        <LinkIcon />
+                        {'google map'}
+                      </a>
+                    </span>
+                  </RestaurantLocation>
+                </Description>
+              </RestaurantBox>
+            );
+          })}
         </List>
       ) : (
         <List>
@@ -108,7 +107,6 @@ const List = styled.ul`
 
 const RestaurantBox = styled.li`
   width: 100%;
-  height: 200px;
   background-color: ${({ theme }) => theme.colors.backgroundLayer1};
   border-radius: 1.6rem;
   overflow: hidden;
@@ -119,6 +117,16 @@ const RestaurantBox = styled.li`
     height: 100%;
     object-fit: cover;
     flex-shrink: 0;
+
+    @media (max-width: 700px) {
+      width: 100%;
+      aspect-ratio: 1.2;
+      height: auto;
+    }
+  }
+
+  @media (max-width: 700px) {
+    display: block;
   }
 `;
 
@@ -128,18 +136,31 @@ const Description = styled.div`
   padding: 1.9rem 2.7rem 3.9rem 2.7rem;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-around;
+
+  @media (max-width: 900px) {
+    padding: 1rem 1.3rem 1.9rem 1.3rem;
+  }
+
+  @media (max-width: 700px) {
+    height: auto;
+    flex-shrink: 0;
+  }
 `;
 
 const RestaurantInfo = styled.div`
   display: flex;
   flex-direction: column;
+  margin-bottom: 1rem;
   gap: 1rem;
   > h1 {
     font-size: 2.4rem;
     font-weight: 400;
     letter-spacing: -1px;
     color: ${({ theme }) => theme.colors.gray700};
+    @media (max-width: 700px) {
+      font-size: 2rem;
+    }
   }
 
   > p {
@@ -178,6 +199,10 @@ const RestaurantLocation = styled.div`
     display: flex;
     gap: 1.6rem;
 
+    @media (max-width: 700px) {
+      gap: 0rem;
+    }
+
     > a {
       display: flex;
       gap: 1rem;
@@ -187,6 +212,10 @@ const RestaurantLocation = styled.div`
       letter-spacing: -0.3px;
       text-decoration-line: underline;
       color: ${({ theme }) => theme.colors.gray500};
+
+      @media (max-width: 700px) {
+        font-size: 1rem;
+      }
 
       > svg {
         width: 1.7rem;

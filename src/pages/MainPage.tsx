@@ -1,11 +1,63 @@
 import styled from 'styled-components';
-
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import Carousel from '@/components/MainPage/Carousel';
 import Tips from '@/components/MainPage/Tips';
+import { useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { formatRelativeTime } from '@/utils/formatTime';
+import { CommunityPost, EachPost } from '@/types/CommunityPost';
+import { EachMarketPost, MarketPost } from '@/types/MarketPost';
+import { useEffect, useState } from 'react';
+
+async function fetchCommunityPosts(): Promise<EachPost[]> {
+  const url = new URL(`${import.meta.env.VITE_API_URL}/api/posting`);
+
+  const response = await fetch(url.toString(), { method: 'GET' });
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  const data = (await response.json()) as CommunityPost;
+  console.log(data);
+  return data.results;
+}
+
+async function fetchMarketPosts(): Promise<EachMarketPost[]> {
+  const url = new URL(`${import.meta.env.VITE_API_URL}/api/posting/market`);
+
+  const response = await fetch(url.toString(), { method: 'GET' });
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  const data = (await response.json()) as MarketPost;
+  console.log(data);
+  return data.results;
+}
 
 export default function MainPage() {
+  const navigate = useNavigate();
+
+  const { data: onePageCommuData } = useQuery<EachPost[]>({
+    queryKey: ['commuPost'],
+    queryFn: () => fetchCommunityPosts()
+  });
+
+  const { data: onePageMarketData } = useQuery<EachMarketPost[]>({
+    queryKey: ['marketPost'],
+    queryFn: () => fetchMarketPosts()
+  });
+
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <Main>
       <Wrapper>
@@ -17,30 +69,21 @@ export default function MainPage() {
           <MiniCommunity>
             <Title>
               <span>Community</span>
-              <span>+ more</span>
+              <span onClick={() => navigate('/community')}>+ more</span>
             </Title>
             <CommunityList>
               <ul>
-                <li>
-                  <span>Where is good restarant?</span>
-                  <span>3min</span>
-                </li>
-                <li>
-                  <span>Where is good restarant?</span>
-                  <span>3min</span>
-                </li>
-                <li>
-                  <span>Where is good restarant?</span>
-                  <span>3min</span>
-                </li>
-                <li>
-                  <span>Where is good restarant?</span>
-                  <span>3min</span>
-                </li>
-                <li>
-                  <span>Where is good restarant?</span>
-                  <span>3min</span>
-                </li>
+                {onePageCommuData?.map((item, idx) => {
+                  return (
+                    <li
+                      key={idx}
+                      onClick={() => navigate(`community/detail/${item.id}`)}
+                    >
+                      <span>{item.title}</span>
+                      <span>{formatRelativeTime(item.created_at)}</span>
+                    </li>
+                  );
+                })}
               </ul>
             </CommunityList>
           </MiniCommunity>
@@ -48,33 +91,43 @@ export default function MainPage() {
           <MiniMarket>
             <Title>
               <span>Market</span>
-              <span>+ more</span>
+              <span onClick={() => navigate('/market')}>+ more</span>
             </Title>
-            <MarketList>
+            <MarketListContainer>
               <ul>
-                <li>
-                  <div>image</div>
-                  <div>
-                    <span>MEGA coffee coupon</span>
-                    <span>24/01/2024</span>
-                  </div>
-                </li>
-                <li>
-                  <div>image</div>
-                  <div>
-                    <span>MEGA coffee coupon</span>
-                    <span>24/01/2024</span>
-                  </div>
-                </li>
-                <li>
-                  <div>image</div>
-                  <div>
-                    <span>MEGA coffee coupon</span>
-                    <span>24/01/2024</span>
-                  </div>
-                </li>
+                {onePageMarketData?.map((post, idx) => {
+                  if (idx > (isMobile ? 3 : 2)) return null;
+                  const status = post.status
+                    .toLocaleLowerCase()
+                    .split('_')
+                    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                    .join(' ');
+                  console.log(status);
+                  return (
+                    <li
+                      key={post.id}
+                      onClick={() => navigate(`market/detail/${post.id}`)}
+                    >
+                      <Tag
+                        className={`${post.status === 'FOR_SALE' ? 'onSale' : 'soldOut'}`}
+                      >
+                        {status}
+                      </Tag>
+                      <MarketImageWrapper>
+                        <img src={post.thumbnail} />
+                      </MarketImageWrapper>
+                      <ItemInfo>
+                        <span>{post.title}</span>
+                        <div>
+                          <span>{post.price}</span>
+                          <span>{formatRelativeTime(post.created_at)}</span>
+                        </div>
+                      </ItemInfo>
+                    </li>
+                  );
+                })}
               </ul>
-            </MarketList>
+            </MarketListContainer>
           </MiniMarket>
         </MiniBoardWrapper>
       </Wrapper>
@@ -89,6 +142,11 @@ const Main = styled.main`
   flex-direction: column;
   align-items: center;
   margin-bottom: 13.9rem;
+
+  @media (max-width: 700px) {
+    padding-right: 2rem;
+    padding-left: 2rem;
+  }
 `;
 
 const Wrapper = styled.div`
@@ -181,66 +239,123 @@ const CommunityList = styled.div`
   }
 `;
 
-const MarketList = styled.div`
+const Tag = styled.div`
+  z-index: 10;
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  width: 8.6rem;
+  background-color: ${({ theme }) => theme.colors.purple600};
+  color: ${({ theme }) => theme.colors.gray50};
+  text-align: center;
+  font-family: Inter;
+  font-size: 1.4rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  letter-spacing: -0.07rem;
+  padding: 0.25rem 1rem;
+  border-radius: 1.6rem;
+
+  &.onSale {
+    background: ${({ theme }) => theme.colors.purple600};
+    color: ${({ theme }) => theme.colors.gray50};
+  }
+
+  &.soldOut {
+    background: ${({ theme }) => theme.colors.gray100};
+    color: ${({ theme }) => theme.colors.gray500};
+    font-weight: 600;
+  }
+`;
+
+const MarketListContainer = styled.div`
+  min-height: 100vh;
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: baseline;
 
   > ul {
+    margin-top: 2rem;
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-    gap: 2.3rem;
-    place-items: center;
+    flex: 1;
+
+    grid-template-columns: repeat(auto-fit, minmax(20%, auto));
+    grid-gap: 2rem;
+
+    @media (max-width: 768px) {
+      grid-template-columns: repeat(2, 47.5%);
+    }
 
     > li {
-      max-width: 18.7rem;
-      width: 100%;
-      aspect-ratio: 0.64;
+      max-width: 100%;
+      position: relative;
+      cursor: pointer;
+      aspect-ratio: 0.7;
       display: flex;
       flex-direction: column;
 
       border-radius: 16px;
-      border: 1px solid ${({ theme }) => theme.colors.gray700};
+      border: 1px solid ${({ theme }) => theme.colors.backgroundBase};
       background: ${({ theme }) => theme.colors.backgroundLayer2};
+    }
+  }
+`;
 
-      > div {
-        &:first-child {
-          width: 100%;
-          height: 60%;
-          background-color: skyblue;
-          border-radius: 16px 16px 0 0;
-        }
-        &:nth-child(2) {
-          padding: 1rem 1rem 0 1rem;
-          display: flex;
-          flex-direction: column;
-          gap: 1.2rem;
-          > span {
-            &:first-child {
-              color: ${({ theme }) => theme.colors.gray700};
-              font-family: Inter;
-              font-size: 20px;
-              font-style: normal;
-              font-weight: 400;
-              line-height: 21px; /* 105% */
-              letter-spacing: -1px;
-            }
+const MarketImageWrapper = styled.div`
+  width: 100%;
+  height: 70%;
+  border-radius: 16px 16px 0 0;
+  overflow: hidden;
 
-            &:nth-child(2) {
-              color: ${({ theme }) => theme.colors.gray400};
-              font-family: Inter;
-              font-size: 16px;
-              font-style: normal;
-              font-weight: 400;
-              line-height: 21px; /* 131.25% */
-              letter-spacing: -0.8px;
-            }
-          }
-        }
-      }
+  > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 비율을 유지하면서 꽉 채움 */
+    border-radius: 16px 16px 0 0;
+    transition: transform 0.2s ease-in-out;
+    transform-origin: center; /* 중심을 기준으로 확대 */ /* 부모와 동일한 border-radius 적용 */
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+`;
+
+const ItemInfo = styled.div`
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+
+  > div {
+    display: flex;
+    justify-content: space-between;
+  }
+  > span {
+    line-height: 3rem;
+    &:first-child {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: ${({ theme }) => theme.colors.gray700};
+      font-family: Inter;
+      font-size: 20px;
+      font-style: normal;
+      font-weight: 400;
+      letter-spacing: -1px;
+    }
+
+    &:nth-child(2) {
+      color: ${({ theme }) => theme.colors.gray400};
+      font-family: Inter;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 21px; /* 131.25% */
+      letter-spacing: -0.8px;
     }
   }
 `;

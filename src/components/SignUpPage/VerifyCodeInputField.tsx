@@ -43,7 +43,8 @@ export default function VerifyCodeInputField({
 }
 
 const VerifyCodeInputFieldWrapper = styled.div`
-  width: 60.5rem;
+  width: 100%;
+  max-width: 60.5rem;
   margin-bottom: 2.6rem;
 
   > span {
@@ -61,10 +62,12 @@ const VerifyCodeInput = styled.div`
   display: flex;
   gap: 2rem;
   align-items: center;
+  width: 100%;
   > label {
+    width: 100%;
     input {
       padding-left: 2.3rem;
-      width: 39.4rem;
+      width: 100%;
       height: 5rem;
       flex-shrink: 0;
       border-radius: 5px;
@@ -85,12 +88,16 @@ const VerifyCodeButtonWrapper = styled.div<{ $isSubmitClicked: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 190px;
+  width: 19rem;
   height: 50px;
   flex-shrink: 0;
   border-radius: 5px;
   background: ${({ $isSubmitClicked, theme }) =>
     $isSubmitClicked ? theme.colors.gray700 : theme.colors.purple600};
+
+  @media (max-width: 450px) {
+    width: 15rem;
+  }
 `;
 
 const VerifyCodeText = styled.div`

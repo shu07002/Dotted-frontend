@@ -7,7 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 
 const fetchBuildings = async () => {
   const response = await fetch(
-    `${import.meta.env.VITE_API_URL}/tips/map-building`
+    `${import.meta.env.VITE_API_DOMAIN}/api/campus/building`
   );
   return response.json();
 };
@@ -32,12 +32,12 @@ export default function SearchBox() {
     if (data && !isLoading) {
       setBuildingsData(data);
       const names = data.map((building: BuildsDataType) => ({
-        name: building.building_name,
+        name: building.name,
         building_id: building.id
       }));
       setBuildingNames(names);
     }
-  }, []);
+  }, [data, isLoading]);
 
   useEffect(() => {
     if (searchParams.get('search')) {
@@ -72,20 +72,22 @@ export default function SearchBox() {
 
   return (
     <Wrapper>
-      <InputBox
-        style={{ borderRadius: isFocused ? '2.5rem 2.5rem 0 0' : '6.5rem' }}
-        className="search"
-      >
-        <SearchIcon className="search-icon" />
-        <input
-          onChange={(e) => handleInputChange(e)}
-          onFocus={() => handleInputFocus()}
-          onBlur={() => handleInputBlur()}
-          type="text"
-          placeholder="search..."
-          //   value={searchValue}
-        />
-      </InputBox>
+      {!isLoading && (
+        <InputBox
+          style={{ borderRadius: isFocused ? '2.5rem 2.5rem 0 0' : '6.5rem' }}
+          className="search"
+        >
+          <SearchIcon className="search-icon" />
+          <input
+            onChange={(e) => handleInputChange(e)}
+            onFocus={() => handleInputFocus()}
+            onBlur={() => handleInputBlur()}
+            type="text"
+            placeholder="search..."
+            //   value={searchValue}
+          />
+        </InputBox>
+      )}
       {isFocused && (
         <ResultBox>
           {filteredBuildingNames.length > 0 ? (
