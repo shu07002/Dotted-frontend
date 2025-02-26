@@ -22,7 +22,7 @@ export type BuildsDataType = {
     name: string;
     location_detail: string;
     open_hours: string;
-    tags: { id: number; name: string }[];
+    features: { id: number; name: string }[];
     photo: string | null;
     building: number;
     building_name: string;
@@ -32,7 +32,7 @@ export type BuildsDataType = {
     name: string;
     location_detail: string;
     open_hours: string;
-    tags: { id: number; name: string }[];
+    features: { id: number; name: string }[];
     photo: string;
     building: number;
     building_name: string;
@@ -42,7 +42,7 @@ export type BuildsDataType = {
     name: string;
     location_detail: string;
     open_hours: string;
-    tags: { id: number; name: string }[];
+    features: { id: number; name: string }[];
     photo: string;
     building: number;
     building_name: string;
@@ -52,7 +52,7 @@ export type BuildsDataType = {
     name: string;
     location_detail: string;
     open_hours: string;
-    tags: { id: number; name: string }[];
+    features: { id: number; name: string }[];
     photo: string;
     building: number;
     building_name: string;
