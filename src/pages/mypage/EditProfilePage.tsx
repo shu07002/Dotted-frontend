@@ -4,7 +4,6 @@ import styled from 'styled-components';
 export default function EditProfilePage() {
   return (
     <Main>
-      {/* <h1>Edit Profile</h1> */}
       <EditProfileForm />
       <DeleteBtn>
         <button>Delete Account</button>

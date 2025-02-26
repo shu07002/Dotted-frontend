@@ -7,14 +7,29 @@ export default function NoticeDetailPage() {
     <Main>
       <BackIcon onClick={() => navigate(-1)} />
       <Header>
-        <h1>{'Server Check Notice'}</h1>
-        <span>{'31/01/2025'}</span>
+        <h1>{'📢 [Dotted Beta Period & Verification Notice]'}</h1>
+        <span>{'01/03/2025'}</span>
       </Header>
       <Section>
         <p>
-          {
-            'We will check the server on 2025. 02. 13 02:00 a.m ~ 2025. 02. 13 04:00 a.m.Thank you for your support.  '
-          }
+          📢 [Dotted Beta Period & Verification Notice]
+          <br /> 📅 Beta Period: March 1st – March 21st
+          <br /> Dotted is a private community exclusively for verified Sogang
+          students. To fully access the Community and Market, you need to verify
+          that you are a Sogang University student.
+          <br /> 🔓 [Beta Period: Free Access] Until March 22nd, you can freely
+          access the Community and Market without verification. <br />
+          🔒 [After March 22nd: Verification Required] Starting March 23rd, only
+          verified Sogang students will have full access to the Community and
+          Market. <br />
+          📝 How to Verify?
+          <br />
+          1.Sign up with your Sogang email to complete registration and student
+          verification simultaneously!
+          <br />
+          2.If you don’t register with a Sogang email, upload a photo of your
+          student ID or SAINT portal screenshot (only name & school name
+          visible) in mypage → school verification
         </p>
       </Section>
     </Main>
@@ -60,7 +75,10 @@ const Section = styled.section`
   p {
     font-size: 1.6rem;
     font-weight: 400;
-    line-height: 2rem;
+    line-height: 4rem;
     color: ${({ theme }) => theme.colors.gray800};
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
   }
 `;

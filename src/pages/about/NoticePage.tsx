@@ -80,6 +80,14 @@ export default function NoticePage() {
     setSearchParams({ page: targetPage.toString(), keyword, searchType });
   };
 
+  const dummy = [
+    {
+      id: 1,
+      question: '📢 [Dotted Beta Period & Verification Notice]',
+      created_at: '2025-03-01'
+    }
+  ];
+
   return (
     <FAQPageContainer>
       <Wrapper>
@@ -99,7 +107,7 @@ export default function NoticePage() {
         </NoticeAndSearch>
 
         <FAQBox>
-          {pagedData.map((item, idx) => {
+          {dummy.map((item, idx) => {
             return (
               <div key={item.id}>
                 <FAQItem onClick={() => navigate(`/about/notice/${item.id}`)}>
@@ -119,7 +127,7 @@ export default function NoticePage() {
         </FAQBox>
 
         {/* 페이지네이션 UI */}
-        <PaginationBox>
+        {/* <PaginationBox>
           <button
             onClick={() => handlePageChange(startPage - 1)}
             disabled={currentGroup === 0}
@@ -141,7 +149,7 @@ export default function NoticePage() {
           >
             {'>'}
           </button>
-        </PaginationBox>
+        </PaginationBox> */}
       </Wrapper>
     </FAQPageContainer>
   );
@@ -257,29 +265,29 @@ const FAQItem = styled.li`
   }
 `;
 
-const PaginationBox = styled.div`
-  width: 100%;
-  padding: 5rem 0;
-  display: flex;
-  justify-content: center;
-  gap: 1.5rem;
+// const PaginationBox = styled.div`
+//   width: 100%;
+//   padding: 5rem 0;
+//   display: flex;
+//   justify-content: center;
+//   gap: 1.5rem;
 
-  button {
-    width: 3.1rem;
-    height: 3.1rem;
-    border-radius: 50%;
-    border: none;
-    background: none;
-    font-size: 1.6rem;
+//   button {
+//     width: 3.1rem;
+//     height: 3.1rem;
+//     border-radius: 50%;
+//     border: none;
+//     background: none;
+//     font-size: 1.6rem;
 
-    &.selected {
-      background-color: ${({ theme }) => theme.colors.purple600};
-      color: ${({ theme }) => theme.colors.gray50};
-    }
+//     &.selected {
+//       background-color: ${({ theme }) => theme.colors.purple600};
+//       color: ${({ theme }) => theme.colors.gray50};
+//     }
 
-    &:hover {
-      background-color: ${({ theme }) => theme.colors.backgroundBase};
-      cursor: pointer;
-    }
-  }
-`;
+//     &:hover {
+//       background-color: ${({ theme }) => theme.colors.backgroundBase};
+//       cursor: pointer;
+//     }
+//   }
+// `;
