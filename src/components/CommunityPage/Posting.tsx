@@ -143,8 +143,6 @@ const InfoWrapper = styled.div`
 `;
 
 const PostingWrapper = styled.div`
-  padding: 2rem 3rem 0 3rem;
-
   margin-bottom: 1.6rem;
   display: flex;
   flex-direction: column;
