@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import ImgBox from '@/components/MarketPage/ImgBox';
 import { useBlocker, useLocation, useNavigate } from 'react-router-dom';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { fetchWithAuth } from '@/utils/auth';
 
 interface MarketData {
@@ -44,10 +44,9 @@ export default function WriteMarketPage() {
     return currentLocation.pathname !== nextLocation.pathname;
   });
   const [editMode, setEditMode] = useState(false);
-
   const navigate = useNavigate();
-
   const { state } = useLocation();
+  const queryClient = useQueryClient();
 
   const originalImageList = useRef<OriginalImage[]>([]);
 
@@ -287,12 +286,16 @@ export default function WriteMarketPage() {
       );
       return response;
     },
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       console.log('🎉 글수정 성공:', data);
+      await queryClient.refetchQueries({
+        queryKey: ['postDetail', data.id],
+        exact: true
+      });
       setIsSubmitted(true);
       blocker.reset?.();
       setTimeout(() => {
-        navigate('/market');
+        navigate(`/market/detail/${data.id}`);
       }, 100);
     },
     onError: (error) => {
@@ -319,9 +322,9 @@ export default function WriteMarketPage() {
           <label htmlFor="price">
             <span>Price</span>
             <input
+              type="number"
               className="price"
               placeholder="₩"
-              type="text"
               id="price"
               {...register('price', { required: 'Please enter a price' })}
             />
@@ -388,6 +391,9 @@ const Title = styled.div`
   color: ${({ theme }) => theme.colors.gray700};
   font-family: Pretendard;
   font-size: 3.6rem;
+  @media (max-width: 460px) {
+    font-size: 3.1rem;
+  }
   font-style: normal;
   font-weight: 700;
   line-height: 3.6rem; /* 100% */
@@ -403,12 +409,20 @@ const Form = styled.form`
   > label {
     width: 100%;
     display: flex;
-
     gap: 2rem;
+
+    @media (max-width: 770px) {
+      flex-direction: column;
+      gap: 1rem;
+    }
+
     > span {
       flex: 0 0 auto;
       display: flex;
       width: 10rem;
+      @media (max-width: 770px) {
+        gap: 0rem;
+      }
       margin-top: 0.5rem;
 
       color: ${({ theme }) => theme.colors.gray700};
@@ -418,6 +432,10 @@ const Form = styled.form`
       font-weight: 500;
       line-height: 2.4rem; /* 120% */
       letter-spacing: -0.04rem;
+
+      @media (max-width: 460px) {
+        font-size: 1.7rem;
+      }
     }
 
     > input {
@@ -431,6 +449,10 @@ const Form = styled.form`
 
       &.price {
         width: 23.5rem;
+
+        @media (max-width: 770px) {
+          width: 15rem;
+        }
       }
     }
 
@@ -446,6 +468,9 @@ const Form = styled.form`
       padding: 1.2rem;
       font-family: Pretendard;
       font-size: 1.6rem;
+      @media (max-width: 460px) {
+        font-size: 1.3rem;
+      }
       font-style: normal;
       font-weight: 500;
       line-height: 2.4rem; /* 150% */
@@ -468,6 +493,9 @@ const SubmitButton = styled.button`
   text-align: center;
   font-family: Inter;
   font-size: 1.4rem;
+  @media (max-width: 460px) {
+    font-size: 1.1rem;
+  }
   font-style: normal;
   font-weight: 600;
   line-height: normal;

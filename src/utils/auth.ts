@@ -67,6 +67,7 @@ export async function fetchWithAuth<T>(
     accessToken = localStorage.getItem('accessToken');
   }
 
+  console.log('okay now1');
   const finalOptions: RequestInit = {
     ...options,
     headers: {
@@ -78,7 +79,9 @@ export async function fetchWithAuth<T>(
     }
   };
 
+  console.log(url, finalOptions, 'okay now2');
   let response = await fetch(url, finalOptions);
+  console.log(response, 'okay now3');
 
   // 만약 401 Unauthorized 응답이면 다시 시도 (토큰이 갱신된 경우)
   if (response.status === 401) {
@@ -92,6 +95,8 @@ export async function fetchWithAuth<T>(
           Authorization: `Bearer ${accessToken}`
         }
       });
+
+      console.log(response, 'okay now4');
     } catch (error) {
       throw new Error('Token refresh failed, please login again.');
     }
@@ -101,5 +106,15 @@ export async function fetchWithAuth<T>(
     throw new Error(`HTTP error ${response.status}`);
   }
 
-  return response.json() as Promise<T>;
+  // 응답 본문이 없는 경우(JSON 파싱하지 않음)
+  if (response.status === 204 || response.status === 205) {
+    return null as unknown as T;
+  }
+
+  const text = await response.text();
+  if (!text) {
+    return null as unknown as T;
+  }
+
+  return JSON.parse(text) as T;
 }

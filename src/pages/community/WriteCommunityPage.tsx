@@ -2,10 +2,11 @@ import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { useBlocker, useLocation, useNavigate } from 'react-router-dom';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import TagBox from '@/components/WriteCommunityPage/TagBox';
 import { fetchWithAuth } from '@/utils/auth'; // auth.ts에서 정의한 fetchWithAuth를 import
 import Tiptap from '@/components/CommunityPage/TipTap';
+import Editor from '@/components/WriteCommunityPage/Editor';
 
 // -------------------- 타입 정의 --------------------
 export interface CommunityData {
@@ -37,7 +38,6 @@ interface OriginalImage {
 
 export default function WriteCommunityPage() {
   const {
-    control,
     register,
     handleSubmit,
     watch,
@@ -48,6 +48,7 @@ export default function WriteCommunityPage() {
   const navigate = useNavigate();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [editMode, setEditMode] = useState(false);
+  const queryClient = useQueryClient();
 
   // location state로부터 넘어온 기존 데이터 (수정 모드일 때)
   const { state } = useLocation();
@@ -136,7 +137,7 @@ export default function WriteCommunityPage() {
         blocker.reset();
       }
       setTimeout(() => {
-        navigate('/community');
+        navigate(`/community/detail/${data.id}`);
       }, 100);
     },
     onError: (error) => {
@@ -168,14 +169,19 @@ export default function WriteCommunityPage() {
       );
       return response;
     },
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       console.log('🎉 글수정 성공:', data);
+
+      await queryClient.refetchQueries({
+        queryKey: ['postDetail', data.id],
+        exact: true
+      });
       setIsSubmitted(true);
       if (blocker.state === 'blocked') {
         blocker.reset();
       }
       setTimeout(() => {
-        navigate('/community');
+        navigate(`/community/detail/${data.id}`);
       }, 100);
     },
     onError: (error) => {

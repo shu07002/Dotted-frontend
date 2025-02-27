@@ -90,6 +90,7 @@ export default function MoreButton({
       const path = origin
         ? `/api/posting/${origin}/${postId}/delete`
         : `/api/posting/${postId}/delete`;
+      console.log(`${import.meta.env.VITE_API_DOMAIN}${path}`);
       return await fetchWithAuth<void>(
         `${import.meta.env.VITE_API_DOMAIN}${path}`,
         { method: 'DELETE' }

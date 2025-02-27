@@ -209,7 +209,7 @@ export default function AComment({
             ) : (
               <NicknameDiv>
                 {comment.user_nickname}
-                {comment.is_mine && origin && (
+                {comment.is_mine && origin && comment.is_secret && (
                   <LockerDiv>
                     <Locker />
                   </LockerDiv>

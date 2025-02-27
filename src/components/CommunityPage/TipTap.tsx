@@ -89,15 +89,10 @@ interface TipTapProps {
 
 const Tiptap = ({ watch, setValue, trigger }: TipTapProps) => {
   const tiptapRef = useRef<HTMLDivElement>(null);
-  const content = watch('content');
-
-  useEffect(() => {
-    if (tiptapRef.current) {
-      setValue('content', content);
-    }
-  }, [content, setValue]);
+  const content = watch('content') || '';
 
   const editor = useEditor({
+    content,
     extensions: [
       ResizableImage,
       TextAlign.configure({
@@ -121,6 +116,17 @@ const Tiptap = ({ watch, setValue, trigger }: TipTapProps) => {
       trigger('content');
     }
   });
+
+  // 폼의 content가 변경되면 에디터 내용을 업데이트 (선택사항)
+  useEffect(() => {
+    if (editor && content) {
+      // editor에 이미 내용이 있다면 업데이트하지 않고,
+      // 빈 경우나 초기 로드 시에만 업데이트할 수 있습니다.
+      if (!editor.getHTML() || editor.getHTML() === '<p></p>') {
+        editor.commands.setContent(content);
+      }
+    }
+  }, [content, editor]);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 

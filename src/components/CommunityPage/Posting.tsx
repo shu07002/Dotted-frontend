@@ -10,6 +10,7 @@ import { PostDetail } from '@/pages/community/DetailCommunityPage';
 import { useEffect, useState } from 'react';
 import MoreButton from './MoreButton';
 import { formatRelativeTime } from '@/utils/formatTime';
+import { TiptapViewOnly } from './TipTapViewOnly';
 
 const PostingTagsColors: Record<string, string> = {
   Living: `purple950`,
@@ -114,12 +115,8 @@ export default function Posting({
       </InfoWrapper>
 
       <ContentWrapper>
-        <StyledReactQuill
-          value={replacedContent}
-          readOnly={true}
-          theme="snow"
-          modules={{ toolbar: false }}
-        />
+        <>{console.log(replacedContent)}</>
+        <TiptapViewOnly content={replacedContent} />
 
         <ButtonWrapper>
           <Button className={`${isLiked && 'liked'}`} onClick={handleLikeClick}>

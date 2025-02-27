@@ -45,20 +45,23 @@ export default function MarketPosting({
     setLocalScrapped((prev) => !prev);
     onClickScrap();
   };
+  console.log(post);
   return (
     <ItemWrapper>
       <div>
-        <ImgCarouselWrapper>
-          <StyledSlider {...setting}>
-            {post.images.map((image, idx) => (
-              <SlideContent key={idx}>
-                <ImageWrapper>
-                  <img src={image.image_url} />
-                </ImageWrapper>
-              </SlideContent>
-            ))}
-          </StyledSlider>
-        </ImgCarouselWrapper>
+        {post.images.length > 0 && (
+          <ImgCarouselWrapper>
+            <StyledSlider {...setting}>
+              {post.images.map((image, idx) => (
+                <SlideContent key={idx}>
+                  <ImageWrapper>
+                    <img src={image.image_url} />
+                  </ImageWrapper>
+                </SlideContent>
+              ))}
+            </StyledSlider>
+          </ImgCarouselWrapper>
+        )}
       </div>
 
       <div>
