@@ -11,7 +11,7 @@ import { EachMarketPost, MarketPost } from '@/types/MarketPost';
 import { useEffect, useState } from 'react';
 
 async function fetchCommunityPosts(): Promise<EachPost[]> {
-  const url = new URL(`${import.meta.env.VITE_API_URL}/api/posting`);
+  const url = new URL(`${import.meta.env.VITE_API_DOMAIN}/api/posting`);
 
   const response = await fetch(url.toString(), { method: 'GET' });
   if (!response.ok) {
@@ -23,7 +23,7 @@ async function fetchCommunityPosts(): Promise<EachPost[]> {
 }
 
 async function fetchMarketPosts(): Promise<EachMarketPost[]> {
-  const url = new URL(`${import.meta.env.VITE_API_URL}/api/posting/market`);
+  const url = new URL(`${import.meta.env.VITE_API_DOMAIN}/api/posting/market`);
 
   const response = await fetch(url.toString(), { method: 'GET' });
   if (!response.ok) {
