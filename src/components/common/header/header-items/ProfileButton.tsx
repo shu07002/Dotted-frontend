@@ -1,7 +1,7 @@
 import ProfileIcon from '@/assets/icons/header/profile.svg?react';
 import DownIcon from '@/assets/icons/header/down.svg?react';
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { fetchWithAuth } from '@/utils/auth';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
@@ -44,11 +44,26 @@ async function fetchUserProfile(): Promise<UserProfile> {
 
 export default function ProfileButton() {
   const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(false);
+  const [openMore, setOpenMore] = useState(false);
   const { data } = useQuery<UserProfile>({
     queryKey: ['userProfile'],
     queryFn: fetchUserProfile
   });
+  const moreWrapperRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        openMore &&
+        moreWrapperRef.current &&
+        !moreWrapperRef.current.contains(event.target as Node)
+      ) {
+        setOpenMore(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [openMore]);
 
   const onClickLogout = () => {
     localStorage.removeItem('accessToken');
@@ -57,8 +72,11 @@ export default function ProfileButton() {
   };
 
   return (
-    <ProfileBox onClick={() => setIsOpen((prev) => !prev)}>
-      {isOpen && (
+    <ProfileBox
+      onClick={() => setOpenMore((prev) => !prev)}
+      ref={moreWrapperRef}
+    >
+      {openMore && (
         <Menu>
           <div>my page</div>
           <div onClick={onClickLogout}>logout</div>

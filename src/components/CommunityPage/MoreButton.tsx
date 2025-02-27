@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import More from '@/assets/svg/CommunityPage/More.svg?react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -50,6 +50,21 @@ export default function MoreButton({
   const [reportType, setReportType] = useState('');
   const [reportContent, setReportContent] = useState('');
   const [statusType, setStatusType] = useState('');
+  const moreWrapperRef = useRef<HTMLButtonElement | null>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        openMore &&
+        moreWrapperRef.current &&
+        !moreWrapperRef.current.contains(event.target as Node)
+      ) {
+        setOpenMore(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [openMore]);
 
   let replacedContent = post.content;
   const navigate = useNavigate();
@@ -192,7 +207,7 @@ export default function MoreButton({
 
   return (
     <>
-      <button onClick={() => setOpenMore((prev) => !prev)}>
+      <button onClick={() => setOpenMore((prev) => !prev)} ref={moreWrapperRef}>
         <More />
         {openMore && (
           <Menu>
@@ -212,17 +227,17 @@ export default function MoreButton({
                     })
                   }
                 >
-                  edit
+                  Edit
                 </div>
-                <div onClick={() => setOpenNormalModal(true)}>delete</div>
+                <div onClick={() => setOpenNormalModal(true)}>Delete</div>
                 {origin && (
                   <div onClick={() => setOpenChangeModal(true)}>
-                    change condition
+                    Change condition
                   </div>
                 )}
               </>
             ) : (
-              <div onClick={() => setOpenReportModal(true)}>report</div>
+              <div onClick={() => setOpenReportModal(true)}>Report</div>
             )}
           </Menu>
         )}

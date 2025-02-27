@@ -1,5 +1,5 @@
 import { Comment } from '@/pages/community/DetailCommunityPage';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Profile from '@/assets/svg/CommunityPage/Profile.svg?react';
 import styled from 'styled-components';
 import Like from '@/assets/svg/CommunityPage/Like.svg?react';
@@ -39,6 +39,21 @@ export default function AReply({ reply }: { reply: Comment }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState(reply.content);
   const [openNormalModal, setOpenNormalModal] = useState(false);
+  const moreWrapperRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        openMore &&
+        moreWrapperRef.current &&
+        !moreWrapperRef.current.contains(event.target as Node)
+      ) {
+        setOpenMore(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [openMore]);
 
   // 댓글 삭제 mutation (반환 타입: void)
   const deleteMutation = useMutation<void, Error, void>({
@@ -167,7 +182,7 @@ export default function AReply({ reply }: { reply: Comment }) {
               {likeCount}
             </button>
             {reply.content !== 'Deleted Comment' && (
-              <MoreWrapper>
+              <MoreWrapper ref={moreWrapperRef}>
                 <button onClick={() => setOpenMore((prev) => !prev)}>
                   <More />
                   {openMore && (
@@ -320,6 +335,10 @@ const Menu = styled.div`
   left: 100%;
   margin-top: 1rem;
   width: 15.9rem;
+
+  @media (max-width: 400px) {
+    width: 10rem;
+  }
   flex-shrink: 0;
   border-radius: 0.5rem;
   background: ${({ theme }) => theme.colors.backgroundLayer2};

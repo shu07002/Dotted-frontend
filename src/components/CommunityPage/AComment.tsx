@@ -1,5 +1,5 @@
 import { Comment } from '@/pages/community/DetailCommunityPage';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import CommentSVG from '@/assets/svg/CommunityPage/Comment.svg?react';
 import Profile from '@/assets/svg/CommunityPage/Profile.svg?react';
 import Like from '@/assets/svg/CommunityPage/Like.svg?react';
@@ -51,6 +51,21 @@ export default function AComment({
   const [editedContent, setEditedContent] = useState(comment.content);
   const [openNormalModal, setOpenNormalModal] = useState(false);
   const [isSecret, setIsSecret] = useState(false);
+  const moreWrapperRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        openMore &&
+        moreWrapperRef.current &&
+        !moreWrapperRef.current.contains(event.target as Node)
+      ) {
+        setOpenMore(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [openMore]);
 
   // 댓글 좋아요 mutation (반환 타입을 CommentLikeResponse로 지정)
   const commentLikeMutation = useMutation<CommentLikeResponse, Error, void>({
@@ -222,7 +237,7 @@ export default function AComment({
               <CommentSVG className={`${isOpenRecomment && 'recomment'}`} />
             </button>
             {comment.content !== 'Deleted Comment' && (
-              <MoreWrapper>
+              <MoreWrapper ref={moreWrapperRef}>
                 <button onClick={() => setOpenMore((prev) => !prev)}>
                   <More />
                   {openMore && (
@@ -515,6 +530,10 @@ const Menu = styled.div`
   left: 100%;
   margin-top: 1rem;
   width: 15.9rem;
+  @media (max-width: 400px) {
+    width: 10rem;
+  }
+
   flex-shrink: 0;
   border-radius: 0.5rem;
   background: ${({ theme }) => theme.colors.backgroundLayer2};
@@ -523,6 +542,7 @@ const Menu = styled.div`
 
   > div {
     text-align: start;
+
     cursor: pointer;
     padding: 1rem 2rem;
     color: ${({ theme }) => theme.colors.gray700};
