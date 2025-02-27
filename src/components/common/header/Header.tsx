@@ -137,7 +137,15 @@ export default function Header({ scrollY }: { scrollY: number }) {
               {/* <LanguageButton /> */}
             </>
           ) : (
-            <LoginButton onClick={() => navigate('/login')}>Login</LoginButton>
+            <LoginSignup>
+              <LoginButton onClick={() => navigate('/login')}>
+                <span>Login</span>
+              </LoginButton>
+              <span>/</span>
+              <LoginButton onClick={() => navigate('/sign-up')}>
+                <span>Sign Up</span>
+              </LoginButton>
+            </LoginSignup>
           )}
         </RightSection>
       </UpWrapper>
@@ -150,6 +158,22 @@ export default function Header({ scrollY }: { scrollY: number }) {
     </HeaderContainer>
   );
 }
+
+const LoginSignup = styled.div`
+  > span {
+    color: ${({ theme }) => theme.colors.purple600};
+
+    border-radius: 2.4rem;
+
+    text-align: center;
+    font-family: Inter;
+    font-size: 2.1rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: -0.07rem;
+  }
+`;
 
 const HeaderNavWrapper = styled.div`
   @media (max-width: 900px) {
@@ -175,19 +199,60 @@ const ArrowWrapper = styled.div`
 `;
 
 const LoginButton = styled.button`
-  background-color: ${({ theme }) => theme.colors.purple600};
+  position: relative;
+  color: ${({ theme }) => theme.colors.gray900};
   padding: 0.7rem 1.5rem;
-  border-radius: 2.4rem;
-  color: ${({ theme }) => theme.colors.gray50};
   text-align: center;
   font-family: Inter;
   font-size: 2.1rem;
   font-style: normal;
-  font-weight: 500;
+  font-weight: 600;
   line-height: normal;
   letter-spacing: -0.07rem;
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.purple450};
+  background: none;
+  border: none;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    border-bottom: 4px dashed ${({ theme }) => theme.colors.purple600};
+    transition: width 0.5s ease;
+  }
+
+  &:hover::after {
+    width: 100%;
+  }
+
+  & > span {
+    display: inline-block;
+
+    transform: scale(1);
+  }
+
+  &:hover > span {
+    animation: heartBeat 0.5s ease 0.5s 1 forwards;
+  }
+
+  @keyframes heartBeat {
+    0% {
+      transform: scale(1);
+    }
+    30% {
+      transform: scale(1.1);
+    }
+    50% {
+      transform: scale(0.9);
+    }
+    70% {
+      transform: scale(1.1);
+    }
+    100% {
+      transform: scale(1);
+    }
   }
 `;
 
