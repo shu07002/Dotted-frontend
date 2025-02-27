@@ -13,7 +13,7 @@ import Highlighter from '@/assets/svg/tiptap/highlight.svg?react';
 import ImageIcon from '@/assets/svg/tiptap/image.svg?react';
 import Italic from '@/assets/svg/tiptap/italic.svg?react';
 import Strike from '@/assets/svg/tiptap/strike.svg?react';
-import Code from '@/assets/svg/tiptap/Code.svg?react';
+import Code from '@/assets/svg/tiptap/code.svg?react';
 import Quote from '@/assets/svg/tiptap/quote.svg?react';
 import Bullet from '@/assets/svg/tiptap/bullet.svg?react';
 import Horizontal from '@/assets/svg/tiptap/horizontal.svg?react';
