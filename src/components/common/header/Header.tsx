@@ -209,7 +209,7 @@ const UpWrapper = styled.div<{ $scrollY: number }>`
   }
   height: 8rem;
   background-color: ${({ theme }) => theme.colors.backgroundLayer2};
-  color: ${({ theme }) => theme.colors.gray700};
+  color: ${({ theme }) => theme.colors.gray800};
   display: flex;
   justify-content: space-between;
 `;

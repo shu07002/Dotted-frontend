@@ -23,8 +23,16 @@ import DetailMarketPage from './pages/market/DetailMarketPage';
 import NotificatoinPage from './pages/NotificatoinPage';
 import OnboardingPage from './pages/about/OnboardingPage';
 import NoticePage from './pages/about/NoticePage';
-import ScrollToTop from './components/common/ScrollToTop';
 
+import EditProfilePage from './pages/mypage/EditProfilePage';
+import MyPageLayout from './components/mypage/MyPageLayout';
+import VerificationPage from './pages/mypage/VerificationPage';
+import MyPostsPage from './pages/mypage/MyPostsPage';
+import MyCommentsPage from './pages/mypage/MyCommentsPage';
+import MyScrapsPage from './pages/mypage/MyScrapsPage';
+import NoticeDetailPage from './pages/about/NoticeDetailPage';
+
+import ScrollToTop from './components/common/ScrollToTop';
 const Router = createBrowserRouter([
   {
     path: '/',
@@ -44,32 +52,37 @@ const Router = createBrowserRouter([
         element: <MainPage />
       },
       {
-        path: 'tips/sogang-map',
-        element: <SogangMapPage />
-      },
-      {
-        path: 'tips/restaurant',
-        element: <RestaurantPage />
-      },
-      {
-        path: 'tips/hospital',
-        element: <HospitalPage />
-      },
-      {
-        path: 'tips/faq',
-        element: <FAQPage />
-      },
-      {
-        path: 'tips/clubs',
-        element: <ClubsPage />
-      },
-      {
-        path: 'tips/culture',
-        element: <CulturePage />
-      },
-      {
-        path: 'tips/culture/:cultureId',
-        element: <CultureDetailPage />
+        path: 'tips',
+        children: [
+          {
+            path: 'sogang-map',
+            element: <SogangMapPage />
+          },
+          {
+            path: 'restaurant',
+            element: <RestaurantPage />
+          },
+          {
+            path: 'hospital',
+            element: <HospitalPage />
+          },
+          {
+            path: 'faq',
+            element: <FAQPage />
+          },
+          {
+            path: 'clubs',
+            element: <ClubsPage />
+          },
+          {
+            path: 'culture',
+            element: <CulturePage />
+          },
+          {
+            path: 'culture/:cultureId',
+            element: <CultureDetailPage />
+          }
+        ]
       },
       {
         path: 'community',
@@ -103,7 +116,60 @@ const Router = createBrowserRouter([
         path: 'about',
         children: [
           { path: 'onboarding', element: <OnboardingPage /> },
-          { path: 'notice', element: <NoticePage /> }
+          { path: 'notice', element: <NoticePage /> },
+          { path: 'notice/:id', element: <NoticeDetailPage /> }
+        ]
+      },
+      {
+        path: 'mypage',
+        element: <MyPageLayout />,
+        children: [
+          {
+            path: 'profile',
+            element: <EditProfilePage />
+          },
+          {
+            path: 'verification',
+            element: <VerificationPage />
+          },
+          {
+            path: 'posts',
+            element: <MyPostsPage />
+          },
+          {
+            path: 'comments',
+            element: <MyCommentsPage />
+          },
+          {
+            path: 'scraps',
+            element: <MyScrapsPage />
+          }
+        ]
+      },
+      {
+        path: 'mypage',
+        element: <MyPageLayout />,
+        children: [
+          {
+            path: 'profile',
+            element: <EditProfilePage />
+          },
+          {
+            path: 'verification',
+            element: <VerificationPage />
+          },
+          {
+            path: 'posts',
+            element: <MyPostsPage />
+          },
+          {
+            path: 'comments',
+            element: <MyCommentsPage />
+          },
+          {
+            path: 'scraps',
+            element: <MyScrapsPage />
+          }
         ]
       }
     ]

@@ -1,16 +1,16 @@
-import CommunityComments from '@/components/mypage/my-comments/CommunityComments';
-import MarketComments from '@/components/mypage/my-comments/MarketComments';
+import CommunityPosts from '@/components/mypage/my-post/CommunityPosts';
+import MarketPosts from '@/components/mypage/my-post/MarketPosts';
 import { useState } from 'react';
 import styled from 'styled-components';
 
-export default function MyCommentsPage() {
+export default function MyPostsPage() {
   const [selectedTab, setSelectedTab] = useState('community');
   function handleTabClick(tab: 'community' | 'market') {
     setSelectedTab(tab);
   }
   return (
     <Main>
-      <h1>My Comments</h1>
+      <h1>My Posts</h1>
       <nav>
         <div
           onClick={() => handleTabClick('community')}
@@ -26,8 +26,8 @@ export default function MyCommentsPage() {
         </div>
         <p className={selectedTab === 'market' ? 'market' : ''}></p>
       </nav>
-      {selectedTab === 'community' && <CommunityComments />}
-      {selectedTab === 'market' && <MarketComments />}
+      {selectedTab === 'community' && <CommunityPosts />}
+      {selectedTab === 'market' && <MarketPosts />}
     </Main>
   );
 }
