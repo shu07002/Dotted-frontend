@@ -34,7 +34,7 @@ export interface UserProfile {
 
 async function fetchUserProfile(): Promise<UserProfile> {
   return fetchWithAuth<UserProfile>(
-    `${import.meta.env.VITE_API_URL}/api/user/profile`,
+    `${import.meta.env.VITE_API_DOMAIN}/api/user/profile`,
     {
       method: 'GET'
     }
@@ -59,7 +59,6 @@ export default function ProfileButton() {
     <ProfileBox onClick={() => setIsOpen((prev) => !prev)}>
       {isOpen && (
         <Menu>
-
           <div onClick={() => navigate('/mypage/profile')}>my page</div>
 
           <div onClick={onClickLogout}>logout</div>
