@@ -97,7 +97,5 @@ p{
   font-size: 16px;
 }
 
-span {
-  font-size: 16px;
-}
+
 `;

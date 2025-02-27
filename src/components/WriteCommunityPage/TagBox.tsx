@@ -49,7 +49,7 @@ export default function TagBox({ register, watch, setValue }: TagBoxProps) {
       ))}
       <input
         type="hidden"
-        {...register('tag', { required: 'Plaese select tag' })}
+        {...register('tag', { required: 'Plaese select a tag' })}
       />
     </TagBoxWrapper>
   );

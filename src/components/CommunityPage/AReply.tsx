@@ -334,6 +334,13 @@ const NowButton = styled.div`
 
 const MoreWrapper = styled.div`
   position: relative;
+  > button {
+    > svg {
+      @media (max-width: 460px) {
+        height: 10px;
+      }
+    }
+  }
 `;
 
 const Menu = styled.div`
@@ -436,6 +443,9 @@ const ButtonWrapper = styled.div`
     align-items: center;
     gap: 1.2rem;
     > svg {
+      @media (max-width: 460px) {
+        width: 15px;
+      }
       &.commentLiked {
         > path {
           fill: ${({ theme }) => theme.colors.purple600};

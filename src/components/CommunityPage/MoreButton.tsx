@@ -258,7 +258,7 @@ export default function MoreButton({
             </AccessRestrictedNormal>
             <ButtonBox>
               <LaterButton onClick={() => setOpenNormalModal((prev) => !prev)}>
-                Cancle
+                Cancel
               </LaterButton>
               <NowButton onClick={handleDelete}>
                 {deleteMutation.isPending ? 'Deleting...' : 'Delete'}

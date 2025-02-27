@@ -209,7 +209,7 @@ export default function AComment({
             ) : (
               <NicknameDiv>
                 {comment.user_nickname}
-                {comment.is_mine && (
+                {comment.is_mine && origin && (
                   <LockerDiv>
                     <Locker />
                   </LockerDiv>
@@ -277,7 +277,7 @@ export default function AComment({
                 <LaterButton
                   onClick={() => setOpenNormalModal((prev) => !prev)}
                 >
-                  Cancle
+                  Cancel
                 </LaterButton>
                 <NowButton onClick={handleDelete}>
                   {deleteMutation.isPending ? 'Deleting...' : 'Delete'}
@@ -373,6 +373,13 @@ const NicknameDiv = styled.div`
 
 const MoreWrapper = styled.div`
   position: relative;
+  > button {
+    > svg {
+      @media (max-width: 460px) {
+        height: 10px;
+      }
+    }
+  }
 `;
 
 const CommentInputWrapper = styled.div`
@@ -514,10 +521,16 @@ const ButtonWrapper = styled.div`
     justify-content: center;
     gap: 1.2rem;
     > svg {
+      @media (max-width: 460px) {
+        width: 15px;
+      }
       &.commentLiked {
         > path {
           fill: ${({ theme }) => theme.colors.purple600};
           stroke: ${({ theme }) => theme.colors.purple600};
+          @media (max-width: 460px) {
+            width: 15px;
+          }
         }
       }
       &.recomment {

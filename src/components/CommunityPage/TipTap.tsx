@@ -35,6 +35,7 @@ const EditorContainer = styled.div`
 const ToolbarContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   padding: 8px;
   border-bottom: 1px solid #e5e6eb;
   background-color: #f7f8fa;

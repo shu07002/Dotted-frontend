@@ -3,9 +3,9 @@ import DownIcon from '@/assets/icons/header/down.svg?react';
 import styled from 'styled-components';
 import { useEffect, useRef, useState } from 'react';
 import { fetchWithAuth } from '@/utils/auth';
-import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useQuery } from '@tanstack/react-query';
 
 // types/user.ts
 
@@ -33,17 +33,6 @@ export interface UserProfile {
   social_additional_info: any; // 구조에 따라 세부 타입 정의 가능
 }
 
-<<<<<<< HEAD
-// async function fetchUserProfile(): Promise<UserProfile> {
-//   console.log('Asdasdsad');
-//   return fetchWithAuth<UserProfile>(
-//     `${import.meta.env.VITE_API_DOMAIN}/api/user/profile`,
-//     {
-//       method: 'GET'
-//     }
-//   );
-// }
-=======
 async function fetchUserProfile(): Promise<UserProfile> {
   return fetchWithAuth<UserProfile>(
     `${import.meta.env.VITE_API_DOMAIN}/api/user/profile`,
@@ -52,15 +41,14 @@ async function fetchUserProfile(): Promise<UserProfile> {
     }
   );
 }
->>>>>>> 73304641f1dc478138a248784987f556a49b0172
 
 export default function ProfileButton() {
   const navigate = useNavigate();
   const [openMore, setOpenMore] = useState(false);
-  // const { data } = useQuery<UserProfile>({
-  //   queryKey: ['userProfile'],
-  //   queryFn: fetchUserProfile
-  // });
+  const { data } = useQuery<UserProfile>({
+    queryKey: ['userProfile'],
+    queryFn: fetchUserProfile
+  });
   const moreWrapperRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -84,7 +72,6 @@ export default function ProfileButton() {
   };
 
   return (
-<<<<<<< HEAD
     <ProfileBox
       onClick={() => setOpenMore((prev) => !prev)}
       ref={moreWrapperRef}
@@ -103,18 +90,8 @@ export default function ProfileButton() {
         )}
       </AnimatePresence>
 
-=======
-    <ProfileBox onClick={() => setIsOpen((prev) => !prev)}>
-      {isOpen && (
-        <Menu>
-          <div onClick={() => navigate('/mypage/profile')}>my page</div>
-
-          <div onClick={onClickLogout}>logout</div>
-        </Menu>
-      )}
->>>>>>> 73304641f1dc478138a248784987f556a49b0172
       <ProfileIcon />
-      {/* <span>{data?.nickname}</span> */}
+      <span>{data?.nickname}</span>
       <DownIcon />
     </ProfileBox>
   );

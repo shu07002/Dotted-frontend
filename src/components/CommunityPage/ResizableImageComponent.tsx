@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { NodeViewProps, NodeViewWrapper } from '@tiptap/react';
+import { NodeSelection } from 'prosemirror-state'; // NodeSelection import 추가
 import styled from 'styled-components';
 
 const ResizableImageComponent: React.FC<NodeViewProps> = ({
@@ -89,9 +90,11 @@ const ResizableImageComponent: React.FC<NodeViewProps> = ({
     if (typeof getPos === 'function') {
       const pos = getPos();
       const { tr } = editor.state;
+      const nodeType = node.type; // node.type을 사용하여 노드 타입 가져오기
+
       tr.setSelection(
         // NodeSelection을 통해 이미지 노드를 선택함
-        editor.state.schema.nodes[this.name || '']
+        nodeType
           ? NodeSelection.create(editor.state.doc, pos)
           : editor.state.selection
       );
