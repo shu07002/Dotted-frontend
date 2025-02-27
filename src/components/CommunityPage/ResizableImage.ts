@@ -223,7 +223,7 @@ export const ResizableImage = Node.create<ImageOptions>({
               return false;
             }
           },
-          handleDrop: (view, event, slice, moved) => {
+          handleDrop: (view, event) => {
             const nodePosStr = event.dataTransfer?.getData(
               'application/tiptap-node-id'
             );

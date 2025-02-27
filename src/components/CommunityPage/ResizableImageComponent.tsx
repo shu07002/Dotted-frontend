@@ -89,7 +89,7 @@ const ResizableImageComponent: React.FC<NodeViewProps> = ({
   };
 
   // 모바일에서 이미지 클릭 시 해당 이미지 노드를 선택하도록 설정(엔터키가 작동하게 함)
-  const handleTap = (e: React.MouseEvent | React.TouchEvent) => {
+  const handleTap = () => {
     if (typeof getPos === 'function') {
       const pos = getPos();
       const { tr } = editor.state;

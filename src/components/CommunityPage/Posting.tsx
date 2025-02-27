@@ -4,7 +4,7 @@ import Profile from '@/assets/svg/CommunityPage/Profile.svg?react';
 import Like from '@/assets/svg/CommunityPage/Like.svg?react';
 import Scrap from '@/assets/svg/CommunityPage/Scrap.svg?react';
 
-import ReactQuill from 'react-quill-new';
+//import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 import { PostDetail } from '@/pages/community/DetailCommunityPage';
 import { useEffect, useState } from 'react';
@@ -258,41 +258,41 @@ const ContentWrapper = styled.div`
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray300};
 `;
 
-const StyledReactQuill = styled(ReactQuill)`
-  width: 100%;
+// const StyledReactQuill = styled(ReactQuill)`
+//   width: 100%;
 
-  box-sizing: border-box;
+//   box-sizing: border-box;
 
-  .ql-container {
-    border: none;
-  }
+//   .ql-container {
+//     border: none;
+//   }
 
-  .ql-editor,
-  .ql-blank {
-    min-height: 42.6rem;
-  }
+//   .ql-editor,
+//   .ql-blank {
+//     min-height: 42.6rem;
+//   }
 
-  .ql-size-small {
-    font-size: 1.5rem;
-    @media (max-width: 460px) {
-      font-size: 1.2rem;
-    }
-  }
+//   .ql-size-small {
+//     font-size: 1.5rem;
+//     @media (max-width: 460px) {
+//       font-size: 1.2rem;
+//     }
+//   }
 
-  p {
-    font-size: 2rem;
-    @media (max-width: 460px) {
-      font-size: 1.7rem;
-    }
-  }
+//   p {
+//     font-size: 2rem;
+//     @media (max-width: 460px) {
+//       font-size: 1.7rem;
+//     }
+//   }
 
-  .ql-size-large {
-    font-size: 3rem;
-    @media (max-width: 460px) {
-      font-size: 2%.6;
-    }
-  }
-`;
+//   .ql-size-large {
+//     font-size: 3rem;
+//     @media (max-width: 460px) {
+//       font-size: 2%.6;
+//     }
+//   }
+// `;
 
 const ButtonWrapper = styled.div`
   display: flex;

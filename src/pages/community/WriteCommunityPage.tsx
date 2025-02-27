@@ -6,7 +6,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import TagBox from '@/components/WriteCommunityPage/TagBox';
 import { fetchWithAuth } from '@/utils/auth'; // auth.ts에서 정의한 fetchWithAuth를 import
 import Tiptap from '@/components/CommunityPage/TipTap';
-import Editor from '@/components/WriteCommunityPage/Editor';
+//import Editor from '@/components/WriteCommunityPage/Editor';
 
 // -------------------- 타입 정의 --------------------
 export interface CommunityData {
@@ -264,7 +264,7 @@ export default function WriteCommunityPage() {
     const imgTagRegex = /<img[^>]*src=["'](data:[^"']+)["'][^>]*>/g;
 
     // 모든 base64 이미지를 찾아서 중괄호 표현식으로 대체
-    resultContent = resultContent.replace(imgTagRegex, (match, src) => {
+    resultContent = resultContent.replace(imgTagRegex, (match) => {
       // src="data:..." 부분을 src={images[인덱스].image_url} 형태로 대체
       return match.replace(
         /src=["']data:[^"']+["']/,
