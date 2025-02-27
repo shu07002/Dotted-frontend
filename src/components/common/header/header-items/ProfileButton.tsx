@@ -89,12 +89,6 @@ const ProfileBox = styled.div`
   }
 
   > svg {
-    &:first-child {
-      width: 2.7rem;
-      height: 2.7rem;
-      flex-shrink: 0;
-    }
-
     &:last-child {
       width: 1.8rem;
       height: 0.9rem;

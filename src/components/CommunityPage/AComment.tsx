@@ -511,14 +511,27 @@ const ButtonWrapper = styled.div`
 const Menu = styled.div`
   z-index: 10;
   position: absolute;
-  top: -250%;
-  left: 150%;
+  top: 0%;
+  left: 100%;
   margin-top: 1rem;
-  background-color: ${({ theme }) => theme.colors.gray100};
+  width: 15.9rem;
+  flex-shrink: 0;
+  border-radius: 0.5rem;
+  background: ${({ theme }) => theme.colors.backgroundLayer2};
+  box-shadow: 2px 2px 26.1px -3px rgba(0, 0, 0, 0.22);
   color: ${({ theme }) => theme.colors.gray800};
+
   > div {
+    text-align: start;
     cursor: pointer;
-    padding: 1rem;
+    padding: 1rem 2rem;
+    color: ${({ theme }) => theme.colors.gray700};
+    font-family: Inter;
+    font-size: 1.6rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: -0.08rem;
     &:hover {
       background-color: ${({ theme }) => theme.colors.gray200};
     }
