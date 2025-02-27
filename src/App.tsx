@@ -7,6 +7,7 @@ import ReactQueryProvider from './context/ReactQueryProvider';
 import { DndProvider } from 'react-dnd';
 
 import './style/style.css';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
 function App() {
   return (
