@@ -8,7 +8,6 @@ import SubHeader from './SubHeader';
 import { useNavigate } from 'react-router-dom';
 import { EventSourcePolyfill, NativeEventSource } from 'event-source-polyfill';
 import { isTokenExpired, refreshAccessToken } from '@/utils/auth';
-import ArrowDown from '@/assets/svg/tips/faq/arrow.svg?react';
 
 export interface NotiList {
   id: number;
@@ -128,9 +127,7 @@ export default function Header({ scrollY }: { scrollY: number }) {
               e.stopPropagation();
               setIsOpen((prev) => !prev);
             }}
-          >
-            <ArrowDown />
-          </ArrowWrapper>
+          ></ArrowWrapper>
         </LeftSection>
         <RightSection onMouseEnter={() => setHoveredTab('')}>
           {isLogined() ? (
@@ -144,11 +141,11 @@ export default function Header({ scrollY }: { scrollY: number }) {
           )}
         </RightSection>
       </UpWrapper>
-      {isOpen && (
-        <MobileNav ref={mobileNavRef} onClick={(e) => e.stopPropagation()}>
-          <HeaderNav setHoveredTab={setHoveredTab} />
-        </MobileNav>
-      )}
+
+      <MobileNav ref={mobileNavRef} onClick={(e) => e.stopPropagation()}>
+        <HeaderNav setHoveredTab={setHoveredTab} />
+      </MobileNav>
+
       <SubHeader hoveredTab={hoveredTab} />
     </HeaderContainer>
   );
@@ -195,15 +192,16 @@ const LoginButton = styled.button`
 `;
 
 const HeaderContainer = styled.div`
-  width: 100%;
+  z-index: 1000;
 
   position: fixed;
   top: 0;
-  z-index: 1000;
+  left: 0;
+  right: 0;
 `;
 
 const UpWrapper = styled.div<{ $scrollY: number }>`
-  padding: 0 9rem 0 7.7rem;
+  padding: 0 7.7rem 0 7.7rem;
 
   @media (max-width: 700px) {
     padding-right: 2rem;

@@ -3,6 +3,11 @@ export function formatRelativeTime(timestamp: string): string {
   const now: Date = new Date();
   const diff: number = now.getTime() - date.getTime();
 
+  // 1분(60초) 미만이면 "now"로 표시
+  if (diff < 60000) {
+    return 'now';
+  }
+
   // 1시간(3600초) 미만이면 분 단위로 표시
   if (diff < 3600000) {
     const minutes: number = Math.floor(diff / (1000 * 60));

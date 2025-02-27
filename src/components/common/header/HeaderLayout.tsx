@@ -24,8 +24,9 @@ export default function HeaderLayout() {
 }
 
 const Wrapper = styled.div`
-  width: 100vw;
   display: flex;
   flex-direction: column;
   padding-top: 8rem;
+  position: relative;
+  padding-right: 2rem;
 `;

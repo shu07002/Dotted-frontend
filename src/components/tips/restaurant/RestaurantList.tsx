@@ -16,10 +16,11 @@ interface RestaurantData {
   id: number;
   name: string;
   type: string;
-  google_map_link: string;
-  naver_map_link: string;
+  google_map: string;
+  naver_map: string;
   distance: number;
   photo: string;
+  intro: string;
 }
 
 export default function RestaurantList() {
@@ -49,14 +50,14 @@ export default function RestaurantList() {
       {!isLoading && filteredRestaurants ? (
         <List>
           {filteredRestaurants.map((el: RestaurantData, idx: number) => {
-            console.log(el.photo);
+            console.log(el);
             return (
               <RestaurantBox key={idx}>
                 <img src={el.photo} alt={el.name} />
                 <Description>
                   <RestaurantInfo>
                     <h1>{el.name}</h1>
-                    <p>{el.type}</p>
+                    <p>{el.intro}</p>
                   </RestaurantInfo>
                   <RestaurantLocation>
                     <span className="location__distance">
@@ -64,11 +65,11 @@ export default function RestaurantList() {
                       <span>{el.distance}m from School</span>
                     </span>
                     <span className="location__link">
-                      <a target="_blank" href={el.naver_map_link}>
+                      <a target="_blank" href={el.naver_map}>
                         <LinkIcon />
                         {'naver map'}
                       </a>
-                      <a target="_blank" href={el.google_map_link}>
+                      <a target="_blank" href={el.google_map}>
                         <LinkIcon />
                         {'google map'}
                       </a>
@@ -103,6 +104,10 @@ const List = styled.ul`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 4.6rem;
+
+  @media (max-width: 470px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
 `;
 
 const RestaurantBox = styled.li`
@@ -118,14 +123,14 @@ const RestaurantBox = styled.li`
     object-fit: cover;
     flex-shrink: 0;
 
-    @media (max-width: 700px) {
+    @media (max-width: 900px) {
       width: 100%;
       aspect-ratio: 1.2;
       height: auto;
     }
   }
 
-  @media (max-width: 700px) {
+  @media (max-width: 900px) {
     display: block;
   }
 `;
@@ -133,7 +138,7 @@ const RestaurantBox = styled.li`
 const Description = styled.div`
   width: 100%;
   height: 100%;
-  padding: 1.9rem 2.7rem 3.9rem 2.7rem;
+  padding: 1.9rem 2.7rem 2rem 2.7rem;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -142,7 +147,7 @@ const Description = styled.div`
     padding: 1rem 1.3rem 1.9rem 1.3rem;
   }
 
-  @media (max-width: 700px) {
+  @media (max-width: 900px) {
     height: auto;
     flex-shrink: 0;
   }
@@ -158,7 +163,7 @@ const RestaurantInfo = styled.div`
     font-weight: 400;
     letter-spacing: -1px;
     color: ${({ theme }) => theme.colors.gray700};
-    @media (max-width: 700px) {
+    @media (max-width: 900px) {
       font-size: 2rem;
     }
   }
@@ -188,6 +193,8 @@ const RestaurantLocation = styled.div`
     }
 
     > span {
+      display: flex;
+      gap: 1rem;
       font-size: 1.4rem;
       font-weight: 400;
       letter-spacing: -0.7px;
@@ -197,15 +204,11 @@ const RestaurantLocation = styled.div`
 
   & .location__link {
     display: flex;
-    gap: 1.6rem;
-
-    @media (max-width: 700px) {
-      gap: 0rem;
-    }
+    gap: 1rem;
 
     > a {
       display: flex;
-      gap: 1rem;
+      gap: 0.5rem;
       align-items: center;
       font-size: 1.4rem;
       font-weight: 400;
@@ -213,7 +216,7 @@ const RestaurantLocation = styled.div`
       text-decoration-line: underline;
       color: ${({ theme }) => theme.colors.gray500};
 
-      @media (max-width: 700px) {
+      @media (max-width: 900px) {
         font-size: 1rem;
       }
 

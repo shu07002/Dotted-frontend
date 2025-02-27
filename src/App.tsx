@@ -5,8 +5,9 @@ import { RouterProvider } from 'react-router-dom';
 import { GlobalThemeProvider } from './context/ThemeContext';
 import ReactQueryProvider from './context/ReactQueryProvider';
 import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
+
 import './style/style.css';
+
 function App() {
   return (
     <DndProvider backend={HTML5Backend}>
@@ -25,8 +26,6 @@ function App() {
 export default App;
 
 const AppContainer = styled.div`
-  width: 100vw;
-  height: 100vh;
   overflow-x: hidden;
 
   background-color: ${({ theme }) => theme.colors.backgroundLayer2};
