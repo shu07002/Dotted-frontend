@@ -23,6 +23,8 @@ import DetailMarketPage from './pages/market/DetailMarketPage';
 import NotificatoinPage from './pages/NotificatoinPage';
 import OnboardingPage from './pages/about/OnboardingPage';
 import NoticePage from './pages/about/NoticePage';
+import AdminVerifyPage from './pages/admin/AdminVerifyPage';
+import NoticeWritePage from './pages/admin/NoticeWritePage';
 
 const Router = createBrowserRouter([
   {
@@ -122,6 +124,13 @@ const Router = createBrowserRouter([
   {
     path: 'user/login/google/callback',
     element: <Google />
+  },
+  {
+    path: 'admin',
+    children: [
+      { path: 'verify', element: <AdminVerifyPage /> },
+      { path: 'notice/write', element: <NoticeWritePage /> }
+    ]
   }
 ]);
 
