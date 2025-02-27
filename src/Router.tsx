@@ -23,6 +23,8 @@ import DetailMarketPage from './pages/market/DetailMarketPage';
 import NotificatoinPage from './pages/NotificatoinPage';
 import OnboardingPage from './pages/about/OnboardingPage';
 import NoticePage from './pages/about/NoticePage';
+import AdminVerifyPage from './pages/admin/AdminVerifyPage';
+import NoticeWritePage from './pages/admin/NoticeWritePage';
 
 import EditProfilePage from './pages/mypage/EditProfilePage';
 import MyPageLayout from './components/mypage/MyPageLayout';
@@ -33,6 +35,7 @@ import MyScrapsPage from './pages/mypage/MyScrapsPage';
 import NoticeDetailPage from './pages/about/NoticeDetailPage';
 
 import ScrollToTop from './components/common/ScrollToTop';
+import CultureCreatePage from './pages/admin/CultureCreatePage';
 const Router = createBrowserRouter([
   {
     path: '/',
@@ -190,6 +193,14 @@ const Router = createBrowserRouter([
   {
     path: 'user/login/google/callback',
     element: <Google />
+  },
+  {
+    path: 'admin',
+    children: [
+      { path: 'verify', element: <AdminVerifyPage /> },
+      { path: 'notice/write', element: <NoticeWritePage /> },
+      { path: 'culture/create', element: <CultureCreatePage /> }
+    ]
   }
 ]);
 
