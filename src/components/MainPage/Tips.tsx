@@ -44,7 +44,7 @@ export default function Tips() {
 }
 
 const TipsWrapper = styled.section`
-  margin-bottom: 9.2rem;
+  margin-bottom: 2rem;
 `;
 
 const Title = styled.div`
@@ -72,9 +72,10 @@ const Contents = styled.nav`
 
   @media (max-width: 1024px) {
     grid-template-columns: repeat(3, 1fr); /*  화면이 줄어들면 3개씩 */
+    padding: 0 4rem;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 500px) {
     grid-template-columns: repeat(2, 1fr); /*  더 줄어들면 2개씩 */
   }
 `;
