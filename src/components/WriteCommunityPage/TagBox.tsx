@@ -86,7 +86,9 @@ const Tag = styled.li<{ $selected: boolean; $color: string }>`
 
   ${({ theme, $selected }) =>
     !$selected &&
-    `&:hover {
-    background-color: ${theme.colors.gray200};
-  }`}
+    ` @media (hover: hover) and (pointer: fine) {
+        &:hover {
+        background-color: ${theme.colors.gray200};
+        }
+      }`}
 `;

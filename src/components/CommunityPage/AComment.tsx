@@ -574,8 +574,11 @@ const Menu = styled.div`
     font-weight: 400;
     line-height: normal;
     letter-spacing: -0.08rem;
-    &:hover {
-      background-color: ${({ theme }) => theme.colors.gray200};
+
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        background-color: ${({ theme }) => theme.colors.gray200};
+      }
     }
   }
 `;

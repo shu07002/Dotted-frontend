@@ -70,8 +70,10 @@ const PostingListWrapper = styled.ul`
     display: flex;
     border-bottom: 1px solid ${({ theme }) => theme.colors.gray300};
 
-    &:hover {
-      background-color: ${({ theme }) => theme.colors.gray100};
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        background-color: ${({ theme }) => theme.colors.gray100};
+      }
     }
   }
 `;

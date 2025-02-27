@@ -189,10 +189,11 @@ const PaginationBox = styled.div`
       background-color: ${({ theme }) => theme.colors.purple600};
       color: ${({ theme }) => theme.colors.gray50};
     }
-
-    &:hover {
-      background-color: ${({ theme }) => theme.colors.backgroundBase};
-      cursor: pointer;
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        background-color: ${({ theme }) => theme.colors.backgroundBase};
+        cursor: pointer;
+      }
     }
 
     &:disabled {

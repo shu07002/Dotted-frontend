@@ -65,8 +65,10 @@ const ToolbarButton = styled.button`
   cursor: pointer;
   border-radius: 4px;
 
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.05);
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
   }
 
   &.is-active {

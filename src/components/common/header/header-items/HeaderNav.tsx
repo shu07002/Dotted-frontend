@@ -70,8 +70,10 @@ const NavWrapper = styled.nav`
       color: ${({ theme }) => theme.colors.purple600};
     }
 
-    &:hover {
-      color: ${({ theme }) => theme.colors.purple600};
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        color: ${({ theme }) => theme.colors.purple600};
+      }
     }
   }
 `;

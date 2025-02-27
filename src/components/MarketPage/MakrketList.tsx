@@ -136,8 +136,10 @@ const MarketImageWrapper = styled.div`
     border-radius: 16px 16px 0 0;
     transition: transform 0.2s ease-in-out;
     transform-origin: center; /* 중심을 기준으로 확대 */ /* 부모와 동일한 border-radius 적용 */
-    &:hover {
-      transform: scale(1.1);
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        transform: scale(1.1);
+      }
     }
   }
 `;

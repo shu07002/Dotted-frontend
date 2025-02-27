@@ -20,8 +20,10 @@ const LanguageBox = styled.div`
   cursor: pointer;
   padding: 1rem;
 
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.backgroundLayer1};
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: ${({ theme }) => theme.colors.backgroundLayer1};
+    }
   }
 
   > svg {

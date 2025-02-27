@@ -329,8 +329,10 @@ const Button = styled.button`
     }
   }
 
-  &:hover {
-    background: ${({ theme }) => theme.colors.purple100};
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background: ${({ theme }) => theme.colors.purple100};
+    }
   }
 
   &.liked {

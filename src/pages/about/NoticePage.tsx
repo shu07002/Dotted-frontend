@@ -228,10 +228,12 @@ const FAQItem = styled.li`
   &:first-child {
     border-top: 1px solid ${({ theme }) => theme.colors.purple600};
   }
-
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.gray100};
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: ${({ theme }) => theme.colors.gray100};
+    }
   }
+
   cursor: pointer;
   padding: 2.5rem 4rem 2.5rem 2rem;
 

@@ -45,7 +45,7 @@ export default function SubHeader({ hoveredTab }: SubHeaderProps) {
           hoveredTab !== 'COMMUNITY' &&
           hoveredTab !== 'MARKET')) && (
         <SubHeaderWrapper {...SubHeaderAnimation}>
-          {hoveredTab === 'ABOUT' ? (
+          {pathname.includes('about') ? (
             <>
               {aboutsubs.map((sub, idx) => (
                 <SubElement key={idx}>
@@ -116,8 +116,10 @@ const SubElement = styled.div`
       color: ${({ theme }) => theme.colors.purple600};
     }
 
-    &:hover {
-      color: ${({ theme }) => theme.colors.purple600};
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        color: ${({ theme }) => theme.colors.purple600};
+      }
     }
   }
 

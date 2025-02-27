@@ -259,9 +259,12 @@ const AlignButton = styled.button`
   cursor: pointer;
   padding: 2px 5px;
   border-radius: 2px;
-  &:hover {
-    background-color: #f0f0f0;
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: #f0f0f0;
+    }
   }
+
   &.active {
     background-color: #e0e0e0;
   }

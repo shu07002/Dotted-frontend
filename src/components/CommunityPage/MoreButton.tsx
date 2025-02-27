@@ -471,8 +471,11 @@ const Menu = styled.div`
     font-weight: 400;
     line-height: normal;
     letter-spacing: -0.08rem;
-    &:hover {
-      background-color: ${({ theme }) => theme.colors.gray200};
+
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        background-color: ${({ theme }) => theme.colors.gray200};
+      }
     }
   }
 `;
@@ -734,8 +737,10 @@ const TextReport = styled.div`
         }
 
         /* 선택되지 않은 상태(hover) 시 효과 */
-        &.custom-radio input[type='radio']:hover {
-          border-color: #f06f00; /* 살짝 어두운 주황 */
+        @media (hover: hover) and (pointer: fine) {
+          &.custom-radio input[type='radio']:hover {
+            border-color: #f06f00; /* 살짝 어두운 주황 */
+          }
         }
 
         /* 라디오 버튼이 선택된 경우, 안에 점을 찍어준다 */

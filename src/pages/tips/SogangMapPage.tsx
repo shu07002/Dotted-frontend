@@ -120,9 +120,12 @@ const LocationElement = styled.li`
       fill: ${({ theme }) => theme.colors.purple600};
     }
   }
-  &:not(.search):hover {
-    max-width: 25rem;
+  @media (hover: hover) and (pointer: fine) {
+    &:not(.search):hover {
+      max-width: 25rem;
+    }
   }
+
   svg {
     width: 1.8rem;
     height: 1.8rem;
@@ -143,10 +146,13 @@ const LocationElement = styled.li`
       display 0.2s;
     flex-shrink: 0;
   }
-  &:hover > span {
-    display: inline;
-    opacity: 1;
+  @media (hover: hover) and (pointer: fine) {
+    &:hover > span {
+      display: inline;
+      opacity: 1;
+    }
   }
+
   &:active {
     scale: 0.9;
   }

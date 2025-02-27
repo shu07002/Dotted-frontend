@@ -110,8 +110,10 @@ const ProfileBox = styled.div`
   cursor: pointer;
   padding: 1rem;
 
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.backgroundLayer1};
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: ${({ theme }) => theme.colors.backgroundLayer1};
+    }
   }
 
   > svg {
@@ -165,8 +167,11 @@ const Menu = styled(motion.div)`
     font-weight: 400;
     line-height: normal;
     letter-spacing: -0.08rem;
-    &:hover {
-      background-color: ${({ theme }) => theme.colors.gray200};
+
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        background-color: ${({ theme }) => theme.colors.gray200};
+      }
     }
   }
 `;

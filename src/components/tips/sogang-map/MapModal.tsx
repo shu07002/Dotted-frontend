@@ -287,9 +287,12 @@ const ModalWrapper = styled.div<{ modalopen: string }>`
         stroke-width: 2;
         stroke: ${({ theme }) => theme.colors.gray900};
       }
-      &:hover {
-        path {
-          stroke: ${({ theme }) => theme.colors.purple600};
+
+      @media (hover: hover) and (pointer: fine) {
+        &:hover {
+          path {
+            stroke: ${({ theme }) => theme.colors.purple600};
+          }
         }
       }
     }

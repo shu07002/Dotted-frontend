@@ -114,9 +114,12 @@ const LeftButton = styled.div`
   display: none;
   align-items: center;
   padding: 0 1rem;
-  &:hover {
-    opacity: 0.8;
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      opacity: 0.8;
+    }
   }
+
   @media (max-width: 830px) {
     display: flex;
     padding-left: 0;
@@ -128,9 +131,12 @@ const RightButton = styled.div`
   display: none;
   align-items: center;
   padding: 0 1rem;
-  &:hover {
-    opacity: 0.8;
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      opacity: 0.8;
+    }
   }
+
   @media (max-width: 830px) {
     display: flex;
     padding-right: 0;
@@ -169,8 +175,10 @@ const Tab = styled.span`
   cursor: pointer;
   white-space: nowrap;
 
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.gray300};
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: ${({ theme }) => theme.colors.gray300};
+    }
   }
 
   &.selected {

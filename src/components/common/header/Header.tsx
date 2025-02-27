@@ -172,6 +172,10 @@ const LoginSignup = styled.div`
     font-weight: 600;
     line-height: normal;
     letter-spacing: -0.07rem;
+
+    @media (max-width: 460px) {
+      font-size: 1.8rem;
+    }
   }
 `;
 
@@ -202,6 +206,9 @@ const LoginButton = styled.button`
   position: relative;
   color: ${({ theme }) => theme.colors.gray900};
   padding: 0.7rem 1.5rem;
+  @media (max-width: 460px) {
+    padding: 0.7rem 0.5rem;
+  }
   text-align: center;
   font-family: Inter;
   font-size: 2.1rem;
@@ -223,18 +230,25 @@ const LoginButton = styled.button`
     transition: width 0.5s ease;
   }
 
-  &:hover::after {
-    width: 100%;
+  @media (hover: hover) and (pointer: fine) {
+    &:hover::after {
+      width: 100%;
+    }
   }
 
   & > span {
+    @media (max-width: 460px) {
+      font-size: 1.6rem;
+    }
     display: inline-block;
 
     transform: scale(1);
   }
 
-  &:hover > span {
-    animation: heartBeat 0.5s ease 0.5s 1 forwards;
+  @media (hover: hover) and (pointer: fine) {
+    &:hover > span {
+      animation: heartBeat 0.5s ease 0.5s 1 forwards;
+    }
   }
 
   @keyframes heartBeat {
@@ -305,9 +319,12 @@ const Logo = styled.div`
   line-height: 2.1rem;
   letter-spacing: -2.16px;
   cursor: pointer;
-  &:hover {
-    opacity: 0.9;
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      opacity: 0.9;
+    }
   }
+
   > img {
     width: 3.5rem;
     height: 3.5rem;

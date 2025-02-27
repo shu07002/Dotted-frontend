@@ -166,9 +166,12 @@ const LeftButton = styled.div`
   display: none;
   align-items: center;
   padding: 0 1rem;
-  &:hover {
-    opacity: 0.8;
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      opacity: 0.8;
+    }
   }
+
   @media (max-width: 700px) {
     display: flex;
     padding-left: 0;
@@ -180,9 +183,12 @@ const RightButton = styled.div`
   display: none;
   align-items: center;
   padding: 0 1rem;
-  &:hover {
-    opacity: 0.8;
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      opacity: 0.8;
+    }
   }
+
   @media (max-width: 700px) {
     display: flex;
     padding-right: 0;
@@ -266,9 +272,11 @@ const TabElement = styled.div<{ $active: boolean }>`
     background-color: ${({ $active, theme }) =>
       $active ? theme.colors.purple100 : ''};
 
-    &:hover {
-      background-color: ${({ theme }) => theme.colors.backgroundLayer1};
-      cursor: pointer;
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        background-color: ${({ theme }) => theme.colors.backgroundLayer1};
+        cursor: pointer;
+      }
     }
 
     > svg {

@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import Checked from '@/assets/svg/SignUpPage/CheckedSVG.svg?react';
 import Link from '@/assets/svg/SignUpPage/LinkSVG.svg?react';
-import { useNavigate } from 'react-router-dom';
 
 interface AgreeItemProps {
   text: string;
@@ -16,15 +15,15 @@ export default function AgreeItem({
   onChangeChecked,
   ischecked
 }: AgreeItemProps) {
-  const navigate = useNavigate();
-
   return (
     <AgreeItemBox>
       <CheckBox onClick={onChangeChecked} $checked={ischecked}>
         {ischecked && <CheckedSVG />}
       </CheckBox>
       <span>{text}</span>
-      <LinkSVG onClick={() => navigate(link)} />
+      <a href={link} target="_blank">
+        <LinkSVG />
+      </a>
     </AgreeItemBox>
   );
 }

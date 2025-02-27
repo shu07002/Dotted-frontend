@@ -288,9 +288,12 @@ const FAQItem = styled.li<{ $isOpen: boolean }>`
     border-top: 1px solid ${({ theme }) => theme.colors.purple600};
   }
 
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.gray100};
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: ${({ theme }) => theme.colors.gray100};
+    }
   }
+
   cursor: pointer;
   padding: 2.5rem 4rem 2.5rem 2rem;
   background-color: ${({ theme, $isOpen }) =>
@@ -372,9 +375,11 @@ const PaginationBox = styled.div`
       color: ${({ theme }) => theme.colors.gray50};
     }
 
-    &:hover {
-      background-color: ${({ theme }) => theme.colors.backgroundBase};
-      cursor: pointer;
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        background-color: ${({ theme }) => theme.colors.backgroundBase};
+        cursor: pointer;
+      }
     }
   }
 `;
