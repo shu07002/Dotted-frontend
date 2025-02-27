@@ -4,7 +4,6 @@ import 'react-quill-new/dist/quill.snow.css';
 import styled from 'styled-components';
 import { ImageResize } from 'quill-image-resize-module-ts';
 import { UseFormSetValue, UseFormTrigger, UseFormWatch } from 'react-hook-form';
-import { CommunityData } from '@/pages/community/WriteCommunityPage';
 import { CultureData } from '@/pages/admin/CultureCreatePage';
 
 Quill.register('modules/ImageResize', ImageResize);

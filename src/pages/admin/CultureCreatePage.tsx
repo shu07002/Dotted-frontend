@@ -14,7 +14,7 @@ export interface CultureData {
 export default function CultureCreatePage() {
   const { reset, register, handleSubmit, setValue, watch, trigger } =
     useForm<CultureData>();
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [_, setIsSubmitted] = useState(false);
 
   const postingMutation = useMutation({
     mutationFn: async (data: CultureData) => {
