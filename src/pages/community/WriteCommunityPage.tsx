@@ -4,8 +4,8 @@ import { useForm } from 'react-hook-form';
 import { useBlocker, useLocation, useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import TagBox from '@/components/WriteCommunityPage/TagBox';
-import Editor from '@/components/WriteCommunityPage/Editor';
 import { fetchWithAuth } from '@/utils/auth'; // auth.ts에서 정의한 fetchWithAuth를 import
+import Tiptap from '@/components/CommunityPage/TipTap';
 
 // -------------------- 타입 정의 --------------------
 export interface CommunityData {
@@ -37,6 +37,7 @@ interface OriginalImage {
 
 export default function WriteCommunityPage() {
   const {
+    control,
     register,
     handleSubmit,
     watch,
@@ -249,6 +250,25 @@ export default function WriteCommunityPage() {
     return imagePayload;
   };
 
+  const replaceBase64WithBracketExpressions = (htmlContent: string): string => {
+    let resultContent = htmlContent;
+    let imageIndex = 0;
+
+    // base64 이미지를 찾는 정규식
+    const imgTagRegex = /<img[^>]*src=["'](data:[^"']+)["'][^>]*>/g;
+
+    // 모든 base64 이미지를 찾아서 중괄호 표현식으로 대체
+    resultContent = resultContent.replace(imgTagRegex, (match, src) => {
+      // src="data:..." 부분을 src={images[인덱스].image_url} 형태로 대체
+      return match.replace(
+        /src=["']data:[^"']+["']/,
+        `src={images[${imageIndex++}].image_url}`
+      );
+    });
+
+    return resultContent;
+  };
+
   // -------------------------------------
   // onSubmit
   // -------------------------------------
@@ -260,15 +280,27 @@ export default function WriteCommunityPage() {
       return;
     }
 
+    const dataToSend = {
+      title: data.title,
+      content: data.content,
+      images: data.images,
+      tag: data.tag
+    };
+
     if (postingMutation.isPending || updateMutation.isPending) return;
 
     // content 내의 base64 이미지 추출 (create 시 사용)
-    const extractedImages = extractBase64Images(data.content);
-    console.log(extractedImages);
+    const extractedImages = extractBase64Images(dataToSend.content);
+    const deliciousMeal = replaceBase64WithBracketExpressions(
+      dataToSend.content
+    );
+    await setValue('content', deliciousMeal);
+    const realDelicious = watch('content');
+    dataToSend.content = realDelicious;
 
     if (!editMode) {
       const newPostData: CommunityData = {
-        ...data,
+        ...dataToSend,
         images: extractedImages
       };
       try {
@@ -321,7 +353,8 @@ export default function WriteCommunityPage() {
             {...register('title', { required: 'Please write your title' })}
           />
         </TitleWrapper>
-        <Editor watch={watch} setValue={setValue} trigger={trigger} />
+        {/* <Editor watch={watch} setValue={setValue} trigger={trigger} /> */}
+        <Tiptap watch={watch} setValue={setValue} trigger={trigger} />
         {editMode ? (
           <SubmitButton type="submit">
             {updateMutation.isPending ? 'Updating...' : 'Edit'}

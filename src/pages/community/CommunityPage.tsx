@@ -1,7 +1,6 @@
 import PostingList from '@/components/CommunityPage/PostingList';
 import SearchBar from '@/components/CommunityPage/SearchBar';
 import TagList from '@/components/CommunityPage/TagList';
-import Tiptap from '@/components/CommunityPage/TipTap';
 import { useSearchPosts } from '@/hooks/useSearchPosts';
 import { CommunityPost, EachPost } from '@/types/CommunityPost';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -95,7 +94,6 @@ export default function CommunityPage() {
     <CommunityPageContainer>
       <Wrapper>
         <Title>Community</Title>
-        <Tiptap />
 
         <TagAndSearch>
           <TagList

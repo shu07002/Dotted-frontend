@@ -7,7 +7,7 @@ import Scrap from '@/assets/svg/CommunityPage/Scrap.svg?react';
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 import { PostDetail } from '@/pages/community/DetailCommunityPage';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import MoreButton from './MoreButton';
 import { formatRelativeTime } from '@/utils/formatTime';
 
@@ -43,13 +43,14 @@ export default function Posting({
   onClickScrap
 }: PostingProps) {
   const [openMore, setOpenMore] = useState(false);
-  let replacedContent = post.content;
 
   const [localLikeCount, setLocalLikeCount] = useState(post.like_count);
   const [localLiked, setLocalLiked] = useState(post.is_liked);
 
   const [localScrapCount, setLocalScrapCount] = useState(post.scrap_count);
   const [localScrapped, setLocalScrapped] = useState(post.is_scrapped);
+
+  const [replacedContent, setReplacedContent] = useState(post.content);
 
   const handleLikeClick = () => {
     if (localLiked) {
@@ -71,15 +72,17 @@ export default function Posting({
     onClickScrap();
   };
 
-  if (post.images && post.images.length > 0) {
-    post.images.forEach((imgObj, index) => {
-      // 예: 'src="{images[0].image_url}"' => 'src="https://example.com/img1.png"'
-      const placeholder = `src={images[${index}].image_url}`;
-      const realSrc = `src="${imgObj.image_url}"`;
+  useEffect(() => {
+    if (post.images && post.images.length > 0) {
+      post.images.forEach((imgObj, index) => {
+        // 예: 'src="{images[0].image_url}"' => 'src="https://example.com/img1.png"'
+        const placeholder = `src={images[${index}].image_url}`;
+        const realSrc = `src="${imgObj.image_url}"`;
 
-      replacedContent = replacedContent.replace(placeholder, realSrc);
-    });
-  }
+        setReplacedContent(replacedContent.replace(placeholder, realSrc));
+      });
+    }
+  }, []);
 
   return (
     <PostingWrapper>

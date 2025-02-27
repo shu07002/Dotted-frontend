@@ -1,4 +1,3 @@
-// src/Tiptap.tsx
 import { Editor, EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import TextAlign from '@tiptap/extension-text-align';
@@ -19,15 +18,15 @@ import Quote from '@/assets/svg/tiptap/quote.svg?react';
 import Bullet from '@/assets/svg/tiptap/bullet.svg?react';
 import Horizontal from '@/assets/svg/tiptap/horizontal.svg?react';
 import Highlight from '@tiptap/extension-highlight';
-// import Image from '@tiptap/extension-image'; // 기존 이미지 확장 대신
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import styled from 'styled-components';
-// 필요한 바이트 컴포넌트 임포트 (예시)
 import ResizableImage from './ResizableImage';
+import { CommunityData } from '@/pages/community/WriteCommunityPage';
+import { UseFormSetValue, UseFormTrigger, UseFormWatch } from 'react-hook-form';
 
-// 스타일드 컴포넌트로 에디터 스타일링
 const EditorContainer = styled.div`
   border: 1px solid #e5e6eb;
+  margin-bottom: 4.2rem;
   border-radius: 4px;
   overflow: hidden;
 `;
@@ -43,7 +42,7 @@ const ToolbarContainer = styled.div`
 
 const StyledEditorContent = styled(EditorContent)`
   padding: 16px;
-  min-height: 200px;
+  min-height: 300px;
 
   .ProseMirror {
     outline: none;
@@ -58,7 +57,6 @@ const StyledEditorContent = styled(EditorContent)`
   }
 `;
 
-// 툴바 버튼 스타일링
 const ToolbarButton = styled.button`
   background: none;
   border: none;
@@ -83,10 +81,25 @@ const ToolbarButton = styled.button`
   }
 `;
 
-const Tiptap = () => {
+interface TipTapProps {
+  watch: UseFormWatch<CommunityData>;
+  setValue: UseFormSetValue<CommunityData>;
+  trigger: UseFormTrigger<CommunityData>;
+}
+
+const Tiptap = ({ watch, setValue, trigger }: TipTapProps) => {
+  const tiptapRef = useRef<HTMLDivElement>(null);
+  const content = watch('content');
+
+  useEffect(() => {
+    if (tiptapRef.current) {
+      setValue('content', content);
+    }
+  }, [content, setValue]);
+
   const editor = useEditor({
     extensions: [
-      ResizableImage, // 기존 Image 대신 ResizableImage 사용
+      ResizableImage,
       TextAlign.configure({
         types: ['heading', 'paragraph']
       }),
@@ -102,17 +115,47 @@ const Tiptap = () => {
         }
       })
     ],
-    content: `
-    <h3 style="text-align:center">
-      Devs Just Want to Have Fun by Cyndi Lauper
-    </h3>
-  `
+    onUpdate: ({ editor }) => {
+      const html = editor.getHTML();
+      setValue('content', html);
+      trigger('content');
+    }
   });
 
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files && event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        if (typeof reader.result === 'string') {
+          editor?.chain().focus().setImage({ src: reader.result }).run();
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  if (!editor) {
+    return null;
+  }
+
   return (
-    <EditorContainer>
+    <EditorContainer ref={tiptapRef}>
       <MenuBar editor={editor} />
-      <StyledEditorContent editor={editor} />
+      <StyledEditorContent
+        editor={editor}
+        placeholder="Please write content"
+        onClick={() => editor.chain().focus().run()}
+      />
+      <input
+        type="file"
+        accept="image/*"
+        ref={fileInputRef}
+        style={{ display: 'none' }}
+        onChange={handleFileChange}
+      />
     </EditorContainer>
   );
 };
@@ -126,7 +169,6 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
       const reader = new FileReader();
       reader.onloadend = () => {
         if (typeof reader.result === 'string') {
-          // ResizableImage의 setImage 메소드 사용
           editor?.chain().focus().setImage({ src: reader.result }).run();
         }
       };
@@ -146,6 +188,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
     <ToolbarContainer>
       <div>
         <ToolbarButton
+          type="button"
           onClick={() =>
             editor.chain().focus().toggleHeading({ level: 1 }).run()
           }
@@ -156,6 +199,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
           <H1 />
         </ToolbarButton>
         <ToolbarButton
+          type="button"
           onClick={() =>
             editor.chain().focus().toggleHeading({ level: 2 }).run()
           }
@@ -166,6 +210,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
           <H2 />
         </ToolbarButton>
         <ToolbarButton
+          type="button"
           onClick={() =>
             editor.chain().focus().toggleHeading({ level: 3 }).run()
           }
@@ -176,6 +221,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
           <H3 />
         </ToolbarButton>
         <ToolbarButton
+          type="button"
           onClick={() =>
             editor.chain().focus().toggleHeading({ level: 4 }).run()
           }
@@ -189,6 +235,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 
       <div>
         <ToolbarButton
+          type="button"
           onClick={() => editor.chain().focus().toggleBold().run()}
           disabled={!editor.can().chain().focus().toggleBold().run()}
           className={editor.isActive('bold') ? 'is-active' : ''}
@@ -196,6 +243,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
           <Bold />
         </ToolbarButton>
         <ToolbarButton
+          type="button"
           onClick={() => editor.chain().focus().toggleItalic().run()}
           disabled={!editor.can().chain().focus().toggleItalic().run()}
           className={editor.isActive('italic') ? 'is-active' : ''}
@@ -203,6 +251,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
           <Italic />
         </ToolbarButton>
         <ToolbarButton
+          type="button"
           onClick={() => editor.chain().focus().toggleStrike().run()}
           disabled={!editor.can().chain().focus().toggleStrike().run()}
           className={editor.isActive('strike') ? 'is-active' : ''}
@@ -210,6 +259,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
           <Strike />
         </ToolbarButton>
         <ToolbarButton
+          type="button"
           onClick={() => editor.chain().focus().toggleHighlight().run()}
           className={editor.isActive('highlight') ? 'is-active' : ''}
         >
@@ -219,12 +269,14 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 
       <div>
         <ToolbarButton
+          type="button"
           onClick={() => editor.chain().focus().setTextAlign('left').run()}
           className={editor.isActive({ textAlign: 'left' }) ? 'is-active' : ''}
         >
           <AlignLeft />
         </ToolbarButton>
         <ToolbarButton
+          type="button"
           onClick={() => editor.chain().focus().setTextAlign('center').run()}
           className={
             editor.isActive({ textAlign: 'center' }) ? 'is-active' : ''
@@ -233,6 +285,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
           <AlignCenter />
         </ToolbarButton>
         <ToolbarButton
+          type="button"
           onClick={() => editor.chain().focus().setTextAlign('right').run()}
           className={editor.isActive({ textAlign: 'right' }) ? 'is-active' : ''}
         >
@@ -242,24 +295,28 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 
       <div>
         <ToolbarButton
+          type="button"
           onClick={() => editor.chain().focus().toggleBulletList().run()}
           className={editor.isActive('bulletList') ? 'is-active' : ''}
         >
           <Bullet />
         </ToolbarButton>
         <ToolbarButton
+          type="button"
           onClick={() => editor.chain().focus().toggleCodeBlock().run()}
           className={editor.isActive('codeBlock') ? 'is-active' : ''}
         >
           <Code />
         </ToolbarButton>
         <ToolbarButton
+          type="button"
           onClick={() => editor.chain().focus().toggleBlockquote().run()}
           className={editor.isActive('blockquote') ? 'is-active' : ''}
         >
           <Quote />
         </ToolbarButton>
         <ToolbarButton
+          type="button"
           onClick={() => editor.chain().focus().setHorizontalRule().run()}
         >
           <Horizontal />
@@ -267,7 +324,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
       </div>
 
       <div>
-        <ToolbarButton onClick={handleImageButtonClick}>
+        <ToolbarButton type="button" onClick={handleImageButtonClick}>
           <ImageIcon />
         </ToolbarButton>
       </div>

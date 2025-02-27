@@ -2,6 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import { NodeViewProps, NodeViewWrapper } from '@tiptap/react';
 import { NodeSelection } from 'prosemirror-state'; // NodeSelection import 추가
 import styled from 'styled-components';
+import AlignCenter from '@/assets/svg/tiptap/align_center.svg?react';
+import AlignLeft from '@/assets/svg/tiptap/align_left.svg?react';
+import AlignRight from '@/assets/svg/tiptap/align_right.svg?react';
 
 const ResizableImageComponent: React.FC<NodeViewProps> = ({
   node,
@@ -163,22 +166,25 @@ const ResizableImageComponent: React.FC<NodeViewProps> = ({
             />
             <AlignmentButtons>
               <AlignButton
+                type="button"
                 onClick={() => handleAlignmentChange('left')}
                 className={alignment === 'left' ? 'active' : ''}
               >
-                ⬅️
+                <AlignLeft />
               </AlignButton>
               <AlignButton
+                type="button"
                 onClick={() => handleAlignmentChange('center')}
                 className={alignment === 'center' ? 'active' : ''}
               >
-                🔲
+                <AlignCenter />
               </AlignButton>
               <AlignButton
+                type="button"
                 onClick={() => handleAlignmentChange('right')}
                 className={alignment === 'right' ? 'active' : ''}
               >
-                ➡️
+                <AlignRight />
               </AlignButton>
             </AlignmentButtons>
           </>
@@ -210,7 +216,8 @@ const ImageContainer = styled.div<{ selected: boolean; alignment: string }>`
   position: relative;
   display: inline-block;
   cursor: ${(props) => (props.selected ? 'move' : 'pointer')};
-  outline: ${(props) => (props.selected ? '2px solid #68cef8' : 'none')};
+  outline: ${(props) =>
+    props.selected ? `2px solid ${props.theme.colors.purple600}` : 'none'};
 `;
 
 const StyledImage = styled.img`
@@ -224,7 +231,7 @@ const ResizeHandle = styled.div`
   height: 12px;
   bottom: 0;
   right: 0;
-  background-color: #4dabf7;
+  background-color: ${({ theme }) => theme.colors.purple600};
   cursor: nwse-resize;
   z-index: 2;
 `;
@@ -241,9 +248,12 @@ const AlignmentButtons = styled.div`
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   padding: 2px;
   z-index: 3;
+  align-items: center;
 `;
 
 const AlignButton = styled.button`
+  display: flex;
+  align-items: center;
   background: none;
   border: none;
   cursor: pointer;
@@ -254,5 +264,13 @@ const AlignButton = styled.button`
   }
   &.active {
     background-color: #e0e0e0;
+  }
+
+  > svg {
+    width: 18px;
+
+    @media (max-width: 460px) {
+      width: 15px;
+    }
   }
 `;
