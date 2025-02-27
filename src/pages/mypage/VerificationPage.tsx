@@ -7,7 +7,6 @@ import UnlockSVG from '@/assets/svg/SignUpPage/UnlockSVG.svg?react';
 import PentagonSVG from '@/assets/svg/SignUpPage/PentagonSVG.svg?react';
 import { useRef, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { fetchWithAuth } from '@/utils/auth';
 export default function VerificationPage() {
   const [preview, setPreview] = useState<string>('');
   const imgFileRef = useRef<HTMLInputElement>(null);
