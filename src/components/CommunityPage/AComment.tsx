@@ -367,6 +367,8 @@ const ConetentDiv = styled.div`
 const NicknameDiv = styled.div`
   display: flex;
   gap: 1rem;
+  height: 3rem;
+  align-items: center;
 `;
 
 const MoreWrapper = styled.div`
@@ -444,10 +446,17 @@ const Comments = styled.li`
   display: flex;
   gap: 2.1rem;
   margin-bottom: 3.1rem;
+  @media (max-width: 460px) {
+    margin-bottom: 2rem;
+    gap: 1rem;
+  }
   > div {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    @media (max-width: 460px) {
+      gap: 0.2rem;
+    }
     > div {
       font-family: Inter;
       font-style: normal;

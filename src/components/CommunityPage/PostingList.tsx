@@ -106,6 +106,9 @@ const PostingTitle = styled.div`
     &:first-child {
       color: ${({ theme }) => theme.colors.gray700};
       font-size: 2rem;
+      @media (max-width: 460px) {
+        font-size: 1.7rem;
+      }
       font-weight: 600;
       letter-spacing: -0.1rem;
     }
@@ -113,6 +116,9 @@ const PostingTitle = styled.div`
     color: ${({ theme }) => theme.colors.gray700};
     font-family: Inter;
     font-size: 1.6rem;
+    @media (max-width: 460px) {
+      font-size: 1.3rem;
+    }
     font-style: normal;
     font-weight: 400;
     line-height: normal;
@@ -140,8 +146,8 @@ const PostingWriter = styled.div`
     letter-spacing: -0.07rem;
     font-size: 1.4rem;
 
-    @media (max-width: 500) {
-      font-size: 1.2rem;
+    @media (max-width: 460px) {
+      font-size: 1.1rem;
     }
     gap: 0.5rem;
 
@@ -149,8 +155,8 @@ const PostingWriter = styled.div`
       display: flex;
       align-items: center;
 
-      @media (max-width: 500) {
-        font-size: 1.2rem;
+      @media (max-width: 460px) {
+        font-size: 1.1rem;
       }
     }
   }

@@ -76,4 +76,28 @@ button {
   background-color:transparent;
   
 }
+
+h1 {
+  font-size: 32px;
+}
+
+h2 {
+  font-size: 24px;
+}
+
+h3 {
+  font-size: 18.72px;
+}
+
+h4 {
+  font-size: 16px;
+}
+
+p{
+  font-size: 16px;
+}
+
+span {
+  font-size: 16px;
+}
 `;

@@ -463,6 +463,9 @@ const Menu = styled.div`
     color: ${({ theme }) => theme.colors.gray700};
     font-family: Inter;
     font-size: 1.6rem;
+    @media (max-width: 460px) {
+      font-size: 1.3rem;
+    }
     font-style: normal;
     font-weight: 400;
     line-height: normal;
@@ -474,7 +477,10 @@ const Menu = styled.div`
 `;
 
 const RadioLabel = styled.span`
-  font-size: 16px;
+  font-size: 1.6rem;
+  @media (max-width: 460px) {
+    font-size: 1.3rem;
+  }
   color: #333;
 `;
 
@@ -510,7 +516,10 @@ const ButtonBox = styled.div`
     align-items: center;
     text-align: center;
     font-family: Inter;
-    font-size: 20px;
+    font-size: 2rem;
+    @media (max-width: 460px) {
+      font-size: 1.7rem;
+    }
     font-style: normal;
     font-weight: 500;
     line-height: 25px; /* 125% */
@@ -575,7 +584,10 @@ const TextNormal = styled.div`
     color: ${({ theme }) => theme.colors.gray700};
     text-align: center;
     font-family: Inter;
-    font-size: 20px;
+    font-size: 2rem;
+    @media (max-width: 460px) {
+      font-size: 1.7rem;
+    }
     font-style: normal;
     font-weight: 400;
     line-height: 34px; /* 170% */
@@ -612,6 +624,9 @@ const AccessRestrictedReport = styled.div`
     height: 5.7rem;
     font-family: Inter;
     font-size: 1.6rem;
+    @media (max-width: 460px) {
+      font-size: 1.3rem;
+    }
   }
 
   > div:last-child {
@@ -622,6 +637,9 @@ const AccessRestrictedReport = styled.div`
     text-align: center;
     font-family: Inter;
     font-size: 1.4rem;
+    @media (max-width: 460px) {
+      font-size: 1.1rem;
+    }
     font-style: normal;
     font-weight: 400;
     line-height: 3.4rem; /* 242.857% */
@@ -642,6 +660,9 @@ const TextReport = styled.div`
       text-align: center;
       font-family: Inter;
       font-size: 2rem;
+      @media (max-width: 460px) {
+        font-size: 1.7rem;
+      }
       font-style: normal;
       font-weight: 400;
       line-height: 3.4rem; /* 170% */
@@ -652,6 +673,9 @@ const TextReport = styled.div`
       color: ${({ theme }) => theme.colors.gray400};
       font-family: Inter;
       font-size: 1.4rem;
+      @media (max-width: 460px) {
+        font-size: 1.1rem;
+      }
       font-style: normal;
       font-weight: 400;
       line-height: 3.4rem; /* 242.857% */
@@ -678,6 +702,9 @@ const TextReport = styled.div`
       color: ${({ theme }) => theme.colors.gray700};
       font-family: Inter;
       font-size: 1.6rem;
+      @media (max-width: 460px) {
+        font-size: 1.3rem;
+      }
       font-style: normal;
       font-weight: 400;
       line-height: 3.4rem; /* 212.5% */
@@ -727,6 +754,9 @@ const TextReport = styled.div`
         /* 라벨 텍스트 */
         &.custom-radio span {
           font-size: 1.4rem;
+          @media (max-width: 460px) {
+            font-size: 1.1rem;
+          }
           color: #333;
           user-select: none; /* 드래그 방지 (옵션) */
         }

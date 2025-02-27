@@ -158,6 +158,9 @@ const PostingTag = styled.div<{ $color: string }>`
   text-align: center;
   font-family: Inter;
   font-size: 1.3rem;
+  @media (max-width: 460px) {
+    font-size: 1rem;
+  }
   font-style: normal;
   font-weight: 500;
   line-height: normal;
@@ -196,6 +199,9 @@ const Title = styled.div`
   color: ${({ theme }) => theme.colors.gray800};
   font-family: Pretendard;
   font-size: 2.8rem;
+  @media (max-width: 460px) {
+    font-size: 2.4rem;
+  }
   font-style: normal;
   font-weight: 700;
   line-height: 3.6rem; /* 128.571% */
@@ -217,6 +223,9 @@ const PostingWriter = styled.div`
     gap: 0.25rem;
     color: ${({ theme }) => theme.colors.gray500};
     font-size: 1.4rem;
+    @media (max-width: 460px) {
+      font-size: 1.1rem;
+    }
     font-family: Inter;
     font-style: normal;
     line-height: normal;
@@ -265,14 +274,23 @@ const StyledReactQuill = styled(ReactQuill)`
 
   .ql-size-small {
     font-size: 1.5rem;
+    @media (max-width: 460px) {
+      font-size: 1.2rem;
+    }
   }
 
   p {
     font-size: 2rem;
+    @media (max-width: 460px) {
+      font-size: 1.7rem;
+    }
   }
 
   .ql-size-large {
     font-size: 3rem;
+    @media (max-width: 460px) {
+      font-size: 2%.6;
+    }
   }
 `;
 
@@ -297,6 +315,9 @@ const Button = styled.button`
     text-align: center;
     font-family: Inter;
     font-size: 1.6rem;
+    @media (max-width: 460px) {
+      font-size: 1.3rem;
+    }
     font-style: normal;
     font-weight: 300;
     line-height: normal;

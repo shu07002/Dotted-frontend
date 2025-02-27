@@ -167,6 +167,9 @@ const Tag = styled.li<{ $selected: boolean }>`
   text-align: center;
   font-family: Pretendard;
   font-size: 1.6rem;
+  @media (max-width: 460px) {
+    font-size: 1.3rem;
+  }
   font-style: normal;
   font-weight: 500;
   line-height: 2.4rem; /* 150% */

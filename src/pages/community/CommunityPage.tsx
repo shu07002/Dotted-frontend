@@ -1,6 +1,7 @@
 import PostingList from '@/components/CommunityPage/PostingList';
 import SearchBar from '@/components/CommunityPage/SearchBar';
 import TagList from '@/components/CommunityPage/TagList';
+import Tiptap from '@/components/CommunityPage/TipTap';
 import { useSearchPosts } from '@/hooks/useSearchPosts';
 import { CommunityPost, EachPost } from '@/types/CommunityPost';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -94,6 +95,7 @@ export default function CommunityPage() {
     <CommunityPageContainer>
       <Wrapper>
         <Title>Community</Title>
+        <Tiptap />
 
         <TagAndSearch>
           <TagList
@@ -193,6 +195,9 @@ const Title = styled.div`
   color: ${({ theme }) => theme.colors.gray700};
   font-family: Pretendard;
   font-size: 3.6rem;
+  @media (max-width: 460px) {
+    font-size: 3.3rem;
+  }
   font-style: normal;
   font-weight: 700;
   line-height: 3.6rem;
@@ -241,6 +246,9 @@ const PaginationBox = styled.div`
     border: none;
     background: none;
     font-size: 1.6rem;
+    @media (max-width: 460px) {
+      font-size: 1.3rem;
+    }
     font-weight: 400;
 
     &.selected {
@@ -285,6 +293,9 @@ const WriteButton = styled.button`
   text-align: center;
   font-family: Inter;
   font-size: 1.4rem;
+  @media (max-width: 460px) {
+    font-size: 1.1rem;
+  }
   font-weight: 600;
   line-height: normal;
 

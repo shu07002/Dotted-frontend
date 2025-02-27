@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { fetchWithAuth } from '@/utils/auth';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
 
 // types/user.ts
 
@@ -32,23 +33,23 @@ export interface UserProfile {
   social_additional_info: any; // 구조에 따라 세부 타입 정의 가능
 }
 
-async function fetchUserProfile(): Promise<UserProfile> {
-  console.log('Asdasdsad');
-  return fetchWithAuth<UserProfile>(
-    `${import.meta.env.VITE_API_URL}/api/user/profile`,
-    {
-      method: 'GET'
-    }
-  );
-}
+// async function fetchUserProfile(): Promise<UserProfile> {
+//   console.log('Asdasdsad');
+//   return fetchWithAuth<UserProfile>(
+//     `${import.meta.env.VITE_API_DOMAIN}/api/user/profile`,
+//     {
+//       method: 'GET'
+//     }
+//   );
+// }
 
 export default function ProfileButton() {
   const navigate = useNavigate();
   const [openMore, setOpenMore] = useState(false);
-  const { data } = useQuery<UserProfile>({
-    queryKey: ['userProfile'],
-    queryFn: fetchUserProfile
-  });
+  // const { data } = useQuery<UserProfile>({
+  //   queryKey: ['userProfile'],
+  //   queryFn: fetchUserProfile
+  // });
   const moreWrapperRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -76,14 +77,22 @@ export default function ProfileButton() {
       onClick={() => setOpenMore((prev) => !prev)}
       ref={moreWrapperRef}
     >
-      {openMore && (
-        <Menu>
-          <div>my page</div>
-          <div onClick={onClickLogout}>logout</div>
-        </Menu>
-      )}
+      <AnimatePresence>
+        {openMore && (
+          <Menu
+            initial={{ opacity: 0, y: -10, x: 10 }}
+            animate={{ opacity: 1, y: 0, x: 0 }}
+            exit={{ opacity: 0, y: -10, x: 10 }}
+            transition={{ duration: 0.2 }}
+          >
+            <div>my page</div>
+            <div onClick={onClickLogout}>logout</div>
+          </Menu>
+        )}
+      </AnimatePresence>
+
       <ProfileIcon />
-      <span>{data?.nickname}</span>
+      {/* <span>{data?.nickname}</span> */}
       <DownIcon />
     </ProfileBox>
   );
@@ -92,7 +101,7 @@ export default function ProfileButton() {
 const ProfileBox = styled.div`
   @media (max-width: 900px) {
     gap: 1rem;
-    margin-right: 1rem;
+    padding-right: 0;
   }
   position: relative;
   display: flex;
@@ -130,7 +139,7 @@ const ProfileBox = styled.div`
   }
 `;
 
-const Menu = styled.div`
+const Menu = styled(motion.div)`
   z-index: 10;
   position: absolute;
   top: 100%;

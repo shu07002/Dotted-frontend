@@ -243,6 +243,8 @@ const ConetentDiv = styled.div`
 const NicknameDiv = styled.div`
   display: flex;
   gap: 1rem;
+  height: 3rem;
+  align-items: center;
 `;
 
 const AccessRestrictedWrapper = styled.div`
@@ -278,7 +280,10 @@ const TextNormal = styled.div`
     color: ${({ theme }) => theme.colors.gray700};
     text-align: center;
     font-family: Inter;
-    font-size: 20px;
+    font-size: 2rem;
+    @media (max-width: 460px) {
+      font-size: 1.7rem;
+    }
     font-style: normal;
     font-weight: 400;
     line-height: 34px;
@@ -302,7 +307,10 @@ const ButtonBox = styled.div`
     align-items: center;
     text-align: center;
     font-family: Inter;
-    font-size: 20px;
+    font-size: 2rem;
+    @media (max-width: 460px) {
+      font-size: 1.7rem;
+    }
     font-style: normal;
     font-weight: 500;
     line-height: 25px;
@@ -352,6 +360,9 @@ const Menu = styled.div`
     color: ${({ theme }) => theme.colors.gray700};
     font-family: Inter;
     font-size: 1.6rem;
+    @media (max-width: 460px) {
+      font-size: 1.3rem;
+    }
     font-style: normal;
     font-weight: 400;
     line-height: normal;
@@ -370,25 +381,43 @@ const Comments = styled.div`
   display: flex;
   gap: 2.1rem;
   margin-top: 2rem;
+
+  @media (max-width: 460px) {
+    gap: 1rem;
+  }
   > div {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    @media (max-width: 460px) {
+      gap: 0.2rem;
+    }
     > div {
       font-family: Inter;
+
       &:first-child {
         color: ${({ theme }) => theme.colors.gray700};
         font-size: 2rem;
+        @media (max-width: 460px) {
+          font-size: 1.7rem;
+        }
+
         font-weight: 600;
       }
       &:nth-child(2) {
         color: ${({ theme }) => theme.colors.gray700};
         font-size: 2rem;
+        @media (max-width: 460px) {
+          font-size: 1.7rem;
+        }
         font-weight: 300;
       }
       &:nth-child(3) {
         color: ${({ theme }) => theme.colors.gray500};
         font-size: 1.4rem;
+        @media (max-width: 460px) {
+          font-size: 1.1rem;
+        }
         font-weight: 300;
       }
     }
@@ -432,6 +461,9 @@ const CommentInputWrapper = styled.div`
     background: ${({ theme }) => theme.colors.gray100};
     font-family: Inter;
     font-size: 1.6rem;
+    @media (max-width: 460px) {
+      font-size: 1.3rem;
+    }
     font-style: normal;
     font-weight: 300;
     letter-spacing: -0.08rem;
@@ -448,6 +480,9 @@ const CommentInputWrapper = styled.div`
       background: ${({ theme }) => theme.colors.gray100};
       font-family: Inter;
       font-size: 1.6rem;
+      @media (max-width: 460px) {
+        font-size: 1.3rem;
+      }
       font-style: normal;
       font-weight: 300;
       letter-spacing: -0.08rem;
@@ -466,6 +501,9 @@ const CommentButton = styled.button`
   text-align: center;
   font-family: Inter;
   font-size: 1.6rem;
+  @media (max-width: 460px) {
+    font-size: 1.3rem;
+  }
   font-style: normal;
   font-weight: 500;
   line-height: normal;
