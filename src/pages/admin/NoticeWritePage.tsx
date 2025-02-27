@@ -1,3 +1,7 @@
+import styled from 'styled-components';
+
 export default function NoticeWritePage() {
-  return <div>djlk</div>;
+  return <Wrapper>djlk</Wrapper>;
 }
+
+const Wrapper = styled.div``;

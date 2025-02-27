@@ -35,6 +35,7 @@ import MyScrapsPage from './pages/mypage/MyScrapsPage';
 import NoticeDetailPage from './pages/about/NoticeDetailPage';
 
 import ScrollToTop from './components/common/ScrollToTop';
+import CultureCreatePage from './pages/admin/CultureCreatePage';
 const Router = createBrowserRouter([
   {
     path: '/',
@@ -197,7 +198,8 @@ const Router = createBrowserRouter([
     path: 'admin',
     children: [
       { path: 'verify', element: <AdminVerifyPage /> },
-      { path: 'notice/write', element: <NoticeWritePage /> }
+      { path: 'notice/write', element: <NoticeWritePage /> },
+      { path: 'culture/create', element: <CultureCreatePage /> }
     ]
   }
 ]);

@@ -1,26 +1,22 @@
 import { useEffect, useState } from 'react';
-import dayjs from 'dayjs';
 import styled from 'styled-components';
-import EyeIcon from '@/assets/svg/mypage/Eye.svg?react';
+import ProfileIcon from '@/assets/svg/mypage/Profilecircle.svg?react';
 import { useNavigate } from 'react-router-dom';
 
 interface PostType {
   id: number;
-  title: string;
-  comment_count: number;
-  created_at: string;
-  like_count: number;
-  tag: string;
-  view_count: number;
-  writer_id: number;
-  writer_nickname: string;
+  post_title: string;
+  content: string;
+  post: number;
+  post_type: string;
+  is_secret: boolean;
 }
 
 export default function CommunityComments() {
   const navigate = useNavigate();
   const [posts, setPosts] = useState<PostType[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const postsPerPage = 7; // 페이지당 표시할 게시글 수
+  const postsPerPage = 5; // 페이지당 표시할 게시글 수
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -38,14 +34,11 @@ export default function CommunityComments() {
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
+        console.log(data.comments);
 
-        const formattedPosts = data.registered_posts.map((post: any) => {
-          if (post.tag === 'Campus Life') {
-            post.tag = 'Campus';
-          }
-          return post;
-        });
+        const formattedPosts = data.comments.filter(
+          (comment: any) => comment.post_type === 'post'
+        );
         setPosts(formattedPosts);
       }
     };
@@ -66,23 +59,15 @@ export default function CommunityComments() {
     <Section>
       {currentPosts.map((post) => (
         <PostBox
-          onClick={() => navigate(`/community/detail/${post.id}`)}
+          onClick={() => navigate(`/community/detail/${post.post}`)}
           key={post.id}
         >
-          <Tag className={post.tag}>{post.tag}</Tag>
-          <Information>
-            <h3>
-              {post.title} [{post.comment_count}]
-            </h3>
-            <div>
-              <span>{dayjs(post.created_at).format('YYYY/MM/DD')}</span>
-              <span>•</span>
-              <span>
-                <EyeIcon />
-                {post.view_count}
-              </span>
-            </div>
-          </Information>
+          <h3>{post.post_title}</h3>
+          <p></p>
+          <div>
+            <ProfileIcon />
+            {post.content}
+          </div>
         </PostBox>
       ))}
 
@@ -126,68 +111,36 @@ const Section = styled.section`
 
 const PostBox = styled.div`
   display: flex;
-  gap: 1.6rem;
+  flex-direction: column;
   padding: 1.6rem 1rem;
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray200};
   cursor: pointer;
   &:hover {
     background-color: ${({ theme }) => theme.colors.gray100};
   }
-`;
-
-const Tag = styled.div`
-  width: 6rem;
-  height: 2.4rem;
-  color: ${({ theme }) => theme.colors.gray50};
-  font-size: 1.3rem;
-  font-weight: 500;
-  letter-spacing: -0.4px;
-  border-radius: 1.6rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  &.Others {
-    background-color: ${({ theme }) => theme.colors.gray400};
+  p {
+    width: 1px;
+    height: 2rem;
+    background-color: ${({ theme }) => theme.colors.gray300};
+    transform: translateX(1rem);
   }
-  &.Campus {
-    background-color: ${({ theme }) => theme.colors.purple450};
+  h3 {
+    color: ${({ theme }) => theme.colors.gray500};
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 4px;
   }
-  &.Living {
-    background-color: ${({ theme }) => theme.colors.purple950};
-  }
-  &.Travel {
-    background-color: ${({ theme }) => theme.colors.purple650};
-  }
-`;
-
-const Information = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  > h3 {
+  div {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
     color: ${({ theme }) => theme.colors.gray700};
     font-size: 1.6rem;
     font-weight: 500;
     letter-spacing: -0.4px;
-  }
-
-  > div {
-    display: flex;
-    gap: 1.2rem;
-    margin-top: 0.8rem;
-    color: ${({ theme }) => theme.colors.gray400};
-    font-size: 1.4rem;
-    font-weight: 400;
-    letter-spacing: -0.4px;
-    > span {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
     svg {
-      path {
-        stroke: ${({ theme }) => theme.colors.gray400};
-      }
+      width: 2rem;
+      height: 2rem;
     }
   }
 `;

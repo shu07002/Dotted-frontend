@@ -1,23 +1,22 @@
 import { useEffect, useState } from 'react';
-import dayjs from 'dayjs';
 import styled from 'styled-components';
+import ProfileIcon from '@/assets/svg/mypage/Profilecircle.svg?react';
 import { useNavigate } from 'react-router-dom';
 
 interface PostType {
   id: number;
-  title: string;
-  price: number;
-  status: string;
-  created_at: string;
-  thumbnail: string;
-  writer_id: number;
-  writer_nickname: string;
+  post_title: string;
+  content: string;
+  post: number;
+  post_type: string;
+  is_secret: boolean;
 }
+
 export default function MarketComments() {
   const navigate = useNavigate();
   const [posts, setPosts] = useState<PostType[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const postsPerPage = 8; // 페이지당 표시할 게시글 수
+  const postsPerPage = 5; // 페이지당 표시할 게시글 수
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -35,20 +34,11 @@ export default function MarketComments() {
 
       if (response.ok) {
         const data = await response.json();
+        console.log(data.comments);
 
-        const formattedPosts = data.registered_marketposts.map((post: any) => {
-          if (post.tag === 'Campus Life') {
-            post.tag = 'Campus';
-          }
-          if (post.status === 'FOR_SALE') {
-            post.status = 'For Sale';
-          } else if (post.status === 'RESERVED') {
-            post.status = 'Reserved';
-          } else {
-            post.status = 'Sold Out';
-          }
-          return post;
-        });
+        const formattedPosts = data.comments.filter(
+          (comment: any) => comment.post_type === 'marketpost'
+        );
         setPosts(formattedPosts);
       }
     };
@@ -67,29 +57,19 @@ export default function MarketComments() {
 
   return (
     <Section>
-      <MarketContainer>
-        {currentPosts.map((post) => (
-          <PostBox
-            onClick={() => navigate(`/market/detail/${post.id}`)}
-            key={post.id}
-          >
-            {post.status === 'For Sale' && (
-              <Status className="forsale">{post.status}</Status>
-            )}
-            {post.status !== 'For Sale' && <Status>{post.status}</Status>}
-            <figure>
-              <img src={post.thumbnail} alt="thumbnail" />
-            </figure>
-            <Information>
-              <h3>{post.title}</h3>
-              <span>
-                <p>₩ {post.price}</p>
-                <p>{dayjs(post.created_at).format('YYYY-MM-DD')}</p>
-              </span>
-            </Information>
-          </PostBox>
-        ))}
-      </MarketContainer>
+      {currentPosts.map((post) => (
+        <PostBox
+          onClick={() => navigate(`/community/detail/${post.post}`)}
+          key={post.id}
+        >
+          <h3>{post.post_title}</h3>
+          <p></p>
+          <div>
+            <ProfileIcon />
+            {post.content}
+          </div>
+        </PostBox>
+      ))}
 
       <PaginationBox>
         <button
@@ -128,80 +108,39 @@ export default function MarketComments() {
 const Section = styled.section`
   height: 100vh;
 `;
-const MarketContainer = styled.div`
-  height: 80%;
-  padding: 2rem 0rem;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: 1fr 1fr;
-  gap: 2.4rem;
-`;
+
 const PostBox = styled.div`
-  width: 100%;
-  height: 100%;
-  border-radius: 1.6rem;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  display: grid;
-  grid-template-rows: 70% 1fr;
-  border: 1px solid ${({ theme }) => theme.colors.gray200};
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.gray100};
-    img {
-      scale: 1.1;
-    }
-  }
-  > figure {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-  }
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: scale 0.3s;
-  }
-`;
-
-const Status = styled.div`
-  z-index: 4;
-  position: absolute;
-  top: 1rem;
-  left: 1rem;
-  color: ${({ theme }) => theme.colors.gray500};
-  background-color: ${({ theme }) => theme.colors.gray100};
-  padding: 0.4rem 0.8rem;
-  border-radius: 1.6rem;
-  &.forsale {
-    color: ${({ theme }) => theme.colors.gray50};
-    background-color: ${({ theme }) => theme.colors.purple600};
-  }
-`;
-
-const Information = styled.div`
-  padding: 1rem;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  h3 {
-    width: 90%;
-    height: 2rem;
-    font-size: 1.6rem;
-    font-weight: 700;
-    color: ${({ theme }) => theme.colors.gray700};
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+  padding: 1.6rem 1rem;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.gray200};
+  cursor: pointer;
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.gray100};
   }
-  span {
+  p {
+    width: 1px;
+    height: 2rem;
+    background-color: ${({ theme }) => theme.colors.gray300};
+    transform: translateX(1rem);
+  }
+  h3 {
+    color: ${({ theme }) => theme.colors.gray500};
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  div {
     display: flex;
-    justify-content: space-between;
-    p {
-      font-size: 1.4rem;
-      font-weight: 400;
-      color: ${({ theme }) => theme.colors.gray500};
+    align-items: center;
+    gap: 1rem;
+    color: ${({ theme }) => theme.colors.gray700};
+    font-size: 1.6rem;
+    font-weight: 500;
+    letter-spacing: -0.4px;
+    svg {
+      width: 2rem;
+      height: 2rem;
     }
   }
 `;
