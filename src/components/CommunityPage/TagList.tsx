@@ -183,9 +183,11 @@ const Tag = styled.li<{ $selected: boolean }>`
         color: ${theme.colors.purple600};
       `
       : `
-       @media (hover: hover) and (pointer: fine) {&:hover {
+       @media (hover: hover) and (pointer: fine) {
+       &:hover {
           background-color: ${theme.colors.backgroundBase}; 
-        }}
+        }
+      }
         
       `};
 
