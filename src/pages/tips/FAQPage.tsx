@@ -272,7 +272,9 @@ const NoticeAndSearch = styled.div`
   }
 `;
 
-const FAQBox = styled.ul``;
+const FAQBox = styled.ul`
+  border-bottom: 1px solid ${({ theme }) => theme.colors.purple600};
+`;
 
 const ArrowWrapper = styled.div<{ $isOpen: boolean }>`
   display: flex;
