@@ -14,21 +14,21 @@ export default function NoticePage() {
   const [searchType, setSearchType] = useState('all');
   const { data } = useNotice();
   const [filteredData, setFilteredData] = useState<EachNoticePost[]>([]);
-  const [pagedData, setPagedData] = useState<EachNoticePost[]>([]);
+  const [_, setPagedData] = useState<EachNoticePost[]>([]);
 
   const [searchParams, setSearchParams] = useSearchParams();
   const currentPage = Number(searchParams.get('page')) || 1;
 
   // 전체 페이지 계산
-  const totalPages = filteredData
-    ? Math.ceil(filteredData.length / POSTS_PER_PAGE)
-    : 1;
+  // const totalPages = filteredData
+  //   ? Math.ceil(filteredData.length / POSTS_PER_PAGE)
+  //   : 1;
 
   // 페이지네이션 그룹 설정
-  const groupSize = 5;
-  const currentGroup = Math.floor((currentPage - 1) / groupSize);
-  const startPage = currentGroup * groupSize + 1;
-  const endPage = Math.min(startPage + groupSize - 1, totalPages);
+  // const groupSize = 5;
+  // const currentGroup = Math.floor((currentPage - 1) / groupSize);
+  // const startPage = currentGroup * groupSize + 1;
+  // const endPage = Math.min(startPage + groupSize - 1, totalPages);
 
   // 🔹 검색어 필터링 함수
   const handleSearch = () => {
@@ -76,9 +76,9 @@ export default function NoticePage() {
   };
 
   // 페이지 변경 핸들러
-  const handlePageChange = (targetPage: number) => {
-    setSearchParams({ page: targetPage.toString(), keyword, searchType });
-  };
+  // const handlePageChange = (targetPage: number) => {
+  //   setSearchParams({ page: targetPage.toString(), keyword, searchType });
+  // };
 
   const dummy = [
     {
