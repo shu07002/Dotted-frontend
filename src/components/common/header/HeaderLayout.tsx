@@ -29,7 +29,7 @@ const Wrapper = styled.div`
   padding-top: 8rem;
 
   @media (max-width: 900px) {
-    padding-top: 10rem;
+    padding-top: 12rem;
   }
   position: relative;
   padding-right: 2rem;
