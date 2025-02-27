@@ -6,11 +6,13 @@ import ReligionIcon from '@/assets/svg/tips/clubs/religion.svg?react';
 import PEIcon from '@/assets/svg/tips/clubs/pe.svg?react';
 import AcademicIcon from '@/assets/svg/tips/clubs/academic.svg?react';
 import SocialIcon from '@/assets/svg/tips/clubs/social.svg?react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import SearchBox from '@/components/tips/clubs/SearchBox';
 import ClubsList from '@/components/tips/clubs/ClubsList';
 import { useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+import Left from '@/assets/svg/tips/hospital/left.svg?react';
+import Right from '@/assets/svg/tips/hospital/right.svg?react';
 
 const clubTabs = [
   { name: 'All', src: 'all' },
@@ -57,8 +59,9 @@ export default function ClubsPage() {
   });
   const [searchParam, setSearchParam] = useSearchParams();
   const [filterdData, setFilterdData] = useState<ClubData[]>([]);
-  const [inputValue, setInputValue] = useState(''); // 인풋창 값
-  const [searchTerm, setSearchTerm] = useState(''); // 실제 검색어
+  const [inputValue, setInputValue] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const navBarRef = useRef<HTMLElement | null>(null);
 
   function handleTabClick(tab: string) {
     setInputValue('');
@@ -66,7 +69,6 @@ export default function ClubsPage() {
     setSearchParam({ q: tab.toLowerCase() });
   }
 
-  // 엔터 또는 서치 아이콘 클릭 시 실행
   function handleSearch() {
     setSearchParam({ q: 'all' });
     setSearchTerm(inputValue);
@@ -80,7 +82,6 @@ export default function ClubsPage() {
   useEffect(() => {
     if (clubs) {
       let filtered = clubs;
-      // 검색어가 존재하면 검색어에 해당하는 클럽들만 필터링 (카테고리 무시)
       if (searchTerm.trim() !== '') {
         filtered = clubs.filter(
           (club) =>
@@ -88,7 +89,6 @@ export default function ClubsPage() {
             club.intro.toLowerCase().includes(searchTerm.toLowerCase())
         );
       } else {
-        // 검색어가 없으면 선택된 카테고리에 따라 필터링 (all인 경우 전체 표시)
         if (searchParam.get('q') !== 'all') {
           filtered = clubs.filter(
             (club: ClubData) =>
@@ -100,37 +100,94 @@ export default function ClubsPage() {
     }
   }, [clubs, searchTerm, searchParam]);
 
+  const scrollLeft = () => {
+    if (navBarRef.current) {
+      navBarRef.current.scrollBy({
+        left: -200,
+        behavior: 'smooth'
+      });
+    }
+  };
+
+  const scrollRight = () => {
+    if (navBarRef.current) {
+      navBarRef.current.scrollBy({
+        left: 200,
+        behavior: 'smooth'
+      });
+    }
+  };
+
   return (
     <Main>
       <HeaderSection>
-        <Nav>
-          {clubTabs.map((tab, idx) => {
-            const isActive = searchParam.get('q') === tab.name.toLowerCase();
-            const IconComponent = clubIcons[tab.src];
-            return (
-              <TabElement key={idx} $active={isActive}>
-                <span onClick={() => handleTabClick(tab.name)}>
-                  <IconComponent />
-                </span>
-                <p>{tab.name}</p>
-              </TabElement>
-            );
-          })}
-        </Nav>
-        {/* SearchBox에 인풋창 값, onChange, onSearch 핸들러 전달 */}
+        <NavContainer>
+          <LeftButton onClick={scrollLeft}>
+            <Left />
+          </LeftButton>
+          <Nav ref={navBarRef}>
+            {clubTabs.map((tab, idx) => {
+              const isActive = searchParam.get('q') === tab.name.toLowerCase();
+              const IconComponent = clubIcons[tab.src];
+              return (
+                <TabElement key={idx} $active={isActive}>
+                  <span onClick={() => handleTabClick(tab.name)}>
+                    <IconComponent />
+                  </span>
+                  <p>{tab.name}</p>
+                </TabElement>
+              );
+            })}
+          </Nav>
+          <RightButton onClick={scrollRight}>
+            <Right />
+          </RightButton>
+        </NavContainer>
         <SearchBox
           searchValue={inputValue}
           onInputChange={setInputValue}
           onSearch={handleSearch}
         />
-        {/* <a target="_blank" rel="noopener noreferrer">
-          Download Club Guidebook ⟶
-        </a> */}
       </HeaderSection>
       {clubs && <ClubsList filterdData={filterdData} />}
     </Main>
   );
 }
+
+const NavContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+`;
+
+const LeftButton = styled.div`
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  padding: 0 1rem;
+  &:hover {
+    opacity: 0.8;
+  }
+  @media (max-width: 700px) {
+    display: flex;
+    padding-left: 0;
+  }
+`;
+
+const RightButton = styled.div`
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  padding: 0 1rem;
+  &:hover {
+    opacity: 0.8;
+  }
+  @media (max-width: 700px) {
+    display: flex;
+    padding-right: 0;
+  }
+`;
 
 const Main = styled.main`
   width: 100%;
@@ -139,20 +196,20 @@ const Main = styled.main`
   flex-direction: column;
 
   @media (max-width: 900px) {
-    padding-right: 10rem;
-    padding-left: 10rem;
+    padding-right: 7.7rem;
+    padding-left: 7.7rem;
   }
   @media (max-width: 700px) {
-    padding-right: 5rem;
-    padding-left: 5rem;
-  }
-  @media (max-width: 480px) {
     padding-right: 2rem;
     padding-left: 2rem;
   }
 `;
 
 const HeaderSection = styled.section`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   > a {
     width: 100%;
     display: flex;
@@ -167,19 +224,29 @@ const HeaderSection = styled.section`
 `;
 
 const Nav = styled.nav`
-  width: 100%;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
   gap: 5rem;
   padding: 2.8rem 0;
-
+  justify-content: center;
   @media (max-width: 900px) {
     gap: 3rem;
   }
-
+  /* 모바일에서는 스크롤 가능하도록 설정 */
+  @media (max-width: 700px) {
+    overflow-x: auto;
+    /* 내부 아이템이 축소되지 않게 함 */
+    & > div {
+      flex-shrink: 0;
+    }
+    /* 좌측 정렬로 변경 */
+    justify-content: flex-start;
+  }
   @media (max-width: 480px) {
     gap: 2rem;
+  }
+
+  &::-webkit-scrollbar {
+    display: none;
   }
 `;
 

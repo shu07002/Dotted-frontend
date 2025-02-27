@@ -127,8 +127,8 @@ const Main = styled.main`
   flex-direction: column;
 
   @media (max-width: 1220px) {
-    padding-left: 10rem;
-    padding-right: 10rem;
+    padding-left: 7.7rem;
+    padding-right: 7.7rem;
   }
 
   @media (max-width: 700px) {

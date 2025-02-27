@@ -33,6 +33,7 @@ export interface UserProfile {
 }
 
 async function fetchUserProfile(): Promise<UserProfile> {
+  console.log('Asdasdsad');
   return fetchWithAuth<UserProfile>(
     `${import.meta.env.VITE_API_URL}/api/user/profile`,
     {

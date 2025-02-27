@@ -123,6 +123,11 @@ const List = styled.ul`
     display: flex;
     gap: 3rem;
 
+    @media (max-width: 400px) {
+      flex-direction: column;
+      align-items: center;
+    }
+
     img {
       width: 14rem;
       height: 14rem;
@@ -137,6 +142,11 @@ const List = styled.ul`
       gap: 1.8rem;
       padding-top: 0.7rem;
 
+      @media (max-width: 400px) {
+        flex-direction: column;
+        align-items: center;
+      }
+
       h3 {
         font-size: 2.2rem;
         font-weight: 600;
@@ -150,6 +160,10 @@ const List = styled.ul`
         color: ${({ theme }) => theme.colors.gray500};
         letter-spacing: -0.28px;
         line-height: 1.2;
+
+        @media (max-width: 400px) {
+          text-align: center;
+        }
       }
     }
   }

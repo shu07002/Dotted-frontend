@@ -30,10 +30,10 @@ export default function NotificatoinPage() {
   const [notice, setNotice] = useState<AllInfoNotification | null>(null);
 
   useEffect(() => {
+    // 토큰이 없는 경우 연결하지 않음
+    let accessToken = localStorage.getItem('accessToken');
+    if (!accessToken) return;
     const runSSE = async () => {
-      // 토큰이 없는 경우 연결하지 않음
-      let accessToken = localStorage.getItem('accessToken');
-      if (!accessToken) return;
       const EventSourceConstructor = EventSourcePolyfill || NativeEventSource;
       const headers = { Authorization: `Bearer ${accessToken}` };
 
