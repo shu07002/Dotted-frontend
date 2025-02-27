@@ -1,15 +1,55 @@
 import EditProfileForm from '@/components/mypage/edit-profile/EditProfileForm';
+import { useState } from 'react';
 import styled from 'styled-components';
 
 export default function EditProfilePage() {
+  const [submitNickname, setSubmitNickname] = useState('');
+  const [submitName, setSubmitName] = useState('');
+  const [isAllChecked, setIsAllChecked] = useState(false);
+  const handleSubmit = async () => {
+    try {
+      let accessToken = localStorage.getItem('accessToken');
+      if (!accessToken) return;
+
+      const headers = {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json'
+      };
+
+      const response = await fetch(
+        `${import.meta.env.VITE_API_DOMAIN}/api/user/update`,
+        {
+          method: 'PATCH',
+          headers: headers,
+          body: JSON.stringify({ nickname: submitNickname, name: submitName })
+        }
+      );
+      if (response.ok) {
+      } else {
+        console.error('Failed to change user information');
+      }
+    } catch (error) {
+      console.error('Error changing:', error);
+    }
+  };
   return (
     <Main>
-      <EditProfileForm />
+      <EditProfileForm
+        setSubmitNickname={setSubmitNickname}
+        setSubmitName={setSubmitName}
+        setIsAllChecked={setIsAllChecked}
+      />
       <DeleteBtn>
         <button>Delete Account</button>
       </DeleteBtn>
       <SubmitBtn>
-        <button>Submit</button>
+        <button
+          className={isAllChecked ? '' : 'unchecked'}
+          onClick={handleSubmit}
+          disabled={!isAllChecked}
+        >
+          Submit
+        </button>
       </SubmitBtn>
     </Main>
   );
@@ -59,5 +99,10 @@ const SubmitBtn = styled.div`
     font-weight: 500;
     line-height: 3.6rem;
     letter-spacing: -0.6px;
+    &.unchecked {
+      background-color: ${({ theme }) => theme.colors.gray300};
+      color: ${({ theme }) => theme.colors.gray500};
+      cursor: not-allowed;
+    }
   }
 `;
