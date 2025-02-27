@@ -52,14 +52,26 @@ export default function ImgBox({
           </label>
         )}
       </ImgBoxWrapper>
+      {previews.length > 0 && <Notice>Click an image to delete it.</Notice>}
     </ImgBoxContainer>
   );
 }
 
+const Notice = styled.div`
+  margin-top: 1rem;
+  color: ${({ theme }) => theme.colors.gray400};
+
+  font-family: Pretendard;
+  font-size: 1.6rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 2.4rem; /* 150% */
+  letter-spacing: -0.032rem;
+`;
+
 const ImgBoxContainer = styled.div`
   overflow: auto;
-  display: flex;
-  align-items: center;
+
   overflow-y: hidden;
 `;
 
@@ -71,10 +83,11 @@ const ImgBoxWrapper = styled.div`
   display: flex;
   gap: 1rem;
   overflow: auto;
+  padding-bottom: 2rem;
 
   &::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
   }
 
   &::-webkit-scrollbar-track {
@@ -83,15 +96,14 @@ const ImgBoxWrapper = styled.div`
   }
 
   &::-webkit-scrollbar-thumb {
-    background: var(--primary-color);
+    background: ${({ theme }) => theme.colors.purple600};
     border-radius: 10px;
   }
 
   /* 스크롤바 핸들 호버 시 */
-  @media (hover: hover) and (pointer: fine) {
-    &::-webkit-scrollbar-thumb:hover {
-      background: ${({ theme }) => theme.colors.purple600};
-    }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: ${({ theme }) => theme.colors.purple600};
   }
 
   > li {

@@ -49,6 +49,11 @@ const FooterContainer = styled.footer`
   padding: 4.6rem 3.4rem 4rem 7rem;
   display: flex;
   justify-content: space-between;
+
+  @media (max-width: 700px) {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
 `;
 
 const LeftSection = styled.section`
@@ -68,6 +73,9 @@ const LogoWrapper = styled.div`
   font-weight: 700;
   line-height: 2.1rem; /* 43.75% */
   letter-spacing: -0.288rem;
+  @media (max-width: 700px) {
+    font-size: 4rem;
+  }
   > div > svg {
     path {
       stroke: ${({ theme }) => theme.colors.gray50};
@@ -121,11 +129,22 @@ const SVGWrapper = styled.div`
   display: flex;
   justify-content: center;
   gap: 2rem;
+
+  @media (max-width: 700px) {
+    justify-content: end;
+  }
 `;
 
 const ContactWrapper = styled.div`
+  @media (max-width: 700px) {
+    display: flex;
+    justify-content: end;
+  }
   > span {
     margin-right: 10rem;
+    @media (max-width: 700px) {
+      margin: 0;
+    }
     color: ${({ theme }) => theme.colors.gray50};
     font-family: Inter;
     font-size: 1.4rem;
