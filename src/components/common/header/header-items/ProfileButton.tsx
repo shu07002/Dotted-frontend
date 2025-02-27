@@ -33,6 +33,7 @@ export interface UserProfile {
   social_additional_info: any; // 구조에 따라 세부 타입 정의 가능
 }
 
+<<<<<<< HEAD
 // async function fetchUserProfile(): Promise<UserProfile> {
 //   console.log('Asdasdsad');
 //   return fetchWithAuth<UserProfile>(
@@ -42,6 +43,16 @@ export interface UserProfile {
 //     }
 //   );
 // }
+=======
+async function fetchUserProfile(): Promise<UserProfile> {
+  return fetchWithAuth<UserProfile>(
+    `${import.meta.env.VITE_API_DOMAIN}/api/user/profile`,
+    {
+      method: 'GET'
+    }
+  );
+}
+>>>>>>> 73304641f1dc478138a248784987f556a49b0172
 
 export default function ProfileButton() {
   const navigate = useNavigate();
@@ -73,6 +84,7 @@ export default function ProfileButton() {
   };
 
   return (
+<<<<<<< HEAD
     <ProfileBox
       onClick={() => setOpenMore((prev) => !prev)}
       ref={moreWrapperRef}
@@ -91,6 +103,16 @@ export default function ProfileButton() {
         )}
       </AnimatePresence>
 
+=======
+    <ProfileBox onClick={() => setIsOpen((prev) => !prev)}>
+      {isOpen && (
+        <Menu>
+          <div onClick={() => navigate('/mypage/profile')}>my page</div>
+
+          <div onClick={onClickLogout}>logout</div>
+        </Menu>
+      )}
+>>>>>>> 73304641f1dc478138a248784987f556a49b0172
       <ProfileIcon />
       {/* <span>{data?.nickname}</span> */}
       <DownIcon />

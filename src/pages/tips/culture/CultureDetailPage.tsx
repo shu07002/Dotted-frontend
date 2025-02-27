@@ -1,16 +1,16 @@
 // import { useQuery } from '@tanstack/react-query';
-import { cultureData } from '@/components/tips/culture/testData';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import BackIcon from '@/assets/svg/tips/culture/back.svg?react';
 import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
-// const fetchCultureDetail = async (id: number) => {
-//   const response = await fetch(
-//     `${import.meta.env.VITE_API_DOMAIN}/tips/tips-clubs/${id}`
-//   );
-//   return response.json();
-// };
+const fetchCultureData = async () => {
+  const response = await fetch(
+    `${import.meta.env.VITE_API_DOMAIN}/api/campus/culture`
+  );
+  return response.json();
+};
 
 interface CultureDetail {
   title: string;
@@ -21,23 +21,30 @@ interface CultureDetail {
 }
 
 export default function CultureDetailPage() {
-  // const { data:articleData, error } = useQuery({
-  //   queryKey: ['cultureDetail', 1],
-  //   queryFn: () => fetchCultureDetail(1),
-  // })
   const navigate = useNavigate();
-  const [articleData, setArticleData] = useState<CultureDetail>();
   const { cultureId } = useParams();
   const [articleContent, setArticleContent] = useState<string[]>([]);
+  const [articleData, setArticleData] = useState<CultureDetail | null>(null);
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['tipsClubs'],
+    queryFn: fetchCultureData
+  });
 
   useEffect(() => {
-    if (cultureId) {
-      setArticleData(cultureData[parseInt(cultureId) - 1]);
-      setArticleContent(
-        cultureData[parseInt(cultureId) - 1].content.split('\n')
+    if (cultureId && data) {
+      const fetchedData = data?.filter(
+        (item: CultureDetail) => item.id === parseInt(cultureId)
       );
+
+      if (fetchedData) {
+        setArticleData(fetchedData[0]);
+        setArticleContent(fetchedData[0].content?.split('\n'));
+      }
     }
   }, [cultureId]);
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error...</div>;
 
   return (
     <Main>
@@ -47,7 +54,7 @@ export default function CultureDetailPage() {
         <BackIcon onClick={() => navigate(-1)} />
       </Header>
       <ContentBox>
-        {articleContent.map((line, idx) =>
+        {articleContent?.map((line, idx) =>
           line.startsWith('http') ? (
             <img key={idx} src={line} alt="contentImage" />
           ) : (

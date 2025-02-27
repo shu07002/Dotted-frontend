@@ -26,6 +26,7 @@
     "@types/react-modal": "^3.16.3",
     "@xeger/quill-image-actions": "^0.7.2",
     "aos": "^2.3.4",
+    "dayjs": "^1.11.13",
     "dotenv": "^16.4.7",
     "event-source-polyfill": "^1.0.31",
     "framer-motion": "^12.3.1",

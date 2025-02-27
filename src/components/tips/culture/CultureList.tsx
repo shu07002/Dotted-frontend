@@ -1,47 +1,49 @@
 import { useEffect, useState } from 'react';
-import { cultureData } from './testData';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 
-// import { useQuery } from '@tanstack/react-query';
-
-// const fetchClubData = async () => {
-//   const response = await fetch(
-//     `${import.meta.env.VITE_API_DOMAIN}/tips/tips-clubs`
-//   );
-//   return response.json();
-// };
+const fetchCultureData = async () => {
+  const response = await fetch(
+    `${import.meta.env.VITE_API_DOMAIN}/api/campus/culture`
+  );
+  return response.json();
+};
 
 interface CultureData {
   id: number;
   title: string;
   content: string;
-  thumnail: string;
+  thumbnail: string;
   createdAt: string;
 }
 
 export default function CultureList() {
-  // const {data, loading, error} = useQuery({
-  //     queryKey: ['tipsClubs'],
-  //     queryFn: fetchCultureData
-  // })
-  const data = cultureData;
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['tipsClubs'],
+    queryFn: fetchCultureData
+  });
   const navigate = useNavigate();
   const [pagedData, setPagedData] = useState<CultureData[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
 
-  //pagination 처리
   useEffect(() => {
-    const start = (currentPage - 1) * 6;
-    const end = start + 6;
-    setPagedData(data.slice(start, end));
-  }, [currentPage]);
+    if (data) {
+      const start = (currentPage - 1) * 6;
+      const end = start + 6;
+      setPagedData(data.slice(start, end));
+    }
+  }, [currentPage, data]);
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error...</div>;
+  console.log(data);
 
   function handleDirectionBtn(targetPage: number) {
     if (targetPage < 1) {
       setCurrentPage(1);
-    } else if (targetPage > Math.ceil(data.length / 6)) {
-      setCurrentPage(Math.ceil(data.length / 6));
+    } else if (targetPage > Math.ceil(data?.length / 6)) {
+      setCurrentPage(Math.ceil(data?.length / 6));
     } else {
       setCurrentPage(targetPage);
     }
@@ -54,9 +56,12 @@ export default function CultureList() {
   return (
     <ListWrapper>
       <List>
-        {pagedData.map((club: CultureData, idx: number) => (
-          <li key={idx} onClick={() => navigate(`/tips/culture/${club.id}`)}>
-            <img src={club.thumnail} alt="club" />
+        {pagedData?.map((club: CultureData) => (
+          <li
+            key={club.id}
+            onClick={() => navigate(`/tips/culture/${club.id}`)}
+          >
+            <img src={club.thumbnail} alt="club" />
             <div>
               <h3>{club.title}</h3>
               <p>{club.createdAt}</p>
@@ -68,7 +73,7 @@ export default function CultureList() {
         <button onClick={() => handleDirectionBtn(currentPage - 1)}>
           {'<'}
         </button>
-        {Array.from({ length: Math.ceil(data.length / 6) }, (_, idx) => (
+        {Array.from({ length: Math.ceil(data?.length / 6) }, (_, idx) => (
           <button
             className={currentPage === idx + 1 ? 'selected' : ''}
             key={idx}
@@ -98,7 +103,7 @@ const List = styled.ul`
 
   li {
     width: 100%;
-    height: 30rem;
+    /* height: 30rem; */
     border-radius: 1.6rem;
     display: flex;
     flex-direction: column;
