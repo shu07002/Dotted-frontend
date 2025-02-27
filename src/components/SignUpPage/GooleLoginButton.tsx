@@ -10,7 +10,8 @@ const GoogleLoginButton = ({
 }) => {
   const GOOGLE_CLIENT_ID =
     '27893795025-99ide3g469se39f3pba1mofvirpjmhri.apps.googleusercontent.com'; // 여기에 실제 Google Client ID 입력
-  const REDIRECT_URI = 'http://localhost:3000/user/login/google/callback';
+  // const REDIRECT_URI = 'http://localhost:3000/user/login/google/callback';
+  const REDIRECT_URI = `${import.meta.env.VITE_API_DOMAIN}/user/login/google/callback`;
   const SCOPE =
     'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile';
 
