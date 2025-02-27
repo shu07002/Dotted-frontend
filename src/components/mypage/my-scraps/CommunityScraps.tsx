@@ -24,7 +24,7 @@ export default function CommunityScraps() {
 
   useEffect(() => {
     const fetchProfileData = async () => {
-      let accessToken = localStorage.getItem('accessToken');
+      const accessToken = localStorage.getItem('accessToken');
       if (!accessToken) return;
 
       const headers = { Authorization: `Bearer ${accessToken}` };
@@ -128,8 +128,11 @@ const PostBox = styled.div`
   padding: 1.6rem 1rem;
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray200};
   cursor: pointer;
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.gray100};
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: ${({ theme }) => theme.colors.gray100};
+    }
   }
 `;
 
@@ -211,9 +214,11 @@ const PaginationBox = styled.div`
       color: ${({ theme }) => theme.colors.gray50};
     }
 
-    &:hover {
-      background-color: ${({ theme }) => theme.colors.backgroundBase};
-      cursor: pointer;
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        background-color: ${({ theme }) => theme.colors.backgroundBase};
+        cursor: pointer;
+      }
     }
 
     &:disabled {

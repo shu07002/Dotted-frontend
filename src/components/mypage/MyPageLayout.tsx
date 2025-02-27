@@ -68,8 +68,10 @@ const List = styled.ul`
     color: ${({ theme }) => theme.colors.gray700};
     cursor: pointer;
 
-    &:hover {
-      color: ${({ theme }) => theme.colors.gray500};
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        color: ${({ theme }) => theme.colors.gray500};
+      }
     }
 
     &.selected {

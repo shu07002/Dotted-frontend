@@ -21,7 +21,7 @@ export default function MarketPosts() {
 
   useEffect(() => {
     const fetchProfileData = async () => {
-      let accessToken = localStorage.getItem('accessToken');
+      const accessToken = localStorage.getItem('accessToken');
       if (!accessToken) return;
 
       const headers = { Authorization: `Bearer ${accessToken}` };
@@ -227,9 +227,11 @@ const PaginationBox = styled.div`
       color: ${({ theme }) => theme.colors.gray50};
     }
 
-    &:hover {
-      background-color: ${({ theme }) => theme.colors.backgroundBase};
-      cursor: pointer;
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        background-color: ${({ theme }) => theme.colors.backgroundBase};
+        cursor: pointer;
+      }
     }
 
     &:disabled {

@@ -49,8 +49,10 @@ const List = styled.ul`
     letter-spacing: -0.16px;
     cursor: pointer;
 
-    &:hover {
-      background-color: ${({ theme }) => theme.colors.gray100};
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        background-color: ${({ theme }) => theme.colors.gray100};
+      }
     }
   }
 `;

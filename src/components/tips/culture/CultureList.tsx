@@ -111,9 +111,11 @@ const List = styled.ul`
     transition: background-color 0.2s;
     padding: 1rem;
 
-    &:hover {
-      cursor: pointer;
-      background-color: ${({ theme }) => theme.colors.backgroundLayer1};
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        cursor: pointer;
+        background-color: ${({ theme }) => theme.colors.backgroundLayer1};
+      }
     }
 
     img {
@@ -169,9 +171,11 @@ const PaginationBox = styled.div`
       color: ${({ theme }) => theme.colors.gray50};
     }
 
-    &:hover {
-      background-color: ${({ theme }) => theme.colors.backgroundBase};
-      cursor: pointer;
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        background-color: ${({ theme }) => theme.colors.backgroundBase};
+        cursor: pointer;
+      }
     }
   }
 `;

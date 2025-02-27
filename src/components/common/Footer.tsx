@@ -12,8 +12,18 @@ export default function Footer() {
         </LogoWrapper>
 
         <PolicyWrapper>
-          <span>Privacy Policy</span>
-          <span>Terms</span>
+          <a
+            href="https://rustic-tulip-dff.notion.site/Privacy-Policy-1a72493912ca808ab6eec4647468fb5c"
+            target="_blank"
+          >
+            Privacy Policy
+          </a>
+          <a
+            href="https://rustic-tulip-dff.notion.site/Terms-of-Service-1a72493912ca80258a20e709cf6b9e27"
+            target="_blank"
+          >
+            Terms of Service
+          </a>
         </PolicyWrapper>
       </LeftSection>
 
@@ -73,7 +83,7 @@ const LogoWrapper = styled.div`
 const PolicyWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  > span {
+  > a {
     cursor: pointer;
     color: ${({ theme }) => theme.colors.gray50};
     font-family: Inter;
@@ -88,9 +98,11 @@ const PolicyWrapper = styled.div`
     text-decoration-thickness: auto;
     text-underline-offset: auto;
     text-underline-position: from-font;
-
-    &:hover {
-      text-decoration-line: underline;
+    text-decoration-line: none;
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        text-decoration-line: underline;
+      }
     }
   }
 `;

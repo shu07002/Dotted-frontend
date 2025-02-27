@@ -127,8 +127,8 @@ const Main = styled.main`
   flex-direction: column;
 
   @media (max-width: 1220px) {
-    padding-left: 10rem;
-    padding-right: 10rem;
+    padding-left: 7.7rem;
+    padding-right: 7.7rem;
   }
 
   @media (max-width: 700px) {
@@ -166,8 +166,10 @@ const NaviBar = styled.nav`
     background-color: ${({ theme }) => theme.colors.gray200};
     cursor: pointer;
 
-    &:hover {
-      background-color: ${({ theme }) => theme.colors.gray300};
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        background-color: ${({ theme }) => theme.colors.gray300};
+      }
     }
 
     &.selected {
@@ -197,9 +199,12 @@ const LeftButton = styled.div`
   display: flex;
   align-items: center;
   padding: 0 1rem;
-  &:hover {
-    opacity: 0.8;
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      opacity: 0.8;
+    }
   }
+
   @media (max-width: 500px) {
     padding-left: 0;
   }
@@ -210,9 +215,12 @@ const RightButton = styled.div`
   display: flex;
   align-items: center;
   padding: 0 1rem;
-  &:hover {
-    opacity: 0.8;
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      opacity: 0.8;
+    }
   }
+
   @media (max-width: 500px) {
     padding-right: 0;
   }

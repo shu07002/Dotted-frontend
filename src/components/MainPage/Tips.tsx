@@ -32,7 +32,7 @@ export default function Tips() {
         </Item>
         <Item onClick={() => navigate('/tips/clubs')}>
           <Clubs />
-          <span>Clubs Map</span>
+          <span>Clubs</span>
         </Item>
         <Item onClick={() => navigate('/tips/culture')}>
           <Culture />

@@ -27,9 +27,10 @@ const AlarmBox = styled.div`
   cursor: pointer;
   padding: 1rem;
   position: relative;
-
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.backgroundLayer1};
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: ${({ theme }) => theme.colors.backgroundLayer1};
+    }
   }
 
   > svg {

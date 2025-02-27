@@ -7,11 +7,15 @@ import ReactQueryProvider from './context/ReactQueryProvider';
 import { DndProvider } from 'react-dnd';
 
 import './style/style.css';
+
+import { TouchBackend } from 'react-dnd-touch-backend';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+
+const isMobile = /Mobi|Android/i.test(navigator.userAgent);
 
 function App() {
   return (
-    <DndProvider backend={HTML5Backend}>
+    <DndProvider backend={isMobile ? TouchBackend : HTML5Backend}>
       <ReactQueryProvider>
         <GlobalThemeProvider>
           <AppContainer>

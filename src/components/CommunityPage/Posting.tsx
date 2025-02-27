@@ -4,12 +4,13 @@ import Profile from '@/assets/svg/CommunityPage/Profile.svg?react';
 import Like from '@/assets/svg/CommunityPage/Like.svg?react';
 import Scrap from '@/assets/svg/CommunityPage/Scrap.svg?react';
 
-import ReactQuill from 'react-quill-new';
+//import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 import { PostDetail } from '@/pages/community/DetailCommunityPage';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import MoreButton from './MoreButton';
 import { formatRelativeTime } from '@/utils/formatTime';
+import { TiptapViewOnly } from './TipTapViewOnly';
 
 const PostingTagsColors: Record<string, string> = {
   Living: `purple950`,
@@ -43,13 +44,14 @@ export default function Posting({
   onClickScrap
 }: PostingProps) {
   const [openMore, setOpenMore] = useState(false);
-  let replacedContent = post.content;
 
   const [localLikeCount, setLocalLikeCount] = useState(post.like_count);
   const [localLiked, setLocalLiked] = useState(post.is_liked);
 
   const [localScrapCount, setLocalScrapCount] = useState(post.scrap_count);
   const [localScrapped, setLocalScrapped] = useState(post.is_scrapped);
+
+  const [replacedContent, setReplacedContent] = useState(post.content);
 
   const handleLikeClick = () => {
     if (localLiked) {
@@ -71,15 +73,17 @@ export default function Posting({
     onClickScrap();
   };
 
-  if (post.images && post.images.length > 0) {
-    post.images.forEach((imgObj, index) => {
-      // 예: 'src="{images[0].image_url}"' => 'src="https://example.com/img1.png"'
-      const placeholder = `src={images[${index}].image_url}`;
-      const realSrc = `src="${imgObj.image_url}"`;
+  useEffect(() => {
+    if (post.images && post.images.length > 0) {
+      post.images.forEach((imgObj, index) => {
+        // 예: 'src="{images[0].image_url}"' => 'src="https://example.com/img1.png"'
+        const placeholder = `src={images[${index}].image_url}`;
+        const realSrc = `src="${imgObj.image_url}"`;
 
-      replacedContent = replacedContent.replace(placeholder, realSrc);
-    });
-  }
+        setReplacedContent(replacedContent.replace(placeholder, realSrc));
+      });
+    }
+  }, []);
 
   return (
     <PostingWrapper>
@@ -111,12 +115,8 @@ export default function Posting({
       </InfoWrapper>
 
       <ContentWrapper>
-        <StyledReactQuill
-          value={replacedContent}
-          readOnly={true}
-          theme="snow"
-          modules={{ toolbar: false }}
-        />
+        <>{console.log(replacedContent)}</>
+        <TiptapViewOnly content={replacedContent} />
 
         <ButtonWrapper>
           <Button className={`${isLiked && 'liked'}`} onClick={handleLikeClick}>
@@ -158,6 +158,9 @@ const PostingTag = styled.div<{ $color: string }>`
   text-align: center;
   font-family: Inter;
   font-size: 1.3rem;
+  @media (max-width: 460px) {
+    font-size: 1rem;
+  }
   font-style: normal;
   font-weight: 500;
   line-height: normal;
@@ -196,6 +199,9 @@ const Title = styled.div`
   color: ${({ theme }) => theme.colors.gray800};
   font-family: Pretendard;
   font-size: 2.8rem;
+  @media (max-width: 460px) {
+    font-size: 2.4rem;
+  }
   font-style: normal;
   font-weight: 700;
   line-height: 3.6rem; /* 128.571% */
@@ -217,6 +223,9 @@ const PostingWriter = styled.div`
     gap: 0.25rem;
     color: ${({ theme }) => theme.colors.gray500};
     font-size: 1.4rem;
+    @media (max-width: 460px) {
+      font-size: 1.1rem;
+    }
     font-family: Inter;
     font-style: normal;
     line-height: normal;
@@ -249,32 +258,41 @@ const ContentWrapper = styled.div`
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray300};
 `;
 
-const StyledReactQuill = styled(ReactQuill)`
-  width: 100%;
+// const StyledReactQuill = styled(ReactQuill)`
+//   width: 100%;
 
-  box-sizing: border-box;
+//   box-sizing: border-box;
 
-  .ql-container {
-    border: none;
-  }
+//   .ql-container {
+//     border: none;
+//   }
 
-  .ql-editor,
-  .ql-blank {
-    min-height: 42.6rem;
-  }
+//   .ql-editor,
+//   .ql-blank {
+//     min-height: 42.6rem;
+//   }
 
-  .ql-size-small {
-    font-size: 1.5rem;
-  }
+//   .ql-size-small {
+//     font-size: 1.5rem;
+//     @media (max-width: 460px) {
+//       font-size: 1.2rem;
+//     }
+//   }
 
-  p {
-    font-size: 2rem;
-  }
+//   p {
+//     font-size: 2rem;
+//     @media (max-width: 460px) {
+//       font-size: 1.7rem;
+//     }
+//   }
 
-  .ql-size-large {
-    font-size: 3rem;
-  }
-`;
+//   .ql-size-large {
+//     font-size: 3rem;
+//     @media (max-width: 460px) {
+//       font-size: 2%.6;
+//     }
+//   }
+// `;
 
 const ButtonWrapper = styled.div`
   display: flex;
@@ -297,6 +315,9 @@ const Button = styled.button`
     text-align: center;
     font-family: Inter;
     font-size: 1.6rem;
+    @media (max-width: 460px) {
+      font-size: 1.3rem;
+    }
     font-style: normal;
     font-weight: 300;
     line-height: normal;
@@ -308,8 +329,10 @@ const Button = styled.button`
     }
   }
 
-  &:hover {
-    background: ${({ theme }) => theme.colors.purple100};
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background: ${({ theme }) => theme.colors.purple100};
+    }
   }
 
   &.liked {

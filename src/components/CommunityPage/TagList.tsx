@@ -48,7 +48,7 @@ export default function TagList({
     <TagListWrapper>
       <HeaderSection>
         {/* 500px 이하에서만 나타나는 왼쪽 버튼 */}
-        <LeftButton onClick={scrollLeft}>
+        <LeftButton onClick={scrollLeft} $isMarket={isMarket}>
           <LeftIcon />
         </LeftButton>
 
@@ -83,7 +83,7 @@ export default function TagList({
         </NavContainer>
 
         {/* 500px 이하에서만 나타나는 오른쪽 버튼 */}
-        <RightButton onClick={scrollRight}>
+        <RightButton onClick={scrollRight} $isMarket={isMarket}>
           <RightIcon />
         </RightButton>
       </HeaderSection>
@@ -111,19 +111,21 @@ const NavContainer = styled.div`
   }
 `;
 
-const LeftButton = styled.div`
+const LeftButton = styled.div<{ $isMarket: boolean }>`
   cursor: pointer;
   display: none;
-  @media (max-width: 500px) {
-    display: block;
+
+  @media (max-width: 540px) {
+    ${({ $isMarket }) => ($isMarket ? 'display: none;' : ' display: block;')}
   }
 `;
 
-const RightButton = styled.div`
+const RightButton = styled.div<{ $isMarket: boolean }>`
   cursor: pointer;
   display: none;
-  @media (max-width: 500px) {
-    display: block;
+
+  @media (max-width: 540px) {
+    ${({ $isMarket }) => ($isMarket ? 'display: none;' : ' display: block;')}
   }
 `;
 
@@ -165,6 +167,9 @@ const Tag = styled.li<{ $selected: boolean }>`
   text-align: center;
   font-family: Pretendard;
   font-size: 1.6rem;
+  @media (max-width: 460px) {
+    font-size: 1.3rem;
+  }
   font-style: normal;
   font-weight: 500;
   line-height: 2.4rem; /* 150% */
@@ -178,9 +183,10 @@ const Tag = styled.li<{ $selected: boolean }>`
         color: ${theme.colors.purple600};
       `
       : `
-        &:hover {
+       @media (hover: hover) and (pointer: fine) {&:hover {
           background-color: ${theme.colors.backgroundBase}; 
-        }
+        }}
+        
       `};
 
   > svg {

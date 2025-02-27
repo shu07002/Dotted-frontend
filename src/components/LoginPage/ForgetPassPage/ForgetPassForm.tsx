@@ -77,10 +77,12 @@ const ForgetPassContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: 0 2rem;
 `;
 
 const ForgetPassFormWrapper = styled.div`
-  width: 60.5rem;
+  width: 100%;
+  max-width: 60.5rem;
   position: relative;
   display: flex;
   flex-direction: column;

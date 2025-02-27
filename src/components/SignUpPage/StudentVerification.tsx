@@ -24,28 +24,31 @@ export default function StudentVerificat({
   const imgFileRef = useRef<HTMLInputElement>(null);
   const [imgFile, setImgFile] = useState<File | null>(null);
 
-  let emailValue = watch('email');
-  if (emailValue && !emailValue.includes('@')) {
-    emailValue += '@sogang.ac.kr';
-  }
-  const passwordValue = watch('password');
-
   // 자동 로그인 Mutation: fetchWithAuth를 사용해 토큰 갱신 로직이 내부에서 수행됨
   const autoLoginMutation = useMutation({
     mutationFn: async () => {
       // 로그인은 JSON 요청이므로 Content-Type 헤더를 추가
-      const data = await fetchWithAuth<any>(
+      let emailValue = watch('email');
+      if (emailValue && !emailValue.includes('@')) {
+        emailValue += '@sogang.ac.kr';
+      }
+      const passwordValue = watch('password');
+      console.log(emailValue, passwordValue);
+
+      const data = await fetch(
         `${import.meta.env.VITE_API_DOMAIN}/api/user/login`,
         {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json'
+          },
           body: JSON.stringify({
             email: emailValue,
             password: passwordValue
           })
         }
       );
-      return data;
+      return data.json();
     },
     onSuccess: (data) => {
       console.log('✅ 자동 로그인 성공:', data);

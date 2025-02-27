@@ -1,5 +1,5 @@
 import { Comment } from '@/pages/community/DetailCommunityPage';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import CommentSVG from '@/assets/svg/CommunityPage/Comment.svg?react';
 import Profile from '@/assets/svg/CommunityPage/Profile.svg?react';
 import Like from '@/assets/svg/CommunityPage/Like.svg?react';
@@ -51,6 +51,21 @@ export default function AComment({
   const [editedContent, setEditedContent] = useState(comment.content);
   const [openNormalModal, setOpenNormalModal] = useState(false);
   const [isSecret, setIsSecret] = useState(false);
+  const moreWrapperRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        openMore &&
+        moreWrapperRef.current &&
+        !moreWrapperRef.current.contains(event.target as Node)
+      ) {
+        setOpenMore(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [openMore]);
 
   // 댓글 좋아요 mutation (반환 타입을 CommentLikeResponse로 지정)
   const commentLikeMutation = useMutation<CommentLikeResponse, Error, void>({
@@ -194,7 +209,7 @@ export default function AComment({
             ) : (
               <NicknameDiv>
                 {comment.user_nickname}
-                {comment.is_mine && (
+                {comment.is_mine && origin && comment.is_secret && (
                   <LockerDiv>
                     <Locker />
                   </LockerDiv>
@@ -222,7 +237,7 @@ export default function AComment({
               <CommentSVG className={`${isOpenRecomment && 'recomment'}`} />
             </button>
             {comment.content !== 'Deleted Comment' && (
-              <MoreWrapper>
+              <MoreWrapper ref={moreWrapperRef}>
                 <button onClick={() => setOpenMore((prev) => !prev)}>
                   <More />
                   {openMore && (
@@ -262,7 +277,7 @@ export default function AComment({
                 <LaterButton
                   onClick={() => setOpenNormalModal((prev) => !prev)}
                 >
-                  Cancle
+                  Cancel
                 </LaterButton>
                 <NowButton onClick={handleDelete}>
                   {deleteMutation.isPending ? 'Deleting...' : 'Delete'}
@@ -352,10 +367,19 @@ const ConetentDiv = styled.div`
 const NicknameDiv = styled.div`
   display: flex;
   gap: 1rem;
+  height: 3rem;
+  align-items: center;
 `;
 
 const MoreWrapper = styled.div`
   position: relative;
+  > button {
+    > svg {
+      @media (max-width: 460px) {
+        height: 10px;
+      }
+    }
+  }
 `;
 
 const CommentInputWrapper = styled.div`
@@ -429,10 +453,17 @@ const Comments = styled.li`
   display: flex;
   gap: 2.1rem;
   margin-bottom: 3.1rem;
+  @media (max-width: 460px) {
+    margin-bottom: 2rem;
+    gap: 1rem;
+  }
   > div {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    @media (max-width: 460px) {
+      gap: 0.2rem;
+    }
     > div {
       font-family: Inter;
       font-style: normal;
@@ -490,10 +521,16 @@ const ButtonWrapper = styled.div`
     justify-content: center;
     gap: 1.2rem;
     > svg {
+      @media (max-width: 460px) {
+        width: 15px;
+      }
       &.commentLiked {
         > path {
           fill: ${({ theme }) => theme.colors.purple600};
           stroke: ${({ theme }) => theme.colors.purple600};
+          @media (max-width: 460px) {
+            width: 15px;
+          }
         }
       }
       &.recomment {
@@ -511,16 +548,37 @@ const ButtonWrapper = styled.div`
 const Menu = styled.div`
   z-index: 10;
   position: absolute;
-  top: -250%;
-  left: 150%;
+  top: 0%;
+  left: 100%;
   margin-top: 1rem;
-  background-color: ${({ theme }) => theme.colors.gray100};
+  width: 15.9rem;
+  @media (max-width: 400px) {
+    width: 10rem;
+  }
+
+  flex-shrink: 0;
+  border-radius: 0.5rem;
+  background: ${({ theme }) => theme.colors.backgroundLayer2};
+  box-shadow: 2px 2px 26.1px -3px rgba(0, 0, 0, 0.22);
   color: ${({ theme }) => theme.colors.gray800};
+
   > div {
+    text-align: start;
+
     cursor: pointer;
-    padding: 1rem;
-    &:hover {
-      background-color: ${({ theme }) => theme.colors.gray200};
+    padding: 1rem 2rem;
+    color: ${({ theme }) => theme.colors.gray700};
+    font-family: Inter;
+    font-size: 1.6rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: -0.08rem;
+
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        background-color: ${({ theme }) => theme.colors.gray200};
+      }
     }
   }
 `;

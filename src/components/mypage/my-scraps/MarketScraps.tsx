@@ -21,7 +21,7 @@ export default function MarketScraps() {
 
   useEffect(() => {
     const fetchProfileData = async () => {
-      let accessToken = localStorage.getItem('accessToken');
+      const accessToken = localStorage.getItem('accessToken');
       if (!accessToken) return;
 
       const headers = { Authorization: `Bearer ${accessToken}` };
@@ -146,12 +146,15 @@ const PostBox = styled.div`
   display: grid;
   grid-template-rows: 70% 1fr;
   border: 1px solid ${({ theme }) => theme.colors.gray200};
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.gray100};
-    img {
-      scale: 1.1;
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: ${({ theme }) => theme.colors.gray100};
+      img {
+        scale: 1.1;
+      }
     }
   }
+
   > figure {
     width: 100%;
     height: 100%;
@@ -227,9 +230,11 @@ const PaginationBox = styled.div`
       color: ${({ theme }) => theme.colors.gray50};
     }
 
-    &:hover {
-      background-color: ${({ theme }) => theme.colors.backgroundBase};
-      cursor: pointer;
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        background-color: ${({ theme }) => theme.colors.backgroundBase};
+        cursor: pointer;
+      }
     }
 
     &:disabled {

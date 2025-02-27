@@ -46,14 +46,13 @@ const NavWrapper = styled.nav`
   background-color: ${({ theme }) => theme.colors.backgroundLayer2};
 
   @media (max-width: 900px) {
-    padding: 0 7.7rem 0 7.7rem;
-    padding-bottom: 1rem;
+    padding: 1.5rem 7.7rem 1.5rem 7.7rem;
   }
 
   @media (max-width: 700px) {
     padding-right: 2rem;
     padding-left: 2em;
-    padding-bottom: 1rem;
+    padding-bottom: 1.5rem;
   }
 
   > div {
@@ -71,8 +70,10 @@ const NavWrapper = styled.nav`
       color: ${({ theme }) => theme.colors.purple600};
     }
 
-    &:hover {
-      color: ${({ theme }) => theme.colors.purple600};
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        color: ${({ theme }) => theme.colors.purple600};
+      }
     }
   }
 `;

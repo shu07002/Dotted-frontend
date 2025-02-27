@@ -143,8 +143,10 @@ const ResultBox = styled.ul`
     padding: 1.5rem 2rem;
     cursor: pointer;
     border-radius: 0;
-    &:hover {
-      background-color: ${({ theme }) => theme.colors.gray200};
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        background-color: ${({ theme }) => theme.colors.gray200};
+      }
     }
   }
 `;

@@ -88,8 +88,10 @@ const ImgBoxWrapper = styled.div`
   }
 
   /* 스크롤바 핸들 호버 시 */
-  &::-webkit-scrollbar-thumb:hover {
-    background: ${({ theme }) => theme.colors.purple600};
+  @media (hover: hover) and (pointer: fine) {
+    &::-webkit-scrollbar-thumb:hover {
+      background: ${({ theme }) => theme.colors.purple600};
+    }
   }
 
   > li {
@@ -100,9 +102,10 @@ const ImgBoxWrapper = styled.div`
         width: 15rem;
         height: 15rem;
       }
-
-      &:hover img {
-        filter: brightness(0.7); /* 이미지만 흐려짐 */
+      @media (hover: hover) and (pointer: fine) {
+        &:hover img {
+          filter: brightness(0.7); /* 이미지만 흐려짐 */
+        }
       }
 
       &::after {
@@ -126,13 +129,17 @@ const ImgBoxWrapper = styled.div`
       }
 
       /* 호버 시 X 표시 나타나기 */
-      &:hover::after {
-        opacity: 1;
+      @media (hover: hover) and (pointer: fine) {
+        &:hover::after {
+          opacity: 1;
+        }
       }
 
       /* X 버튼에 흐림 효과가 적용되지 않도록 */
-      &:hover::after {
-        filter: none; /* X 버튼은 흐려지지 않음 */
+      @media (hover: hover) and (pointer: fine) {
+        &:hover::after {
+          filter: none; /* X 버튼은 흐려지지 않음 */
+        }
       }
     }
   }
@@ -150,9 +157,12 @@ const EachImage = styled.div`
   border: 1px solid ${({ theme }) => theme.colors.gray400};
   background: ${({ theme }) => theme.colors.backgroundLayer1};
 
-  &:hover {
-    background: rgba(217, 217, 217, 0.7);
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background: rgba(217, 217, 217, 0.7);
+    }
   }
+
   width: 15rem;
   height: 15rem;
   margin-bottom: 0.5rem;

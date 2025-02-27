@@ -38,14 +38,17 @@ const Wrapper = styled.div`
   justify-content: center;
 
   > span {
+    max-width: 26rem;
+    width: 100%;
     display: flex;
     align-items: center;
     background-color: ${({ theme }) => theme.colors.backgroundBase};
     padding: 0 1.7rem;
     border-radius: 5px;
+    position: relative;
 
     > input {
-      width: 26rem;
+      width: 100%;
       height: 4rem;
       flex-shrink: 0;
       border: none;
@@ -58,6 +61,11 @@ const Wrapper = styled.div`
     }
 
     > svg {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      right: 1rem;
+
       width: 1.5rem;
       height: 1.5rem;
       path {

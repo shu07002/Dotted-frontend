@@ -2,10 +2,11 @@ import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { useBlocker, useLocation, useNavigate } from 'react-router-dom';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import TagBox from '@/components/WriteCommunityPage/TagBox';
-import Editor from '@/components/WriteCommunityPage/Editor';
 import { fetchWithAuth } from '@/utils/auth'; // auth.ts에서 정의한 fetchWithAuth를 import
+import Tiptap from '@/components/CommunityPage/TipTap';
+//import Editor from '@/components/WriteCommunityPage/Editor';
 
 // -------------------- 타입 정의 --------------------
 export interface CommunityData {
@@ -36,14 +37,27 @@ interface OriginalImage {
 }
 
 export default function WriteCommunityPage() {
-  const { register, handleSubmit, watch, setValue, trigger } =
-    useForm<CommunityData>();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    trigger,
+    formState: { errors }
+  } = useForm<CommunityData>();
   const navigate = useNavigate();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [editMode, setEditMode] = useState(false);
+  const queryClient = useQueryClient();
 
   // location state로부터 넘어온 기존 데이터 (수정 모드일 때)
   const { state } = useLocation();
+
+  useEffect(() => {
+    if (errors.tag) {
+      alert('Please select a tag');
+    }
+  }, [errors.tag]);
 
   /**
    * originalImageList에는 서버에서 받아온 기존 이미지 정보( image_id, url 등 )를 저장해둡니다.
@@ -102,6 +116,7 @@ export default function WriteCommunityPage() {
   const postingMutation = useMutation({
     mutationFn: async (data: CommunityData) => {
       // fetchWithAuth 내부에서 토큰 유효성 검사/갱신이 처리됨
+
       const response = await fetchWithAuth<any>(
         `${import.meta.env.VITE_API_DOMAIN}/api/posting/create`,
         {
@@ -122,7 +137,7 @@ export default function WriteCommunityPage() {
         blocker.reset();
       }
       setTimeout(() => {
-        navigate('/community');
+        navigate(`/community/detail/${data.id}`);
       }, 100);
     },
     onError: (error) => {
@@ -154,14 +169,19 @@ export default function WriteCommunityPage() {
       );
       return response;
     },
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       console.log('🎉 글수정 성공:', data);
+
+      await queryClient.refetchQueries({
+        queryKey: ['postDetail', data.id],
+        exact: true
+      });
       setIsSubmitted(true);
       if (blocker.state === 'blocked') {
         blocker.reset();
       }
       setTimeout(() => {
-        navigate('/community');
+        navigate(`/community/detail/${data.id}`);
       }, 100);
     },
     onError: (error) => {
@@ -236,24 +256,57 @@ export default function WriteCommunityPage() {
     return imagePayload;
   };
 
+  const replaceBase64WithBracketExpressions = (htmlContent: string): string => {
+    let resultContent = htmlContent;
+    let imageIndex = 0;
+
+    // base64 이미지를 찾는 정규식
+    const imgTagRegex = /<img[^>]*src=["'](data:[^"']+)["'][^>]*>/g;
+
+    // 모든 base64 이미지를 찾아서 중괄호 표현식으로 대체
+    resultContent = resultContent.replace(imgTagRegex, (match) => {
+      // src="data:..." 부분을 src={images[인덱스].image_url} 형태로 대체
+      return match.replace(
+        /src=["']data:[^"']+["']/,
+        `src={images[${imageIndex++}].image_url}`
+      );
+    });
+
+    return resultContent;
+  };
+
   // -------------------------------------
   // onSubmit
   // -------------------------------------
   const onSubmit = async (data: CommunityData) => {
     // 중복 클릭 방지
+    const currentTag = watch('tag');
+    if (!currentTag) {
+      alert('Please select a tag');
+      return;
+    }
+
+    const dataToSend = {
+      title: data.title,
+      content: data.content,
+      images: data.images,
+      tag: data.tag
+    };
+
     if (postingMutation.isPending || updateMutation.isPending) return;
 
     // content 내의 base64 이미지 추출 (create 시 사용)
-    const extractedImages = extractBase64Images(data.content);
-
-    console.log(extractedImages);
+    const extractedImages = extractBase64Images(dataToSend.content);
+    const deliciousMeal = replaceBase64WithBracketExpressions(
+      dataToSend.content
+    );
+    await setValue('content', deliciousMeal);
+    const realDelicious = watch('content');
+    dataToSend.content = realDelicious;
 
     if (!editMode) {
-      // -----------------------------
-      // 새 게시글 작성 로직
-      // -----------------------------
       const newPostData: CommunityData = {
-        ...data,
+        ...dataToSend,
         images: extractedImages
       };
       try {
@@ -262,9 +315,6 @@ export default function WriteCommunityPage() {
         console.error('❌ 글쓰기 실패:', error);
       }
     } else {
-      // -----------------------------
-      // 기존 게시글 수정 로직
-      // -----------------------------
       if (!state?.postId) {
         alert('수정할 게시글 ID가 없습니다.');
         return;
@@ -300,9 +350,7 @@ export default function WriteCommunityPage() {
     <WriteCommunityPageContainer onSubmit={handleSubmit(onSubmit)}>
       <Wrapper>
         <Title>Community</Title>
-
         <TagBox register={register} watch={watch} setValue={setValue} />
-
         <TitleWrapper>
           <label htmlFor="title" />
           <input
@@ -311,9 +359,8 @@ export default function WriteCommunityPage() {
             {...register('title', { required: 'Please write your title' })}
           />
         </TitleWrapper>
-
-        <Editor watch={watch} setValue={setValue} trigger={trigger} />
-
+        {/* <Editor watch={watch} setValue={setValue} trigger={trigger} /> */}
+        <Tiptap watch={watch} setValue={setValue} trigger={trigger} />
         {editMode ? (
           <SubmitButton type="submit">
             {updateMutation.isPending ? 'Updating...' : 'Edit'}

@@ -118,10 +118,15 @@ export default function MainPage() {
                         <img src={post.thumbnail} />
                       </MarketImageWrapper>
                       <ItemInfo>
-                        <span>{post.title}</span>
+                        <div className="title">
+                          <span>{post.title}</span>
+                        </div>
+
                         <div>
-                          <span>{post.price}</span>
-                          <span>{formatRelativeTime(post.created_at)}</span>
+                          <span className="price">₩ {post.price}</span>
+                          <span className=" created">
+                            {formatRelativeTime(post.created_at)}
+                          </span>
                         </div>
                       </ItemInfo>
                     </li>
@@ -214,6 +219,11 @@ const CommunityList = styled.div`
       align-items: center;
       justify-content: space-between;
       height: 6.4rem;
+      @media (max-width: 865px) {
+        @media (max-width: 865px) {
+          height: 5.4rem;
+        }
+      }
       padding: 0 2.5rem;
 
       &:not(:last-child) {
@@ -223,7 +233,10 @@ const CommunityList = styled.div`
       > span {
         color: ${({ theme }) => theme.colors.gray700};
         font-family: Inter;
-        font-size: 20px;
+        font-size: 2rem;
+        @media (max-width: 865px) {
+          font-size: 1.7rem;
+        }
         font-style: normal;
         font-weight: 400;
         line-height: 21px; /* 105% */
@@ -231,7 +244,10 @@ const CommunityList = styled.div`
 
         &:last-child {
           color: ${({ theme }) => theme.colors.gray400};
-          font-size: 16px;
+          font-size: 1.6rem;
+          @media (max-width: 865px) {
+            font-size: 1.3rem;
+          }
           font-weight: 400;
           letter-spacing: -0.8px;
         }
@@ -251,6 +267,9 @@ const Tag = styled.div`
   text-align: center;
   font-family: Inter;
   font-size: 1.4rem;
+  @media (max-width: 865px) {
+    font-size: 1.2rem;
+  }
   font-style: normal;
   font-weight: 600;
   line-height: normal;
@@ -271,7 +290,6 @@ const Tag = styled.div`
 `;
 
 const MarketListContainer = styled.div`
-  min-height: 100vh;
   width: 100%;
   height: 100%;
   display: flex;
@@ -319,35 +337,66 @@ const MarketImageWrapper = styled.div`
     border-radius: 16px 16px 0 0;
     transition: transform 0.2s ease-in-out;
     transform-origin: center; /* 중심을 기준으로 확대 */ /* 부모와 동일한 border-radius 적용 */
-    &:hover {
-      transform: scale(1.1);
+
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        transform: scale(1.1);
+      }
     }
   }
 `;
 
 const ItemInfo = styled.div`
-  padding: 1.5rem;
+  padding: 1rem 2rem 1.2rem 2rem;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  align-items: stretch;
   gap: 1.2rem;
 
   > div {
     display: flex;
     justify-content: space-between;
+
+    &.title {
+      > span {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: ${({ theme }) => theme.colors.gray700};
+        font-family: Inter;
+        font-size: 20px;
+        font-style: normal;
+        font-weight: 400;
+        letter-spacing: -1px;
+        line-height: 2;
+      }
+    }
+
+    > span {
+      &.price {
+        color: ${({ theme }) => theme.colors.gray700};
+        font-family: Inter;
+        font-size: 1.4rem;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        letter-spacing: -0.07rem;
+      }
+
+      &.created {
+        color: ${({ theme }) => theme.colors.gray500};
+        font-family: Inter;
+        font-size: 1.4rem;
+        font-style: normal;
+        font-weight: 300;
+        line-height: normal;
+        letter-spacing: -0.07rem;
+      }
+    }
   }
   > span {
     line-height: 3rem;
-    &:first-child {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      color: ${({ theme }) => theme.colors.gray700};
-      font-family: Inter;
-      font-size: 20px;
-      font-style: normal;
-      font-weight: 400;
-      letter-spacing: -1px;
-    }
 
     &:nth-child(2) {
       color: ${({ theme }) => theme.colors.gray400};

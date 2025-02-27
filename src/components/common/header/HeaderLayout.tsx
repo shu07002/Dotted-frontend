@@ -27,6 +27,10 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   padding-top: 8rem;
+
+  @media (max-width: 900px) {
+    padding-top: 12rem;
+  }
   position: relative;
   padding-right: 2rem;
 `;

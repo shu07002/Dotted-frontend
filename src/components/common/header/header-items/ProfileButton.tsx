@@ -1,10 +1,11 @@
 import ProfileIcon from '@/assets/icons/header/profile.svg?react';
 import DownIcon from '@/assets/icons/header/down.svg?react';
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { fetchWithAuth } from '@/utils/auth';
-import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useQuery } from '@tanstack/react-query';
 
 // types/user.ts
 
@@ -43,11 +44,26 @@ async function fetchUserProfile(): Promise<UserProfile> {
 
 export default function ProfileButton() {
   const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(false);
+  const [openMore, setOpenMore] = useState(false);
   const { data } = useQuery<UserProfile>({
     queryKey: ['userProfile'],
     queryFn: fetchUserProfile
   });
+  const moreWrapperRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        openMore &&
+        moreWrapperRef.current &&
+        !moreWrapperRef.current.contains(event.target as Node)
+      ) {
+        setOpenMore(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [openMore]);
 
   const onClickLogout = () => {
     localStorage.removeItem('accessToken');
@@ -56,14 +72,24 @@ export default function ProfileButton() {
   };
 
   return (
-    <ProfileBox onClick={() => setIsOpen((prev) => !prev)}>
-      {isOpen && (
-        <Menu>
-          <div onClick={() => navigate('/mypage/profile')}>my page</div>
+    <ProfileBox
+      onClick={() => setOpenMore((prev) => !prev)}
+      ref={moreWrapperRef}
+    >
+      <AnimatePresence>
+        {openMore && (
+          <Menu
+            initial={{ opacity: 0, y: -10, x: 10 }}
+            animate={{ opacity: 1, y: 0, x: 0 }}
+            exit={{ opacity: 0, y: -10, x: 10 }}
+            transition={{ duration: 0.2 }}
+          >
+            <div>my page</div>
+            <div onClick={onClickLogout}>logout</div>
+          </Menu>
+        )}
+      </AnimatePresence>
 
-          <div onClick={onClickLogout}>logout</div>
-        </Menu>
-      )}
       <ProfileIcon />
       <span>{data?.nickname}</span>
       <DownIcon />
@@ -74,7 +100,7 @@ export default function ProfileButton() {
 const ProfileBox = styled.div`
   @media (max-width: 900px) {
     gap: 1rem;
-    margin-right: 1rem;
+    padding-right: 0;
   }
   position: relative;
   display: flex;
@@ -84,17 +110,13 @@ const ProfileBox = styled.div`
   cursor: pointer;
   padding: 1rem;
 
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.backgroundLayer1};
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: ${({ theme }) => theme.colors.backgroundLayer1};
+    }
   }
 
   > svg {
-    &:first-child {
-      width: 2.7rem;
-      height: 2.7rem;
-      flex-shrink: 0;
-    }
-
     &:last-child {
       width: 1.8rem;
       height: 0.9rem;
@@ -118,7 +140,7 @@ const ProfileBox = styled.div`
   }
 `;
 
-const Menu = styled.div`
+const Menu = styled(motion.div)`
   z-index: 10;
   position: absolute;
   top: 100%;
@@ -145,8 +167,11 @@ const Menu = styled.div`
     font-weight: 400;
     line-height: normal;
     letter-spacing: -0.08rem;
-    &:hover {
-      background-color: ${({ theme }) => theme.colors.gray200};
+
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        background-color: ${({ theme }) => theme.colors.gray200};
+      }
     }
   }
 `;

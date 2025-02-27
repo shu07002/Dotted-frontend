@@ -30,10 +30,15 @@ export default function MakrketList({ pagedData }: MarketListProps) {
                 <img src={post.thumbnail} />
               </MarketImageWrapper>
               <ItemInfo>
-                <span>{post.title}</span>
+                <div className="title">
+                  <span>{post.title}</span>
+                </div>
+
                 <div>
-                  <span>{post.price}</span>
-                  <span>{formatRelativeTime(post.created_at)}</span>
+                  <span className="price">₩ {post.price}</span>
+                  <span className=" created">
+                    {formatRelativeTime(post.created_at)}
+                  </span>
                 </div>
               </ItemInfo>
             </li>
@@ -87,22 +92,27 @@ const MarketListContainer = styled.div`
     display: grid;
     flex: 1;
 
-    grid-template-columns: repeat(auto-fit, minmax(20%, auto));
+    grid-template-columns: repeat(4, minmax(23.4%, auto));
     grid-gap: 2rem;
 
     @media (max-width: 1200px) {
-      grid-template-columns: repeat(auto-fit, 30.8%);
+      grid-template-columns: repeat(3, minmax(30%, auto));
     }
 
     @media (max-width: 768px) {
       grid-template-columns: repeat(2, 47.5%);
     }
 
+    @media (max-width: 450px) {
+      grid-template-columns: repeat(1, 100%);
+    }
+
     > li {
-      max-width: 100%;
+      width: 100%;
+
       position: relative;
       cursor: pointer;
-      aspect-ratio: 0.7;
+      aspect-ratio: 0.7833;
       display: flex;
       flex-direction: column;
 
@@ -126,35 +136,65 @@ const MarketImageWrapper = styled.div`
     border-radius: 16px 16px 0 0;
     transition: transform 0.2s ease-in-out;
     transform-origin: center; /* 중심을 기준으로 확대 */ /* 부모와 동일한 border-radius 적용 */
-    &:hover {
-      transform: scale(1.1);
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        transform: scale(1.1);
+      }
     }
   }
 `;
 
 const ItemInfo = styled.div`
-  padding: 1.5rem;
+  padding: 1rem 2rem 1.2rem 2rem;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  align-items: stretch;
   gap: 1.2rem;
 
   > div {
     display: flex;
     justify-content: space-between;
+
+    &.title {
+      > span {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: ${({ theme }) => theme.colors.gray700};
+        font-family: Inter;
+        font-size: 20px;
+        font-style: normal;
+        font-weight: 400;
+        letter-spacing: -1px;
+        line-height: 2;
+      }
+    }
+
+    > span {
+      &.price {
+        color: ${({ theme }) => theme.colors.gray700};
+        font-family: Inter;
+        font-size: 1.4rem;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        letter-spacing: -0.07rem;
+      }
+
+      &.created {
+        color: ${({ theme }) => theme.colors.gray500};
+        font-family: Inter;
+        font-size: 1.4rem;
+        font-style: normal;
+        font-weight: 300;
+        line-height: normal;
+        letter-spacing: -0.07rem;
+      }
+    }
   }
   > span {
     line-height: 3rem;
-    &:first-child {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      color: ${({ theme }) => theme.colors.gray700};
-      font-family: Inter;
-      font-size: 20px;
-      font-style: normal;
-      font-weight: 400;
-      letter-spacing: -1px;
-    }
 
     &:nth-child(2) {
       color: ${({ theme }) => theme.colors.gray400};

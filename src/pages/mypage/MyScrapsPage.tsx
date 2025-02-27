@@ -67,9 +67,12 @@ const Main = styled.main`
       letter-spacing: -0.4px;
       cursor: pointer;
       padding-bottom: 1.2rem;
-      &:hover {
-        color: ${({ theme }) => theme.colors.gray600};
+      @media (hover: hover) and (pointer: fine) {
+        &:hover {
+          color: ${({ theme }) => theme.colors.gray600};
+        }
       }
+
       &.selected {
         color: ${({ theme }) => theme.colors.purple600};
       }

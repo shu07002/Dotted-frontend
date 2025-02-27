@@ -193,6 +193,9 @@ const Title = styled.div`
   color: ${({ theme }) => theme.colors.gray700};
   font-family: Pretendard;
   font-size: 3.6rem;
+  @media (max-width: 460px) {
+    font-size: 3.3rem;
+  }
   font-style: normal;
   font-weight: 700;
   line-height: 3.6rem;
@@ -241,16 +244,20 @@ const PaginationBox = styled.div`
     border: none;
     background: none;
     font-size: 1.6rem;
+    @media (max-width: 460px) {
+      font-size: 1.3rem;
+    }
     font-weight: 400;
 
     &.selected {
       background-color: ${({ theme }) => theme.colors.purple600};
       color: ${({ theme }) => theme.colors.gray50};
     }
-
-    &:hover {
-      background-color: ${({ theme }) => theme.colors.backgroundBase};
-      cursor: pointer;
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        background-color: ${({ theme }) => theme.colors.backgroundBase};
+        cursor: pointer;
+      }
     }
   }
 `;
@@ -285,10 +292,14 @@ const WriteButton = styled.button`
   text-align: center;
   font-family: Inter;
   font-size: 1.4rem;
+  @media (max-width: 460px) {
+    font-size: 1.1rem;
+  }
   font-weight: 600;
   line-height: normal;
-
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.gray600};
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: ${({ theme }) => theme.colors.gray600};
+    }
   }
 `;

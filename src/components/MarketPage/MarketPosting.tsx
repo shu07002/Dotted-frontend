@@ -45,20 +45,23 @@ export default function MarketPosting({
     setLocalScrapped((prev) => !prev);
     onClickScrap();
   };
+  console.log(post);
   return (
     <ItemWrapper>
       <div>
-        <ImgCarouselWrapper>
-          <StyledSlider {...setting}>
-            {post.images.map((image, idx) => (
-              <SlideContent key={idx}>
-                <ImageWrapper>
-                  <img src={image.image_url} />
-                </ImageWrapper>
-              </SlideContent>
-            ))}
-          </StyledSlider>
-        </ImgCarouselWrapper>
+        {post.images.length > 0 && (
+          <ImgCarouselWrapper>
+            <StyledSlider {...setting}>
+              {post.images.map((image, idx) => (
+                <SlideContent key={idx}>
+                  <ImageWrapper>
+                    <img src={image.image_url} />
+                  </ImageWrapper>
+                </SlideContent>
+              ))}
+            </StyledSlider>
+          </ImgCarouselWrapper>
+        )}
       </div>
 
       <div>
@@ -372,8 +375,10 @@ const ScrapButton = styled.button`
     letter-spacing: -0.08rem;
   }
 
-  &:hover {
-    background: ${({ theme }) => theme.colors.purple100};
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background: ${({ theme }) => theme.colors.purple100};
+    }
   }
 
   &.scraped {
@@ -404,8 +409,10 @@ const ImageWrapper = styled.div`
 
     transition: transform 0.2s ease-in-out;
     transform-origin: center; /* 중심을 기준으로 확대 */ /* 부모와 동일한 border-radius 적용 */
-    &:hover {
-      transform: scale(1.1);
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        transform: scale(1.1);
+      }
     }
   }
 `;

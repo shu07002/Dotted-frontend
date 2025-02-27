@@ -256,10 +256,11 @@ const PaginationBox = styled.div`
       background-color: ${({ theme }) => theme.colors.purple600};
       color: ${({ theme }) => theme.colors.gray50};
     }
-
-    &:hover {
-      background-color: ${({ theme }) => theme.colors.backgroundBase};
-      cursor: pointer;
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        background-color: ${({ theme }) => theme.colors.backgroundBase};
+        cursor: pointer;
+      }
     }
   }
 `;
@@ -306,8 +307,9 @@ const WriteButton = styled.button`
   font-size: 1.4rem;
   font-weight: 600;
   line-height: normal;
-
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.gray600};
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: ${({ theme }) => theme.colors.gray600};
+    }
   }
 `;

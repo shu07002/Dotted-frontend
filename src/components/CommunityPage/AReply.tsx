@@ -1,5 +1,5 @@
 import { Comment } from '@/pages/community/DetailCommunityPage';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Profile from '@/assets/svg/CommunityPage/Profile.svg?react';
 import styled from 'styled-components';
 import Like from '@/assets/svg/CommunityPage/Like.svg?react';
@@ -39,6 +39,21 @@ export default function AReply({ reply }: { reply: Comment }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState(reply.content);
   const [openNormalModal, setOpenNormalModal] = useState(false);
+  const moreWrapperRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        openMore &&
+        moreWrapperRef.current &&
+        !moreWrapperRef.current.contains(event.target as Node)
+      ) {
+        setOpenMore(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [openMore]);
 
   // 댓글 삭제 mutation (반환 타입: void)
   const deleteMutation = useMutation<void, Error, void>({
@@ -167,7 +182,7 @@ export default function AReply({ reply }: { reply: Comment }) {
               {likeCount}
             </button>
             {reply.content !== 'Deleted Comment' && (
-              <MoreWrapper>
+              <MoreWrapper ref={moreWrapperRef}>
                 <button onClick={() => setOpenMore((prev) => !prev)}>
                   <More />
                   {openMore && (
@@ -228,6 +243,8 @@ const ConetentDiv = styled.div`
 const NicknameDiv = styled.div`
   display: flex;
   gap: 1rem;
+  height: 3rem;
+  align-items: center;
 `;
 
 const AccessRestrictedWrapper = styled.div`
@@ -263,7 +280,10 @@ const TextNormal = styled.div`
     color: ${({ theme }) => theme.colors.gray700};
     text-align: center;
     font-family: Inter;
-    font-size: 20px;
+    font-size: 2rem;
+    @media (max-width: 460px) {
+      font-size: 1.7rem;
+    }
     font-style: normal;
     font-weight: 400;
     line-height: 34px;
@@ -287,7 +307,10 @@ const ButtonBox = styled.div`
     align-items: center;
     text-align: center;
     font-family: Inter;
-    font-size: 20px;
+    font-size: 2rem;
+    @media (max-width: 460px) {
+      font-size: 1.7rem;
+    }
     font-style: normal;
     font-weight: 500;
     line-height: 25px;
@@ -311,21 +334,51 @@ const NowButton = styled.div`
 
 const MoreWrapper = styled.div`
   position: relative;
+  > button {
+    > svg {
+      @media (max-width: 460px) {
+        height: 10px;
+      }
+    }
+  }
 `;
 
 const Menu = styled.div`
   z-index: 10;
   position: absolute;
-  top: -250%;
-  left: 150%;
+  top: 0%;
+  left: 100%;
   margin-top: 1rem;
-  background-color: ${({ theme }) => theme.colors.gray100};
+  width: 15.9rem;
+
+  @media (max-width: 400px) {
+    width: 10rem;
+  }
+  flex-shrink: 0;
+  border-radius: 0.5rem;
+  background: ${({ theme }) => theme.colors.backgroundLayer2};
+  box-shadow: 2px 2px 26.1px -3px rgba(0, 0, 0, 0.22);
   color: ${({ theme }) => theme.colors.gray800};
+
   > div {
+    text-align: start;
     cursor: pointer;
-    padding: 1rem;
-    &:hover {
-      background-color: ${({ theme }) => theme.colors.gray200};
+    padding: 1rem 2rem;
+    color: ${({ theme }) => theme.colors.gray700};
+    font-family: Inter;
+    font-size: 1.6rem;
+    @media (max-width: 460px) {
+      font-size: 1.3rem;
+    }
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: -0.08rem;
+
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        background-color: ${({ theme }) => theme.colors.gray200};
+      }
     }
   }
 `;
@@ -338,25 +391,43 @@ const Comments = styled.div`
   display: flex;
   gap: 2.1rem;
   margin-top: 2rem;
+
+  @media (max-width: 460px) {
+    gap: 1rem;
+  }
   > div {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    @media (max-width: 460px) {
+      gap: 0.2rem;
+    }
     > div {
       font-family: Inter;
+
       &:first-child {
         color: ${({ theme }) => theme.colors.gray700};
         font-size: 2rem;
+        @media (max-width: 460px) {
+          font-size: 1.7rem;
+        }
+
         font-weight: 600;
       }
       &:nth-child(2) {
         color: ${({ theme }) => theme.colors.gray700};
         font-size: 2rem;
+        @media (max-width: 460px) {
+          font-size: 1.7rem;
+        }
         font-weight: 300;
       }
       &:nth-child(3) {
         color: ${({ theme }) => theme.colors.gray500};
         font-size: 1.4rem;
+        @media (max-width: 460px) {
+          font-size: 1.1rem;
+        }
         font-weight: 300;
       }
     }
@@ -375,6 +446,9 @@ const ButtonWrapper = styled.div`
     align-items: center;
     gap: 1.2rem;
     > svg {
+      @media (max-width: 460px) {
+        width: 15px;
+      }
       &.commentLiked {
         > path {
           fill: ${({ theme }) => theme.colors.purple600};
@@ -400,6 +474,9 @@ const CommentInputWrapper = styled.div`
     background: ${({ theme }) => theme.colors.gray100};
     font-family: Inter;
     font-size: 1.6rem;
+    @media (max-width: 460px) {
+      font-size: 1.3rem;
+    }
     font-style: normal;
     font-weight: 300;
     letter-spacing: -0.08rem;
@@ -416,6 +493,9 @@ const CommentInputWrapper = styled.div`
       background: ${({ theme }) => theme.colors.gray100};
       font-family: Inter;
       font-size: 1.6rem;
+      @media (max-width: 460px) {
+        font-size: 1.3rem;
+      }
       font-style: normal;
       font-weight: 300;
       letter-spacing: -0.08rem;
@@ -434,6 +514,9 @@ const CommentButton = styled.button`
   text-align: center;
   font-family: Inter;
   font-size: 1.6rem;
+  @media (max-width: 460px) {
+    font-size: 1.3rem;
+  }
   font-style: normal;
   font-weight: 500;
   line-height: normal;
