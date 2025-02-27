@@ -9,7 +9,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 const tags = ['All', 'HOT', 'Campus Life', 'Travel', 'Living', 'Others'];
-const POST_PER_PAGE = 5; // 서버에서 받아오는 page 당 개수가 맞다면 굳이 slice 안해도 됨
+const POST_PER_PAGE = 8; // 서버에서 받아오는 page 당 개수가 맞다면 굳이 slice 안해도 됨
 
 export default function CommunityPage() {
   const [selectedTag, setSelectedTag] = useState('All');
@@ -206,7 +206,7 @@ const TagAndSearch = styled.div`
   margin-top: 2rem;
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray300};
 
-  @media (max-width: 1125px) {
+  @media (max-width: 1260px) {
     flex-direction: column;
     align-items: normal;
     > ul:first-child {
@@ -231,6 +231,7 @@ const PaginationBox = styled.div`
   padding: 5rem 0;
   display: flex;
   justify-content: center;
+  align-items: center;
   gap: 1.5rem;
 
   button {

@@ -54,7 +54,7 @@ export default function SignUpForm({
 }
 
 const SignUpFormWrapper = styled.div`
-  padding-left: 2rem;
+  padding: 0 2rem;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -65,5 +65,4 @@ const SignUpFormWrapper = styled.div`
 
 const DividerWrapper = styled.div`
   width: 100%;
-  padding-left: 2rem;
 `;

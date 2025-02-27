@@ -30,18 +30,18 @@ export default function NotificatoinPage() {
   const [notice, setNotice] = useState<AllInfoNotification | null>(null);
 
   useEffect(() => {
-    let accessToken = localStorage.getItem('accessToken');
-    if (!accessToken) return;
-    const EventSourceConstructor = EventSourcePolyfill || NativeEventSource;
-    const headers = { Authorization: `Bearer ${accessToken}` };
-
-    const evtSource = new EventSourceConstructor(
-      `${import.meta.env.VITE_API_DOMAIN}/api/notification/stream`,
-      { headers: headers, withCredentials: true }
-    );
-
     const runSSE = async () => {
       // 토큰이 없는 경우 연결하지 않음
+      let accessToken = localStorage.getItem('accessToken');
+      if (!accessToken) return;
+      const EventSourceConstructor = EventSourcePolyfill || NativeEventSource;
+      const headers = { Authorization: `Bearer ${accessToken}` };
+
+      console.log(`${import.meta.env.VITE_API_DOMAIN}/api/notification/stream`);
+      const evtSource = new EventSourceConstructor(
+        `${import.meta.env.VITE_API_DOMAIN}/api/notification/stream`,
+        { headers: headers, withCredentials: true }
+      );
 
       // 토큰 만료 여부 체크, 만료되었다면 갱신 시도
       if (isTokenExpired(accessToken)) {
@@ -92,11 +92,6 @@ export default function NotificatoinPage() {
     };
 
     runSSE();
-
-    return () => {
-      evtSource.close();
-      console.log('SSE 연결 종료');
-    };
   }, []);
 
   useEffect(() => {
@@ -171,7 +166,7 @@ const DeleteAll = styled.button`
   font-size: 1.6rem;
   font-style: normal;
   font-weight: 600;
-  line-height: 3.6rem; /* 225% */
+  line-height: 3.6rem;
   letter-spacing: -0.048rem;
 `;
 
@@ -238,7 +233,7 @@ const From = styled.div`
   font-size: 1.6rem;
   font-style: normal;
   font-weight: 500;
-  line-height: 3.6rem; /* 225% */
+  line-height: 3.6rem;
   letter-spacing: -0.08rem;
 `;
 
@@ -248,7 +243,7 @@ const Content = styled.div`
   font-size: 2.4rem;
   font-style: normal;
   font-weight: 500;
-  line-height: 3.6rem; /* 150% */
+  line-height: 3.6rem;
   letter-spacing: -0.12rem;
 `;
 
@@ -277,6 +272,6 @@ const Date = styled.div`
   font-size: 1.6rem;
   font-style: normal;
   font-weight: 500;
-  line-height: 3.6rem; /* 225% */
+  line-height: 3.6rem;
   letter-spacing: -0.08rem;
 `;

@@ -20,7 +20,7 @@ export default function AccessRestrictedModal({
 
           <Text>
             <span>
-              To full access ‘Community’ and ‘Market’ you
+              To full access ‘Community’ and ‘Market’ you&nbsp;
               <span>
                 need to <br />
                 verify that you are a student at Sogang university.
@@ -32,7 +32,7 @@ export default function AccessRestrictedModal({
             <span>
               <span>
                 <ColorPurple>Beta period</ColorPurple>: Free access to Community
-                and Market until March 22nd without verification.After that
+                and Market until March 22nd without verification. After that
                 date, only verified students will have full access.
               </span>
             </span>
@@ -51,6 +51,34 @@ export default function AccessRestrictedModal({
             </span>
           </Text>
         </AccessRestricted>
+
+        <MobileNotice>
+          <IconWrapper>
+            <InfoSVG />
+          </IconWrapper>
+          <Text>
+            <span>
+              Verify your Sogang student status to access ‘Community’ and
+              ‘Market’.&nbsp;
+            </span>
+          </Text>
+
+          <Text>
+            <span>
+              <span>
+                <ColorPurple>Beta period</ColorPurple>: Free access to Community
+                and Market until March 22nd without verification. After that
+                date, only verified students will have full access.
+              </span>
+            </span>
+          </Text>
+
+          <Text>
+            <span>
+              Verify now or later in Mypage {'>'} Student Verification.
+            </span>
+          </Text>
+        </MobileNotice>
         <ButtonBox>
           <LaterButton onClick={onClickLater}>verify later</LaterButton>
           <NowButton onClick={onClickNow}>verify now</NowButton>
@@ -61,6 +89,7 @@ export default function AccessRestrictedModal({
 }
 
 const AccessRestrictedWrapper = styled.div`
+  padding: 2rem;
   width: 100%;
   height: 100%;
   background: var(--Modal-Background, rgba(12, 12, 12, 0.3));
@@ -77,9 +106,14 @@ const AccessRestricted = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  padding: 5.6rem 2rem 0 2rem;
-  width: 58rem;
-  height: 51.8rem;
+  gap: 2rem;
+  padding: 5.6rem 2rem 2rem 2rem;
+  max-width: 58rem;
+
+  @media (max-width: 700px) {
+    display: none;
+  }
+
   flex-shrink: 0;
   border-radius: 5px 5px 0 0;
   background: ${({ theme }) => theme.colors.backgroundLayer1};
@@ -90,6 +124,11 @@ const AccessRestricted = styled.div`
 
 const IconWrapper = styled.div`
   text-align: center;
+  margin-bottom: 1rem;
+
+  @media (max-width: 500px) {
+    margin: 0;
+  }
 `;
 
 const InfoSVG = styled(Info).attrs({ width: '3.9rem', height: '3.9rem' })``;
@@ -102,6 +141,7 @@ const Text = styled.div`
     text-align: center;
     font-family: Inter;
     font-size: 20px;
+
     font-style: normal;
     font-weight: 400;
     line-height: 34px; /* 170% */
@@ -150,4 +190,25 @@ const NowButton = styled.div`
 
 const ColorPurple = styled.span`
   color: ${({ theme }) => theme.colors.purple600};
+`;
+
+const MobileNotice = styled.div`
+  display: none;
+
+  flex-direction: column;
+  justify-content: space-evenly;
+  gap: 2rem;
+  padding: 5.6rem 2rem 2rem 2rem;
+  max-width: 58rem;
+
+  flex-shrink: 0;
+  border-radius: 5px 5px 0 0;
+  background: ${({ theme }) => theme.colors.backgroundLayer1};
+
+  /* popup */
+  box-shadow: 2px 2px 2px 0px rgba(0, 0, 0, 0.11);
+
+  @media (max-width: 700px) {
+    display: flex;
+  }
 `;
