@@ -7,7 +7,6 @@ import UnlockSVG from '@/assets/svg/SignUpPage/UnlockSVG.svg?react';
 import PentagonSVG from '@/assets/svg/SignUpPage/PentagonSVG.svg?react';
 import { useRef, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { fetchWithAuth } from '@/utils/auth';
 export default function VerificationPage() {
   const [preview, setPreview] = useState<string>('');
   const imgFileRef = useRef<HTMLInputElement>(null);
@@ -44,10 +43,14 @@ export default function VerificationPage() {
     mutationFn: async (file: File) => {
       const formData = new FormData();
       formData.append('image_upload', file);
+      let accessToken = localStorage.getItem('accessToken');
+      if (!accessToken) return;
 
-      const data = await fetchWithAuth<any>(
+      const headers = { Authorization: `Bearer ${accessToken}` };
+      const data = await fetch(
         `${import.meta.env.VITE_API_DOMAIN}/api/user/univrequest`,
         {
+          headers,
           method: 'POST',
           body: formData
         }
@@ -70,6 +73,8 @@ export default function VerificationPage() {
       alert('Please Attach Image File');
       return;
     }
+    console.log(imgFile);
+
     uploadUniversityImageMutation.mutate(imgFile);
   };
   return (
