@@ -28,6 +28,5 @@ export default App;
 
 const AppContainer = styled.div`
   overflow-x: hidden;
-
   background-color: ${({ theme }) => theme.colors.backgroundLayer2};
 `;
