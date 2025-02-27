@@ -9,7 +9,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 const tags = ['All', 'Only For Sale'];
-const POST_PER_PAGE = 5;
+const POST_PER_PAGE = 16;
 
 export default function MarketPage() {
   const [selectedTag, setSelectedTag] = useState('All');

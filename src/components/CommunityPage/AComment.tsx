@@ -329,6 +329,9 @@ const SecretButton = styled.button<{ $isSecret: boolean }>`
   text-align: center;
   font-family: Inter;
   font-size: 1.6rem;
+  @media (max-width: 460px) {
+    font-size: 1.3rem;
+  }
   font-style: normal;
   font-weight: 300;
   line-height: normal;
@@ -371,6 +374,9 @@ const CommentInputWrapper = styled.div`
     background: ${({ theme }) => theme.colors.gray100};
     font-family: Inter;
     font-size: 1.6rem;
+    @media (max-width: 460px) {
+      font-size: 1.3rem;
+    }
     font-style: normal;
     font-weight: 300;
     letter-spacing: -0.08rem;
@@ -389,6 +395,9 @@ const CommentInputWrapper = styled.div`
       background: ${({ theme }) => theme.colors.gray100};
       font-family: Inter;
       font-size: 1.6rem;
+      @media (max-width: 460px) {
+        font-size: 1.3rem;
+      }
       font-style: normal;
       font-weight: 300;
       letter-spacing: -0.08rem;
@@ -407,6 +416,9 @@ const CommentButton = styled.button`
   text-align: center;
   font-family: Inter;
   font-size: 1.6rem;
+  @media (max-width: 460px) {
+    font-size: 1.3rem;
+  }
   font-style: normal;
   font-weight: 500;
   line-height: normal;
@@ -428,18 +440,27 @@ const Comments = styled.li`
       &:first-child {
         color: ${({ theme }) => theme.colors.gray700};
         font-size: 2rem;
+        @media (max-width: 460px) {
+          font-size: 1.7rem;
+        }
         font-weight: 600;
         letter-spacing: -0.1rem;
       }
       &:nth-child(2) {
         color: ${({ theme }) => theme.colors.gray700};
         font-size: 2rem;
+        @media (max-width: 460px) {
+          font-size: 1.7rem;
+        }
         font-weight: 300;
         letter-spacing: -0.1rem;
       }
       &:nth-child(3) {
         color: ${({ theme }) => theme.colors.gray500};
         font-size: 1.4rem;
+        @media (max-width: 460px) {
+          font-size: 1.1rem;
+        }
         font-weight: 300;
         letter-spacing: -0.07rem;
       }
@@ -450,6 +471,9 @@ const Comments = styled.li`
 const ButtonWrapper = styled.div`
   color: ${({ theme }) => theme.colors.gray700};
   font-size: 1.4rem;
+  @media (max-width: 460px) {
+    font-size: 1.1rem;
+  }
   font-weight: 300;
   letter-spacing: -0.07rem;
   display: flex;
@@ -543,7 +567,10 @@ const TextNormal = styled.div`
     color: ${({ theme }) => theme.colors.gray700};
     text-align: center;
     font-family: Inter;
-    font-size: 20px;
+    font-size: 2rem;
+    @media (max-width: 460px) {
+      font-size: 1.7rem;
+    }
     font-style: normal;
     font-weight: 400;
     line-height: 34px;
@@ -567,7 +594,10 @@ const ButtonBox = styled.div`
     align-items: center;
     text-align: center;
     font-family: Inter;
-    font-size: 20px;
+    font-size: 2rem;
+    @media (max-width: 460px) {
+      font-size: 1.7rem;
+    }
     font-style: normal;
     font-weight: 500;
     line-height: 25px;

@@ -122,11 +122,11 @@ export default function LoginForm() {
 
 const DividerWrapper = styled.div`
   width: 100%;
-  padding-left: 2rem;
+  padding: 0 2rem;
 `;
 
 const LoginButtonWrapper = styled.div`
-  padding-left: 2rem;
+  padding: 0 2rem;
   width: 100%;
   max-width: 38.6rem;
 `;
@@ -144,14 +144,14 @@ const PasswordWrapper = styled.div`
   position: relative;
   width: 100%;
   max-width: 60.5rem;
-  padding-left: 2rem;
+  padding: 0 2rem;
 `;
 
 const EyeStyled = styled(Eye)<{ $eyeOn: boolean }>`
   cursor: pointer;
   position: absolute;
   top: 50%;
-  right: 2rem;
+  right: 3rem;
 
   transform: translateY(-50%);
 
@@ -241,5 +241,5 @@ const EmailInputWrapper = styled.div`
   margin-bottom: 2.1rem;
   width: 100%;
   max-width: 60.5rem;
-  padding-left: 2rem;
+  padding: 0 2rem;
 `;

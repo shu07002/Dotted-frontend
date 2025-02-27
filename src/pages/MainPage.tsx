@@ -74,6 +74,7 @@ export default function MainPage() {
             <CommunityList>
               <ul>
                 {onePageCommuData?.map((item, idx) => {
+                  if (idx > 4) return null;
                   return (
                     <li
                       key={idx}

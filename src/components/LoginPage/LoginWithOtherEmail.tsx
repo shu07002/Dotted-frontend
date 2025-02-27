@@ -23,7 +23,7 @@ const LoginWithOtherEmailWrapper = styled.div`
   align-items: center;
   gap: 1.2rem;
   margin-bottom: 4.8rem;
-  padding-left: 2rem;
+  padding: 0 2rem;
 `;
 
 // const BlackButtonWrapper = styled.div`
