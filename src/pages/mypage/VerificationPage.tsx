@@ -44,10 +44,14 @@ export default function VerificationPage() {
     mutationFn: async (file: File) => {
       const formData = new FormData();
       formData.append('image_upload', file);
+      let accessToken = localStorage.getItem('accessToken');
+      if (!accessToken) return;
 
-      const data = await fetchWithAuth<any>(
+      const headers = { Authorization: `Bearer ${accessToken}` };
+      const data = await fetch(
         `${import.meta.env.VITE_API_DOMAIN}/api/user/univrequest`,
         {
+          headers,
           method: 'POST',
           body: formData
         }
@@ -70,6 +74,8 @@ export default function VerificationPage() {
       alert('Please Attach Image File');
       return;
     }
+    console.log(imgFile);
+
     uploadUniversityImageMutation.mutate(imgFile);
   };
   return (
