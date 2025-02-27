@@ -1,5 +1,4 @@
 // import { useQuery } from '@tanstack/react-query';
-import { cultureData } from '@/components/tips/culture/testData';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import BackIcon from '@/assets/svg/tips/culture/back.svg?react';
