@@ -21,7 +21,6 @@ export default function NiceMsg({ msg }: NiceMsgProps) {
 
 const NiceText = styled.span`
   color: ${({ theme }) => theme.colors.purple600};
-  font-family: Pretendard;
   font-size: 16px;
   font-style: normal;
   font-weight: 300;

@@ -228,7 +228,7 @@ const ReadAll = styled.button`
   cursor: pointer;
   color: ${({ theme }) => theme.colors.purple600};
   text-align: center;
-  font-family: Pretendard;
+
   font-size: 1.6rem;
   border-radius: 1.6rem;
   padding: 0 1.5rem;
@@ -248,7 +248,7 @@ const DeleteAll = styled.button`
   cursor: pointer;
   color: var(--Semantic-Negative-900, #ea3729);
   text-align: center;
-  font-family: Pretendard;
+
   font-size: 1.6rem;
   font-style: normal;
   font-weight: 600;
@@ -295,7 +295,7 @@ const Title = styled.div`
   gap: 1.2rem;
   width: 100%;
   color: ${({ theme }) => theme.colors.gray700};
-  font-family: Pretendard;
+
   font-size: 3.6rem;
   @media (max-width: 460px) {
     font-size: 3.1rem;
@@ -350,7 +350,7 @@ const RightDiv = styled.div`
 
 const From = styled.div`
   color: ${({ theme }) => theme.colors.purple600};
-  font-family: Pretendard;
+
   font-size: 1.6rem;
   @media (max-width: 700px) {
     font-size: 1.7rem;
@@ -363,7 +363,7 @@ const From = styled.div`
 
 const Content = styled.div`
   color: ${({ theme }) => theme.colors.gray700};
-  font-family: Pretendard;
+
   font-size: 2.4rem;
   @media (max-width: 700px) {
     font-size: 2.1rem;
@@ -397,7 +397,7 @@ const DeleteButtonWrapper = styled.div`
 const Date = styled.div`
   color: ${({ theme }) => theme.colors.gray400};
   text-align: right;
-  font-family: Pretendard;
+
   width: 10rem;
   font-size: 1.6rem;
   @media (max-width: 700px) {

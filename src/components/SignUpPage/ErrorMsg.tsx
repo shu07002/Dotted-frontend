@@ -23,7 +23,6 @@ export default function ErrorMsg({ msg }: ErrorMsgProps) {
 
 const ErrorText = styled.span`
   color: var(--Semantic-Negative-900, #ea3729);
-  font-family: Pretendard;
   font-size: 16px;
   font-style: normal;
   font-weight: 300;

@@ -146,7 +146,7 @@ const InputWrapper = styled.div`
 const Label = styled.label`
   width: 100%;
   color: ${({ theme }) => theme.colors.gray700};
-  font-family: Pretendard;
+
   font-size: 16px;
   font-style: normal;
   font-weight: 300;
@@ -161,7 +161,7 @@ const Input = styled.input`
   border-radius: 5px;
   border: 1px solid ${({ theme }) => theme.colors.gray300};
   background: ${({ theme }) => theme.colors.gray100};
-  font-family: Pretendard;
+
   font-size: 20px;
   font-style: normal;
   font-weight: 400;
@@ -194,7 +194,7 @@ const SubmitButton = styled.button`
 
   color: ${({ theme }) => theme.colors.gray50};
   text-align: center;
-  font-family: Pretendard;
+
   font-size: 20px;
   font-style: normal;
   font-weight: 500;

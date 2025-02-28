@@ -117,7 +117,6 @@ export default function Nickname({ register, watch }: NicknameProps) {
 const SubText = styled.span`
   margin-left: 2rem;
   color: ${({ theme }) => theme.colors.gray400};
-  font-family: Pretendard;
   font-size: 16px;
   font-style: normal;
   font-weight: 300;

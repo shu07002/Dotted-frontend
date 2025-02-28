@@ -30,7 +30,7 @@ const NextButtonWrapper = styled.div`
   > span {
     color: ${({ theme }) => theme.colors.gray50};
     text-align: center;
-    font-family: Pretendard;
+
     font-size: 20px;
     font-style: normal;
     font-weight: 500;
@@ -42,7 +42,7 @@ const NextButtonWrapper = styled.div`
 const NextButtonText = styled.div`
   color: ${({ theme }) => theme.colors.gray50};
   text-align: center;
-  font-family: Pretendard;
+
   font-size: 20px;
   font-style: normal;
   font-weight: 500;

@@ -17,7 +17,7 @@ export default function MarketScraps() {
   const navigate = useNavigate();
   const [posts, setPosts] = useState<PostType[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const postsPerPage = 8; // 페이지당 표시할 게시글 수
+  const postsPerPage = 6; // 페이지당 표시할 게시글 수
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -126,15 +126,22 @@ export default function MarketScraps() {
 }
 
 const Section = styled.section`
-  height: 100vh;
+  /* height: 100%; */
 `;
 const MarketContainer = styled.div`
   height: 80%;
   padding: 2rem 0rem;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   grid-template-rows: 1fr 1fr;
   gap: 2.4rem;
+  @media (max-width: 1180px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media (max-width: 768px) {
+    display: flex;
+    flex-direction: column;
+  }
 `;
 const PostBox = styled.div`
   width: 100%;
@@ -146,6 +153,8 @@ const PostBox = styled.div`
   display: grid;
   grid-template-rows: 70% 1fr;
   border: 1px solid ${({ theme }) => theme.colors.gray200};
+  flex-shrink: 0;
+
   @media (hover: hover) and (pointer: fine) {
     &:hover {
       background-color: ${({ theme }) => theme.colors.gray100};
@@ -165,6 +174,14 @@ const PostBox = styled.div`
     height: 100%;
     object-fit: cover;
     transition: scale 0.3s;
+  }
+  @media (max-width: 768px) {
+    grid-template-rows: 1fr;
+    grid-template-columns: 30% 1fr;
+    height: 10rem;
+    > figure {
+      height: 10rem;
+    }
   }
 `;
 
@@ -224,7 +241,9 @@ const PaginationBox = styled.div`
     background: none;
     font-size: 1.6rem;
     font-weight: 400;
-
+    display: flex;
+    justify-content: center;
+    align-items: center;
     &.selected {
       background-color: ${({ theme }) => theme.colors.purple600};
       color: ${({ theme }) => theme.colors.gray50};

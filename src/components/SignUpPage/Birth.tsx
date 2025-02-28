@@ -83,7 +83,6 @@ const Select = styled.select`
   border: 1px solid ${({ theme }) => theme.colors.gray700};
   background: ${({ theme }) => theme.colors.backgroundLayer2};
   color: ${({ theme }) => theme.colors.gray700};
-  font-family: Pretendard;
   font-size: 20px;
   font-style: normal;
   font-weight: 400;

@@ -258,7 +258,7 @@ const Title = styled.div`
   justify-content: center;
   flex-shrink: 0;
   color: ${({ theme }) => theme.colors.gray700};
-  font-family: Pretendard;
+
   font-size: 36px;
   @media (max-width: 700px) {
     font-size: 33px;
@@ -274,7 +274,7 @@ const Guide = styled.div`
   > span {
     &:last-child {
       color: ${({ theme }) => theme.colors.purple600};
-      font-family: Pretendard;
+
       font-size: 24px;
       @media (max-width: 700px) {
         font-size: 21px;
@@ -285,7 +285,7 @@ const Guide = styled.div`
       letter-spacing: -0.72px;
     }
     color: ${({ theme }) => theme.colors.gray700};
-    font-family: Pretendard;
+
     font-size: 24px;
     @media (max-width: 700px) {
       font-size: 21px;
@@ -300,7 +300,7 @@ const Guide = styled.div`
 const Example = styled.div`
   width: 100%;
   color: ${({ theme }) => theme.colors.gray500};
-  font-family: Pretendard;
+
   font-size: 20px;
   @media (max-width: 700px) {
     font-size: 17px;
@@ -320,7 +320,7 @@ const Warnning = styled.div`
 
   > span {
     color: var(--Semantic-Negative-900, #ea3729);
-    font-family: Pretendard;
+
     font-size: 20px;
     @media (max-width: 700px) {
       font-size: 17px;
@@ -363,7 +363,7 @@ const AttatchImage = styled.div`
       &:last-child {
         color: ${({ theme }) => theme.colors.purple600};
         text-align: center;
-        font-family: Pretendard;
+
         font-size: 16px;
         @media (max-width: 700px) {
           font-size: 13px;
@@ -376,7 +376,7 @@ const AttatchImage = styled.div`
 
       color: ${({ theme }) => theme.colors.gray700};
       text-align: center;
-      font-family: Pretendard;
+
       font-size: 24px;
       @media (max-width: 700px) {
         font-size: 21px;
@@ -425,7 +425,7 @@ const Notice = styled.div`
         }
       }
       text-align: center;
-      font-family: Pretendard;
+
       font-size: 20px;
       @media (max-width: 700px) {
         font-size: 17px;
@@ -494,7 +494,7 @@ const ButtonWrapper = styled.div`
     background: ${({ theme }) => theme.colors.purple600};
     color: ${({ theme }) => theme.colors.gray50};
     text-align: center;
-    font-family: Pretendard;
+
     font-size: 20px;
     @media (max-width: 700px) {
       font-size: 17px;
@@ -518,7 +518,7 @@ const SubmitButton = styled.div`
   background: ${({ theme }) => theme.colors.purple600};
   color: ${({ theme }) => theme.colors.gray50};
   text-align: center;
-  font-family: Pretendard;
+
   font-size: 20px;
   @media (max-width: 700px) {
     font-size: 17px;

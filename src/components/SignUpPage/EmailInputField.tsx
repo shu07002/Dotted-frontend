@@ -97,7 +97,7 @@ const EmailInput = styled.div<{ $isSogangEmail: boolean }>`
       border-radius: 5px;
       border: 1px solid ${({ theme }) => theme.colors.gray300};
       background: ${({ theme }) => theme.colors.gray100};
-      font-family: Pretendard;
+
       font-size: 20px;
       font-style: normal;
       font-weight: 400;
@@ -109,7 +109,7 @@ const EmailInput = styled.div<{ $isSogangEmail: boolean }>`
 
   > span {
     color: ${({ theme }) => theme.colors.gray700};
-    font-family: Pretendard;
+
     font-size: 20px;
     font-style: normal;
     font-weight: 400;

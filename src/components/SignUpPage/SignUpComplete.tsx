@@ -57,7 +57,7 @@ const Text = styled.span`
   color: ${({ theme }) => theme.colors.gray700};
   margin-bottom: 8.3rem;
   text-align: center;
-  font-family: Pretendard;
+
   font-size: 24px;
   font-style: normal;
   font-weight: 700;
@@ -76,7 +76,7 @@ const ToLoginButton = styled.div`
   color: ${({ theme }) => theme.colors.gray50};
   margin-bottom: 11.3rem;
   text-align: center;
-  font-family: Pretendard;
+
   font-size: 20px;
   font-style: normal;
   font-weight: 500;

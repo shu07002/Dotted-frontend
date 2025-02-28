@@ -165,7 +165,6 @@ const Tag = styled.li<{ $selected: boolean }>`
 
   color: ${({ theme }) => theme.colors.gray400};
   text-align: center;
-  font-family: Pretendard;
   font-size: 1.6rem;
   @media (max-width: 460px) {
     font-size: 1.3rem;
