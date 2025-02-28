@@ -74,7 +74,8 @@ const BirthSelectWrapper = styled.div`
 `;
 
 const Select = styled.select`
-  padding: 0 1rem;
+  padding: 0 0.5rem;
+  min-width: 80px;
   width: 100%;
   height: 50px;
   flex-shrink: 0;
@@ -83,9 +84,13 @@ const Select = styled.select`
   border: 1px solid ${({ theme }) => theme.colors.gray700};
   background: ${({ theme }) => theme.colors.backgroundLayer2};
   color: ${({ theme }) => theme.colors.gray700};
-  font-size: 20px;
+  font-size: 17px;
   font-style: normal;
   font-weight: 400;
   line-height: 36px; /* 180% */
   letter-spacing: -0.6px;
+  @media (max-width: 460px) {
+    font-size: 1.4rem;
+    padding-right: 0.1rem;
+  }
 `;

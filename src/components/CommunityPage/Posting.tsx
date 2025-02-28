@@ -63,6 +63,10 @@ export default function Posting({
     onClickLike();
   };
 
+  useEffect(() => {
+    console.log(replacedContent);
+  }, [replacedContent]);
+
   const handleScrapClick = () => {
     if (localScrapped) {
       setLocalScrapCount((prev) => prev - 1);
@@ -105,7 +109,6 @@ export default function Posting({
           <span>{formatRelativeTime(post.created_at)}</span>
           <span>•</span>
           <span>by</span>
-          <span>•</span>
           <span>{post.writer_nickname}</span>
           <span>•</span>
           <span>
@@ -232,13 +235,13 @@ const PostingWriter = styled.div`
     &:first-child,
     &:nth-child(2),
     &:nth-child(3),
-    &:nth-child(4),
     &:nth-child(6),
     &:nth-child(7) {
       font-weight: 300;
     }
 
-    &:nth-child(5) {
+    &:nth-child(5),
+    &:nth-child(4) {
       font-weight: 500;
     }
 
