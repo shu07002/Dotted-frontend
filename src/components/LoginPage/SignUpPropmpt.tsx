@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import Arrow from '@/assets/svg/SignUpPage/ArrowSVG.svg?react';
 import { useNavigate } from 'react-router-dom';
 
 export default function SignUpPropmpt() {
