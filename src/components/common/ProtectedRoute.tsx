@@ -54,7 +54,7 @@ export const LoginModal = ({
         >
           <h1>
             This service is available
-            <br /> <span>after loggin in.</span>
+            <br /> <span>after you log in.</span>
           </h1>
           <div>
             <button onClick={() => handleCloseClick(pathname)}>
