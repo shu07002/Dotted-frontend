@@ -69,8 +69,6 @@ const Notice = styled.div`
 `;
 
 const ImgBoxContainer = styled.div`
-  overflow: auto;
-
   overflow-y: hidden;
 `;
 

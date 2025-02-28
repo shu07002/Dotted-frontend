@@ -48,10 +48,14 @@ export default function MainPage() {
   });
 
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [uglyZone, setUglyZone] = useState(
+    window.innerWidth < 1150 && window.innerWidth >= 768
+  );
 
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
+      setUglyZone(window.innerWidth < 1150 && window.innerWidth >= 768);
     };
 
     window.addEventListener('resize', handleResize);
@@ -97,7 +101,7 @@ export default function MainPage() {
             <MarketListContainer>
               <ul>
                 {onePageMarketData?.map((post, idx) => {
-                  if (idx > (isMobile ? 3 : 2)) return null;
+                  if (idx > (isMobile ? 3 : uglyZone ? 1 : 2)) return null;
                   const status = post.status
                     .toLocaleLowerCase()
                     .split('_')
@@ -181,6 +185,10 @@ const Title = styled.div`
   display: flex;
   justify-content: space-between;
   padding: 0 2.5rem;
+
+  @media (max-width: 865px) {
+    padding: 0 0.2rem;
+  }
   height: 4.7rem;
   align-items: center;
   > span {

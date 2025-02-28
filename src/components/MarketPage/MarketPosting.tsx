@@ -1,5 +1,5 @@
 import { MarketPostDetail } from '@/pages/market/DetailMarketPage';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Slider from 'react-slick';
 import styled from 'styled-components';
 import { NextArrow, PrevArrow } from '@/components/MainPage/CustomArrow';
@@ -7,16 +7,23 @@ import Profile from '@/assets/svg/CommunityPage/Profile.svg?react';
 import Scrap from '@/assets/svg/CommunityPage/Scrap.svg?react';
 import MoreButton from '../CommunityPage/MoreButton';
 import { formatRelativeTime } from '@/utils/formatTime';
+import Modal from 'react-modal';
+import Close from '@/assets/svg/MarketPage/close.svg?react';
 
-const setting = {
-  infinite: true,
-  speed: 750,
-  slidesToShow: 1,
-  slidesToScroll: 1,
-  autoplay: false,
-
-  prevArrow: <PrevArrow />,
-  nextArrow: <NextArrow />
+const customStyles = {
+  content: {
+    inset: '0',
+    padding: '0',
+    width: '100%',
+    height: '100%',
+    overflow: 'hidden',
+    overflowY: 'hidden' as 'auto' | 'hidden' | 'scroll' | 'visible' | undefined,
+    backgroundColor: 'var(--modal-Background)',
+    zIndex: 9999
+  },
+  overlay: {
+    zIndex: 9999
+  }
 };
 
 interface MarketPostingProps {
@@ -35,6 +42,85 @@ export default function MarketPosting({
   const [localScrapCount, setLocalScrapCount] = useState(post.scrap_count);
   const [localScrapped, setLocalScrapped] = useState(post.is_scrapped);
   const [localStatus, setLocalStatus] = useState(post.status);
+  const [openModal, setOpenModal] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [zoomLevel, setZoomLevel] = useState(1);
+
+  useEffect(() => {
+    const handleZoom = (e: WheelEvent) => {
+      if (e.ctrlKey) {
+        e.preventDefault();
+        setZoomLevel((prevZoom) => {
+          const newZoom = prevZoom + (e.deltaY > 0 ? -0.1 : 0.1);
+          return Math.min(Math.max(newZoom, 0.7), 2);
+        });
+      }
+    };
+
+    if (openModal) {
+      // ✅ 배경 스크롤 차단 (스크롤 위치 유지)
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${window.scrollY}px`;
+      document.body.style.left = '0';
+      document.body.style.right = '0';
+
+      document.body.style.overflow = 'hidden';
+
+      document.addEventListener('wheel', handleZoom, { passive: false });
+    } else {
+      // ✅ 배경 스크롤 원래대로 복구
+      const scrollY = document.body.style.top;
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.right = '';
+
+      document.body.style.overflow = 'auto';
+      window.scrollTo(0, parseInt(scrollY || '0') * -1);
+    }
+
+    return () => {
+      document.removeEventListener('wheel', handleZoom);
+      setZoomLevel(1);
+    };
+  }, [openModal]);
+
+  const setting = {
+    infinite: true,
+    speed: 750,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: false,
+
+    prevArrow: <PrevArrow />,
+    nextArrow: <NextArrow />,
+    afterChange: (index: number) => setCurrentIndex(index),
+    accessibility: false
+  };
+
+  useEffect(() => {
+    const handleListClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+
+      if (target.closest('.slick-prev') || target.closest('.slick-next')) {
+        return;
+      }
+
+      console.log('slick-list 내부 클릭됨:', target);
+      setOpenModal(true);
+    };
+
+    const list = document.querySelector('.slick-list');
+    if (list) {
+      list.addEventListener('click', handleListClick as EventListener);
+    }
+
+    return () => {
+      if (list) {
+        list.removeEventListener('click', handleListClick as EventListener);
+      }
+    };
+  }, []);
 
   const handleScrapClick = () => {
     if (localScrapped) {
@@ -45,15 +131,51 @@ export default function MarketPosting({
     setLocalScrapped((prev) => !prev);
     onClickScrap();
   };
-  console.log(post);
+
+  const onClickImgWrapper = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    e.stopPropagation();
+    setOpenModal(true);
+  };
+
   return (
     <ItemWrapper>
+      <Modal
+        isOpen={openModal}
+        style={customStyles}
+        onRequestClose={() => setOpenModal((prev) => !prev)}
+        contentLabel="example"
+      >
+        <CloseButton type="button" onClick={() => setOpenModal(false)}>
+          Close <Close />
+        </CloseButton>
+        <AccessRestrictedWrapper onClick={() => setOpenModal(false)}>
+          <AccessRestrictedNormal onClick={(e) => e.stopPropagation()}>
+            <div>
+              <img
+                src={post.images[currentIndex].image_url}
+                alt="Market Image"
+                style={{
+                  transform: `scale(${zoomLevel})`,
+                  transition: 'transform 0.2s ease-in-out' // 부드러운 확대 효과
+                }}
+              />
+            </div>
+          </AccessRestrictedNormal>
+        </AccessRestrictedWrapper>
+      </Modal>
       <div>
         {post.images.length > 0 && (
           <ImgCarouselWrapper>
             <StyledSlider {...setting}>
               {post.images.map((image, idx) => (
-                <SlideContent key={idx}>
+                <SlideContent
+                  key={idx}
+                  onClick={(e) => {
+                    onClickImgWrapper(e);
+                  }}
+                >
                   <ImageWrapper>
                     <img src={image.image_url} />
                   </ImageWrapper>
@@ -127,6 +249,67 @@ const MobileScrap = styled.span`
   }
 `;
 
+const CloseButton = styled.button`
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background-color: ${({ theme }) => theme.colors.gray50};
+  padding: 0.3rem 2rem;
+  top: 1rem;
+  left: 1rem;
+  position: absolute;
+  color: ${({ theme }) => theme.colors.gray800};
+  font-family: Pretendard;
+  font-size: 1.7rem;
+  font-style: normal;
+  font-weight: 700;
+  border-radius: 1.6rem;
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: ${({ theme }) => theme.colors.gray200};
+    }
+  }
+`;
+
+const AccessRestrictedWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  background: var(--Modal-Background, rgba(12, 12, 12, 0.3));
+  position: absolute;
+  z-index: 10;
+  padding: 2rem;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: auto;
+  overscroll-behavior: contain;
+`;
+
+const AccessRestrictedNormal = styled.div`
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  > div {
+    position: relative;
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: inherit;
+
+    > img {
+      width: 100%;
+      object-fit: cover;
+      max-height: 60vh;
+    }
+  }
+`;
+
 const ItemWrapper = styled.div`
   display: flex;
   gap: 2rem;
@@ -172,7 +355,7 @@ const ImgCarouselWrapper = styled.div`
 const StyledSlider = styled(Slider)`
   position: relative;
   width: 100%;
-  height: 100%; /* ✅ 높이를 명확히 설정 */
+  height: 100%;
 
   .slick-slider {
     width: 100%;
@@ -182,13 +365,24 @@ const StyledSlider = styled(Slider)`
   .slick-list {
     width: 100%;
     height: 100%;
-    overflow: hidden; /* ✅ 슬라이드가 한 개씩 나오도록 제한 */
+    overflow: hidden;
+    cursor: pointer;
   }
 
   .slick-track {
     width: 100% !important;
     display: flex;
     height: 100%;
+
+    > div {
+      transition: transform 0.2s ease-in-out;
+      transform-origin: center;
+      @media (hover: hover) and (pointer: fine) {
+        &:hover {
+          transform: scale(1.1);
+        }
+      }
+    }
   }
 
   .slick-slide {
@@ -406,13 +600,5 @@ const ImageWrapper = styled.div`
     width: 100%;
     height: 100%;
     object-fit: cover; /* 비율을 유지하면서 꽉 채움 */
-
-    transition: transform 0.2s ease-in-out;
-    transform-origin: center; /* 중심을 기준으로 확대 */ /* 부모와 동일한 border-radius 적용 */
-    @media (hover: hover) and (pointer: fine) {
-      &:hover {
-        transform: scale(1.1);
-      }
-    }
   }
 `;
