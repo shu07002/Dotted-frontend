@@ -7,38 +7,52 @@ import FAQ from '@/assets/svg/MainPage/FAQ.svg?react';
 import Clubs from '@/assets/svg/MainPage/Clubs.svg?react';
 import Culture from '@/assets/svg/MainPage/Culture.svg?react';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { LoginModal } from '../common/ProtectedRoute';
 
 export default function Tips() {
+  const [modalOpen, setModalOpen] = useState(false);
   const navigate = useNavigate();
+  const isLogined = () => {
+    return !!localStorage.getItem('accessToken');
+  };
+  const handleTipClick = (path: string) => {
+    if (!isLogined()) {
+      setModalOpen(true);
+    } else {
+      navigate(path);
+    }
+  };
   return (
     <TipsWrapper>
       <Title>Tips for Sogang</Title>
       <Contents>
-        <Item onClick={() => navigate('/tips/sogang-map')}>
+        <Item onClick={() => handleTipClick('/tips/sogang-map')}>
           <SogangMap />
           <span>Sogang Map</span>
         </Item>
-        <Item onClick={() => navigate('/tips/restaurant')}>
+        <Item onClick={() => handleTipClick('/tips/restaurant')}>
           <Restaurant />
           <span>Restaurant</span>
         </Item>
-        <Item onClick={() => navigate('/tips/hospital')}>
+        <Item onClick={() => handleTipClick('/tips/hospital')}>
           <Hospital />
           <span>Hospital</span>
         </Item>
-        <Item onClick={() => navigate('/tips/faq')}>
+        <Item onClick={() => handleTipClick('/tips/faq')}>
           <FAQ />
           <span>FAQ</span>
         </Item>
-        <Item onClick={() => navigate('/tips/clubs')}>
+        <Item onClick={() => handleTipClick('/tips/clubs')}>
           <Clubs />
           <span>Clubs</span>
         </Item>
-        <Item onClick={() => navigate('/tips/culture')}>
+        <Item onClick={() => handleTipClick('/tips/culture')}>
           <Culture />
           <span>Culture</span>
         </Item>
       </Contents>
+      {modalOpen && <LoginModal setModalOpen={setModalOpen} />}
     </TipsWrapper>
   );
 }
@@ -49,7 +63,7 @@ const TipsWrapper = styled.section`
 
 const Title = styled.div`
   color: ${({ theme }) => theme.colors.gray700};
-  font-family: Inter;
+
   font-size: 24px;
   font-style: normal;
   font-weight: 500;
@@ -91,7 +105,7 @@ const Item = styled.div`
   > span {
     color: ${({ theme }) => theme.colors.gray700};
     text-align: center;
-    font-family: Inter;
+
     font-size: 16px;
     font-style: normal;
     font-weight: 300;

@@ -279,7 +279,7 @@ const TextNormal = styled.div`
   > span {
     color: ${({ theme }) => theme.colors.gray700};
     text-align: center;
-    font-family: Inter;
+
     font-size: 2rem;
     @media (max-width: 460px) {
       font-size: 1.7rem;
@@ -306,7 +306,7 @@ const ButtonBox = styled.div`
     justify-content: center;
     align-items: center;
     text-align: center;
-    font-family: Inter;
+
     font-size: 2rem;
     @media (max-width: 460px) {
       font-size: 1.7rem;
@@ -365,7 +365,7 @@ const Menu = styled.div`
     cursor: pointer;
     padding: 1rem 2rem;
     color: ${({ theme }) => theme.colors.gray700};
-    font-family: Inter;
+
     font-size: 1.6rem;
     @media (max-width: 460px) {
       font-size: 1.3rem;
@@ -403,8 +403,6 @@ const Comments = styled.div`
       gap: 0.2rem;
     }
     > div {
-      font-family: Inter;
-
       &:first-child {
         color: ${({ theme }) => theme.colors.gray700};
         font-size: 2rem;
@@ -472,7 +470,7 @@ const CommentInputWrapper = styled.div`
     height: 100%;
     border-radius: 0.4rem;
     background: ${({ theme }) => theme.colors.gray100};
-    font-family: Inter;
+
     font-size: 1.6rem;
     @media (max-width: 460px) {
       font-size: 1.3rem;
@@ -491,7 +489,7 @@ const CommentInputWrapper = styled.div`
       height: 100%;
       border-radius: 0.4rem;
       background: ${({ theme }) => theme.colors.gray100};
-      font-family: Inter;
+
       font-size: 1.6rem;
       @media (max-width: 460px) {
         font-size: 1.3rem;
@@ -512,7 +510,7 @@ const CommentButton = styled.button`
   background: ${({ theme }) => theme.colors.purple600};
   color: ${({ theme }) => theme.colors.gray50};
   text-align: center;
-  font-family: Inter;
+
   font-size: 1.6rem;
   @media (max-width: 460px) {
     font-size: 1.3rem;

@@ -26,7 +26,6 @@ const CreateEmailButtonBox = styled.div`
 const CreateEmailText = styled.p`
   color: ${({ theme }) => theme.colors.purple600};
   text-align: center;
-  font-family: Inter;
   font-size: 20px;
   @media (max-width: 400px) {
     font-size: 15px;

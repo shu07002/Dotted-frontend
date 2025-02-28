@@ -289,7 +289,6 @@ const WriteButton = styled.button`
 
   color: #fff;
   text-align: center;
-  font-family: Inter;
   font-size: 1.4rem;
   @media (max-width: 460px) {
     font-size: 1.1rem;

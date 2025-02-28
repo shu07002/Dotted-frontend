@@ -116,7 +116,7 @@ const PostingTitle = styled.div`
     }
 
     color: ${({ theme }) => theme.colors.gray700};
-    font-family: Inter;
+
     font-size: 1.6rem;
     @media (max-width: 460px) {
       font-size: 1.3rem;
@@ -142,7 +142,7 @@ const PostingWriter = styled.div`
     align-items: center;
     gap: 0.25rem;
     color: ${({ theme }) => theme.colors.gray500};
-    font-family: Inter;
+
     font-style: normal;
     line-height: normal;
     letter-spacing: -0.07rem;
@@ -171,7 +171,7 @@ const PostingWriter = styled.div`
 const PostingTag = styled.div<{ $color: string }>`
   color: ${({ theme }) => theme.colors.gray50};
   text-align: center;
-  font-family: Inter;
+
   font-size: 1.3rem;
   font-style: normal;
   font-weight: 500;

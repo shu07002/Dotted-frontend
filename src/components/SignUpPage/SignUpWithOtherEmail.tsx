@@ -54,7 +54,6 @@ const SignUpWithOtherEmailWrapper = styled.div`
 //     width: 176px;
 //     color: ${({ theme }) => theme.colors.gray50};
 //     text-align: center;
-//     font-family: Inter;
 //     font-size: 15px;
 //     font-style: normal;
 //     font-weight: 300;
@@ -79,7 +78,6 @@ const GrayButtonWrapper = styled.div`
     width: 154px;
     color: ${({ theme }) => theme.colors.gray800};
     text-align: center;
-    font-family: Inter;
     font-size: 15px;
     font-style: normal;
     font-weight: 300;

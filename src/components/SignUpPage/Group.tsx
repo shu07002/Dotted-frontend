@@ -64,7 +64,6 @@ const RadioLabel = styled.label`
   gap: 0.5rem; /* 라디오 버튼과 텍스트 사이 여백 */
   margin-right: 1.2rem;
   color: ${({ theme }) => theme.colors.gray600};
-  font-family: Inter;
   font-size: 16px;
   font-style: normal;
   font-weight: 400;

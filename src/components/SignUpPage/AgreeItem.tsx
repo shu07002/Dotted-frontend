@@ -49,7 +49,6 @@ const AgreeItemBox = styled.div`
 
   > span {
     color: ${({ theme }) => theme.colors.gray900};
-    font-family: Inter;
     font-size: 20px;
     font-style: normal;
     font-weight: 400;

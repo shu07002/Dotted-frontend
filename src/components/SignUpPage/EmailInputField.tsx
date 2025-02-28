@@ -72,7 +72,6 @@ const EmailInputFieldWrapper = styled.div`
     max-width: 60.5rem;
     > span {
       color: ${({ theme }) => theme.colors.gray600};
-      font-family: Inter;
       font-size: 18px;
       font-style: normal;
       font-weight: 500;

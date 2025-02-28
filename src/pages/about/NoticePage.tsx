@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { EachNoticePost, useNotice } from '@/hooks/useNotice';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import dayjs from 'dayjs';
+import { NoticeList } from '@/components/about/notice/NoticeList';
 
 const POSTS_PER_PAGE = 7; // 7개씩 표시
 
@@ -80,14 +81,6 @@ export default function NoticePage() {
   //   setSearchParams({ page: targetPage.toString(), keyword, searchType });
   // };
 
-  const dummy = [
-    {
-      id: 1,
-      question: '📢 [Dotted Beta Period & Verification Notice]',
-      created_at: '2025-03-01'
-    }
-  ];
-
   return (
     <FAQPageContainer>
       <Wrapper>
@@ -107,14 +100,14 @@ export default function NoticePage() {
         </NoticeAndSearch>
 
         <FAQBox>
-          {dummy.map((item, idx) => {
+          {NoticeList.map((item, idx) => {
             return (
               <div key={item.id}>
                 <FAQItem onClick={() => navigate(`/about/notice/${item.id}`)}>
                   <div className="question">
                     <div>
                       <div>{idx + 1 + (currentPage - 1) * POSTS_PER_PAGE}</div>
-                      {item.question}
+                      {item.title}
                     </div>
                     <ArrowWrapper>
                       {dayjs(item.created_at).format('YYYY/MM/DD')}
@@ -238,13 +231,14 @@ const FAQItem = styled.li`
   padding: 2.5rem 4rem 2.5rem 2rem;
 
   transition: background-color 0.3s ease;
-
+  @media (max-width: 500px) {
+    padding: 1rem;
+  }
   .question {
     display: flex;
     justify-content: space-between;
     align-items: center;
     color: ${({ theme }) => theme.colors.gray700};
-    font-family: Inter;
     font-size: 2rem;
     font-style: normal;
     font-weight: 600;

@@ -342,7 +342,7 @@ const SecretButton = styled.button<{ $isSecret: boolean }>`
   color: ${({ theme, $isSecret }) =>
     $isSecret ? theme.colors.purple600 : theme.colors.gray400};
   text-align: center;
-  font-family: Inter;
+
   font-size: 1.6rem;
   @media (max-width: 460px) {
     font-size: 1.3rem;
@@ -396,7 +396,7 @@ const CommentInputWrapper = styled.div`
     height: 100%;
     border-radius: 0.4rem;
     background: ${({ theme }) => theme.colors.gray100};
-    font-family: Inter;
+
     font-size: 1.6rem;
     @media (max-width: 460px) {
       font-size: 1.3rem;
@@ -417,7 +417,7 @@ const CommentInputWrapper = styled.div`
       height: 100%;
       border-radius: 0.4rem;
       background: ${({ theme }) => theme.colors.gray100};
-      font-family: Inter;
+
       font-size: 1.6rem;
       @media (max-width: 460px) {
         font-size: 1.3rem;
@@ -438,7 +438,7 @@ const CommentButton = styled.button`
   background: ${({ theme }) => theme.colors.purple600};
   color: ${({ theme }) => theme.colors.gray50};
   text-align: center;
-  font-family: Inter;
+
   font-size: 1.6rem;
   @media (max-width: 460px) {
     font-size: 1.3rem;
@@ -465,7 +465,6 @@ const Comments = styled.li`
       gap: 0.2rem;
     }
     > div {
-      font-family: Inter;
       font-style: normal;
       line-height: normal;
       &:first-child {
@@ -568,7 +567,7 @@ const Menu = styled.div`
     cursor: pointer;
     padding: 1rem 2rem;
     color: ${({ theme }) => theme.colors.gray700};
-    font-family: Inter;
+
     font-size: 1.6rem;
     font-style: normal;
     font-weight: 400;
@@ -624,7 +623,7 @@ const TextNormal = styled.div`
   > span {
     color: ${({ theme }) => theme.colors.gray700};
     text-align: center;
-    font-family: Inter;
+
     font-size: 2rem;
     @media (max-width: 460px) {
       font-size: 1.7rem;
@@ -651,7 +650,7 @@ const ButtonBox = styled.div`
     justify-content: center;
     align-items: center;
     text-align: center;
-    font-family: Inter;
+
     font-size: 2rem;
     @media (max-width: 460px) {
       font-size: 1.7rem;

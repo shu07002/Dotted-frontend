@@ -40,7 +40,6 @@ const SignUpButtonBox = styled.div`
 const SignUpText = styled.p`
   color: ${({ theme }) => theme.colors.gray50};
   text-align: center;
-  font-family: Inter;
   font-size: 20px;
 
   @media (max-width: 400px) {

@@ -303,7 +303,6 @@ const WriteButton = styled.button`
 
   color: #fff;
   text-align: center;
-  font-family: Inter;
   font-size: 1.4rem;
   font-weight: 600;
   line-height: normal;

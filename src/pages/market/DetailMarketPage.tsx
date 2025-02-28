@@ -165,7 +165,6 @@ const ContentWrapper = styled.div`
   margin-bottom: 3.2rem;
 
   color: ${({ theme }) => theme.colors.gray800};
-  font-family: Inter;
   font-size: 2rem;
   font-style: normal;
   font-weight: 300;
