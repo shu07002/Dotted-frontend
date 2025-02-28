@@ -101,7 +101,6 @@ export default function SignUpPage() {
     onSuccess: (data) => {
       console.log('🎉 회원가입 성공:', data);
       window.history.replaceState(null, '', '/login');
-      // ☑️ 회원가입 성공 후 로그인 페이지로 이동
     },
     onError: (error) => {
       console.error('❌ 회원가입 실패:', error);

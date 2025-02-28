@@ -81,7 +81,12 @@ export async function fetchWithAuth<T>(
 
   console.log(url, finalOptions, 'okay now2');
   let response = await fetch(url, finalOptions);
-  console.log(response, 'okay now3');
+
+  console.log('wait');
+  await new Promise((resolve) => setTimeout(resolve, 1500));
+  console.log('go');
+
+  // console.log(response, 'okay now3');
 
   // 만약 401 Unauthorized 응답이면 다시 시도 (토큰이 갱신된 경우)
   if (response.status === 401) {

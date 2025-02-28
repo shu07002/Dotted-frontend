@@ -166,6 +166,7 @@ const Main = styled.main`
   width: 100%;
   display: flex;
   flex-direction: column;
+
   align-items: center;
   margin-bottom: 13.9rem;
 
@@ -176,7 +177,7 @@ const Main = styled.main`
 
 const Wrapper = styled.div`
   width: 100%;
-
+  max-width: 1287px;
   display: flex;
   flex-direction: column;
   gap: 6.5rem;
