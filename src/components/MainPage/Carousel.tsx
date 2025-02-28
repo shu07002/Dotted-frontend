@@ -22,12 +22,12 @@ export default function Carousel() {
       <StyledSlider {...settings}>
         <SlideContent>
           <div onClick={() => navigate('/about/onboarding')}>
-            <img src="src/assets/banner1.png" />
+            <img src="/banner1.png" alt="banner1" />
           </div>
         </SlideContent>
         <SlideContent>
           <div>
-            <img src="src/assets/banner2.png" />
+            <img src="/banner2.png" alt="banner2" />
           </div>
         </SlideContent>
       </StyledSlider>

@@ -99,7 +99,6 @@ export default function DetailCommunityPage() {
     },
     onSuccess: (data) => {
       setIsLiked(data.is_liked);
-      console.log(data);
     },
     onError: (error: any) => {
       console.log(`Error: ${error.message}`);
@@ -122,7 +121,6 @@ export default function DetailCommunityPage() {
     },
     onSuccess: (data) => {
       setIsScraped(data.is_scrapped);
-      console.log(data);
     },
     onError: (error: any) => {
       console.log(`Error: ${error.message}`);
@@ -146,7 +144,7 @@ export default function DetailCommunityPage() {
   if (isError || !post) {
     return <div style={{ minHeight: '116rem' }} />;
   }
-  console.log(post);
+
   return (
     <DetailCommunityPageContainer>
       <Wrapper>
@@ -194,6 +192,7 @@ const Wrapper = styled.div`
 // const Text = styled.div`
 //   padding: 1.5rem;
 //   color: ${({ theme }) => theme.colors.purple600};
+//   font-family: Inter;
 //   font-size: 2rem;
 //   font-style: normal;
 //   font-weight: 600;
