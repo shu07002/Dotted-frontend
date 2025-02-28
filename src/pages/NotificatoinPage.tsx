@@ -9,6 +9,7 @@ import {
   refreshAccessToken
 } from '@/utils/auth';
 import { formatRelativeTime } from '@/utils/formatTime';
+import { useNavigate } from 'react-router-dom';
 
 export interface NotiList {
   id: number;
@@ -32,6 +33,7 @@ export interface AllInfoNotification {
 
 export default function NotificatoinPage() {
   const [notice, setNotice] = useState<AllInfoNotification | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // 토큰이 없는 경우 연결하지 않음
@@ -121,6 +123,28 @@ export default function NotificatoinPage() {
     }
   }
 
+  async function handleRead(notificationId: number): Promise<void> {
+    try {
+      await fetchWithAuth<void>(
+        `${import.meta.env.VITE_API_DOMAIN}/api/notification/${notificationId}`,
+        {
+          method: 'PUT'
+        }
+      );
+
+      setNotice((prev) => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          list: prev?.list.map((noti) =>
+            noti.id === notificationId ? { ...noti, is_read: true } : noti
+          )
+        };
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
   async function handleDeleteAll(): Promise<void> {
     try {
       await fetchWithAuth<void>(
@@ -176,6 +200,11 @@ export default function NotificatoinPage() {
     }
   }
 
+  const handleMarkRead = (id: number, url: string) => {
+    handleRead(id);
+    navigate(url);
+  };
+
   return (
     <NotificationPageContainer>
       <Wrapper>
@@ -191,7 +220,13 @@ export default function NotificatoinPage() {
           <ul>
             {notice?.list.map((item, idx) => {
               return (
-                <EachNotice key={idx} $isRead={item.is_read}>
+                <EachNotice
+                  key={idx}
+                  $isRead={item.is_read}
+                  onClick={() =>
+                    handleMarkRead(item.id, item.redirect_url.redirect_url)
+                  }
+                >
                   <LeftDiv>
                     <From>{item.notification_type}</From>
                     <Content>{item.content}</Content>
@@ -332,6 +367,7 @@ const NotificationListWrapper = styled.div`
 `;
 
 const EachNotice = styled.li<{ $isRead: boolean }>`
+  cursor: pointer;
   padding: 1.5rem 3rem;
   display: flex;
   justify-content: space-between;

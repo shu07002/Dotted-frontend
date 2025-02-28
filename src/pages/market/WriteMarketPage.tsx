@@ -107,6 +107,7 @@ export default function WriteMarketPage() {
           body: JSON.stringify(data)
         }
       );
+
       return response;
     },
     onSuccess: (data) => {

@@ -157,7 +157,7 @@ export default function AReply({ reply }: { reply: Comment }) {
             ) : (
               <NicknameDiv>
                 {reply.user_nickname}
-                {reply.is_mine && (
+                {reply.is_mine && reply.is_secret && (
                   <LockerDiv>
                     <Locker />
                   </LockerDiv>

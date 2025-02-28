@@ -49,6 +49,7 @@ export default function WriteCommunityPage() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const queryClient = useQueryClient();
+  const [isLoading, setisLoading] = useState(false);
 
   // location state로부터 넘어온 기존 데이터 (수정 모드일 때)
   const { state } = useLocation();
@@ -116,6 +117,7 @@ export default function WriteCommunityPage() {
   const postingMutation = useMutation({
     mutationFn: async (data: CommunityData) => {
       // fetchWithAuth 내부에서 토큰 유효성 검사/갱신이 처리됨
+      setisLoading(true);
 
       const response = await fetchWithAuth<any>(
         `${import.meta.env.VITE_API_DOMAIN}/api/posting/create`,
@@ -138,7 +140,7 @@ export default function WriteCommunityPage() {
       }
       setTimeout(() => {
         navigate(`/community/detail/${data.id}`);
-      }, 100);
+      }, 1500);
     },
     onError: (error) => {
       console.error('❌ 글쓰기 실패:', error);
@@ -157,6 +159,7 @@ export default function WriteCommunityPage() {
       data: CommunityUpdateData;
     }) => {
       // fetchWithAuth 내부에서 토큰 관리 수행
+      setisLoading(true);
       const response = await fetchWithAuth<any>(
         `${import.meta.env.VITE_API_DOMAIN}/api/posting/${postId}/update`,
         {
@@ -363,11 +366,11 @@ export default function WriteCommunityPage() {
         <Tiptap watch={watch} setValue={setValue} trigger={trigger} />
         {editMode ? (
           <SubmitButton type="submit">
-            {updateMutation.isPending ? 'Updating...' : 'Edit'}
+            {isLoading ? 'Updating...' : 'Edit'}
           </SubmitButton>
         ) : (
           <SubmitButton type="submit">
-            {postingMutation.isPending ? 'Submitting...' : 'Submit'}
+            {isLoading ? 'Submitting...' : 'Submit'}
           </SubmitButton>
         )}
       </Wrapper>
