@@ -462,7 +462,7 @@ const Menu = styled.div`
     cursor: pointer;
     padding: 1rem 2rem;
     color: ${({ theme }) => theme.colors.gray700};
-    font-family: Inter;
+
     font-size: 1.6rem;
     @media (max-width: 460px) {
       font-size: 1.3rem;
@@ -519,7 +519,7 @@ const ButtonBox = styled.div`
     justify-content: center;
     align-items: center;
     text-align: center;
-    font-family: Inter;
+
     font-size: 2rem;
     @media (max-width: 460px) {
       font-size: 1.7rem;
@@ -587,7 +587,7 @@ const TextNormal = styled.div`
   > span {
     color: ${({ theme }) => theme.colors.gray700};
     text-align: center;
-    font-family: Inter;
+
     font-size: 2rem;
     @media (max-width: 460px) {
       font-size: 1.7rem;
@@ -626,7 +626,7 @@ const AccessRestrictedReport = styled.div`
     width: 100%;
     max-width: 40rem;
     height: 5.7rem;
-    font-family: Inter;
+
     font-size: 1.6rem;
     @media (max-width: 460px) {
       font-size: 1.3rem;
@@ -639,7 +639,7 @@ const AccessRestrictedReport = styled.div`
 
     color: var(--Gray-Gray_light-gray-700_light, #464646);
     text-align: center;
-    font-family: Inter;
+
     font-size: 1.4rem;
     @media (max-width: 460px) {
       font-size: 1.1rem;
@@ -662,7 +662,7 @@ const TextReport = styled.div`
       gap: 1.2rem;
       color: var(--Gray-Gray_light-gray-700_light, #464646);
       text-align: center;
-      font-family: Inter;
+
       font-size: 2rem;
       @media (max-width: 460px) {
         font-size: 1.7rem;
@@ -675,7 +675,7 @@ const TextReport = styled.div`
 
     &:nth-child(2) {
       color: ${({ theme }) => theme.colors.gray400};
-      font-family: Inter;
+
       font-size: 1.4rem;
       @media (max-width: 460px) {
         font-size: 1.1rem;
@@ -704,7 +704,7 @@ const TextReport = styled.div`
       gap: 1.4rem;
 
       color: ${({ theme }) => theme.colors.gray700};
-      font-family: Inter;
+
       font-size: 1.6rem;
       @media (max-width: 460px) {
         font-size: 1.3rem;

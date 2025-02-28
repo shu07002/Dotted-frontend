@@ -188,7 +188,6 @@ const EmailVerificationWrapper = styled.section`
   > p {
     color: ${({ theme }) => theme.colors.gray800};
     text-align: center;
-    font-family: Inter;
     font-size: 40px;
     font-style: normal;
     font-weight: 700;

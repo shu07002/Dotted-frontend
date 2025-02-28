@@ -35,5 +35,5 @@ const Wrapper = styled.div`
     padding-top: 12rem;
   }
   position: relative;
-  padding-right: 2rem;
+  /* padding-right: 2rem; */
 `;

@@ -182,7 +182,7 @@ const OptionBox = styled.div`
 
     > span {
       color: ${({ theme }) => theme.colors.gray800};
-      font-family: Inter;
+
       font-size: 20px;
       font-style: normal;
       font-weight: 400;
@@ -203,7 +203,7 @@ const StyledCheckBox = styled.input.attrs({ type: 'checkbox' })`
 const ForgetPassword = styled.div`
   cursor: pointer;
   color: ${({ theme }) => theme.colors.purple600};
-  font-family: Inter;
+
   font-size: 20px;
   font-style: normal;
   font-weight: 600;
@@ -227,7 +227,7 @@ const LoginButton = styled.button`
     disabled ? theme.colors.gray500 : theme.colors.purple1050};
   color: ${({ theme }) => theme.colors.gray50};
   text-align: center;
-  font-family: Inter;
+
   font-size: 20px;
   font-style: normal;
   font-weight: 600;

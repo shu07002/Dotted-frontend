@@ -308,7 +308,7 @@ const FAQItem = styled.li<{ $isOpen: boolean }>`
     justify-content: space-between;
     align-items: center;
     color: ${({ theme }) => theme.colors.gray700};
-    font-family: Inter;
+
     font-size: 2rem;
     font-style: normal;
     font-weight: 600;
@@ -333,7 +333,6 @@ const FAQItem = styled.li<{ $isOpen: boolean }>`
 
 const Answer = styled.div`
   color: ${({ theme }) => theme.colors.gray700};
-  font-family: Inter;
   font-size: 2rem;
   font-style: normal;
   font-weight: 400;

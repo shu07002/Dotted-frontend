@@ -27,7 +27,7 @@ const HeadContentWrapper = styled.div`
 const Title = styled.span`
   color: ${({ theme }) => theme.colors.gray800};
   text-align: center;
-  font-family: Inter;
+
   font-size: 40px;
   font-style: normal;
   font-weight: 700;
@@ -39,7 +39,7 @@ const Title = styled.span`
 const Text = styled.span`
   color: ${({ theme }) => theme.colors.purple600};
   text-align: center;
-  font-family: Inter;
+
   font-size: 24px;
   font-style: normal;
   font-weight: 500;

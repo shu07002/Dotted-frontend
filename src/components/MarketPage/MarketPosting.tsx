@@ -260,7 +260,7 @@ const CloseButton = styled.button`
   left: 1rem;
   position: absolute;
   color: ${({ theme }) => theme.colors.gray800};
-  font-family: Pretendard;
+
   font-size: 1.7rem;
   font-style: normal;
   font-weight: 700;
@@ -448,7 +448,7 @@ const Tag = styled.div`
   padding: 0.3rem 1.2rem;
 
   text-align: center;
-  font-family: Inter;
+
   font-size: 1.4rem;
   font-style: normal;
   font-weight: 500;
@@ -506,7 +506,7 @@ const Writer = styled.div`
   gap: 1.4rem;
 
   color: ${({ theme }) => theme.colors.gray500};
-  font-family: Inter;
+
   font-size: 1.4rem;
   font-style: normal;
   font-weight: 300;
@@ -561,7 +561,7 @@ const ScrapButton = styled.button`
   > span {
     color: ${({ theme }) => theme.colors.gray700};
     text-align: center;
-    font-family: Inter;
+
     font-size: 1.6rem;
     font-style: normal;
     font-weight: 300;

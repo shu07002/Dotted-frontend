@@ -30,7 +30,6 @@ const LineWrapper = styled.div`
     flex-shrink: 0;
     color: ${({ theme }) => theme.colors.gray400};
     text-align: center;
-    font-family: Inter;
     font-size: 15px;
     font-style: normal;
     font-weight: 500;

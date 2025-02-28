@@ -15,7 +15,6 @@ const LabelWrapper = styled.label`
   width: 100%;
   align-items: center;
   color: ${({ theme }) => theme.colors.gray600};
-  font-family: Inter;
   font-size: 18px;
   font-style: normal;
   font-weight: 500;

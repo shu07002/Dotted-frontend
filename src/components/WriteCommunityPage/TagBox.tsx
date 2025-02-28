@@ -64,7 +64,6 @@ const TagBoxWrapper = styled.ul`
   gap: 2rem;
 
   text-align: center;
-  font-family: Inter;
   font-size: 1.3rem;
   font-style: normal;
   font-weight: 500;

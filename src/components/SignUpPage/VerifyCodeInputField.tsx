@@ -49,7 +49,6 @@ const VerifyCodeInputFieldWrapper = styled.div`
 
   > span {
     color: ${({ theme }) => theme.colors.gray600};
-    font-family: Inter;
     font-size: 18px;
     font-style: normal;
     font-weight: 500;

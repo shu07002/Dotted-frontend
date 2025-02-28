@@ -22,7 +22,6 @@ const MainTextBox = styled.p`
   text-align: center;
   color: ${({ theme }) => theme.colors.gray700};
   text-align: center;
-  font-family: Inter;
   font-size: 16px;
   font-style: italic;
   font-weight: 400;

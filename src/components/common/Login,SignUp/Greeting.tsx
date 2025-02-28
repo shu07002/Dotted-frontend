@@ -17,7 +17,6 @@ export default function Greeting({ text }: GreetingProps) {
 const WelcomeText = styled.h1`
   color: ${({ theme }) => theme.colors.gray900};
   text-align: center;
-  font-family: Inter;
   font-size: 4rem;
   font-style: normal;
   font-weight: 700;

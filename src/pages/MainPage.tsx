@@ -9,6 +9,7 @@ import { formatRelativeTime } from '@/utils/formatTime';
 import { CommunityPost, EachPost } from '@/types/CommunityPost';
 import { EachMarketPost, MarketPost } from '@/types/MarketPost';
 import { useEffect, useState } from 'react';
+import { LoginModal } from '@/components/common/ProtectedRoute';
 
 async function fetchCommunityPosts(): Promise<EachPost[]> {
   const url = new URL(`${import.meta.env.VITE_API_DOMAIN}/api/posting`);
@@ -36,6 +37,7 @@ async function fetchMarketPosts(): Promise<EachMarketPost[]> {
 
 export default function MainPage() {
   const navigate = useNavigate();
+  const [modalOpen, setModalOpen] = useState(false);
 
   const { data: onePageCommuData } = useQuery<EachPost[]>({
     queryKey: ['commuPost'],
@@ -61,7 +63,18 @@ export default function MainPage() {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+  const isLogined = () => {
+    return !!localStorage.getItem('accessToken');
+  };
+  const handleClick = (path: string) => {
+    console.log('path', path);
 
+    if (!isLogined()) {
+      setModalOpen(true);
+    } else {
+      navigate(path);
+    }
+  };
   return (
     <Main>
       <Wrapper>
@@ -73,7 +86,7 @@ export default function MainPage() {
           <MiniCommunity>
             <Title>
               <span>Community</span>
-              <span onClick={() => navigate('/community')}>+ more</span>
+              <span onClick={() => handleClick('/community')}>+ more</span>
             </Title>
             <CommunityList>
               <ul>
@@ -82,7 +95,7 @@ export default function MainPage() {
                   return (
                     <li
                       key={idx}
-                      onClick={() => navigate(`community/detail/${item.id}`)}
+                      onClick={() => handleClick(`community/detail/${item.id}`)}
                     >
                       <span>{item.title}</span>
                       <span>{formatRelativeTime(item.created_at)}</span>
@@ -96,7 +109,7 @@ export default function MainPage() {
           <MiniMarket>
             <Title>
               <span>Market</span>
-              <span onClick={() => navigate('/market')}>+ more</span>
+              <span onClick={() => handleClick('/market')}>+ more</span>
             </Title>
             <MarketListContainer>
               <ul>
@@ -111,7 +124,7 @@ export default function MainPage() {
                   return (
                     <li
                       key={post.id}
-                      onClick={() => navigate(`market/detail/${post.id}`)}
+                      onClick={() => handleClick(`market/detail/${post.id}`)}
                     >
                       <Tag
                         className={`${post.status === 'FOR_SALE' ? 'onSale' : 'soldOut'}`}
@@ -140,6 +153,7 @@ export default function MainPage() {
             </MarketListContainer>
           </MiniMarket>
         </MiniBoardWrapper>
+        {modalOpen && <LoginModal setModalOpen={setModalOpen} />}
       </Wrapper>
     </Main>
   );
@@ -193,7 +207,7 @@ const Title = styled.div`
   align-items: center;
   > span {
     color: ${({ theme }) => theme.colors.gray700};
-    font-family: Inter;
+
     font-size: 24px;
     font-style: normal;
     font-weight: 500;
@@ -240,7 +254,7 @@ const CommunityList = styled.div`
 
       > span {
         color: ${({ theme }) => theme.colors.gray700};
-        font-family: Inter;
+
         font-size: 2rem;
         @media (max-width: 865px) {
           font-size: 1.7rem;
@@ -273,7 +287,6 @@ const Tag = styled.div`
   background-color: ${({ theme }) => theme.colors.purple600};
   color: ${({ theme }) => theme.colors.gray50};
   text-align: center;
-  font-family: Inter;
   font-size: 1.4rem;
   @media (max-width: 865px) {
     font-size: 1.2rem;
@@ -372,7 +385,7 @@ const ItemInfo = styled.div`
         overflow: hidden;
         text-overflow: ellipsis;
         color: ${({ theme }) => theme.colors.gray700};
-        font-family: Inter;
+
         font-size: 20px;
         font-style: normal;
         font-weight: 400;
@@ -384,7 +397,7 @@ const ItemInfo = styled.div`
     > span {
       &.price {
         color: ${({ theme }) => theme.colors.gray700};
-        font-family: Inter;
+
         font-size: 1.4rem;
         font-style: normal;
         font-weight: 500;
@@ -394,7 +407,7 @@ const ItemInfo = styled.div`
 
       &.created {
         color: ${({ theme }) => theme.colors.gray500};
-        font-family: Inter;
+
         font-size: 1.4rem;
         font-style: normal;
         font-weight: 300;
@@ -408,7 +421,7 @@ const ItemInfo = styled.div`
 
     &:nth-child(2) {
       color: ${({ theme }) => theme.colors.gray400};
-      font-family: Inter;
+
       font-size: 16px;
       font-style: normal;
       font-weight: 400;

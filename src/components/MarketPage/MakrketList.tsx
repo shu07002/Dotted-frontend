@@ -57,7 +57,7 @@ const Tag = styled.div`
   background-color: ${({ theme }) => theme.colors.purple600};
   color: ${({ theme }) => theme.colors.gray50};
   text-align: center;
-  font-family: Inter;
+
   font-size: 1.4rem;
   font-style: normal;
   font-weight: 600;
@@ -162,7 +162,7 @@ const ItemInfo = styled.div`
         overflow: hidden;
         text-overflow: ellipsis;
         color: ${({ theme }) => theme.colors.gray700};
-        font-family: Inter;
+
         font-size: 20px;
         font-style: normal;
         font-weight: 400;
@@ -174,7 +174,7 @@ const ItemInfo = styled.div`
     > span {
       &.price {
         color: ${({ theme }) => theme.colors.gray700};
-        font-family: Inter;
+
         font-size: 1.4rem;
         font-style: normal;
         font-weight: 500;
@@ -184,7 +184,7 @@ const ItemInfo = styled.div`
 
       &.created {
         color: ${({ theme }) => theme.colors.gray500};
-        font-family: Inter;
+
         font-size: 1.4rem;
         font-style: normal;
         font-weight: 300;
@@ -198,7 +198,7 @@ const ItemInfo = styled.div`
 
     &:nth-child(2) {
       color: ${({ theme }) => theme.colors.gray400};
-      font-family: Inter;
+
       font-size: 16px;
       font-style: normal;
       font-weight: 400;
