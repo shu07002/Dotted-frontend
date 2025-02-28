@@ -73,6 +73,13 @@ const StyledSlider = styled(Slider)`
     width: 4rem;
     height: 4rem;
     position: absolute;
+
+    @media (max-width: 900px) {
+      > svg {
+        width: 3.2rem;
+        height: 3.2rem;
+      }
+    }
   }
 
   .slick-prev {
@@ -84,7 +91,10 @@ const StyledSlider = styled(Slider)`
     left: auto !important;
     z-index: 100;
     @media (max-width: 900px) {
-      top: 11rem;
+      top: 12rem;
+      width: 3.2rem;
+      height: 3.2rem;
+      right: 6.5rem;
     }
   }
 
@@ -97,7 +107,10 @@ const StyledSlider = styled(Slider)`
 
     z-index: 100;
     @media (max-width: 900px) {
-      top: 11rem;
+      top: 12rem;
+      width: 3.2rem;
+      height: 3.2rem;
+      right: 2rem;
     }
   }
 
@@ -120,4 +133,15 @@ const SlideContent = styled.div`
   justify-content: center;
   align-items: center;
   font-size: 2rem;
+
+  > div {
+    max-width: 1440px;
+    > img {
+      @media (max-width: 900px) {
+        height: 15rem;
+      }
+
+      object-fit: cover;
+    }
+  }
 `;
