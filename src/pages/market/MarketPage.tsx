@@ -200,7 +200,7 @@ const Wrapper = styled.div`
 const Title = styled.div`
   width: 100%;
   color: ${({ theme }) => theme.colors.gray700};
-  font-family: Pretendard;
+
   font-size: 3.6rem;
   font-style: normal;
   font-weight: 700;
@@ -213,7 +213,7 @@ const Notice = styled.div`
   > span {
     white-space: pre-wrap;
     color: ${({ theme }) => theme.colors.gray400};
-    font-family: Pretendard;
+
     font-size: 1.6rem;
     font-style: normal;
     font-weight: 400;

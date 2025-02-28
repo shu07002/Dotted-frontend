@@ -176,45 +176,45 @@ const StudentVerificationLayout = styled.div`
 `;
 
 const StudentVerificationWrapper = styled.div`
-  width: 94.2rem;
+  width: 100%;
 `;
 
 const Title = styled.div`
   width: 100%;
-  margin-bottom: 3.1rem;
+  margin-bottom: 2rem;
   display: flex;
-
+  margin-bottom: 1rem;
   height: 43px;
   flex-direction: column;
   justify-content: center;
   flex-shrink: 0;
   color: ${({ theme }) => theme.colors.gray700};
-  font-family: Pretendard;
-  font-size: 36px;
+
+  font-size: 2.6rem;
   font-style: normal;
   font-weight: 700;
-  line-height: 36px; /* 100% */
+  line-height: 2.6rem; /* 100% */
   letter-spacing: -1.8px;
 `;
 
 const Guide = styled.div`
   width: 100%;
+  margin-bottom: 1rem;
+
   > span {
     &:last-child {
       color: ${({ theme }) => theme.colors.purple600};
-      font-family: Pretendard;
-      font-size: 24px;
+      font-size: 1.6rem;
       font-style: normal;
       font-weight: 700;
-      line-height: 36px;
+      line-height: 2.2rem; /* 150% */
       letter-spacing: -0.72px;
     }
     color: ${({ theme }) => theme.colors.gray700};
-    font-family: Pretendard;
-    font-size: 24px;
+    font-size: 1.6rem;
     font-style: normal;
     font-weight: 500;
-    line-height: 36px; /* 150% */
+    line-height: 1.6rem; /* 150% */
     letter-spacing: -0.72px;
   }
 `;
@@ -222,16 +222,18 @@ const Guide = styled.div`
 const Example = styled.div`
   width: 100%;
   color: ${({ theme }) => theme.colors.gray500};
-  font-family: Pretendard;
-  font-size: 20px;
+  font-size: 1.6rem;
   font-style: normal;
-  font-weight: 300;
-  line-height: 36px; /* 180% */
+  font-weight: 400;
+  line-height: 2rem; /* 180% */
   letter-spacing: -0.6px;
   margin-bottom: 0.5rem;
 `;
 
 const Warnning = styled.div`
+  background-color: ${({ theme }) => theme.colors.gray100};
+  border-radius: 1rem;
+  padding: 1rem;
   display: flex;
   align-items: center;
   gap: 1.2rem;
@@ -239,11 +241,10 @@ const Warnning = styled.div`
 
   > span {
     color: var(--Semantic-Negative-900, #ea3729);
-    font-family: Pretendard;
-    font-size: 20px;
-    font-style: normal;
+
+    font-size: 1.6rem;
     font-weight: 500;
-    line-height: 32px; /* 160% */
+    line-height: 20px; /* 160% */
     letter-spacing: -0.2px;
   }
 `;
@@ -279,7 +280,7 @@ const AttatchImage = styled.div`
       &:last-child {
         color: ${({ theme }) => theme.colors.purple600};
         text-align: center;
-        font-family: Pretendard;
+
         font-size: 16px;
         font-style: normal;
         font-weight: 300;
@@ -289,7 +290,7 @@ const AttatchImage = styled.div`
 
       color: ${({ theme }) => theme.colors.gray700};
       text-align: center;
-      font-family: Pretendard;
+
       font-size: 24px;
       font-style: normal;
       font-weight: 700;
@@ -303,7 +304,7 @@ const Notice = styled.div`
   display: flex;
   position: relative;
   justify-content: space-evenly;
-  margin-bottom: 6.2rem;
+  margin-bottom: 3.2rem;
   > div {
     display: flex;
     flex-direction: column;
@@ -314,11 +315,11 @@ const Notice = styled.div`
     > span {
       color: ${({ theme }) => theme.colors.gray600};
       text-align: center;
-      font-family: Pretendard;
-      font-size: 20px;
+
+      font-size: 1.4rem;
       font-style: normal;
       font-weight: 400;
-      line-height: 36px; /* 180% */
+      line-height: 1.8rem; /* 180% */
       letter-spacing: -0.2px;
 
       > span {
@@ -374,8 +375,8 @@ const ButtonWrapper = styled.div`
     background: ${({ theme }) => theme.colors.purple600};
     color: ${({ theme }) => theme.colors.gray50};
     text-align: center;
-    font-family: Pretendard;
-    font-size: 20px;
+
+    font-size: 1.4rem;
     font-style: normal;
     font-weight: 500;
     line-height: 36px; /* 180% */
@@ -395,7 +396,7 @@ const SubmitButton = styled.div`
   background: ${({ theme }) => theme.colors.purple600};
   color: ${({ theme }) => theme.colors.gray50};
   text-align: center;
-  font-family: Pretendard;
+
   font-size: 20px;
   font-style: normal;
   font-weight: 500;

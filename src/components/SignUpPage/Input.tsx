@@ -34,7 +34,6 @@ const InputWrapper = styled.input`
   border: 1px solid ${({ theme }) => theme.colors.gray300};
   background: ${({ theme }) => theme.colors.gray100};
   color: ${({ theme }) => theme.colors.gray400};
-  font-family: Pretendard;
   font-size: 20px;
   font-style: normal;
   font-weight: 400;

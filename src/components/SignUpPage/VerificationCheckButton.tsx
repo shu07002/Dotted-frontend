@@ -50,7 +50,7 @@ const VerificationCheckButtonWrapper = styled.div<{ disabled?: boolean }>`
     disabled ? theme.colors.gray500 : theme.colors.gray700};
   color: ${({ theme }) => theme.colors.gray50};
   text-align: center;
-  font-family: Pretendard;
+
   font-size: 16px;
   font-weight: 400;
   line-height: 36px;
@@ -70,7 +70,7 @@ const MobileVerificationCheckButtonWrapper = styled.div<{
     disabled ? theme.colors.gray500 : theme.colors.gray700};
   color: ${({ theme }) => theme.colors.gray50};
   text-align: center;
-  font-family: Pretendard;
+
   font-size: 16px;
   font-weight: 400;
   line-height: 36px;

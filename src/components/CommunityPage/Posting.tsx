@@ -115,7 +115,6 @@ export default function Posting({
       </InfoWrapper>
 
       <ContentWrapper>
-        <>{console.log(replacedContent)}</>
         <TiptapViewOnly content={replacedContent} />
 
         <ButtonWrapper>
@@ -197,7 +196,6 @@ const TitleWrapper = styled.div`
 
 const Title = styled.div`
   color: ${({ theme }) => theme.colors.gray800};
-  font-family: Pretendard;
   font-size: 2.8rem;
   @media (max-width: 460px) {
     font-size: 2.4rem;

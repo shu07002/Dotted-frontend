@@ -36,9 +36,14 @@ export default function MyPageLayout() {
 }
 
 const Layout = styled.div`
-  padding: 4rem 12.2rem 0 12.2rem;
+  padding: 4rem 8rem 0 8rem;
   display: grid;
   grid-template-columns: 21rem 1fr;
+  @media (max-width: 768px) {
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 2rem 0 2rem;
+  }
 `;
 
 const MyPageSideBar = styled.div`
@@ -51,6 +56,12 @@ const MyPageSideBar = styled.div`
     line-height: 3.6rem;
     letter-spacing: -1.6px;
     color: ${({ theme }) => theme.colors.gray800};
+  }
+
+  @media (max-width: 768px) {
+    > h1 {
+      font-size: 2.4rem;
+    }
   }
 `;
 
@@ -73,10 +84,25 @@ const List = styled.ul`
         color: ${({ theme }) => theme.colors.gray500};
       }
     }
-
+    @media (max-width: 768px) {
+      background-color: ${({ theme }) => theme.colors.gray200};
+      padding: 0.6rem 1.2rem;
+      border-radius: 5rem;
+      flex-shrink: 0;
+      font-size: 1.2rem;
+    }
     &.selected {
       font-weight: 500;
       color: ${({ theme }) => theme.colors.purple600};
+    }
+  }
+  @media (max-width: 768px) {
+    flex-direction: row;
+    margin: 1.6rem 0;
+    overflow-x: scroll;
+    gap: 0.5rem;
+    &::-webkit-scrollbar {
+      display: none;
     }
   }
 `;

@@ -38,6 +38,9 @@ const Main = styled.main`
     font-size: 3.2rem;
     font-weight: 700;
     letter-spacing: -0.8px;
+    @media (max-width: 768px) {
+      display: none;
+    }
   }
 
   > nav {

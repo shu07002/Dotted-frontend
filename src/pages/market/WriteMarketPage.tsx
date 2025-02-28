@@ -389,7 +389,7 @@ const WriteMarketPageWrapper = styled.div`
 const Title = styled.div`
   width: 100%;
   color: ${({ theme }) => theme.colors.gray700};
-  font-family: Pretendard;
+
   font-size: 3.6rem;
   @media (max-width: 460px) {
     font-size: 3.1rem;
@@ -426,7 +426,7 @@ const Form = styled.form`
       margin-top: 0.5rem;
 
       color: ${({ theme }) => theme.colors.gray700};
-      font-family: Pretendard;
+
       font-size: 2rem;
       font-style: normal;
       font-weight: 500;
@@ -466,7 +466,7 @@ const Form = styled.form`
       margin-bottom: 1.2rem;
 
       padding: 1.2rem;
-      font-family: Pretendard;
+
       font-size: 1.6rem;
       @media (max-width: 460px) {
         font-size: 1.3rem;
