@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 export default function ProtectedRoute({ children }: { children: any }) {
   const { pathname } = useLocation();
-  const [modalOpen, setModalOpen] = useState(false);
+  const [_, setModalOpen] = useState(false);
 
   //로그인 했으면 true, 안했으면 false
   const isLogined = () => {
