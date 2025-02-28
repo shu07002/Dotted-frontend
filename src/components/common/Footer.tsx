@@ -29,7 +29,10 @@ export default function Footer() {
 
       <RightSection>
         <SVGWrapper>
-          <Instagram />
+          <a href="https://www.instagram.com/join.dotted/" target="_blank">
+            <Instagram />
+          </a>
+
           <Mail />
         </SVGWrapper>
 
@@ -123,9 +126,16 @@ const RightSection = styled.section`
 `;
 
 const SVGWrapper = styled.div`
-  > svg {
+  svg {
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
     cursor: pointer;
+    transition: transform 0.3s ease;
   }
+
   display: flex;
   justify-content: center;
   gap: 2rem;

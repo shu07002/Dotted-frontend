@@ -116,9 +116,15 @@ const RestaurantBox = styled.li`
   border-radius: 1.6rem;
   overflow: hidden;
   display: flex;
+  aspect-ratio: 2;
+
+  @media (max-width: 900px) {
+    aspect-ratio: unset;
+  }
 
   > img {
     width: 40%;
+
     height: 100%;
     object-fit: cover;
     flex-shrink: 0;
@@ -143,7 +149,7 @@ const Description = styled.div`
   flex-direction: column;
   justify-content: space-around;
 
-  @media (max-width: 900px) {
+  @media (max-width: 1000px) {
     padding: 1rem 1.3rem 1.9rem 1.3rem;
   }
 
@@ -163,7 +169,7 @@ const RestaurantInfo = styled.div`
     font-weight: 400;
     letter-spacing: -1px;
     color: ${({ theme }) => theme.colors.gray700};
-    @media (max-width: 900px) {
+    @media (max-width: 1000px) {
       font-size: 2rem;
     }
   }

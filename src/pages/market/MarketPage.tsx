@@ -216,7 +216,7 @@ const Notice = styled.div`
     font-family: Pretendard;
     font-size: 1.6rem;
     font-style: normal;
-    font-weight: 400;
+    font-weight: 500;
     line-height: 2rem; /* 125% */
   }
 `;
