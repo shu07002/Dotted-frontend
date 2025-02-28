@@ -3,16 +3,18 @@ import PrinterIcon from '@/assets/svg/tips/sogang-map/printer.svg?react';
 import BookIcon from '@/assets/svg/tips/sogang-map/book.svg?react';
 import HospitalIcon from '@/assets/svg/tips/sogang-map/hospital.svg?react';
 import styled from 'styled-components';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useState } from 'react';
 import KakaoMap from '@/components/tips/sogang-map/KakaoMap';
 import SearchBox from '@/components/tips/sogang-map/SearchBox';
 import { useTheme } from '@/context/ThemeContext';
+import BackIcon from '@/assets/svg/tips/culture/back.svg?react';
 
 export default function SogangMapPage() {
   const [_, setSearchParams] = useSearchParams();
   const [modalOpen, setModalOpen] = useState(false);
   const {} = useTheme();
+  const navigate = useNavigate();
 
   const handleTabClick = (spot: string) => {
     setSearchParams({ spot: spot });
@@ -22,6 +24,11 @@ export default function SogangMapPage() {
   return (
     <Main>
       <LocationTab>
+        <div className="backbox" onClick={() => navigate('/')}>
+          <BackIcon className="back" />
+        </div>
+        <div className="title">Sogang Map</div>
+        <SearchBox />
         <LocationElement className="all" onClick={() => handleTabClick('all')}>
           All
         </LocationElement>
@@ -52,7 +59,6 @@ export default function SogangMapPage() {
           <HospitalIcon />
           <span>health center</span>
         </LocationElement>
-        <SearchBox />
       </LocationTab>
       <div className="mapWrapper">
         <KakaoMap modalOpen={modalOpen} setModalOpen={setModalOpen} />
@@ -64,7 +70,7 @@ export default function SogangMapPage() {
 const Main = styled.main`
   overflow-x: hidden;
   width: 100%;
-  height: calc(100vh - 8rem);
+  height: 100svh;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -77,16 +83,61 @@ const Main = styled.main`
 `;
 
 const LocationTab = styled.ul`
+  width: 100vw;
   z-index: 50;
   position: absolute;
-  top: 6rem;
+  top: 1rem;
   left: 5px;
   display: flex;
+  align-items: center;
   gap: 1rem;
   list-style: none;
   font-size: 1.6rem;
   flex-wrap: wrap;
   /* overflow-x: hidden; */
+  @media (max-width: 900px) {
+    top: 1rem;
+  }
+
+  svg {
+    &.back {
+      width: 2rem;
+      height: 2rem;
+      stroke-width: 4;
+      cursor: pointer;
+      transition: transform 0.3s;
+      @media (max-width: 400px) {
+        width: 6vw;
+        height: 6vw;
+      }
+      path {
+        stroke: ${({ theme }) => theme.colors.purple700};
+      }
+    }
+  }
+
+  div {
+    &.backbox {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 5.2rem;
+      height: 5rem;
+      border-radius: 2.5rem;
+      cursor: pointer;
+      box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+      background-color: ${({ theme }) => theme.colors.backgroundLayer2};
+    }
+    &.title {
+      font-size: 2.6rem;
+      font-weight: 800;
+      color: ${({ theme }) => theme.colors.purple600};
+      letter-spacing: -0.8px;
+      @media (max-width: 400px) {
+        display: none;
+      }
+    }
+  }
 `;
 
 const LocationElement = styled.li`

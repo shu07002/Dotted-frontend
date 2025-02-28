@@ -84,7 +84,7 @@ export default function ProfileButton() {
             exit={{ opacity: 0, y: -10, x: 10 }}
             transition={{ duration: 0.2 }}
           >
-            <div>my page</div>
+            <div onClick={() => navigate('/mypage/profile')}>my page</div>
             <div onClick={onClickLogout}>logout</div>
           </Menu>
         )}

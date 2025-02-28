@@ -58,10 +58,6 @@ const Router = createBrowserRouter([
         path: 'tips',
         children: [
           {
-            path: 'sogang-map',
-            element: <SogangMapPage />
-          },
-          {
             path: 'restaurant',
             element: <RestaurantPage />
           },
@@ -177,7 +173,10 @@ const Router = createBrowserRouter([
       }
     ]
   },
-
+  {
+    path: 'tips/sogang-map',
+    element: <SogangMapPage />
+  },
   {
     path: 'sign-up',
     children: [{ path: '', element: <SignUpPage /> }]
