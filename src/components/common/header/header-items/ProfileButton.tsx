@@ -161,7 +161,7 @@ const Menu = styled(motion.div)`
     cursor: pointer;
     padding: 1rem 2rem;
     color: ${({ theme }) => theme.colors.gray700};
-    font-family: Inter;
+
     font-size: 1.6rem;
     font-style: normal;
     font-weight: 400;

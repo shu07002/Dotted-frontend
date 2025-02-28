@@ -75,7 +75,7 @@ const Filter = styled.select`
 
   > option {
     color: ${({ theme }) => theme.colors.gray600};
-    font-family: Inter;
+
     font-size: 1.4rem;
     @media (max-width: 460px) {
       font-size: 1.1rem;

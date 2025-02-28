@@ -266,7 +266,7 @@ const HospitalListWrapper = styled.div`
         background: ${({ theme }) => theme.colors.purple100};
         color: ${({ theme }) => theme.colors.purple600};
         text-align: center;
-        font-family: Inter;
+
         font-size: 1.5rem;
         font-style: normal;
         font-weight: 400;
@@ -276,7 +276,7 @@ const HospitalListWrapper = styled.div`
       .hospital_name {
         margin-top: 1.2rem;
         color: ${({ theme }) => theme.colors.gray700};
-        font-family: Inter;
+
         font-size: 2.4rem;
         font-style: normal;
         font-weight: 500;
@@ -289,7 +289,7 @@ const HospitalListWrapper = styled.div`
         gap: 1rem;
         margin-top: 1.2rem;
         color: ${({ theme }) => theme.colors.gray600};
-        font-family: Inter;
+
         font-size: 1.4rem;
         font-style: normal;
         font-weight: 300;
@@ -302,7 +302,7 @@ const HospitalListWrapper = styled.div`
         align-items: center;
         gap: 1.5rem;
         color: ${({ theme }) => theme.colors.gray500};
-        font-family: Inter;
+
         font-size: 1.4rem;
         font-style: normal;
         font-weight: 300;

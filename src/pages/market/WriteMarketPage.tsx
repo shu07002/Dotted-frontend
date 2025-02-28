@@ -491,7 +491,6 @@ const SubmitButton = styled.button`
   border: none;
   color: ${({ theme }) => theme.colors.gray50};
   text-align: center;
-  font-family: Inter;
   font-size: 1.4rem;
   @media (max-width: 460px) {
     font-size: 1.1rem;

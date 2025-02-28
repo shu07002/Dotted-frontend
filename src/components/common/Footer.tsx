@@ -70,7 +70,7 @@ const LogoWrapper = styled.div`
   align-items: center;
   gap: 1rem;
   color: ${({ theme }) => theme.colors.gray50};
-  font-family: Inter;
+
   font-size: 4.8rem;
   font-style: normal;
   font-weight: 700;
@@ -97,7 +97,7 @@ const PolicyWrapper = styled.div`
   > a {
     cursor: pointer;
     color: ${({ theme }) => theme.colors.gray50};
-    font-family: Inter;
+
     font-size: 1.6rem;
     font-style: normal;
     font-weight: 300;
@@ -156,7 +156,7 @@ const ContactWrapper = styled.div`
       margin: 0;
     }
     color: ${({ theme }) => theme.colors.gray50};
-    font-family: Inter;
+
     font-size: 1.4rem;
     font-style: normal;
     font-weight: 300;

@@ -61,7 +61,6 @@ const GroupWrapper = styled.div`
 const RadioLabel = styled.label`
   margin-right: 1.2rem;
   color: ${({ theme }) => theme.colors.gray600};
-  font-family: Inter;
   font-size: 16px;
   font-style: normal;
   font-weight: 400;

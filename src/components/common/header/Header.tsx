@@ -166,7 +166,7 @@ const LoginSignup = styled.div`
     border-radius: 2.4rem;
 
     text-align: center;
-    font-family: Inter;
+
     font-size: 2.1rem;
     font-style: normal;
     font-weight: 600;
@@ -210,7 +210,7 @@ const LoginButton = styled.button`
     padding: 0.7rem 0.5rem;
   }
   text-align: center;
-  font-family: Inter;
+
   font-size: 2.1rem;
   font-style: normal;
   font-weight: 600;
@@ -272,7 +272,6 @@ const LoginButton = styled.button`
 
 const HeaderContainer = styled.div`
   z-index: 1000;
-
   position: fixed;
   top: 0;
   left: 0;
@@ -281,12 +280,14 @@ const HeaderContainer = styled.div`
 
 const UpWrapper = styled.div<{ $scrollY: number }>`
   padding: 0 7.7rem 0 7.7rem;
-
+  height: 8rem;
   @media (max-width: 700px) {
     padding-right: 2rem;
     padding-left: 2em;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+    height: 6rem;
   }
-  height: 8rem;
   background-color: ${({ theme }) => theme.colors.backgroundLayer2};
   color: ${({ theme }) => theme.colors.gray800};
   display: flex;
@@ -298,6 +299,7 @@ const LeftSection = styled.div`
   align-items: center;
   gap: 2.8rem;
   height: 100%;
+  color: ${({ theme }) => theme.colors.gray700};
 `;
 
 const RightSection = styled.div`
@@ -324,10 +326,18 @@ const Logo = styled.div`
       opacity: 0.9;
     }
   }
+  @media (max-width: 800px) {
+    font-size: 2.8rem;
+    gap: 1rem;
+  }
 
   > img {
     width: 3.5rem;
     height: 3.5rem;
     flex-shrink: 0;
+    @media (max-width: 800px) {
+      width: 3rem;
+      height: 3rem;
+    }
   }
 `;

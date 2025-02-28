@@ -26,7 +26,6 @@ const SignUpPropmpWrapper = styled.div`
 
 const Text = styled.span`
   color: ${({ theme }) => theme.colors.gray700};
-  font-family: Inter;
   font-size: 20px;
   font-style: normal;
   font-weight: 400;
@@ -37,7 +36,6 @@ const Text = styled.span`
 const GoToSignUp = styled.div`
   cursor: pointer;
   color: ${({ theme }) => theme.colors.purple600};
-  font-family: Inter;
   font-size: 20px;
   font-style: normal;
   font-weight: 400;

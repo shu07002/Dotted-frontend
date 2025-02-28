@@ -139,7 +139,7 @@ const Text = styled.div`
   > span {
     color: ${({ theme }) => theme.colors.gray700};
     text-align: center;
-    font-family: Inter;
+
     font-size: 20px;
 
     font-style: normal;
@@ -166,7 +166,7 @@ const ButtonBox = styled.div`
     justify-content: center;
     align-items: center;
     text-align: center;
-    font-family: Inter;
+
     font-size: 20px;
     font-style: normal;
     font-weight: 500;

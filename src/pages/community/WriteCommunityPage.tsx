@@ -440,7 +440,6 @@ const SubmitButton = styled.button`
   background: ${({ theme }) => theme.colors.purple600};
   color: ${({ theme }) => theme.colors.gray50};
   text-align: center;
-  font-family: Inter;
   font-size: 1.4rem;
   font-style: normal;
   font-weight: 600;

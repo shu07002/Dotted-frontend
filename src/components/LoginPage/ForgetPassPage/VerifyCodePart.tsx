@@ -126,7 +126,6 @@ const ResendButton = styled.div`
   margin-top: 3.8rem;
   color: ${({ theme }) => theme.colors.purple600};
   text-align: center;
-  font-family: Inter;
   font-size: 20px;
   font-style: normal;
   font-weight: 600;

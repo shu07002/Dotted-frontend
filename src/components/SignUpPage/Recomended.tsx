@@ -33,7 +33,6 @@ const RecomendedTextBox = styled.div`
 //   display: flex;
 //   align-items: center; /* 세로 정렬 */
 //   justify-content: center; /* 가로 정렬 */
-//   font-family: Inter;
 //   font-size: 14px;
 //   font-style: normal;
 //   font-weight: 500;

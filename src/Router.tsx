@@ -171,7 +171,11 @@ const Router = createBrowserRouter([
   },
   {
     path: 'tips/sogang-map',
-    element: <SogangMapPage />
+    element: (
+      <ProtectedRoute>
+        <SogangMapPage />
+      </ProtectedRoute>
+    )
   },
   {
     path: 'sign-up',

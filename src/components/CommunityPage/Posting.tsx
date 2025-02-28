@@ -155,7 +155,7 @@ const PostingWrapper = styled.div`
 const PostingTag = styled.div<{ $color: string }>`
   color: ${({ theme }) => theme.colors.gray50};
   text-align: center;
-  font-family: Inter;
+
   font-size: 1.3rem;
   @media (max-width: 460px) {
     font-size: 1rem;
@@ -224,7 +224,7 @@ const PostingWriter = styled.div`
     @media (max-width: 460px) {
       font-size: 1.1rem;
     }
-    font-family: Inter;
+
     font-style: normal;
     line-height: normal;
     letter-spacing: -0.07rem;
@@ -311,7 +311,7 @@ const Button = styled.button`
   > span {
     color: ${({ theme }) => theme.colors.gray700};
     text-align: center;
-    font-family: Inter;
+
     font-size: 1.6rem;
     @media (max-width: 460px) {
       font-size: 1.3rem;

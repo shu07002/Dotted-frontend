@@ -194,7 +194,6 @@ const Wrapper = styled.div`
 // const Text = styled.div`
 //   padding: 1.5rem;
 //   color: ${({ theme }) => theme.colors.purple600};
-//   font-family: Inter;
 //   font-size: 2rem;
 //   font-style: normal;
 //   font-weight: 600;
