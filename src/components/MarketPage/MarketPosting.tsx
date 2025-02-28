@@ -284,7 +284,7 @@ const AccessRestrictedWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: auto;
+
   overscroll-behavior: contain;
 `;
 
@@ -295,7 +295,7 @@ const AccessRestrictedNormal = styled.div`
   justify-content: center;
   > div {
     position: relative;
-    padding: 2rem;
+
     display: flex;
     align-items: center;
     justify-content: center;
