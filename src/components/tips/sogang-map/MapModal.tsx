@@ -37,7 +37,7 @@ export default function MapModal({
       </div>
       {selectedBuildingData?.studyingspots.length! > 0 && (
         <StudyingSpotDiv>
-          <h2>Studying spots</h2>
+          <h2>Study spots</h2>
           {selectedBuildingData?.studyingspots?.map((spot) => (
             <div key={spot.id}>
               <figure>

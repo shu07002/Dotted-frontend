@@ -9,7 +9,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { SignUpFormData } from '@/types/signUpFormData';
 import { UseFormWatch } from 'react-hook-form';
-import { fetchWithAuth } from '@/utils/auth'; // auth.ts 경로에 맞게 수정
+// import { fetchWithAuth } from '@/utils/auth'; // auth.ts 경로에 맞게 수정
 
 interface StudentVerificatProps {
   onChangeStep: () => void;
@@ -76,9 +76,14 @@ export default function StudentVerificat({
     mutationFn: async (file: File) => {
       const formData = new FormData();
       formData.append('image_upload', file);
-      const data = await fetchWithAuth<any>(
+      let accessToken = localStorage.getItem('accessToken');
+      if (!accessToken) return;
+
+      const headers = { Authorization: `Bearer ${accessToken}` };
+      const data = await fetch(
         `${import.meta.env.VITE_API_DOMAIN}/api/user/univrequest`,
         {
+          headers,
           method: 'POST',
           body: formData
         }
