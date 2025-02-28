@@ -10,7 +10,7 @@ import { CommunityPost, EachPost } from '@/types/CommunityPost';
 import { EachMarketPost, MarketPost } from '@/types/MarketPost';
 import { useEffect, useState } from 'react';
 import { LoginModal } from '@/components/common/ProtectedRoute';
-
+import QuoteIcon from '@/assets/svg/MainPage/Quote.svg?react';
 async function fetchCommunityPosts(): Promise<EachPost[]> {
   const url = new URL(`${import.meta.env.VITE_API_DOMAIN}/api/posting`);
 
@@ -97,7 +97,9 @@ export default function MainPage() {
                       key={idx}
                       onClick={() => handleClick(`community/detail/${item.id}`)}
                     >
-                      <span>{item.title}</span>
+                      <span>
+                        <QuoteIcon /> {item.title}
+                      </span>
                       <span>{formatRelativeTime(item.created_at)}</span>
                     </li>
                   );
@@ -200,7 +202,7 @@ const MiniCommunity = styled.div`
 const Title = styled.div`
   display: flex;
   justify-content: space-between;
-  padding: 0 2.5rem;
+  padding: 0 2rem;
 
   @media (max-width: 865px) {
     padding: 0 0.2rem;
@@ -209,7 +211,6 @@ const Title = styled.div`
   align-items: center;
   > span {
     color: ${({ theme }) => theme.colors.gray700};
-
     font-size: 24px;
     font-style: normal;
     font-weight: 500;
@@ -217,6 +218,8 @@ const Title = styled.div`
     letter-spacing: -1.2px;
     @media (max-width: 700px) {
       font-size: 1.6rem;
+      font-weight: 600;
+      letter-spacing: -0.8px;
     }
     &:last-child {
       cursor: pointer;
@@ -247,29 +250,39 @@ const CommunityList = styled.div`
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 6.4rem;
+      height: 5.4rem;
+      padding: 0 2rem;
       @media (max-width: 865px) {
-        @media (max-width: 865px) {
-          height: 5.4rem;
-        }
+        height: 4.4rem;
+        padding: 0 1.5rem;
       }
-      padding: 0 2.5rem;
 
       &:not(:last-child) {
         border-bottom: 1px solid ${({ theme }) => theme.colors.gray300};
       }
 
       > span {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
         color: ${({ theme }) => theme.colors.gray700};
-
         font-size: 2rem;
+        svg {
+          width: 1.4rem;
+          height: 1.4rem;
+          stroke: ${({ theme }) => theme.colors.gray600};
+        }
         @media (max-width: 865px) {
-          font-size: 1.7rem;
+          font-size: 1.6rem;
+          svg {
+            width: 1.2rem;
+            height: 1.2rem;
+          }
         }
         font-style: normal;
         font-weight: 400;
         line-height: 21px; /* 105% */
-        letter-spacing: -1px;
+        letter-spacing: -0.4px;
 
         &:last-child {
           color: ${({ theme }) => theme.colors.gray400};
@@ -297,6 +310,7 @@ const Tag = styled.div`
   font-size: 1.4rem;
   @media (max-width: 865px) {
     font-size: 1.2rem;
+    width: 8rem;
   }
   font-style: normal;
   font-weight: 600;
@@ -329,7 +343,6 @@ const MarketListContainer = styled.div`
     width: 100%;
     display: grid;
     flex: 1;
-
     grid-template-columns: repeat(auto-fit, minmax(20%, auto));
     grid-gap: 2rem;
 
@@ -344,10 +357,12 @@ const MarketListContainer = styled.div`
       aspect-ratio: 0.7;
       display: flex;
       flex-direction: column;
-
       border-radius: 16px;
       border: 1px solid ${({ theme }) => theme.colors.backgroundBase};
       background: ${({ theme }) => theme.colors.backgroundLayer2};
+      @media (max-width: 768px) {
+        border-radius: 1rem;
+      }
     }
   }
 `;
@@ -370,6 +385,12 @@ const MarketImageWrapper = styled.div`
       &:hover {
         transform: scale(1.1);
       }
+    }
+  }
+  @media (max-width: 768px) {
+    border-radius: 1rem 1rem 0 0;
+    > img {
+      border-radius: 1rem 1rem 0 0;
     }
   }
 `;

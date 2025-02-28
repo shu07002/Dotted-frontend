@@ -200,8 +200,7 @@ export default function VerificationPage() {
                   <TimeSVG />
                 </ItemWrapper>
                 <span>
-                  It takes some <span>time</span> to accept you because we have
-                  to check this file.
+                  File verification may take <span>1-2 days</span>.
                 </span>
               </div>
               <div>
@@ -210,7 +209,7 @@ export default function VerificationPage() {
                   <TrashcanSVG />
                 </ItemWrapper>
                 <span>
-                  We will <span>destroy</span> this file after checking.
+                  Your file will be <span>deleted</span> after verification.
                 </span>
               </div>
               <div>
@@ -219,8 +218,7 @@ export default function VerificationPage() {
                   <UnlockSVG />
                 </ItemWrapper>
                 <span>
-                  <span>Community</span> and <span>Market</span> can be used
-                  after you are approved.
+                  You can access <span>Community</span> and <span>Market</span>.
                 </span>
               </div>
             </Notice>

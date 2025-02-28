@@ -63,7 +63,6 @@ const TipsWrapper = styled.section`
 
 const Title = styled.div`
   color: ${({ theme }) => theme.colors.gray700};
-
   font-size: 24px;
   font-style: normal;
   font-weight: 500;
@@ -72,7 +71,9 @@ const Title = styled.div`
   margin-bottom: 4.2rem;
   @media (max-width: 700px) {
     font-size: 1.8rem;
+    letter-spacing: -0.8px;
     margin-bottom: 2.2rem;
+    font-weight: 600;
   }
 `;
 
@@ -95,7 +96,7 @@ const Contents = styled.nav`
 
   @media (max-width: 500px) {
     grid-template-columns: repeat(3, 1fr); /*  더 줄어들면 2개씩 */
-    padding: 0 0rem;
+    padding: 0 2rem;
   }
 `;
 
@@ -106,7 +107,9 @@ const Item = styled.div`
   gap: 2.4rem;
   flex-direction: column;
   align-items: center;
-
+  @media (max-width: 500px) {
+    gap: 1.2rem;
+  }
   > span {
     color: ${({ theme }) => theme.colors.gray600};
     text-align: center;
