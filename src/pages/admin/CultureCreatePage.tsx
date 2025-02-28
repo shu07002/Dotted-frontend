@@ -32,7 +32,7 @@ export default function CultureCreatePage() {
       );
 
       return fetchWithAuth(
-        `${import.meta.env.VITE_API_URL}/api/campus/culture`,
+        `${import.meta.env.VITE_API_DOMAIN}/api/campus/culture`,
         {
           method: 'POST',
           headers: {
