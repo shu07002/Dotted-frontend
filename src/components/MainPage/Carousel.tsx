@@ -36,6 +36,9 @@ const CarouselWrapper = styled.section`
   width: 100%;
   height: 24.9rem;
   background-color: gray;
+  @media (max-width: 900px) {
+    height: 15rem;
+  }
 `;
 
 const StyledSlider = styled(Slider)`
@@ -76,6 +79,9 @@ const StyledSlider = styled(Slider)`
     right: 10rem;
     left: auto !important;
     z-index: 100;
+    @media (max-width: 900px) {
+      top: 11rem;
+    }
   }
 
   .slick-next {
@@ -86,6 +92,9 @@ const StyledSlider = styled(Slider)`
     right: 4rem;
 
     z-index: 100;
+    @media (max-width: 900px) {
+      top: 11rem;
+    }
   }
 
   .slick-prev::before,

@@ -168,8 +168,7 @@ const Main = styled.main`
   margin-bottom: 13.9rem;
 
   @media (max-width: 700px) {
-    padding-right: 2rem;
-    padding-left: 2rem;
+    padding: 0rem 2rem 0rem 2rem;
   }
 `;
 
@@ -179,6 +178,9 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 6.5rem;
+  @media (max-width: 700px) {
+    gap: 3.5rem;
+  }
 `;
 
 const MiniBoardWrapper = styled.section`
@@ -213,13 +215,18 @@ const Title = styled.div`
     font-weight: 500;
     line-height: 21px; /* 87.5% */
     letter-spacing: -1.2px;
-
+    @media (max-width: 700px) {
+      font-size: 1.6rem;
+    }
     &:last-child {
       cursor: pointer;
       color: ${({ theme }) => theme.colors.gray500};
       font-size: 20px;
       font-weight: 300;
       letter-spacing: -1px;
+      @media (max-width: 700px) {
+        font-size: 1.6rem;
+      }
     }
   }
 `;
