@@ -2,7 +2,6 @@ import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 import styled from 'styled-components';
 import CultureTiptap from '@/components/tips/culture/CultureTiptap';
-import { fetchWithAuth } from '@/utils/auth';
 
 export interface CultureData {
   title: string;
@@ -31,16 +30,13 @@ export default function CultureCreatePage() {
         Object.fromEntries(formData.entries())
       );
 
-      return fetchWithAuth(
-        `${import.meta.env.VITE_API_DOMAIN}/api/campus/culture`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          },
-          body: formData
-        }
-      );
+      // fetchWithAuth 대신 fetch를 사용하고, 토큰 등 불필요한 헤더를 제거합니다.
+      return fetch(`${import.meta.env.VITE_API_DOMAIN}/api/campus/culture`, {
+        method: 'POST',
+        // FormData를 전송할 경우 Content-Type을 직접 설정하지 않는 것이 좋습니다.
+        body: formData,
+        mode: 'cors'
+      });
     },
     onSuccess: () => {
       alert('🎉 글이 성공적으로 작성되었습니다!');
@@ -83,11 +79,7 @@ export default function CultureCreatePage() {
         <CultureTiptap watch={watch} setValue={setValue} trigger={trigger} />
 
         <TitleWrapper>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-          />{' '}
+          <input type="file" accept="image/*" onChange={handleFileChange} />
         </TitleWrapper>
 
         {/* 제출 버튼 */}

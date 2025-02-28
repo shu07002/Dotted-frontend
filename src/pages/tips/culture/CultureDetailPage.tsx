@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import BackIcon from '@/assets/svg/tips/culture/back.svg?react';
 import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { TiptapViewOnly } from '@/components/CommunityPage/TipTapViewOnly';
 
 const fetchCultureData = async () => {
   const response = await fetch(
@@ -54,12 +55,8 @@ export default function CultureDetailPage() {
         <BackIcon onClick={() => navigate(-1)} />
       </Header>
       <ContentBox>
-        {articleContent?.map((line, idx) =>
-          line.startsWith('http') ? (
-            <img key={idx} src={line} alt="contentImage" />
-          ) : (
-            <p key={idx}>{line}</p>
-          )
+        {articleData?.content && (
+          <TiptapViewOnly content={articleData.content} />
         )}
       </ContentBox>
     </Main>
@@ -68,9 +65,19 @@ export default function CultureDetailPage() {
 
 const Main = styled.main`
   width: 100%;
-  padding: 5rem 34.4rem 2.6rem 34.4rem;
+  padding: 5rem 15rem 2.6rem 15rem;
   display: flex;
   flex-direction: column;
+
+  @media (max-width: 900px) {
+    padding-left: 7.7rem;
+    padding-right: 7.7rem;
+  }
+
+  @media (max-width: 700px) {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
 `;
 
 const Header = styled.header`
@@ -86,6 +93,10 @@ const Header = styled.header`
     font-weight: 600;
     letter-spacing: -1.8px;
     color: ${({ theme }) => theme.colors.gray800};
+
+    @media (max-width: 700px) {
+      font-size: 3.1rem;
+    }
   }
 
   > p {
