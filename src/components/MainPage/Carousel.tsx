@@ -26,7 +26,7 @@ export default function Carousel() {
           </div>
         </SlideContent>
         <SlideContent>
-          <div>
+          <div onClick={() => navigate('/about/notice')}>
             <img src="/banner2.png" alt="banner2" />
           </div>
         </SlideContent>
