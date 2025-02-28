@@ -4,13 +4,54 @@ import ImgFileSVG from '@/assets/svg/SignUpPage/ImgFileSVG.svg?react';
 import TimeSVG from '@/assets/svg/SignUpPage/TimeSVG.svg?react';
 import TrashcanSVG from '@/assets/svg/SignUpPage/TrashcanSVG.svg?react';
 import UnlockSVG from '@/assets/svg/SignUpPage/UnlockSVG.svg?react';
+import VerifiedSVG from '@/assets/svg/mypage/check.svg?react';
 import PentagonSVG from '@/assets/svg/SignUpPage/PentagonSVG.svg?react';
-import { useRef, useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
+import { useEffect, useRef, useState } from 'react';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { fetchWithAuth } from '@/utils/auth';
+
+export interface UserProfile {
+  id: number;
+  college: string;
+  registered_posts: string[];
+  scrapped_posts: string[];
+  registered_marketposts: string[];
+  scrapped_marketposts: string[];
+  comments: string[];
+  password: string; // 보통 비밀번호는 내려주지 않지만, Swagger 상에 나와있으니 일단 포함
+  last_login: string | null;
+  email: string;
+  name: string;
+  birth: string | null;
+  nickname: string;
+  student_type: string | null;
+  login_type: string | null;
+  univ_certified: boolean;
+  created_at: string;
+  is_staff: boolean;
+  is_active: boolean;
+  social_id: string | null;
+  social_additional_info: any; // 구조에 따라 세부 타입 정의 가능
+}
+
+async function fetchUserProfile(): Promise<UserProfile> {
+  return fetchWithAuth<UserProfile>(
+    `${import.meta.env.VITE_API_DOMAIN}/api/user/profile`,
+    {
+      method: 'GET'
+    }
+  );
+}
+
 export default function VerificationPage() {
+  const [isVerified, setIsVerified] = useState<boolean>(false);
   const [preview, setPreview] = useState<string>('');
   const imgFileRef = useRef<HTMLInputElement>(null);
   const [imgFile, setImgFile] = useState<File | null>(null);
+  const { data, isLoading } = useQuery<UserProfile>({
+    queryKey: ['userProfile'],
+    queryFn: fetchUserProfile
+  });
   const onClickReupload = () => {
     if (imgFileRef.current) {
       imgFileRef.current.value = '';
@@ -77,96 +118,139 @@ export default function VerificationPage() {
 
     uploadUniversityImageMutation.mutate(imgFile);
   };
+
+  useEffect(() => {
+    if (data) {
+      console.log(data.univ_certified);
+
+      setIsVerified(data.univ_certified);
+    }
+  }, [data]);
+  if (isLoading) {
+    return (
+      <VerifiedWrapper className="loading">
+        <img src="../../assets/gif/SignUpPage/" alt="" />
+        Checking the Verification Status...
+      </VerifiedWrapper>
+    );
+  }
+
   return (
     <StudentVerificationLayout>
       <StudentVerificationWrapper>
         <Title>Student Verification</Title>
-        <Guide>
-          <span>Please upload an image file to </span>
-          <span>prove that you are a student at Sogang University.</span>
-        </Guide>
-        <Example>
-          ex. Student ID Card, Saint Main page Screenshot, Course Records
-        </Example>
-        <Warnning>
-          <div>
-            <WarnSVG />
-          </div>
-          <span>
-            Your real name and university name must be visible. <br />
-            You can hide other personal details such as card numbers or photos.
-          </span>
-        </Warnning>
-        <AttatchImage>
-          {preview === '' ? (
-            <>
-              <label htmlFor="file">
-                <ImgFileSVG />
-                <span>Attach Image File</span>
-                <span>JPG, PNG, JPEG</span>
-              </label>
-            </>
-          ) : (
-            <>
-              <img src={preview} alt="proving-source" />
-            </>
-          )}
-          <input
-            type="file"
-            accept="image/*"
-            id="file"
-            name="file"
-            ref={imgFileRef}
-            onChange={onSaveImage}
-            style={{ display: 'none', cursor: 'pointer' }}
-          />
-        </AttatchImage>
-        {preview !== '' && (
-          <ButtonWrapper>
-            <button onClick={onClickReupload}>reupload</button>
-            <button onClick={onClickDelete}>delete</button>
-          </ButtonWrapper>
+        {isVerified ? (
+          <VerifiedWrapper>
+            <VerifiedSVG />
+            You already have verified.
+          </VerifiedWrapper>
+        ) : (
+          <>
+            <Guide>
+              <span>Please upload an image file to </span>
+              <span>prove that you are a student at Sogang University.</span>
+            </Guide>
+            <Example>
+              ex. Student ID Card, Saint Main page Screenshot, Course Records
+            </Example>
+            <Warnning>
+              <div>
+                <WarnSVG />
+              </div>
+              <span>
+                Your real name and university name must be visible. <br />
+                You can hide other personal details such as card numbers or
+                photos.
+              </span>
+            </Warnning>
+            <AttatchImage>
+              {preview === '' ? (
+                <>
+                  <label htmlFor="file">
+                    <ImgFileSVG />
+                    <span>Attach Image File</span>
+                    <span>JPG, PNG, JPEG</span>
+                  </label>
+                </>
+              ) : (
+                <>
+                  <img src={preview} alt="proving-source" />
+                </>
+              )}
+              <input
+                type="file"
+                accept="image/*"
+                id="file"
+                name="file"
+                ref={imgFileRef}
+                onChange={onSaveImage}
+                style={{ display: 'none', cursor: 'pointer' }}
+              />
+            </AttatchImage>
+            {preview !== '' && (
+              <ButtonWrapper>
+                <button onClick={onClickReupload}>reupload</button>
+                <button onClick={onClickDelete}>delete</button>
+              </ButtonWrapper>
+            )}
+            <Notice>
+              <div>
+                <ItemWrapper>
+                  <StyledPentagonSVG />
+                  <TimeSVG />
+                </ItemWrapper>
+                <span>
+                  File verification may take <span>1-2 days</span>.
+                </span>
+              </div>
+              <div>
+                <ItemWrapper>
+                  <StyledPentagonSVG />
+                  <TrashcanSVG />
+                </ItemWrapper>
+                <span>
+                  Your file will be <span>deleted</span> after verification.
+                </span>
+              </div>
+              <div>
+                <ItemWrapper>
+                  <StyledPentagonSVG />
+                  <UnlockSVG />
+                </ItemWrapper>
+                <span>
+                  You can access <span>Community</span> and <span>Market</span>.
+                </span>
+              </div>
+            </Notice>
+            <SubmitButtonLayout>
+              <SubmitButtonWrapper>
+                <SubmitButton onClick={onClickImgSubmit}>Submit</SubmitButton>
+              </SubmitButtonWrapper>
+            </SubmitButtonLayout>
+          </>
         )}
-        <Notice>
-          <div>
-            <ItemWrapper>
-              <StyledPentagonSVG />
-              <TimeSVG />
-            </ItemWrapper>
-            <span>
-              It takes some <span>time</span> to accept you because we have to
-              check this file.
-            </span>
-          </div>
-          <div>
-            <ItemWrapper>
-              <StyledPentagonSVG />
-              <TrashcanSVG />
-            </ItemWrapper>
-            <span>
-              We will <span>destroy</span> this file after checking.
-            </span>
-          </div>
-          <div>
-            <ItemWrapper>
-              <StyledPentagonSVG />
-              <UnlockSVG />
-            </ItemWrapper>
-            <span>
-              <span>Community</span> and <span>Market</span> can be used after
-              you are approved.
-            </span>
-          </div>
-        </Notice>
-        <SubmitButtonLayout>
-          <SubmitButtonWrapper>
-            <SubmitButton onClick={onClickImgSubmit}>Submit</SubmitButton>
-          </SubmitButtonWrapper>
-        </SubmitButtonLayout>
       </StudentVerificationWrapper>
     </StudentVerificationLayout>
   );
 }
+const VerifiedWrapper = styled.div`
+  height: 50vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.6rem;
+  margin-bottom: 3.4rem;
+  color: ${({ theme }) => theme.colors.purple600};
+  font-size: 2.4rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 3.6rem; /* 150% */
+  letter-spacing: -1.2px;
+  &.loading {
+    color: ${({ theme }) => theme.colors.gray700};
+  }
+`;
 
 const StudentVerificationLayout = styled.div`
   width: 100%;

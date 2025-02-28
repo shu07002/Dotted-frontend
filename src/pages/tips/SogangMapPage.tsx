@@ -36,7 +36,7 @@ export default function SogangMapPage() {
           className="study"
           onClick={() => handleTabClick('study')}
         >
-          <BookIcon /> <span>studying spot</span>
+          <BookIcon /> <span>study spot</span>
         </LocationElement>
         <LocationElement
           className="cafe"
