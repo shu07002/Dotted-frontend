@@ -1,47 +1,32 @@
-// import { useQuery } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import BackIcon from '@/assets/svg/tips/culture/back.svg?react';
-import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { TiptapViewOnly } from '@/components/CommunityPage/TipTapViewOnly';
 
-const fetchCultureData = async () => {
+const fetchCultureData = async (id: string) => {
   const response = await fetch(
-    `${import.meta.env.VITE_API_DOMAIN}/api/campus/culture`
+    `${import.meta.env.VITE_API_DOMAIN}/api/campus/culture/${id}`
   );
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
+  }
   return response.json();
 };
-
-interface CultureDetail {
-  title: string;
-  createdAt: string;
-  id: number;
-  content: string;
-  thumnail: string;
-}
 
 export default function CultureDetailPage() {
   const navigate = useNavigate();
   const { cultureId } = useParams();
 
-  const [articleData, setArticleData] = useState<CultureDetail | null>(null);
-  const { data, isLoading, error } = useQuery({
-    queryKey: ['tipsClubs'],
-    queryFn: fetchCultureData
+  const {
+    data: articleData,
+    isLoading,
+    error
+  } = useQuery({
+    queryKey: ['cultureDetail', cultureId],
+    queryFn: () => fetchCultureData(cultureId!),
+    enabled: !!cultureId
   });
-
-  useEffect(() => {
-    if (cultureId && data) {
-      const fetchedData = data?.filter(
-        (item: CultureDetail) => item.id === parseInt(cultureId)
-      );
-
-      if (fetchedData) {
-        setArticleData(fetchedData[0]);
-      }
-    }
-  }, [cultureId]);
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error...</div>;
