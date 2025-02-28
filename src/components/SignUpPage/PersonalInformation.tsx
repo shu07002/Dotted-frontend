@@ -59,7 +59,6 @@ export default function PersonalInformation({
 
 const PersonalInformationWrapper = styled.div`
   width: 100%;
-
   display: flex;
   flex-direction: column;
   justify-content: center;

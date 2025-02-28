@@ -9,7 +9,7 @@ export default function SignUpComplete() {
     <SignUpCompleteContainer>
       <Wrapper>
         <ImgWrapper>
-          <img src="public/logo-motion.gif" alt="Logo Animation" />
+          <img src="/logo-motion.gif" alt="Logo Animation" />
         </ImgWrapper>
 
         <Text>Sign Up Complete !</Text>

@@ -20,6 +20,7 @@ const ResizableImageComponent: React.FC<NodeViewProps> = ({
   const alignment = node.attrs.alignment || 'center';
 
   const handleResizeStart = (e: React.MouseEvent | React.TouchEvent) => {
+    if (!editor.options.editable) return;
     e.preventDefault();
     e.stopPropagation();
     setIsResizing(true);
@@ -59,6 +60,7 @@ const ResizableImageComponent: React.FC<NodeViewProps> = ({
   };
 
   useEffect(() => {
+    if (!editor.options.editable || !isResizing) return;
     if (isResizing) {
       document.addEventListener('mousemove', handleResize);
       document.addEventListener('mouseup', handleResizeEnd);
@@ -142,8 +144,9 @@ const ResizableImageComponent: React.FC<NodeViewProps> = ({
       <ImageContainer
         alignment={alignment}
         selected={selected}
-        draggable={!isResizing}
-        onDragStart={handleDragStart}
+        editable={editor.options.editable} // ✅ editable 상태 전달
+        draggable={!isResizing && editor.options.editable} // 🚨 editable이 false면 드래그 비활성화
+        onDragStart={editor.options.editable ? handleDragStart : undefined} // 🚨 editable이 false면 드래그 이벤트 제거
         onClick={handleTap}
         onTouchEnd={handleTap}
         data-image-component="true"
@@ -158,7 +161,7 @@ const ResizableImageComponent: React.FC<NodeViewProps> = ({
             height: node.attrs.height || 'auto'
           }}
         />
-        {selected && (
+        {selected && editor.options.editable && (
           <>
             <ResizeHandle
               onMouseDown={handleResizeStart}
@@ -212,12 +215,23 @@ const ImageWrapper = styled(NodeViewWrapper)`
   }
 `;
 
-const ImageContainer = styled.div<{ selected: boolean; alignment: string }>`
+const ImageContainer = styled.div<{
+  selected: boolean;
+  alignment: string;
+  editable: boolean;
+}>`
   position: relative;
   display: inline-block;
-  cursor: ${(props) => (props.selected ? 'move' : 'pointer')};
-  outline: ${(props) =>
-    props.selected ? `2px solid ${props.theme.colors.purple600}` : 'none'};
+  cursor: ${({ editable, selected }) =>
+    !editable
+      ? 'default'
+      : selected
+        ? 'move'
+        : 'pointer'}; // 🚨 editable이 false면 기본 커서로 설정
+  outline: ${({ selected, theme, editable }) =>
+    selected && editable
+      ? `2px solid ${theme.colors.purple600}`
+      : 'none'}; // 🚨 editable이 false면 아웃라인 제거
 `;
 
 const StyledImage = styled.img`

@@ -7,8 +7,8 @@ import styled from 'styled-components';
 
 export const TiptapViewOnly = ({ content }: { content: string }) => {
   const editor = useEditor({
-    content, // 초기 내용
-    editable: false, // 읽기 전용 설정
+    content,
+    editable: false, // 🚨 읽기 전용 모드 적용
     extensions: [
       ResizableImage,
       TextAlign.configure({ types: ['heading', 'paragraph'] }),
@@ -24,7 +24,6 @@ export const TiptapViewOnly = ({ content }: { content: string }) => {
 
   return (
     <EditorContainer>
-      {/* 툴바는 필요 없으므로 생략하거나 조건부 렌더링 */}
       <StyledEditorContent editor={editor} />
     </EditorContainer>
   );

@@ -52,6 +52,7 @@ export default function Posting({
   const [localScrapped, setLocalScrapped] = useState(post.is_scrapped);
 
   const [replacedContent, setReplacedContent] = useState(post.content);
+  const [changed, setChanged] = useState(false);
 
   const handleLikeClick = () => {
     if (localLiked) {
@@ -62,10 +63,6 @@ export default function Posting({
     setLocalLiked((prev) => !prev);
     onClickLike();
   };
-
-  useEffect(() => {
-    console.log(replacedContent);
-  }, [replacedContent]);
 
   const handleScrapClick = () => {
     if (localScrapped) {
@@ -78,16 +75,21 @@ export default function Posting({
   };
 
   useEffect(() => {
-    if (post.images && post.images.length > 0) {
+    const replace = async () => {
+      let newContent = post.content; // post.content의 원본을 새로운 변수에 저장
+
       post.images.forEach((imgObj, index) => {
-        // 예: 'src="{images[0].image_url}"' => 'src="https://example.com/img1.png"'
         const placeholder = `src={images[${index}].image_url}`;
         const realSrc = `src="${imgObj.image_url}"`;
-
-        setReplacedContent(replacedContent.replace(placeholder, realSrc));
+        newContent = newContent.replace(placeholder, realSrc);
       });
-    }
-  }, []);
+
+      await setReplacedContent(newContent);
+      setChanged(true);
+    };
+
+    replace();
+  }, [post, replacedContent, changed]);
 
   return (
     <PostingWrapper>
@@ -118,7 +120,9 @@ export default function Posting({
       </InfoWrapper>
 
       <ContentWrapper>
-        <TiptapViewOnly content={replacedContent} />
+        {(changed || post.content !== replacedContent) && (
+          <TiptapViewOnly content={replacedContent} />
+        )}
 
         <ButtonWrapper>
           <Button className={`${isLiked && 'liked'}`} onClick={handleLikeClick}>
