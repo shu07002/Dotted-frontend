@@ -509,7 +509,11 @@ const ChangeRadioWrapper = styled.label`
 const ButtonBox = styled.div`
   display: flex;
   width: 100%;
+  max-width: 51rem;
   height: 7.4rem;
+  @media (max-width: 500px) {
+    height: 5.5rem;
+  }
   border-radius: 0 0 5px 5px;
   background: ${({ theme }) => theme.colors.backgroundLayer1};
 
@@ -562,6 +566,14 @@ const AccessRestrictedWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  > div {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+  }
 `;
 
 const AccessRestrictedNormal = styled.div`
@@ -572,6 +584,7 @@ const AccessRestrictedNormal = styled.div`
   padding: 5.6rem 2rem 0 2rem;
   width: 51rem;
   height: 23.6rem;
+
   flex-shrink: 0;
   border-radius: 5px 5px 0 0;
   background: ${({ theme }) => theme.colors.backgroundLayer1};
@@ -608,7 +621,12 @@ const AccessRestrictedReport = styled.div`
   flex-direction: column;
   justify-content: space-evenly;
   padding: 3.1rem 5.5rem 3.1rem 5.5rem;
-  width: 51rem;
+
+  @media (max-width: 500px) {
+    padding: 2rem 3rem;
+  }
+  width: 100%;
+  max-width: 51rem;
 
   flex-shrink: 0;
   border-radius: 5px 5px 0 0;
@@ -622,6 +640,9 @@ const AccessRestrictedReport = styled.div`
     padding: 1rem;
     min-height: 9rem;
     margin-bottom: 2.8rem;
+    @media (max-width: 500px) {
+      margin-bottom: 2rem;
+    }
     resize: none;
     width: 100%;
     max-width: 40rem;
