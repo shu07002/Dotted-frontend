@@ -24,7 +24,7 @@ interface CultureDetail {
 export default function CultureDetailPage() {
   const navigate = useNavigate();
   const { cultureId } = useParams();
-  const [articleContent, setArticleContent] = useState<string[]>([]);
+
   const [articleData, setArticleData] = useState<CultureDetail | null>(null);
   const { data, isLoading, error } = useQuery({
     queryKey: ['tipsClubs'],
@@ -39,7 +39,6 @@ export default function CultureDetailPage() {
 
       if (fetchedData) {
         setArticleData(fetchedData[0]);
-        setArticleContent(fetchedData[0].content?.split('\n'));
       }
     }
   }, [cultureId]);
