@@ -1,73 +1,68 @@
-import { useState } from 'react';
-import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
-import CultureEditor from '@/components/admin/CultureEditor';
+import styled from 'styled-components';
+import CultureTiptap from '@/components/tips/culture/CultureTiptap';
+import { fetchWithAuth } from '@/utils/auth';
 
 export interface CultureData {
   title: string;
   content: string;
-  thumbnail?: string;
+  thumbnail?: File;
   college: number;
 }
 
 export default function CultureCreatePage() {
-  const { reset, register, handleSubmit, setValue, watch, trigger } =
+  const { register, handleSubmit, setValue, watch, reset, trigger } =
     useForm<CultureData>();
-  const [_, setIsSubmitted] = useState(false);
 
   const postingMutation = useMutation({
     mutationFn: async (data: CultureData) => {
       const formData = new FormData();
       formData.append('title', data.title);
       formData.append('content', data.content);
-      formData.append('college', data.college.toString()); // 숫자는 문자열로 변환
-      if (data.thumbnail) {
-        formData.append('thumbnail', data.thumbnail);
-      }
-      formData.forEach((value, key) => {
-        console.log(`${key}:`, value);
-      });
+      formData.append('college', data.college.toString());
 
-      const response = await fetch(
-        `${import.meta.env.VITE_API_DOMAIN}/campus/culture`,
+      if (data.thumbnail) {
+        formData.append('thumbnail_upload', data.thumbnail);
+      }
+
+      console.log(
+        '📌 업로드할 데이터:',
+        Object.fromEntries(formData.entries())
+      );
+
+      return fetchWithAuth(
+        `${import.meta.env.VITE_API_URL}/api/campus/culture`,
         {
           method: 'POST',
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          },
           body: formData
         }
       );
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      return response;
     },
     onSuccess: () => {
-      setIsSubmitted(true);
-      alert('글이 성공적으로 작성되었습니다.');
-      reset();
+      alert('🎉 글이 성공적으로 작성되었습니다!');
+      reset(); // 입력값 초기화
     },
     onError: (error) => {
       console.error('❌ 글쓰기 실패:', error);
     }
   });
 
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setValue('thumbnail', file);
+    }
+  };
+
   const onSubmit = async (data: CultureData) => {
     if (postingMutation.isPending) return;
-
-    const newPostData: CultureData = {
-      ...data,
-      college: 1
-    };
-
-    console.log('보낼 데이터:', newPostData);
-
-    try {
-      await postingMutation.mutateAsync(newPostData);
-    } catch (error) {
-      console.error('❌ 글쓰기 실패:', error);
-    }
+    const newPostData = { ...data, college: 1 }; // 기본값 설정
+    console.log('📌 최종 전송 데이터:', newPostData);
+    await postingMutation.mutateAsync(newPostData);
   };
 
   return (
@@ -75,24 +70,27 @@ export default function CultureCreatePage() {
       <Wrapper>
         <Title>Culture 글 쓰기</Title>
 
+        {/* 제목 입력 */}
         <TitleWrapper>
           <input
             type="text"
             placeholder="제목"
-            {...register('title', { required: 'Please write your title' })}
+            {...register('title', { required: '제목을 입력하세요.' })}
           />
         </TitleWrapper>
 
-        <CultureEditor watch={watch} setValue={setValue} trigger={trigger} />
+        {/* 에디터 (본문) */}
+        <CultureTiptap watch={watch} setValue={setValue} trigger={trigger} />
 
         <TitleWrapper>
           <input
-            type="text"
-            placeholder="썸네일 URL (선택사항)"
-            {...register('thumbnail')}
-          />
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+          />{' '}
         </TitleWrapper>
 
+        {/* 제출 버튼 */}
         <SubmitButton type="submit">
           {postingMutation.isPending ? 'Submitting...' : 'Submit'}
         </SubmitButton>
@@ -101,6 +99,7 @@ export default function CultureCreatePage() {
   );
 }
 
+// 🔹 스타일 정의
 const WriteCommunityPageContainer = styled.form`
   margin-top: 2.5rem;
   width: 100%;
@@ -108,11 +107,9 @@ const WriteCommunityPageContainer = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
-
   @media (max-width: 1200px) {
     padding: 0 10rem;
   }
-
   @media (max-width: 700px) {
     padding: 0 2rem;
   }
@@ -135,7 +132,6 @@ const Title = styled.div`
 const TitleWrapper = styled.div`
   width: 100%;
   height: 5.4rem;
-
   > input {
     width: 100%;
     height: 100%;
