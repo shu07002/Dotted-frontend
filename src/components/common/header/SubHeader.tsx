@@ -45,7 +45,7 @@ export default function SubHeader({ hoveredTab }: SubHeaderProps) {
           hoveredTab !== 'COMMUNITY' &&
           hoveredTab !== 'MARKET')) && (
         <SubHeaderWrapper {...SubHeaderAnimation}>
-          {pathname.includes('about') ? (
+          {hoveredTab === 'ABOUT' || pathname.includes('about') ? (
             <>
               {aboutsubs.map((sub, idx) => (
                 <SubElement key={idx}>

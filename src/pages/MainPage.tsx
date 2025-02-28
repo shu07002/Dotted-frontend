@@ -203,7 +203,6 @@ const Title = styled.div`
   display: flex;
   justify-content: space-between;
   padding: 0 2rem;
-
   @media (max-width: 865px) {
     padding: 0 0.2rem;
   }
@@ -217,7 +216,7 @@ const Title = styled.div`
     line-height: 21px; /* 87.5% */
     letter-spacing: -1.2px;
     @media (max-width: 700px) {
-      font-size: 1.6rem;
+      font-size: 1.8rem;
       font-weight: 600;
       letter-spacing: -0.8px;
     }
@@ -337,7 +336,6 @@ const MarketListContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: baseline;
-
   > ul {
     margin-top: 2rem;
     width: 100%;
@@ -348,6 +346,7 @@ const MarketListContainer = styled.div`
 
     @media (max-width: 768px) {
       grid-template-columns: repeat(2, 47.5%);
+      margin-top: 0em;
     }
 
     > li {
@@ -402,7 +401,10 @@ const ItemInfo = styled.div`
   justify-content: space-between;
   align-items: stretch;
   gap: 1.2rem;
-
+  @media (max-width: 768px) {
+    padding: 1rem;
+    gap: 0.6rem;
+  }
   > div {
     display: flex;
     justify-content: space-between;
@@ -413,34 +415,40 @@ const ItemInfo = styled.div`
         overflow: hidden;
         text-overflow: ellipsis;
         color: ${({ theme }) => theme.colors.gray700};
-
         font-size: 20px;
         font-style: normal;
-        font-weight: 400;
+        font-weight: 600;
         letter-spacing: -1px;
         line-height: 2;
+        @media (max-width: 768px) {
+          font-size: 1.6rem;
+        }
       }
     }
 
     > span {
       &.price {
         color: ${({ theme }) => theme.colors.gray700};
-
         font-size: 1.4rem;
         font-style: normal;
         font-weight: 500;
         line-height: normal;
         letter-spacing: -0.07rem;
+        @media (max-width: 768px) {
+          font-size: 1.3rem;
+        }
       }
 
       &.created {
-        color: ${({ theme }) => theme.colors.gray500};
-
+        color: ${({ theme }) => theme.colors.gray400};
         font-size: 1.4rem;
         font-style: normal;
-        font-weight: 300;
+        font-weight: 400;
         line-height: normal;
         letter-spacing: -0.07rem;
+        @media (max-width: 768px) {
+          font-size: 1.3rem;
+        }
       }
     }
   }

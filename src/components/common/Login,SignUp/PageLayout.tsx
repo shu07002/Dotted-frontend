@@ -39,7 +39,7 @@ const PurpleCircle = styled.div`
     rgba(150, 120, 211, 0.4) 0%,
     rgba(150, 120, 211, 0) 100%
   );
-  filter: blur(15rem);
+  filter: blur(5rem);
 `;
 
 const GrayCircle = styled.div`
@@ -55,5 +55,5 @@ const GrayCircle = styled.div`
     rgba(164, 164, 164, 0.6) 0%,
     rgba(164, 164, 164, 0) 100%
   );
-  filter: blur(15rem);
+  filter: blur(5rem);
 `;

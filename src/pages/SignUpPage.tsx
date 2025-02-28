@@ -214,6 +214,7 @@ const SignUpPageWrapper = styled.form`
   width: 100%;
   height: 100%;
   background-color: ${({ theme }) => theme.colors.backgroundLayer2};
+  padding-top: 5rem;
 `;
 
 const SignUpTitle = styled.p`
