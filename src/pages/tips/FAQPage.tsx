@@ -86,15 +86,17 @@ export default function FAQPage() {
   };
 
   // 답변 문자열을 포맷팅하는 헬퍼 함수
-
   function formatAnswer(text: string): React.ReactNode[] {
     // 1. 개행 문자 정리: 여러 줄바꿈을 한 칸의 공백으로 변경
     let normalized = text.replace(/\r\n/g, '\n').replace(/\n+/g, ' ');
 
     // 2. 문장 마침표, 느낌표, 물음표 뒤에 줄바꿈을 삽입
-    // 단, 마침표 바로 앞 문자가 숫자일 경우(예: "1.")는 줄바꿈하지 않음.
-    // (?<=[^0-9])는 바로 앞 문자가 숫자가 아닌 경우를 의미합니다.
-    normalized = normalized.replace(/(?<=[^0-9])([.!?])\s+/g, '$1\n');
+    // 단, 마침표 바로 앞 문자가 한 자리 숫자일 경우(예: "1.")는 줄바꿈하지 않음
+    // 두 자리 이상 숫자 뒤의 마침표인 경우는 줄바꿈을 적용
+    normalized = normalized.replace(/(?<!\b\d)([.!?])\s+/g, '$1\n');
+
+    // 두 자리 이상 숫자(10 이상) 뒤에 오는 마침표는 줄바꿈 처리
+    normalized = normalized.replace(/(\b\d{2,}\.)(\s+)/g, '$1\n');
 
     // 3. 줄바꿈 기준으로 분리
     const lines = normalized.split('\n');

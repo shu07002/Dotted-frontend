@@ -46,7 +46,7 @@ export default function PostingList({ pagedData }: PostingListProps) {
               <span>{formatRelativeTime(post.created_at)}</span>
               <span>•</span>
               <span>by</span>
-              <span>{post.writer_nickname}</span>
+              <span className="nickname">{post.writer_nickname}</span>
               <span>•</span>
               <span>
                 <Eye /> {post.view_count}
@@ -147,6 +147,10 @@ const PostingWriter = styled.div`
     line-height: normal;
     letter-spacing: -0.07rem;
     font-size: 1.4rem;
+
+    &.nickname {
+      font-weight: 500;
+    }
 
     @media (max-width: 460px) {
       font-size: 1.1rem;

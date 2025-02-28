@@ -59,6 +59,9 @@ const GroupWrapper = styled.div`
 `;
 
 const RadioLabel = styled.label`
+  display: flex;
+  align-items: center; /* 라디오 버튼과 텍스트를 세로 중앙 정렬 */
+  gap: 0.5rem; /* 라디오 버튼과 텍스트 사이 여백 */
   margin-right: 1.2rem;
   color: ${({ theme }) => theme.colors.gray600};
   font-size: 16px;
@@ -66,10 +69,13 @@ const RadioLabel = styled.label`
   font-weight: 400;
   line-height: 34px; /* 212.5% */
   letter-spacing: -0.64px;
+
+  @media (max-width: 460px) {
+    font-size: 13px;
+  }
 `;
 
 const RadioInput = styled.input.attrs({ type: 'radio' })`
-  margin-right: 1.4rem;
   appearance: none; /* 기본 라디오 버튼 숨김 */
   width: 15px;
   height: 15px;

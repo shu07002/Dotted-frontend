@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import Slider from 'react-slick';
 import { NextArrow, PrevArrow } from './CustomArrow';
+import { useNavigate } from 'react-router-dom';
 
 export default function Carousel() {
   const settings = {
@@ -14,17 +15,20 @@ export default function Carousel() {
     prevArrow: <PrevArrow />,
     nextArrow: <NextArrow />
   };
+
+  const navigate = useNavigate();
   return (
     <CarouselWrapper>
       <StyledSlider {...settings}>
         <SlideContent>
-          <h3>1</h3>
+          <div onClick={() => navigate('/about/onboarding')}>
+            <img src="src/assets/banner1.png" />
+          </div>
         </SlideContent>
         <SlideContent>
-          <h3>2</h3>
-        </SlideContent>
-        <SlideContent>
-          <h3>3</h3>
+          <div>
+            <img src="src/assets/banner2.png" />
+          </div>
         </SlideContent>
       </StyledSlider>
     </CarouselWrapper>

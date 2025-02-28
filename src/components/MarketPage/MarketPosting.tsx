@@ -52,36 +52,19 @@ export default function MarketPosting({
         e.preventDefault();
         setZoomLevel((prevZoom) => {
           const newZoom = prevZoom + (e.deltaY > 0 ? -0.1 : 0.1);
-          return Math.min(Math.max(newZoom, 0.7), 2);
+          return Math.min(Math.max(newZoom, 0.5), 2);
         });
       }
     };
 
     if (openModal) {
-      // ✅ 배경 스크롤 차단 (스크롤 위치 유지)
-      document.body.style.position = 'fixed';
-      document.body.style.top = `-${window.scrollY}px`;
-      document.body.style.left = '0';
-      document.body.style.right = '0';
-
       document.body.style.overflow = 'hidden';
-
       document.addEventListener('wheel', handleZoom, { passive: false });
-    } else {
-      // ✅ 배경 스크롤 원래대로 복구
-      const scrollY = document.body.style.top;
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.left = '';
-      document.body.style.right = '';
-
-      document.body.style.overflow = 'auto';
-      window.scrollTo(0, parseInt(scrollY || '0') * -1);
     }
 
     return () => {
+      document.body.style.overflow = 'auto';
       document.removeEventListener('wheel', handleZoom);
-      setZoomLevel(1);
     };
   }, [openModal]);
 
@@ -140,7 +123,7 @@ export default function MarketPosting({
   };
 
   return (
-    <ItemWrapper>
+    <ItemWrapper $isImage={post.images.length > 0}>
       <Modal
         isOpen={openModal}
         style={customStyles}
@@ -150,11 +133,11 @@ export default function MarketPosting({
         <CloseButton type="button" onClick={() => setOpenModal(false)}>
           Close <Close />
         </CloseButton>
-        <AccessRestrictedWrapper onClick={() => setOpenModal(false)}>
-          <AccessRestrictedNormal onClick={(e) => e.stopPropagation()}>
+        <AccessRestrictedWrapper>
+          <AccessRestrictedNormal>
             <div>
               <img
-                src={post.images[currentIndex].image_url}
+                src={post.images[currentIndex]?.image_url}
                 alt="Market Image"
                 style={{
                   transform: `scale(${zoomLevel})`,
@@ -227,7 +210,7 @@ export default function MarketPosting({
           </Writer>
         </Text>
 
-        <ScrapButtonWrapper>
+        <ScrapButtonWrapper $isImage={post.images.length > 0}>
           <ScrapButton
             onClick={handleScrapClick}
             className={`${isScraped && 'scraped'}`}
@@ -266,6 +249,10 @@ const CloseButton = styled.button`
   font-weight: 700;
   border-radius: 1.6rem;
 
+  > svg {
+    fill: ${({ theme }) => theme.colors.gray800};
+  }
+
   @media (hover: hover) and (pointer: fine) {
     &:hover {
       background-color: ${({ theme }) => theme.colors.gray200};
@@ -279,13 +266,10 @@ const AccessRestrictedWrapper = styled.div`
   background: var(--Modal-Background, rgba(12, 12, 12, 0.3));
   position: absolute;
   z-index: 10;
-  padding: 2rem;
   top: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: auto;
-  overscroll-behavior: contain;
 `;
 
 const AccessRestrictedNormal = styled.div`
@@ -310,9 +294,9 @@ const AccessRestrictedNormal = styled.div`
   }
 `;
 
-const ItemWrapper = styled.div`
+const ItemWrapper = styled.div<{ $isImage: boolean }>`
   display: flex;
-  gap: 2rem;
+  gap: ${({ $isImage }) => ($isImage ? '2rem;' : '0rem;')};
   justify-content: start;
   width: 100%;
 
@@ -476,7 +460,7 @@ const Title = styled.div`
   margin-bottom: 1rem;
   justify-content: space-between;
   color: ${({ theme }) => theme.colors.gray800};
-
+  font-family: Pretendard;
   font-size: 2.8rem;
   font-style: normal;
   font-weight: 700;
@@ -492,7 +476,7 @@ const Title = styled.div`
 `;
 const Price = styled.div`
   color: ${({ theme }) => theme.colors.gray800};
-
+  font-family: Pretendard;
   font-size: 3.2rem;
   font-style: normal;
   font-weight: 700;
@@ -539,7 +523,8 @@ const Writer = styled.div`
   }
 `;
 
-const ScrapButtonWrapper = styled.div`
+const ScrapButtonWrapper = styled.div<{ $isImage: boolean }>`
+  margin-top: ${({ $isImage }) => ($isImage ? '0' : '2rem')};
   @media (max-width: 700px) {
     display: flex;
     justify-content: end;
