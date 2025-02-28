@@ -14,14 +14,6 @@ const fetchCultureData = async (id: string) => {
   return response.json();
 };
 
-interface CultureDetail {
-  title: string;
-  createdAt: string;
-  id: number;
-  content: string;
-  thumnail: string;
-}
-
 export default function CultureDetailPage() {
   const navigate = useNavigate();
   const { cultureId } = useParams();
