@@ -164,7 +164,9 @@ const PaginationBox = styled.div`
     background: none;
     font-size: 1.6rem;
     font-weight: 400;
-
+    display: flex;
+    justify-content: center;
+    align-items: center;
     &.selected {
       background-color: ${({ theme }) => theme.colors.purple600};
       color: ${({ theme }) => theme.colors.gray50};

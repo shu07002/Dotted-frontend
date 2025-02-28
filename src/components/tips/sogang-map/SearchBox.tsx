@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { BuildsDataType } from './KakaoMap';
 import { useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-
 const fetchBuildings = async () => {
   const response = await fetch(
     `${import.meta.env.VITE_API_DOMAIN}/api/campus/building`
@@ -120,7 +119,7 @@ const NotSearched = styled.span`
   align-items: center;
   color: ${({ theme }) => theme.colors.gray900};
   padding: 1rem 2rem;
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   font-weight: 400;
 `;
 
@@ -175,6 +174,13 @@ const InputBox = styled.li`
       outline: none;
       box-shadow: none;
     }
+    @media (max-width: 700px) {
+      font-size: 1.6rem;
+    }
+  }
+  @media (max-width: 700px) {
+    width: 80vw;
+    justify-content: flex-start;
   }
 `;
 

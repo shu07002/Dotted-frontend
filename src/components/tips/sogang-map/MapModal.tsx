@@ -248,9 +248,16 @@ const ModalWrapper = styled.div<{ modalopen: string }>`
     0.3s ease forwards;
   visibility: ${({ modalopen }) =>
     modalopen === 'true' ? 'visible' : 'visible'};
+  /* &::-webkit-scrollbar {
+    width: 8px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: ${({ theme }) => theme.colors.gray200};
+    border-radius: 10px;
+  } */
   h1 {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 1rem;
     font-size: 2.5rem;
     font-weight: 600;
@@ -299,8 +306,8 @@ const ModalWrapper = styled.div<{ modalopen: string }>`
   }
   @media (max-width: 430px) {
     width: 95%;
-    height: 40%;
-    bottom: 0;
+    height: 60%;
+    bottom: 10%;
     animation: ${({ modalopen }) =>
         modalopen === 'true' ? fadeInMobile : fadeOutMobile}
       0.3s ease forwards;

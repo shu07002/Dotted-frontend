@@ -233,6 +233,9 @@ const InputBox = styled.span`
     font-size: 1.6rem;
     color: ${({ theme }) => theme.colors.gray700};
     border: 1px solid ${({ theme }) => theme.colors.gray300};
+    @media (max-width: 700px) {
+      width: 20rem;
+    }
   }
 
   > button {
@@ -245,6 +248,10 @@ const InputBox = styled.span`
     border: none;
     font-size: 1.3rem;
     font-weight: 500;
+    @media (max-width: 400px) {
+      padding: 0 1.5rem;
+      font-size: 1.1rem;
+    }
   }
 `;
 
@@ -273,6 +280,12 @@ const BirthBox = styled.div`
       align-items: center;
       padding: 0 1.4rem;
       background-color: ${({ theme }) => theme.colors.gray100};
+      @media (max-width: 700px) {
+        width: 10rem;
+      }
+      @media (max-width: 400px) {
+        width: 7rem;
+      }
     }
   }
 `;

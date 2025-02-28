@@ -95,7 +95,6 @@ const CodeInput = styled.input`
   border: 1px solid ${({ theme }) => theme.colors.gray300};
   background: ${({ theme }) => theme.colors.gray100};
 
-  font-family: Pretendard;
   font-size: 20px;
   font-style: normal;
   font-weight: 400;
@@ -111,7 +110,6 @@ const VerifyButton = styled.button`
   background: ${({ theme }) => theme.colors.purple600};
   color: ${({ theme }) => theme.colors.gray50};
   text-align: center;
-  font-family: Pretendard;
   font-size: 20px;
   font-style: normal;
   font-weight: 500;

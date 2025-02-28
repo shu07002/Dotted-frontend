@@ -399,7 +399,7 @@ const Wrapper = styled.div`
 const Title = styled.div`
   width: 100%;
   color: ${({ theme }) => theme.colors.gray700};
-  font-family: Pretendard;
+
   font-size: 3.6rem;
   font-style: normal;
   font-weight: 700;
@@ -422,7 +422,6 @@ const TitleWrapper = styled.div`
     border-bottom: 1px solid ${({ theme }) => theme.colors.gray400};
     background: ${({ theme }) => theme.colors.backgroundLayer2};
 
-    font-family: Pretendard;
     font-size: 1.6rem;
     font-style: normal;
     font-weight: 500;

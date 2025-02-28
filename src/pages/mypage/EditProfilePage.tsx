@@ -32,6 +32,32 @@ export default function EditProfilePage() {
       console.error('Error changing:', error);
     }
   };
+
+  const handleDeleteAccount = async () => {
+    try {
+      let accessToken = localStorage.getItem('accessToken');
+      if (!accessToken) return;
+
+      const headers = {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json'
+      };
+      const response = await fetch(
+        `${import.meta.env.VITE_API_DOMAIN}/api/user/delete`,
+        {
+          method: 'DELETE',
+          headers: headers
+        }
+      );
+      if (response.ok) {
+      } else {
+        console.error('Failed to change user information');
+      }
+    } catch (error) {
+      console.error('Error changing:', error);
+    }
+  };
+
   return (
     <Main>
       <EditProfileForm
@@ -40,7 +66,7 @@ export default function EditProfilePage() {
         setIsAllChecked={setIsAllChecked}
       />
       <DeleteBtn>
-        <button>Delete Account</button>
+        <button onClick={() => handleDeleteAccount()}>Delete Account</button>
       </DeleteBtn>
       <SubmitBtn>
         <button

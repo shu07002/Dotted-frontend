@@ -100,6 +100,15 @@ const List = styled.ul`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 3.8rem 4.5rem;
+  @media (max-width: 700px) {
+    gap: 0.5rem;
+  }
+  @media (max-width: 500px) {
+    grid-template-columns: 1fr 1fr;
+  }
+  @media (max-width: 400px) {
+    grid-template-columns: 1fr;
+  }
 
   li {
     width: 100%;

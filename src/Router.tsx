@@ -1,4 +1,4 @@
-import { createBrowserRouter, Outlet } from 'react-router-dom';
+import { createBrowserRouter } from 'react-router-dom';
 import MainPage from './pages/MainPage';
 import ProtectedRoute from './components/common/ProtectedRoute';
 import HeaderLayout from './components/common/header/HeaderLayout';
@@ -15,7 +15,6 @@ import CultureDetailPage from './pages/tips/culture/CultureDetailPage';
 import CommunityPage from './pages/community/CommunityPage';
 import WriteCommunityPage from './pages/community/WriteCommunityPage';
 import DetailCommunityPage from './pages/community/DetailCommunityPage';
-import Footer from './components/common/Footer';
 import Google from './pages/Google';
 import MarketPage from './pages/market/MarketPage';
 import WriteMarketPage from './pages/market/WriteMarketPage';
@@ -44,9 +43,6 @@ const Router = createBrowserRouter([
       <ProtectedRoute>
         <ScrollToTop />
         <HeaderLayout />
-        <Outlet />
-        {/*📌HeaderLayout안에 Outlet이 있는 것보다 밖에 있는게 더 직관적인거 같아서 밖으로 뺐습니다!*/}
-        <Footer />
       </ProtectedRoute>
     ),
     children: [
@@ -57,10 +53,6 @@ const Router = createBrowserRouter([
       {
         path: 'tips',
         children: [
-          {
-            path: 'sogang-map',
-            element: <SogangMapPage />
-          },
           {
             path: 'restaurant',
             element: <RestaurantPage />
@@ -177,7 +169,10 @@ const Router = createBrowserRouter([
       }
     ]
   },
-
+  {
+    path: 'tips/sogang-map',
+    element: <SogangMapPage />
+  },
   {
     path: 'sign-up',
     children: [{ path: '', element: <SignUpPage /> }]

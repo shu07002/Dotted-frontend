@@ -1,7 +1,6 @@
 import CultureList from '@/components/tips/culture/CultureList';
 import styled from 'styled-components';
 import SearchIcon from '@/assets/svg/tips/culture/search.svg?react';
-import { HeaderInputBox } from '@/components/common/SearchBox';
 
 export default function CulturePage() {
   return (
@@ -11,7 +10,7 @@ export default function CulturePage() {
           <h1>Culture</h1>
           <p>Introduce Korean Culture</p>
         </HeaderTitleBox>
-        <HeaderInputBox $width="43rem">
+        <HeaderInputBox>
           <select name="searchType" id="searchType">
             <option value="all">All</option>
             <option value="title">Title</option>
@@ -31,6 +30,9 @@ const Main = styled.main`
   padding: 5rem 12.6rem 2.6rem 12.6rem;
   display: flex;
   flex-direction: column;
+  @media (max-width: 900px) {
+    padding: 5rem 2.6rem 2.6rem 2.6rem;
+  }
 `;
 
 const Header = styled.header`
@@ -38,6 +40,10 @@ const Header = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
+  @media (max-width: 700px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 `;
 
 const HeaderTitleBox = styled.div`
@@ -55,5 +61,60 @@ const HeaderTitleBox = styled.div`
     line-height: 3.6rem;
     letter-spacing: -0.48px;
     color: ${({ theme }) => theme.colors.gray500};
+  }
+`;
+const HeaderInputBox = styled.div`
+  width: 30vw;
+  height: 4rem;
+  display: flex;
+  background-color: ${({ theme }) => theme.colors.backgroundLayer1};
+  border-radius: 5px;
+  position: relative;
+  padding: 0.9rem 0;
+  @media (max-width: 700px) {
+    width: 50vw;
+  }
+  @media (max-width: 500px) {
+    width: 80vw;
+  }
+  select {
+    width: 7.5rem;
+    height: 100%;
+    padding: 0 1.2rem;
+    border: none;
+    border-right: 1px solid ${({ theme }) => theme.colors.gray600};
+    background-color: ${({ theme }) => theme.colors.backgroundLayer1};
+    color: ${({ theme }) => theme.colors.gray600};
+    font-size: 1.4rem;
+    font-weight: 400;
+    line-height: 4rem;
+    letter-spacing: -0.48px;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  input {
+    width: 100%;
+    height: 100%;
+    padding: 0 1.2rem;
+    border: none;
+    background-color: ${({ theme }) => theme.colors.backgroundLayer1};
+    color: ${({ theme }) => theme.colors.gray700};
+    font-size: 1.5rem;
+    font-weight: 400;
+    line-height: 4rem;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  svg {
+    position: absolute;
+    right: 1.6rem;
+    top: 50%;
+    transform: translateY(-50%);
   }
 `;

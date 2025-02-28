@@ -191,7 +191,6 @@ const Wrapper = styled.div`
 const Title = styled.div`
   width: 100%;
   color: ${({ theme }) => theme.colors.gray700};
-  font-family: Pretendard;
   font-size: 3.6rem;
   @media (max-width: 460px) {
     font-size: 3.3rem;

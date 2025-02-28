@@ -26,7 +26,6 @@ const PasswordInputWrapper = styled.input`
   background: ${({ theme }) => theme.colors.backgroundLayer2};
 
   color: var(--Gray-Gray_light-gray-400_light, #b1b1b1);
-  font-family: Pretendard;
   font-size: 20px;
   font-style: normal;
   font-weight: 400;

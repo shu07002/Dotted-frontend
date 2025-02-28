@@ -61,7 +61,6 @@ const Notice = styled.div`
   margin-top: 1rem;
   color: ${({ theme }) => theme.colors.gray400};
 
-  font-family: Pretendard;
   font-size: 1.6rem;
   font-style: normal;
   font-weight: 500;
@@ -183,7 +182,7 @@ const EachImage = styled.div`
     }
     color: ${({ theme }) => theme.colors.gray400};
     text-align: center;
-    font-family: Pretendard;
+
     font-size: 1.6rem;
     font-style: normal;
     font-weight: 500;
